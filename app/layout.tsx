@@ -1,0 +1,55 @@
+import type { Metadata } from "next";
+import { Anek_Gujarati } from "next/font/google";
+import "./globals.css";
+import { AppProvider } from "@/components/AppProvider";
+import Header from "@/components/layout/Header";
+import BreakingTicker from "@/components/layout/BreakingTicker";
+import Footer from "@/components/layout/Footer";
+
+const anekGujarati = Anek_Gujarati({
+  subsets: ["gujarati", "latin"],
+  display: "swap",
+  variable: "--font-anek-gujarati",
+});
+
+export const metadata: Metadata = {
+  metadataBase: new URL("https://gujaratpost.example.com"),
+  title: {
+    default: "Gujarat Post - Gujarati News Portal",
+    template: "%s | Gujarat Post",
+  },
+  description: "Premium Gujarati news portal demo for breaking news, politics, crime, business, sports, videos and photo stories.",
+  keywords: ["Gujarat news", "Gujarati news", "Gujarat Post", "Breaking news Gujarat", "Gujarat politics"],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Gujarat Post",
+    description: "Latest Gujarati breaking news, politics, business, sports and entertainment.",
+    url: "/",
+    siteName: "Gujarat Post",
+    locale: "gu_IN",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Gujarat Post",
+    description: "Latest Gujarati breaking news.",
+  },
+  robots: { index: true, follow: true },
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="gu" className={anekGujarati.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
+      <body className="antialiased">
+        <AppProvider>
+          <Header />
+          <BreakingTicker />
+          <main>{children}</main>
+          <Footer />
+        </AppProvider>
+      </body>
+    </html>
+  );
+}
