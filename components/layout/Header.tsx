@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
   ArrowRight,
+  BookOpen,
   Building2,
   ChevronDown,
   Clapperboard,
@@ -373,6 +374,15 @@ export default function Header() {
                 </div>
               </li>
             ))}
+            <li className="flex items-center">
+              <a
+                href="/epaper"
+                className="inline-flex h-10 items-center gap-2 rounded-xl bg-accent px-4 text-sm font-black text-white shadow-md hover:bg-accent-hover transition duration-200 ml-1.5"
+              >
+                <BookOpen className="h-4 w-4 shrink-0" />
+                <span>E-Paper</span>
+              </a>
+            </li>
           </ul>
         </div>
       </nav>
@@ -380,6 +390,14 @@ export default function Header() {
       {menuOpen && (
         <nav className="border-t border-border bg-card p-4 md:hidden">
           <div className="space-y-3">
+            <a
+              href="/epaper"
+              onClick={() => setMenuOpen(false)}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3 text-sm font-black text-white shadow hover:bg-accent-hover transition"
+            >
+              <BookOpen className="h-4 w-4" />
+              <span>E-Paper</span>
+            </a>
             {navGroups.map((group) => (
               <section key={group.label} className="rounded-2xl border border-border bg-muted p-3">
                 <a href={group.href} onClick={() => setMenuOpen(false)} className="mb-2 block text-sm font-black text-accent">
