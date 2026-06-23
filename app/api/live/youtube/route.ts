@@ -10,6 +10,12 @@ interface VideoItem {
   videoUrl: string;
 }
 
+interface InvidiousVideo {
+  videoId: string;
+  title: string;
+  published: number;
+}
+
 // Fallback data matching the look of the channel
 const FALLBACK_VIDEOS: VideoItem[] = [
   {
@@ -42,6 +48,61 @@ const FALLBACK_VIDEOS: VideoItem[] = [
   }
 ];
 
+async function fetchFromInvidious(channelId: string): Promise<VideoItem[] | null> {
+  const instances = [
+    'https://inv.thepixora.com',
+    'https://invidious.nerdvpn.de',
+    'https://inv.nadeko.net',
+    'https://yt.chocolatemoo53.com',
+    'https://invidious.tiekoetter.com',
+    'https://invidious.f5.si'
+  ];
+
+  for (const instance of instances) {
+    try {
+      const url = `${instance}/api/v1/channels/${channelId}/videos`;
+      const res = await fetch(url, {
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36',
+          'Accept': 'application/json',
+        },
+        next: { revalidate: 300 }, // Cache for 5 minutes
+        signal: AbortSignal.timeout(4000), // Timeout quickly to switch instance if one is slow or down
+      });
+
+      if (!res.ok) {
+        console.warn(`Invidious instance ${instance} returned status ${res.status}`);
+        continue;
+      }
+
+      const data = await res.json();
+      
+      if (data && Array.isArray(data.videos)) {
+        const videos: VideoItem[] = (data.videos as InvidiousVideo[])
+          .filter((v) => v && v.videoId && v.title)
+          .map((v) => ({
+            id: v.videoId,
+            title: decodeHtmlEntities(v.title),
+            publishedAt: typeof v.published === 'number' 
+              ? new Date(v.published * 1000).toISOString() 
+              : new Date().toISOString(),
+            thumbnail: `https://i.ytimg.com/vi/${v.videoId}/hqdefault.jpg`,
+            videoUrl: `https://www.youtube.com/watch?v=${v.videoId}`,
+          }));
+
+        if (videos.length > 0) {
+          console.log(`Successfully fetched ${videos.length} videos from Invidious instance: ${instance}`);
+          return videos;
+        }
+      }
+    } catch (err) {
+      console.warn(`Failed to fetch from Invidious instance ${instance}:`, err instanceof Error ? err.message : err);
+    }
+  }
+  return null;
+}
+
 export async function GET() {
   try {
     const res = await fetch(RSS_URL, {
@@ -64,7 +125,7 @@ export async function GET() {
     const entryMatches = xml.match(/<entry>([\s\S]*?)<\/entry>/g);
     
     if (!entryMatches || entryMatches.length === 0) {
-      return Response.json({ videos: FALLBACK_VIDEOS, source: 'fallback_empty_entries' });
+      throw new Error('No entries found in YouTube RSS XML');
     }
 
     const videos: VideoItem[] = [];
@@ -93,12 +154,25 @@ export async function GET() {
     }
 
     if (videos.length === 0) {
-      return Response.json({ videos: FALLBACK_VIDEOS, source: 'fallback_parse_failed' });
+      throw new Error('Failed to parse any videos from YouTube RSS XML');
     }
 
     return Response.json({ videos: videos.slice(0, 6), source: 'youtube_rss' });
   } catch (error) {
-    console.error('Error fetching YouTube RSS feed:', error);
+    console.error('Error fetching YouTube RSS feed, trying Invidious fallback:', error);
+    
+    try {
+      const invidiousVideos = await fetchFromInvidious(CHANNEL_ID);
+      if (invidiousVideos && invidiousVideos.length > 0) {
+        return Response.json({ 
+          videos: invidiousVideos.slice(0, 6), 
+          source: 'invidious_fallback' 
+        });
+      }
+    } catch (invidiousError) {
+      console.error('Invidious fallback also failed:', invidiousError);
+    }
+
     return Response.json({ 
       videos: FALLBACK_VIDEOS, 
       source: 'fallback_error',

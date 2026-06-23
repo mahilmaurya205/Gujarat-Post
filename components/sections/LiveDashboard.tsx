@@ -10,14 +10,34 @@ interface MarketItem { symbol: string; name: string; exchange: string; value: nu
 interface CricketMatch { id: string; title: string; date: string; status: string; state: string; summary: string; venue: string; teams: Array<{ name: string; score: string }> }
 interface FootballMatch { id: string; league: string; date: string; state: string; status: string; home: string; away: string; homeScore: string; awayScore: string }
 
-function Panel({ title, subtitle, status = 'Live', children }: { title: string; subtitle: string; status?: string; children: React.ReactNode }) {
-  const live = status.toLowerCase() === 'live';
+function Panel({ 
+  title, 
+  subtitle, 
+  status, 
+  isLive, 
+  children 
+}: { 
+  title: string; 
+  subtitle: string; 
+  status?: string; 
+  isLive?: boolean; 
+  children: React.ReactNode 
+}) {
+  const { language } = useApp();
+  const defaultStatus = getLocalized(language, { en: 'Live', gu: 'લાઇવ', hi: 'लाइव' });
+  const displayStatus = status !== undefined ? status : defaultStatus;
+  const displayIsLive = isLive !== undefined ? isLive : (status === undefined || status.toLowerCase() === 'live');
+
   return (
     <section className="flex flex-col rounded-xl border border-border bg-card p-3 shadow-sm">
       <div className="mb-2.5 flex items-start justify-between gap-3">
-        <div><h3 className="text-sm font-black text-foreground">{title}</h3><p className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">{subtitle}</p></div>
-        <span className={`rounded-full px-2 py-0.5 text-[10px] font-black uppercase text-white ${live ? 'bg-accent' : 'bg-slate-500'}`}>
-          {live && <span className="mr-1 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-white" />}{status}
+        <div>
+          <h3 className="text-sm font-black text-foreground">{title}</h3>
+          <p className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">{subtitle}</p>
+        </div>
+        <span className={`rounded-full px-2 py-0.5 text-[10px] font-black uppercase text-white transition-colors duration-200 ${displayIsLive ? 'bg-accent' : 'bg-slate-500'}`}>
+          {displayIsLive && <span className="mr-1 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-white" />}
+          {displayStatus}
         </span>
       </div>
       {children}
@@ -135,7 +155,15 @@ export default function LiveDashboard() {
             <p className="mt-auto pt-3 text-[9px] font-bold text-muted-foreground">Weather source: Open-Meteo</p>
           </Panel>
 
-          <Panel title={getLocalized(language, { en: 'Indian Stock Market', gu: 'ભારતીય શેરબજાર', hi: 'भारतीय शेयर बाज़ार' })} subtitle="NSE · BSE · Currency" status={markets.some((item) => item.marketState === 'REGULAR') ? 'Live' : 'Market closed'}>
+          <Panel 
+            title={getLocalized(language, { en: 'Indian Stock Market', gu: 'ભારતીય શેરબજાર', hi: 'भारतीय शेयर बाज़ार' })} 
+            subtitle="NSE · BSE · Currency" 
+            status={markets.some((item) => item.marketState === 'REGULAR') 
+              ? getLocalized(language, { en: 'Live', gu: 'લાઇવ', hi: 'लाइव' }) 
+              : getLocalized(language, { en: 'Market closed', gu: 'બજાર બંધ', hi: 'बाजार बंद' })
+            }
+            isLive={markets.some((item) => item.marketState === 'REGULAR')}
+          >
             {marketError && !markets.length ? <ErrorState message={marketError} /> : <div className="space-y-3">
               {loading && !markets.length ? <p className="py-10 text-center text-sm font-bold text-muted-foreground">Loading market quotes…</p> : markets.map((item) => {
                 const positive = item.change >= 0;
@@ -145,7 +173,15 @@ export default function LiveDashboard() {
             <p className="mt-auto pt-3 text-[9px] font-bold text-muted-foreground">Indicative quotes · Source: Yahoo Finance</p>
           </Panel>
 
-          <Panel title={getLocalized(language, { en: 'Cricket Scorecard', gu: 'ક્રિકેટ સ્કોરકાર્ડ', hi: 'क्रिकेट स्कोरकार्ड' })} subtitle={getLocalized(language, { en: 'IPL score feed', gu: 'IPL સ્કોર અપડેટ', hi: 'आईपीएल स्कोर फीड' })} status={liveCricket ? (language === 'gu' ? 'લાઇવ' : language === 'hi' ? 'लाइव' : 'Live') : (language === 'gu' ? 'તાજેતરના' : language === 'hi' ? 'नवीनतम' : 'Latest')}>
+          <Panel 
+            title={getLocalized(language, { en: 'Cricket Scorecard', gu: 'ક્રિકેટ સ્કોરકાર્ડ', hi: 'क्रिकेट स्कोरकार्ड' })} 
+            subtitle={getLocalized(language, { en: 'IPL score feed', gu: 'IPL સ્કોર અપડેટ', hi: 'आईपीएल स्कोर फीड' })} 
+            status={liveCricket 
+              ? getLocalized(language, { en: 'Live', gu: 'લાઇવ', hi: 'लाइव' }) 
+              : getLocalized(language, { en: 'Latest', gu: 'તાજેતરના', hi: 'नवीनतम' })
+            }
+            isLive={liveCricket}
+          >
             {sportsError && !cricket ? <ErrorState message={sportsError} /> : cricket ? <div className="rounded-xl bg-muted p-4">
               <div className="flex items-start justify-between gap-2"><div><p className="text-sm font-black text-foreground">{cricket.title}</p><p className="mt-1 text-[10px] font-semibold text-muted-foreground">{cricket.venue}</p></div><span className="shrink-0 text-[10px] font-black uppercase text-accent">{cricket.status}</span></div>
               <div className="mt-5 space-y-3">{cricket.teams.map((team) => <div key={team.name} className="flex items-center justify-between border-b border-border pb-3 last:border-0"><span className="pr-3 text-sm font-black text-foreground">{team.name}</span><span className="text-right text-sm font-black text-accent">{team.score}</span></div>)}</div>
@@ -155,7 +191,15 @@ export default function LiveDashboard() {
             <p className="mt-auto pt-3 text-[9px] font-bold text-muted-foreground">Latest available IPL score · ESPN score feed</p>
           </Panel>
 
-          <Panel title={getLocalized(language, { en: 'Football Scorecard', gu: 'ફૂટબોલ સ્કોરકાર્ડ', hi: 'फ़ुटबॉल स्कोरकार्ड' })} subtitle="ISL · EPL · La Liga" status={liveFootball ? 'Live' : 'Fixtures / results'}>
+          <Panel 
+            title={getLocalized(language, { en: 'Football Scorecard', gu: 'ફૂટબોલ સ્કોરકાર્ડ', hi: 'फ़ुटबॉल स्कोरकार्ड' })} 
+            subtitle="ISL · EPL · La Liga" 
+            status={liveFootball 
+              ? getLocalized(language, { en: 'Live', gu: 'લાઇવ', hi: 'लाइव' }) 
+              : getLocalized(language, { en: 'Fixtures / results', gu: 'સમયપત્રક / પરિણામો', hi: 'फिक्स्चर / परिणाम' })
+            }
+            isLive={liveFootball}
+          >
             {sportsError && !football.length ? <ErrorState message={sportsError} /> : <div className="scrollbar-hide max-h-[24rem] space-y-3 overflow-y-auto">
               {football.map((match) => <div key={match.id} className="rounded-xl bg-muted p-3"><div className="mb-2 flex items-center justify-between text-[10px] font-black uppercase text-muted-foreground"><span>{match.league}</span><span className={match.state === 'in' ? 'text-accent' : ''}>{match.status}</span></div><div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-xs font-black text-foreground"><span className="truncate">{match.home}</span><span className="rounded-lg bg-card px-2 py-1 text-accent">{match.homeScore} - {match.awayScore}</span><span className="truncate text-right">{match.away}</span></div><p className="mt-2 text-[9px] font-semibold text-muted-foreground">{new Date(match.date).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}</p></div>)}
               {!football.length && <ErrorState message="No football fixtures are currently available." />}

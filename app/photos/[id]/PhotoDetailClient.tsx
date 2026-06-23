@@ -5,7 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { 
-  ChevronLeft, ChevronRight, Clock, Eye, MessageCircle, Phone, Globe, Mail, ChevronRight as ChevronRightIcon 
+  ChevronLeft, ChevronRight, Clock, Eye, Phone, Globe, Mail, ChevronRight as ChevronRightIcon,
+  Bookmark, Printer, Copy
 } from 'lucide-react';
 import { PHOTOS, ARTICLES, getLocalized } from '@/data';
 import { useApp } from '@/components/AppProvider';
@@ -105,9 +106,36 @@ export default function PhotoDetailClient({ activeId }: Props) {
   const trending = ARTICLES.filter((item) => item.isTrending).slice(0, 6);
 
   const shareLinks = [
-    { label: 'Facebook', href: shareUrl('facebook', photoUrl, caption), bg: 'bg-[#1877f2]' },
-    { label: 'WhatsApp', href: shareUrl('whatsapp', photoUrl, caption), bg: 'bg-[#25d366]' },
-    { label: 'X', href: shareUrl('twitter', photoUrl, caption), bg: 'bg-black' },
+    { 
+      label: 'Facebook', 
+      href: shareUrl('facebook', photoUrl, caption), 
+      style: 'bg-[#1877f2]/8 text-[#1877f2] border border-[#1877f2]/10 hover:bg-[#1877f2]/15',
+      icon: (className: string) => <svg viewBox="0 0 24 24" className={className} fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
+    },
+    { 
+      label: 'WhatsApp', 
+      href: shareUrl('whatsapp', photoUrl, caption), 
+      style: 'bg-[#25d366]/8 text-[#25d366] border border-[#25d366]/10 hover:bg-[#25d366]/15',
+      icon: (className: string) => <svg viewBox="0 0 24 24" className={className} fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.455 5.703 1.458h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
+    },
+    { 
+      label: 'X', 
+      href: shareUrl('twitter', photoUrl, caption), 
+      style: 'bg-black/[0.03] dark:bg-white/[0.03] text-foreground border border-foreground/10 hover:bg-black/[0.06] dark:hover:bg-white/[0.06]',
+      icon: (className: string) => <svg viewBox="0 0 24 24" className={className} fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
+    },
+    { 
+      label: 'Telegram', 
+      href: `https://t.me/share/url?url=${encodeURIComponent(photoUrl)}&text=${encodeURIComponent(caption)}`, 
+      style: 'bg-[#229ed9]/8 text-[#229ed9] border border-[#229ed9]/10 hover:bg-[#229ed9]/15',
+      icon: (className: string) => <svg viewBox="0 0 24 24" className={className} fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.11.02-1.93 1.23-5.46 3.62-.51.35-.98.53-1.39.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.46-.42-1.4-.88.03-.24.37-.49 1.03-.75 4.04-1.76 6.74-2.92 8.09-3.48 3.85-1.6 4.64-1.88 5.17-1.89.11 0 .37.03.54.17.14.12.18.28.2.45-.02.07-.02.13-.03.2z" /></svg>
+    },
+    { 
+      label: 'Google News', 
+      href: `https://news.google.com/search?q=Gujarat+Post`, 
+      style: 'bg-[#4285f4]/8 text-[#4285f4] border border-[#4285f4]/10 hover:bg-[#4285f4]/15',
+      icon: (className: string) => <svg viewBox="0 0 24 24" className={className} fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 10h-4v-2h4v2zm0-4h-4V6h4v2zm-5 8H5v-2h8v2zm5 0h-4v-2h4v2zM12 6H5v6h7V6z" /></svg>
+    },
   ];
 
   return (
@@ -162,21 +190,22 @@ export default function PhotoDetailClient({ activeId }: Props) {
 
           {/* Share Action Row */}
           <div className="no-print mb-5 flex flex-wrap gap-2">
-            {shareLinks.map(({ label, href, bg }) => (
-              <a key={label} href={href} target="_blank" rel="noreferrer" className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-black text-white ${bg} hover:scale-[1.02] transition`}>
-                {label === 'Facebook' && <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" aria-hidden="true"><path fill="currentColor" d="M14.2 8.2V6.8c0-.7.5-.9.9-.9h2.2V2.1L14.2 2c-3.5 0-4.3 2.1-4.3 4.1v2.1H7.8v4.2h2.1V22h4.3v-9.6h2.9l.5-4.2h-3.4Z" /></svg>}
-                {label === 'WhatsApp' && <MessageCircle className="h-3.5 w-3.5" fill="currentColor" />}
-                {label === 'X' && <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" aria-hidden="true"><path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23.2 22H17l-4.8-6.3L6.7 22H3.5l7.2-8.3L3 2h6.3l4.4 5.8L18.9 2Zm-1.1 17.9h1.7L8.4 4H6.6l11.2 15.9Z" /></svg>}
+            {shareLinks.map(({ label, href, style, icon: Icon }) => (
+              <a key={label} href={href} target="_blank" rel="noreferrer" className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-xs font-black transition-all duration-200 ${style}`}>
+                {Icon("h-3.5 w-3.5")}
                 {label}
               </a>
             ))}
-            <button type="button" onClick={() => setSaved((value) => !value)} className="inline-flex items-center gap-2 rounded-full bg-muted px-3 py-2 text-xs font-black text-foreground">
+            <button type="button" onClick={() => setSaved((value) => !value)} className="inline-flex items-center gap-2 rounded-full bg-muted/60 border border-border/40 px-3 py-2 text-xs font-black text-foreground/80 hover:bg-muted hover:text-foreground transition-all duration-200">
+              <Bookmark className="h-3.5 w-3.5" />
               {saved ? 'Saved' : 'Save Story'}
             </button>
-            <button type="button" onClick={() => window.print()} className="inline-flex items-center gap-2 rounded-full bg-muted px-3 py-2 text-xs font-black text-foreground">
+            <button type="button" onClick={() => window.print()} className="inline-flex items-center gap-2 rounded-full bg-muted/60 border border-border/40 px-3 py-2 text-xs font-black text-foreground/80 hover:bg-muted hover:text-foreground transition-all duration-200">
+              <Printer className="h-3.5 w-3.5" />
               Printer
             </button>
-            <button type="button" onClick={copyUrl} className="inline-flex items-center gap-2 rounded-full bg-muted px-3 py-2 text-xs font-black text-foreground">
+            <button type="button" onClick={copyUrl} className="inline-flex items-center gap-2 rounded-full bg-muted/60 border border-border/40 px-3 py-2 text-xs font-black text-foreground/80 hover:bg-muted hover:text-foreground transition-all duration-200">
+              <Copy className="h-3.5 w-3.5" />
               {copied ? 'Copied' : 'Copy URL'}
             </button>
           </div>
