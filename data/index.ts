@@ -312,12 +312,42 @@ export const PHOTOS: Photo[] = [
 ];
 
 export const BREAKING_TICKER = [
-  "BREAKING: અમદાવાદમાં ભારે વરસાદનું એલર્ટ",
-  "ગુજરાત ચૂંટણી 2027 અપડેટ: મુખ્ય પક્ષોની બેઠક",
-  "ક્રાઇમ બ્રેકિંગ: સાયબર સેલનો મોટો પર્દાફાશ",
-  "સુરત ડાયમંડ ઉદ્યોગ માટે રાહત પેકેજની ચર્ચા",
-  "રાજકોટ એરપોર્ટ પર નવા રૂટની જાહેરાત",
-  "GIFT સિટીમાં ફિનટેક કંપનીઓનું રોકાણ",
+  {
+    en: "BREAKING: Heavy rain alert in Ahmedabad, riverfront gates opened",
+    gu: "અમદાવાદમાં ભારે વરસાદનું એલર્ટ, રિવરફ્રન્ટના ગેટ ખોલાયા",
+    hi: "अहमदाबाद में भारी बारिश का अलर्ट, रिवरफ्रंट के गेट खुले",
+    slug: "ahmedabad-receives-heavy-rain-alert-as-riverfront-gates-opened-1"
+  },
+  {
+    en: "GUJARAT ELECTION 2027: District preparations intensify",
+    gu: "ગુજરાત ચૂંટણી 2027 અપડેટ: મુખ્ય પક્ષોની બેઠક",
+    hi: "गुजरात चुनाव 2027: जिलों में तैयारियां तेज",
+    slug: "gujarat-election-2027-preparations-intensify-across-districts-5"
+  },
+  {
+    en: "CRIME ALERT: Cyber cell busts fake investment app network",
+    gu: "ક્રાઇમ બ્રેકિંગ: સાયબર સેલનો મોટો પર્દાફાશ",
+    hi: "क्राइम ब्रेकिंग: साइबर सेल का बड़ा खुलासा",
+    slug: "cyber-cell-busts-fake-investment-app-network-in-ahmedabad-6"
+  },
+  {
+    en: "SURAT DIAMOND: Industry relief package discussed",
+    gu: "સુરત ડાયમંડ ઉદ્યોગ માટે રાહત પેકેજની ચર્ચા",
+    hi: "सूरत हीरा उद्योग के लिए राहत पैकेज पर चर्चा",
+    slug: "surat-diamond-units-announce-new-export-recovery-plan-2"
+  },
+  {
+    en: "RAJKOT AIRPORT: New domestic flight routes announced",
+    gu: "રાજકોટ એરપોર્ટ પર નવા રૂટની જાહેરાત",
+    hi: "राजकोट एयरपोर्ट पर नए घरेलू मार्गों की घोषणा",
+    slug: "rajkot-international-airport-gets-new-domestic-routes-3"
+  },
+  {
+    en: "GIFT CITY: Fintech hub attracts five global firms",
+    gu: "GIFT સિટીમાં ફિનટેક કંપનીઓનું રોકાણ",
+    hi: "गिफ्ट सिटी: फिनटेक हब ने पांच वैश्विक कंपनियों को आकर्षित किया",
+    slug: "gift-city-fintech-hub-attracts-five-global-firms-8"
+  }
 ];
 
 export const NAV_ITEMS: NavItem[] = [

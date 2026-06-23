@@ -10,18 +10,18 @@ interface MarketItem { symbol: string; name: string; exchange: string; value: nu
 interface CricketMatch { id: string; title: string; date: string; status: string; state: string; summary: string; venue: string; teams: Array<{ name: string; score: string }> }
 interface FootballMatch { id: string; league: string; date: string; state: string; status: string; home: string; away: string; homeScore: string; awayScore: string }
 
-function Panel({ 
-  title, 
-  subtitle, 
-  status, 
-  isLive, 
-  children 
-}: { 
-  title: string; 
-  subtitle: string; 
-  status?: string; 
-  isLive?: boolean; 
-  children: React.ReactNode 
+function Panel({
+  title,
+  subtitle,
+  status,
+  isLive,
+  children
+}: {
+  title: string;
+  subtitle: string;
+  status?: string;
+  isLive?: boolean;
+  children: React.ReactNode
 }) {
   const { language } = useApp();
   const defaultStatus = getLocalized(language, { en: 'Live', gu: 'લાઇવ', hi: 'लाइव' });
@@ -155,11 +155,11 @@ export default function LiveDashboard() {
             <p className="mt-auto pt-3 text-[9px] font-bold text-muted-foreground">Weather source: Open-Meteo</p>
           </Panel>
 
-          <Panel 
-            title={getLocalized(language, { en: 'Indian Stock Market', gu: 'ભારતીય શેરબજાર', hi: 'भारतीय शेयर बाज़ार' })} 
-            subtitle="NSE · BSE · Currency" 
-            status={markets.some((item) => item.marketState === 'REGULAR') 
-              ? getLocalized(language, { en: 'Live', gu: 'લાઇવ', hi: 'लाइव' }) 
+          <Panel
+            title={getLocalized(language, { en: 'Indian Stock Market', gu: 'ભારતીય શેરબજાર', hi: 'भारतीय शेयर बाज़ार' })}
+            subtitle="NSE · BSE · Currency"
+            status={markets.some((item) => item.marketState === 'REGULAR')
+              ? getLocalized(language, { en: 'Live', gu: 'લાઇવ', hi: 'लाइव' })
               : getLocalized(language, { en: 'Market closed', gu: 'બજાર બંધ', hi: 'बाजार बंद' })
             }
             isLive={markets.some((item) => item.marketState === 'REGULAR')}
@@ -173,11 +173,11 @@ export default function LiveDashboard() {
             <p className="mt-auto pt-3 text-[9px] font-bold text-muted-foreground">Indicative quotes · Source: Yahoo Finance</p>
           </Panel>
 
-          <Panel 
-            title={getLocalized(language, { en: 'Cricket Scorecard', gu: 'ક્રિકેટ સ્કોરકાર્ડ', hi: 'क्रिकेट स्कोरकार्ड' })} 
-            subtitle={getLocalized(language, { en: 'IPL score feed', gu: 'IPL સ્કોર અપડેટ', hi: 'आईपीएल स्कोर फीड' })} 
-            status={liveCricket 
-              ? getLocalized(language, { en: 'Live', gu: 'લાઇવ', hi: 'लाइव' }) 
+          <Panel
+            title={getLocalized(language, { en: 'Cricket Scorecard', gu: 'ક્રિકેટ સ્કોરકાર્ડ', hi: 'क्रिकेट स्कोरकार्ड' })}
+            subtitle={getLocalized(language, { en: 'IPL score feed', gu: 'IPL સ્કોર અપડેટ', hi: 'आईपीएल स्कोर फीड' })}
+            status={liveCricket
+              ? getLocalized(language, { en: 'Live', gu: 'લાઇવ', hi: 'लाइव' })
               : getLocalized(language, { en: 'Latest', gu: 'તાજેતરના', hi: 'नवीनतम' })
             }
             isLive={liveCricket}
@@ -191,11 +191,11 @@ export default function LiveDashboard() {
             <p className="mt-auto pt-3 text-[9px] font-bold text-muted-foreground">Latest available IPL score · ESPN score feed</p>
           </Panel>
 
-          <Panel 
-            title={getLocalized(language, { en: 'Football Scorecard', gu: 'ફૂટબોલ સ્કોરકાર્ડ', hi: 'फ़ुटबॉल स्कोरकार्ड' })} 
-            subtitle="ISL · EPL · La Liga" 
-            status={liveFootball 
-              ? getLocalized(language, { en: 'Live', gu: 'લાઇવ', hi: 'लाइव' }) 
+          <Panel
+            title={getLocalized(language, { en: 'Football Scorecard', gu: 'ફૂટબોલ સ્કોરકાર્ડ', hi: 'फ़ुटबॉल स्कोरकार्ड' })}
+            subtitle="ISL · EPL · La Liga"
+            status={liveFootball
+              ? getLocalized(language, { en: 'Live', gu: 'લાઇવ', hi: 'लाइव' })
               : getLocalized(language, { en: 'Fixtures / results', gu: 'સમયપત્રક / પરિણામો', hi: 'फिक्स्चर / परिणाम' })
             }
             isLive={liveFootball}
