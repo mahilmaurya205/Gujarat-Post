@@ -12,19 +12,19 @@ export default function TrendingSection() {
   const trending = getTrendingArticles();
 
   return (
-    <section className="bg-muted py-10">
+    <section className="bg-muted py-3">
       <div className="max-w-screen-xl mx-auto px-4">
-        <div className="mb-6 flex items-center gap-2">
-          <TrendingUp className="h-6 w-6 text-accent" />
+        <div className="mb-2 flex items-center gap-2">
+          <TrendingUp className="h-5 w-5 text-accent" />
           <SectionHeader title="Trending News" titleGu="ટ્રેન્ડિંગ ન્યૂઝ" titleHi="ट्रेंडिंग न्यूज" language={language} />
         </div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {trending.slice(0, 10).map((article, index) => (
             <Link
               key={article.id}
               href={`/news/${article.slug}`}
-              className="news-card group relative overflow-hidden rounded-2xl border border-border bg-card"
+              className="news-card group relative overflow-hidden rounded-xl border border-border bg-card"
             >
               <div className="relative aspect-[16/10]">
                 <Image

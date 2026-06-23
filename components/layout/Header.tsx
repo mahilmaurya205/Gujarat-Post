@@ -1,7 +1,7 @@
 'use client';
 
 /* eslint-disable @next/next/no-html-link-for-pages */
-import { createElement, useState } from 'react';
+import { createElement, useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
@@ -99,11 +99,49 @@ const liveItems = {
 };
 const findMenuItem = (label: string) => findNavItem(label) || liveItems[label as keyof typeof liveItems];
 
+const formatDateLong = (lang: string) => {
+  const locale = lang === 'gu' ? 'gu-IN' : lang === 'hi' ? 'hi-IN' : 'en-GB';
+  return new Date().toLocaleDateString(locale, {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+};
+
+const formatDateShort = (lang: string) => {
+  const locale = lang === 'gu' ? 'gu-IN' : lang === 'hi' ? 'hi-IN' : 'en-GB';
+  return new Date().toLocaleDateString(locale, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+};
+
 export default function Header() {
   const router = useRouter();
   const { theme, toggleTheme, language, setLanguage } = useApp();
+  const [mounted, setMounted] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      setMounted(true);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [searchOpen, setSearchOpen] = useState(false);
+
+  useEffect(() => {
+    if (searchOpen && searchInputRef.current) {
+      const timer = setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [searchOpen]);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -119,10 +157,14 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur">
       <div className="bg-primary text-primary-foreground">
-        <div className="mx-auto flex max-w-screen-xl items-center justify-between gap-3 px-4 py-2">
+        <div className="mx-auto flex max-w-screen-xl items-center justify-between gap-3 px-4 py-1.5">
           <div className="min-w-0 truncate text-sm font-semibold opacity-85">
-            <span className="hidden sm:inline">Sunday, 21 June 2026</span>
-            <span className="sm:hidden">21 Jun 2026</span>
+            <span className="hidden sm:inline">
+              {mounted ? formatDateLong(language) : 'Sunday, 21 June 2026'}
+            </span>
+            <span className="sm:hidden">
+              {mounted ? formatDateShort(language) : '21 Jun 2026'}
+            </span>
             <span className="mx-2 opacity-40">|</span>
             <span>ગુજરાતનું વિશ્વસનીય ન્યૂઝ નેટવર્ક</span>
           </div>
@@ -130,9 +172,11 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-screen-xl items-center justify-between gap-5 px-4 py-4">
+      <div className="mx-auto flex max-w-screen-xl items-center justify-between gap-5 px-4 py-2.5">
         <a href="/" className="logo-3d group flex shrink-0 items-center">
-          <span className="logo-3d-inner relative block h-14 w-40 overflow-hidden rounded-lg bg-white shadow-md ring-1 ring-black/10 sm:w-48 lg:h-16 lg:w-56">
+          <span className={`logo-3d-inner relative block h-14 overflow-hidden rounded-lg bg-white shadow-md ring-1 ring-black/10 transition-all duration-300 sm:h-14 lg:h-16 ${
+            searchOpen ? 'w-24 sm:w-36 lg:w-44' : 'w-40 sm:w-48 lg:w-56'
+          }`}>
             <Image
               src={gpLogo}
               alt="Gujarat Post"
@@ -148,16 +192,57 @@ export default function Header() {
         <Advertisement position="header" className="hidden min-w-0 flex-1 lg:block [&>div]:!min-h-16" />
 
         <div className="flex shrink-0 items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setSearchOpen((value) => !value)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-muted text-foreground transition hover:bg-secondary"
-            aria-label="Search"
-          >
-            <Search className="h-4 w-4" />
-          </button>
+          <div className={`relative flex items-center transition-all duration-300 ease-in-out ${searchOpen ? 'w-44 sm:w-72 md:w-80 lg:w-[28rem]' : 'w-10'}`}>
+            <form onSubmit={submitSearch} className="relative w-full flex items-center">
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder="સમાચાર શોધો..."
+                className={`h-10 w-full rounded-full border border-border bg-muted py-2 pl-10 pr-10 text-sm text-foreground outline-none transition-all duration-300 ease-in-out focus:border-accent focus:bg-card ${
+                  searchOpen ? 'opacity-100 pointer-events-auto' : 'w-10 opacity-0 pointer-events-none'
+                }`}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  if (searchOpen) {
+                    if (searchQuery.trim()) {
+                      const query = searchQuery.trim();
+                      setSearchOpen(false);
+                      router.push(`/search?q=${encodeURIComponent(query)}`);
+                    } else {
+                      setSearchOpen(false);
+                    }
+                  } else {
+                    setSearchOpen(true);
+                  }
+                }}
+                className={`absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-full text-foreground transition hover:bg-secondary ${
+                  searchOpen ? 'text-muted-foreground hover:bg-transparent' : 'bg-muted'
+                }`}
+                aria-label={searchOpen ? "Submit Search" : "Search"}
+              >
+                <Search className="h-4 w-4" />
+              </button>
+              {searchOpen && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchOpen(false);
+                    setSearchQuery('');
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  aria-label="Close search"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </form>
+          </div>
 
-          <div className="relative">
+          <div className={`relative transition-all duration-300 ${searchOpen ? 'max-sm:hidden' : ''}`}>
             <button
               type="button"
               onClick={() => setLanguageOpen((value) => !value)}
@@ -190,7 +275,9 @@ export default function Header() {
           <button
             type="button"
             onClick={toggleTheme}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-muted text-foreground transition hover:bg-secondary"
+            className={`inline-flex h-10 w-10 items-center justify-center rounded-full bg-muted text-foreground transition hover:bg-secondary ${
+              searchOpen ? 'max-sm:hidden' : ''
+            }`}
             aria-label="Toggle dark mode"
           >
             {theme === 'dark' ? <Sun className="h-4 w-4 text-amber-400" /> : <Moon className="h-4 w-4" />}
@@ -207,27 +294,9 @@ export default function Header() {
         </div>
       </div>
 
-      {searchOpen && (
-        <div className="border-t border-border bg-muted px-4 py-3">
-          <div className="mx-auto max-w-screen-xl">
-            <form onSubmit={submitSearch} className="relative max-w-2xl">
-            <label className="relative block">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <input
-                autoFocus
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-                className="h-11 w-full rounded-md border border-border bg-card pl-10 pr-24 text-sm text-foreground outline-none focus:border-accent"
-                placeholder="સમાચાર શોધો..."
-              />
-              <button type="submit" disabled={!searchQuery.trim()} className="absolute right-1.5 top-1/2 h-8 -translate-y-1/2 rounded-md bg-accent px-4 text-xs font-black text-white hover:bg-red-700 disabled:opacity-40">Search</button>
-            </label>
-            </form>
-          </div>
-        </div>
-      )}
 
-      <nav className="hidden border-t border-border bg-card/95 py-2 shadow-[0_6px_18px_rgb(15_23_42/0.04)] md:block">
+
+      <nav className="hidden border-t border-border bg-card/95 py-1.5 shadow-[0_6px_18px_rgb(15_23_42/0.04)] md:block">
         <div className="mx-auto max-w-screen-xl px-4">
           <ul className="mx-auto flex w-fit min-w-0 items-center justify-center gap-1 rounded-2xl border border-border/70 bg-muted/55 p-1.5">
             {navGroups.map((group) => (

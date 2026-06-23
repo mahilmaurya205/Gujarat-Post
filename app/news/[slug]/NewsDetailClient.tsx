@@ -165,7 +165,7 @@ export default function NewsDetailClient({ article, related, trending, articleUr
 
             <div className="space-y-5 text-lg leading-9 text-foreground">
               {paragraphs.map((paragraph, index) => (
-                <div key={paragraph}>
+                <div key={index}>
                   <p>{paragraph}</p>
                   {index === 1 && (
                     <div className="no-print my-6">
@@ -179,8 +179,8 @@ export default function NewsDetailClient({ article, related, trending, articleUr
             <div className="mt-8 border-t border-border pt-5">
               <p className="mb-3 text-xs font-black uppercase tracking-wide text-muted-foreground">Tags</p>
               <div className="flex flex-wrap gap-2">
-                {tags.map((tag) => (
-                  <span key={tag} className="rounded-full bg-muted px-3 py-1 text-xs font-bold text-foreground">#{tag}</span>
+                {tags.map((tag, index) => (
+                  <span key={`${tag}-${index}`} className="rounded-full bg-muted px-3 py-1 text-xs font-bold text-foreground">#{tag}</span>
                 ))}
               </div>
             </div>

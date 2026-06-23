@@ -20,7 +20,7 @@ export const AUTHORS: Author[] = [
     id: "a2",
     name: "Priya Shah",
     nameGu: "પ્રિયા શાહ",
-    nameHi: "प्रिया शाह",
+    nameHi: "પ્રિયા શાહ",
     image: "https://i.pravatar.cc/100?img=32",
     designation: "Crime Reporter",
     designationGu: "ક્રાઇમ રિપોર્ટર",
@@ -97,52 +97,73 @@ const IMG: Record<string, string[]> = {
   gujarat: [
     "https://images.unsplash.com/photo-1599930113854-d6d7fd521f10?w=800&q=80",
     "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&q=80",
-    "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800&q=80",
+    "https://images.unsplash.com/photo-1605649487212-47bdab064df7?w=800&q=80",
+    "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800&q=80",
+    "https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=800&q=80",
+    "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=800&q=80",
   ],
   politics: [
     "https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=800&q=80",
     "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80",
-    "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
+    "https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=800&q=80",
+    "https://images.unsplash.com/photo-1555848962-6e79363ec58f?w=800&q=80",
+    "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80",
   ],
   crime: [
     "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80",
     "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80",
     "https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=800&q=80",
+    "https://images.unsplash.com/photo-1601597111158-2fceff292cdc?w=800&q=80",
+    "https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=800&q=80",
   ],
   business: [
     "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80",
     "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80",
     "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&q=80",
+    "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=800&q=80",
+    "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80",
   ],
   sports: [
     "https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=800&q=80",
     "https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=800&q=80",
+    "https://images.unsplash.com/photo-1518063319789-7217e6706b04?w=800&q=80",
     "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&q=80",
+    "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=800&q=80",
   ],
   entertainment: [
     "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&q=80",
     "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80",
     "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80",
+    "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80",
+    "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80",
   ],
   technology: [
     "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80",
     "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80",
     "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+    "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=800&q=80",
+    "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80",
   ],
   world: [
     "https://images.unsplash.com/photo-1526470608268-f674ce90ebd4?w=800&q=80",
     "https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=800&q=80",
-    "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=80",
+    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&q=80",
+    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
+    "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80",
   ],
   lifestyle: [
     "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80",
     "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80",
     "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&q=80",
+    "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&q=80",
+    "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80",
   ],
   education: [
     "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=800&q=80",
     "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&q=80",
     "https://images.unsplash.com/photo-1513258496099-48168024aec0?w=800&q=80",
+    "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800&q=80",
+    "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80",
   ],
 };
 
@@ -158,7 +179,10 @@ const baseStories = [
   ["sports", "Gujarat Titans begin pre-season camp in Ahmedabad", "ગુજરાત ટાઇટન્સે અમદાવાદમાં પ્રી-સીઝન કેમ્પ શરૂ કર્યો", "गुजरात टाइटन्स ने अहमदाबाद में प्री-सीजन कैंप शुरू किया"],
   ["entertainment", "Navratri 2027 garba events announce premium safety plan", "નવરાત્રી 2027 ગરબા માટે પ્રીમિયમ સેફ્ટી પ્લાન જાહેર", "नवरात्रि 2027 गरबा के लिए प्रीमियम सुरक्षा योजना घोषित"],
   ["technology", "Ahmedabad startups launch AI tools for Gujarati businesses", "અમદાવાદ સ્ટાર્ટઅપ્સે ગુજરાતી બિઝનેસ માટે AI ટૂલ્સ લોન્ચ કર્યા", "अहमदाबाद स्टार्टअप्स ने गुजराती कारोबार के लिए AI टूल लॉन्च किए"],
+  ["world", "Global climate summit adopts new clean energy targets", "વૈશ્વિક આબોહવા પરિષદમાં ક્લીન એનર્જીના લક્ષ્યાંકો નક્કી કરાયા", "वैश्विक जलवायु शिखर सम्मेलन में स्वच्छ ऊर्जा लक्ष्यों को अपनाया गया"],
+  ["world", "US tech giants expand investments in AI data centers", "યુએસ ટેક કંપનીઓએ AI ડેટા સેન્ટર્સમાં રોકાણ વધાર્યું", "अमेरिकी टेक दिग्गजों ने एआई डेटा सेंटरों में निवेश बढ़ाया"],
   ["world", "India trade talks may benefit Gujarat textile exporters", "ભારતની ટ્રેડ વાટાઘાટોથી ગુજરાત ટેક્સટાઇલ નિકાસકારોને લાભ", "भारत व्यापार वार्ता से गुजरात टेक्सटाइल निर्यातकों को लाभ"],
+  ["world", "Global markets surge on positive economic indicator reports", "હકારાત્મક આર્થિક સંકેતો વચ્ચે વૈશ્વિક બજારોમાં ઉછાળો", "सकारात्मक आर्थिक संकेतों से वैश्विक बाजारों में उछाल"],
   ["lifestyle", "Doctors issue heat and hydration advisory for urban Gujarat", "શહેરી ગુજરાત માટે ડૉક્ટર્સની હીટ અને હાઇડ્રેશન એડવાઇઝરી", "शहरी गुजरात के लिए डॉक्टरों की हीट और हाइड्रेशन सलाह"],
   ["education", "Gujarat board announces new digital assessment system", "ગુજરાત બોર્ડે નવી ડિજિટલ મૂલ્યાંકન સિસ્ટમ જાહેર કરી", "गुजरात बोर्ड ने नई डिजिटल मूल्यांकन प्रणाली घोषित की"],
 ];
@@ -167,7 +191,7 @@ const cityStories = [
   ["ahmedabad", "Ahmedabad metro extension trial run completed successfully", "અમદાવાદ મેટ્રો એક્સ્ટેન્શનનો ટ્રાયલ રન સફળ", "अहमदाबाद मेट्रो विस्तार का ट्रायल रन सफल"],
   ["rajkot", "Rajkot civic body approves smart traffic command centre", "રાજકોટમાં સ્માર્ટ ટ્રાફિક કમાન્ડ સેન્ટરને મંજૂરી", "राजकोट में स्मार्ट ट्रैफिक कमांड सेंटर को मंजूरी"],
   ["surat", "Surat textile market records festive season demand spike", "સુરત ટેક્સટાઇલ માર્કેટમાં તહેવારી માંગમાં વધારો", "सूरत टेक्सटाइल बाजार में त्योहारों की मांग बढ़ी"],
-  ["vadodara", "Vadodara lakefront redevelopment opens for public review", "વડોદરા લેકફ્રન્ટ રીડેવલપમેન્ટ જાહેર સમીક્ષા માટે ખુલ્યું", "वडोदरा लेकफ्रंट पुनर्विकास जन समीक्षा के लिए खुला"],
+  ["vadodara", "Vadodara lakefront redevelopment opens for public review", "વડોદરા લેકફ્રન્ટ રીડેવલપમેન્ટ જાહેર સમીક્ષા માટે ખુલ્યું", "वडोदरा हेरिटेज कॉरिडोर का काम अंतिम चरण में"],
 ];
 
 const storyPool = [...baseStories, ...cityStories];
@@ -178,7 +202,7 @@ const excerptEn = "A Gujarat Post special report explains how the development co
 
 const contentGu = [
   "સ્થાનિક અધિકારીઓએ જણાવ્યું કે તાજેતરના નિર્ણય બાદ વિસ્તૃત આયોજન શરૂ કરી દેવામાં આવ્યું છે. લોકો સુધી જરૂરી માહિતી ઝડપથી પહોંચે તે માટે અલગ ટીમો કાર્યરત છે.",
-  "વિભાગો વચ્ચે સંકલન વધારવા માટે કંટ્રોલ રૂમ અને ડિજિટલ મોનિટરિંગ વ્યવસ્થા તૈયાર કરવામાં આવી છે. નાગરિકોને સત્તાવાર સૂચનાઓનું પાલન કરવાની અપીલ કરવામાં આવી છે.",
+  "વિભાગો વચ્ચે સંકલન વધારવા માટે કંટ્રોલ રૂમ અને ડિજિટલ મોનિટરિંગ વ્યવસ્થા તૈયાર કરવામાં આવી છે. નાગરિકોને સત્તાવાર સૂચનાઓનું પાલન કરવામાં આવી છે.",
   "વિશેષજ્ઞોના મતે આ પગલું લાંબા ગાળે ગુજરાતના વિકાસ, સુરક્ષા અને નાગરિક સુવિધાઓ માટે મહત્વપૂર્ણ સાબિત થઈ શકે છે.",
 ];
 
@@ -197,10 +221,19 @@ const contentEn = [
 const slugify = (value: string) =>
   value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
-const imageFor = (category: string, i: number) => {
+const hashString = (str: string) => {
+  let hash = 0;
+  for (let idx = 0; idx < str.length; idx++) {
+    hash = str.charCodeAt(idx) + ((hash << 5) - hash);
+  }
+  return Math.abs(hash);
+};
+
+const imageFor = (category: string, i: number, title: string) => {
   const key = category === "ahmedabad" || category === "rajkot" || category === "surat" || category === "vadodara" ? "gujarat" : category;
   const images = IMG[key] || IMG.gujarat;
-  return images[i % images.length];
+  const hash = hashString(title) + i;
+  return images[hash % images.length];
 };
 
 export const ARTICLES: Article[] = Array.from({ length: 50 }, (_, i) => {
@@ -225,7 +258,7 @@ export const ARTICLES: Article[] = Array.from({ length: 50 }, (_, i) => {
     content: contentEn.join("\n\n"),
     contentGu: contentGu.join("\n\n"),
     contentHi: contentHi.join("\n\n"),
-    image: imageFor(categorySlug, i),
+    image: imageFor(categorySlug, i, story[1]),
     category: meta.name,
     categoryGu: meta.gu,
     categoryHi: meta.hi,
@@ -250,7 +283,7 @@ export const VIDEOS: Video[] = [
   ["v4", "Crime bulletin from major Gujarat cities", "ગુજરાતના મુખ્ય શહેરોની ક્રાઇમ બુલેટિન", "गुजरात के प्रमुख शहरों की क्राइम बुलेटिन", "video", "22:10", 54000],
   ["s1", "Rain alert in 60 seconds", "60 સેકન્ડમાં વરસાદ એલર્ટ", "60 सेकंड में बारिश अलर्ट", "short", "0:58", 185000],
   ["s2", "Gujarat Titans training moment", "ગુજરાત ટાઇટન્સ ટ્રેનિંગ મોમેન્ટ", "गुजरात टाइटन्स ट्रेनिंग मोमेंट", "short", "0:45", 210000],
-  ["s3", "Navratri safety checklist", "નવરાત્રી સેફ્ટી ચેકલિસ્ટ", "नवरात्रि सेफ्टी चेकलिस्ट", "short", "0:59", 146000],
+  ["s3", "Navratri safety checklist", "નવરાત્રી સેફ્ટી ચેકલિસ્ટ", "नवरात्रि सेफ्टी checklist", "short", "0:59", 146000],
   ["s4", "Surat market quick update", "સુરત માર્કેટ ક્વિક અપડેટ", "सूरत मार्केट क्विक अपडेट", "short", "0:52", 118000],
   ["p1", "Podcast: Gujarat economy next decade", "પોડકાસ્ટ: ગુજરાત અર્થતંત્રનો આગામી દાયક", "पॉडकास्ट: गुजरात अर्थव्यवस्था का अगला दशक", "podcast", "55:00", 36000],
   ["p2", "Podcast: Politics and youth vote", "પોડકાસ્ટ: રાજકારણ અને યુવા મતદાર", "पॉडकास्ट: राजनीति और युवा मतदाता", "podcast", "48:30", 28000],
@@ -261,7 +294,7 @@ export const VIDEOS: Video[] = [
   title: title as string,
   titleGu: titleGu as string,
   titleHi: titleHi as string,
-  thumbnail: imageFor(["politics", "gujarat", "business", "crime", "sports", "entertainment"][i % 6], i),
+  thumbnail: imageFor(["politics", "gujarat", "business", "crime", "sports", "entertainment"][i % 6], i, title as string),
   youtubeId: "dQw4w9WgXcQ",
   duration: duration as string,
   type: type as Video["type"],
@@ -270,12 +303,12 @@ export const VIDEOS: Video[] = [
 }));
 
 export const PHOTOS: Photo[] = [
-  { id: "ph1", src: imageFor("gujarat", 0), alt: "Ahmedabad rain", caption: "Ahmedabad monsoon scenes", captionGu: "અમદાવાદમાં ચોમાસાના દૃશ્યો", captionHi: "अहमदाबाद में मानसून के दृश्य" },
-  { id: "ph2", src: imageFor("sports", 0), alt: "Cricket match", caption: "Gujarat cricket practice", captionGu: "ગુજરાત ક્રિકેટ પ્રેક્ટિસ", captionHi: "गुजरात क्रिकेट अभ्यास" },
-  { id: "ph3", src: imageFor("politics", 1), alt: "Political rally", caption: "Election rally crowd", captionGu: "ચૂંટણી સભામાં જનમેદની", captionHi: "चुनावी सभा में भीड़" },
-  { id: "ph4", src: imageFor("entertainment", 1), alt: "Garba night", caption: "Navratri garba night", captionGu: "નવરાત્રી ગરબા નાઇટ", captionHi: "नवरात्रि गरबा नाइट" },
-  { id: "ph5", src: imageFor("business", 1), alt: "Business district", caption: "GIFT City skyline", captionGu: "GIFT સિટી સ્કાઇલાઇન", captionHi: "GIFT सिटी स्काइलाइन" },
-  { id: "ph6", src: imageFor("education", 2), alt: "Students", caption: "Digital classroom in Gujarat", captionGu: "ગુજરાતનો ડિજિટલ ક્લાસરૂમ", captionHi: "गुजरात की डिजिटल कक्षा" },
+  { id: "ph1", src: imageFor("gujarat", 0, "Ahmedabad rain"), alt: "Ahmedabad rain", caption: "Ahmedabad monsoon scenes", captionGu: "અમદાવાદમાં ચોમાસાના દૃશ્યો", captionHi: "अहमदाबाद में मानसून के दृश्य" },
+  { id: "ph2", src: imageFor("sports", 0, "Cricket match"), alt: "Cricket match", caption: "Gujarat cricket practice", captionGu: "ગુજરાત ક્રિકેટ પ્રેક્ટિસ", captionHi: "गुजरात क्रिकेट अभ्यास" },
+  { id: "ph3", src: imageFor("politics", 1, "Political rally"), alt: "Political rally", caption: "Election rally crowd", captionGu: "ચૂંટણી સભામાં જનમેદની", captionHi: "चुनावी सभा में भीड़" },
+  { id: "ph4", src: imageFor("entertainment", 1, "Garba night"), alt: "Garba night", caption: "Navratri garba night", captionGu: "નવરાત્રી ગરબા નાઇટ", captionHi: "नवरात्रि गरबा नाइट" },
+  { id: "ph5", src: imageFor("business", 1, "Business district"), alt: "Business district", caption: "GIFT City skyline", captionGu: "GIFT સિટી સ્કાઇલાઇન", captionHi: "GIFT सिटी स्काइलाइन" },
+  { id: "ph6", src: imageFor("education", 2, "Students"), alt: "Students", caption: "Digital classroom in Gujarat", captionGu: "ગુજરાતનો ડિજિટલ ક્લાસરૂમ", captionHi: "गुजरात की डिजिटल कक्षा" },
 ];
 
 export const BREAKING_TICKER = [

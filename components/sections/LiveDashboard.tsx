@@ -13,10 +13,10 @@ interface FootballMatch { id: string; league: string; date: string; state: strin
 function Panel({ title, subtitle, status = 'Live', children }: { title: string; subtitle: string; status?: string; children: React.ReactNode }) {
   const live = status.toLowerCase() === 'live';
   return (
-    <section className="flex min-h-[30rem] flex-col rounded-2xl border border-border bg-card p-4 shadow-sm">
-      <div className="mb-4 flex items-start justify-between gap-3">
-        <div><h3 className="text-lg font-black text-foreground">{title}</h3><p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">{subtitle}</p></div>
-        <span className={`rounded-full px-2.5 py-1 text-[10px] font-black uppercase text-white ${live ? 'bg-accent' : 'bg-slate-500'}`}>
+    <section className="flex flex-col rounded-xl border border-border bg-card p-3 shadow-sm">
+      <div className="mb-2.5 flex items-start justify-between gap-3">
+        <div><h3 className="text-sm font-black text-foreground">{title}</h3><p className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">{subtitle}</p></div>
+        <span className={`rounded-full px-2 py-0.5 text-[10px] font-black uppercase text-white ${live ? 'bg-accent' : 'bg-slate-500'}`}>
           {live && <span className="mr-1 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-white" />}{status}
         </span>
       </div>
@@ -95,24 +95,31 @@ export default function LiveDashboard() {
   const liveFootball = football.some((match) => match.state === 'in');
 
   return (
-    <section id="live-dashboard" className="py-8">
+    <section id="live-dashboard" className="py-3">
       <div className="mx-auto max-w-screen-xl px-4">
-        <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-accent">Live Center</p>
-            <h2 className="text-2xl font-black text-foreground md:text-3xl">{getLocalized(language, { en: 'Weather, Markets & Scores', gu: 'હવામાન, બજાર અને સ્કોર', hi: 'मौसम, बाज़ार और स्कोर' })}</h2>
-            <p className="mt-1 text-xs font-semibold text-muted-foreground">Live provider data · Auto-refreshes every 5 minutes{updatedAt ? ` · Updated ${new Date(updatedAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}` : ''}</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-accent">Live Center</p>
+            <h2 className="text-lg font-black text-foreground md:text-xl">{getLocalized(language, { en: 'Weather, Markets & Scores', gu: 'હવામાન, બજાર અને સ્કોર', hi: 'मौसम, बाज़ार और स्कोर' })}</h2>
+            <p className="mt-0.5 text-[10px] font-semibold text-muted-foreground">
+              {getLocalized(language, {
+                en: 'Live provider data · Auto-refreshes every 5 minutes',
+                gu: 'લાઇવ ડેટા · દર ૫ મિનિટે ઓટો-રિફ્રેશ થાય છે',
+                hi: 'लाइव डेटा · हर 5 मिनट में ऑटो-रिफ्रेश होता है'
+              })}
+              {updatedAt ? ` · ${getLocalized(language, { en: 'Updated', gu: 'અપડેટ કરેલ', hi: 'अपडेट किया गया' })} ${new Date(updatedAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}` : ''}
+            </p>
           </div>
-          <button type="button" onClick={() => void loadDashboard(true)} disabled={refreshing} className="inline-flex h-9 items-center justify-center gap-2 self-start rounded-full border border-border bg-card px-4 text-xs font-black text-foreground transition hover:border-accent hover:text-accent disabled:opacity-50 sm:self-auto">
-            <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? 'animate-spin' : ''}`} /> Refresh live data
+          <button type="button" onClick={() => void loadDashboard(true)} disabled={refreshing} className="inline-flex h-7 items-center justify-center gap-1.5 self-start rounded-full border border-border bg-card px-3 text-[10px] font-black text-foreground transition hover:border-accent hover:text-accent disabled:opacity-50 sm:self-auto">
+            <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? 'animate-spin' : ''}`} /> {getLocalized(language, { en: 'Refresh live data', gu: 'લાઇવ ડેટા રિફ્રેશ કરો', hi: 'लाइव डेटा रीफ्रेश करें' })}
           </button>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
-          <Panel title={getLocalized(language, { en: 'Weather', gu: 'હવામાન', hi: 'मौसम' })} subtitle="Search any Indian city">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+          <Panel title={getLocalized(language, { en: 'Weather', gu: 'હવામાન', hi: 'मौसम' })} subtitle={getLocalized(language, { en: 'Search any Indian city', gu: 'કોઈપણ ભારતીય શહેર શોધો', hi: 'कोई भी भारतीय शहर खोजें' })}>
             <form onSubmit={searchCity} className="mb-3 flex gap-2">
-              <label className="relative min-w-0 flex-1"><span className="sr-only">Indian city</span><Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" /><input value={city} onChange={(event) => setCity(event.target.value)} placeholder="Mumbai, Jaipur..." className="h-9 w-full rounded-lg border border-border bg-muted pl-9 pr-3 text-xs font-semibold text-foreground outline-none focus:border-accent" /></label>
-              <button className="h-9 rounded-lg bg-accent px-3 text-xs font-black text-white">Search</button>
+              <label className="relative min-w-0 flex-1"><span className="sr-only">{getLocalized(language, { en: 'Indian city', gu: 'ભારતીય શહેર', hi: 'भारतीय शहर' })}</span><Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" /><input value={city} onChange={(event) => setCity(event.target.value)} placeholder={getLocalized(language, { en: 'Mumbai, Jaipur...', gu: 'મુંબઈ, જયપુર...', hi: 'मुंबई, जयपुर...' })} className="h-9 w-full rounded-lg border border-border bg-muted pl-9 pr-3 text-xs font-semibold text-foreground outline-none focus:border-accent" /></label>
+              <button className="h-9 rounded-lg bg-accent px-3 text-xs font-black text-white">{getLocalized(language, { en: 'Search', gu: 'શોધો', hi: 'खोजें' })}</button>
             </form>
             {weatherError && !weather.length ? <ErrorState message={weatherError} /> : (
               <div className="scrollbar-hide max-h-[24rem] space-y-3 overflow-y-auto">
@@ -138,7 +145,7 @@ export default function LiveDashboard() {
             <p className="mt-auto pt-3 text-[9px] font-bold text-muted-foreground">Indicative quotes · Source: Yahoo Finance</p>
           </Panel>
 
-          <Panel title={getLocalized(language, { en: 'Cricket Scorecard', gu: 'ક્રિકેટ સ્કોરકાર્ડ', hi: 'क्रिकेट स्कोरकार्ड' })} subtitle="IPL score feed" status={liveCricket ? 'Live' : 'Latest'}>
+          <Panel title={getLocalized(language, { en: 'Cricket Scorecard', gu: 'ક્રિકેટ સ્કોરકાર્ડ', hi: 'क्रिकेट स्कोरकार्ड' })} subtitle={getLocalized(language, { en: 'IPL score feed', gu: 'IPL સ્કોર અપડેટ', hi: 'आईपीएल स्कोर फीड' })} status={liveCricket ? (language === 'gu' ? 'લાઇવ' : language === 'hi' ? 'लाइव' : 'Live') : (language === 'gu' ? 'તાજેતરના' : language === 'hi' ? 'नवीनतम' : 'Latest')}>
             {sportsError && !cricket ? <ErrorState message={sportsError} /> : cricket ? <div className="rounded-xl bg-muted p-4">
               <div className="flex items-start justify-between gap-2"><div><p className="text-sm font-black text-foreground">{cricket.title}</p><p className="mt-1 text-[10px] font-semibold text-muted-foreground">{cricket.venue}</p></div><span className="shrink-0 text-[10px] font-black uppercase text-accent">{cricket.status}</span></div>
               <div className="mt-5 space-y-3">{cricket.teams.map((team) => <div key={team.name} className="flex items-center justify-between border-b border-border pb-3 last:border-0"><span className="pr-3 text-sm font-black text-foreground">{team.name}</span><span className="text-right text-sm font-black text-accent">{team.score}</span></div>)}</div>

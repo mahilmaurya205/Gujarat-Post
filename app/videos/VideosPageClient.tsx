@@ -19,7 +19,13 @@ const tabs = [
 export default function VideosPageClient() {
   const { language } = useApp();
   const [activeTab, setActiveTab] = useState<TabType>('all');
+  const [playingVideoId, setPlayingVideoId] = useState<string | null>(null);
   const filtered = activeTab === 'all' ? VIDEOS : VIDEOS.filter((item) => item.type === activeTab);
+
+  const handleTabChange = (tab: TabType) => {
+    setActiveTab(tab);
+    setPlayingVideoId(null);
+  };
 
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-8">
@@ -33,7 +39,7 @@ export default function VideosPageClient() {
           const Icon = tab.icon;
           const active = activeTab === tab.key;
           return (
-            <button key={tab.key} type="button" onClick={() => setActiveTab(tab.key)} className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-black ${active ? 'border-accent bg-accent text-white' : 'border-border bg-card text-foreground'}`}>
+            <button key={tab.key} type="button" onClick={() => handleTabChange(tab.key)} className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-black ${active ? 'border-accent bg-accent text-white' : 'border-border bg-card text-foreground'}`}>
               <Icon className="h-4 w-4" />
               {getLocalized(language, { en: tab.label, gu: tab.gu, hi: tab.hi })}
             </button>
@@ -45,12 +51,24 @@ export default function VideosPageClient() {
         {filtered.map((item) => (
           <article key={item.id} className="news-card overflow-hidden rounded-lg border border-border bg-card">
             <div className="relative aspect-video">
-              <Image src={item.thumbnail} alt={item.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
-              <div className="absolute inset-0 flex items-center justify-center bg-black/35">
-                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-white"><Play className="h-6 w-6 fill-current" /></span>
-              </div>
-              <span className="absolute bottom-2 right-2 rounded bg-black/75 px-2 py-0.5 text-xs font-bold text-white">{item.duration}</span>
-              <span className="absolute left-2 top-2 rounded bg-black/70 px-2 py-0.5 text-xs font-black text-white">{item.type.toUpperCase()}</span>
+              {playingVideoId === item.id ? (
+                <iframe
+                  className="absolute inset-0 h-full w-full"
+                  src={`https://www.youtube.com/embed/${item.youtubeId}?autoplay=1&controls=1&mute=0&rel=0`}
+                  title={getLocalized(language, { en: item.title, gu: item.titleGu, hi: item.titleHi })}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              ) : (
+                <div className="group/video relative h-full w-full cursor-pointer" onClick={() => setPlayingVideoId(item.id)}>
+                  <Image src={item.thumbnail} alt={item.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/35 transition-all group-hover/video:bg-black/20">
+                    <span className="flex h-14 w-14 items-center justify-center rounded-full bg-accent text-white transition-transform group-hover/video:scale-110"><Play className="h-6 w-6 fill-current" /></span>
+                  </div>
+                  <span className="absolute bottom-2 right-2 rounded bg-black/75 px-2 py-0.5 text-xs font-bold text-white">{item.duration}</span>
+                  <span className="absolute left-2 top-2 rounded bg-black/70 px-2 py-0.5 text-xs font-black text-white">{item.type.toUpperCase()}</span>
+                </div>
+              )}
             </div>
             <div className="p-4">
               <h2 className="line-clamp-2 text-base font-black leading-snug text-foreground">{getLocalized(language, { en: item.title, gu: item.titleGu, hi: item.titleHi })}</h2>

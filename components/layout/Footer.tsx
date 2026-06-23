@@ -1,11 +1,30 @@
+'use client';
+
 import Link from 'next/link';
 import { ArrowRight, Mail, MapPin, Radio, Smartphone } from 'lucide-react';
 import { NAV_ITEMS } from '@/data';
 import { SocialLinks } from '@/components/ui/SocialLinks';
 
+function AppleIcon({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-1 .04-2.22.67-2.94 1.5-.63.72-1.18 1.86-1.03 2.97 1.12.09 2.27-.6 2.98-1.41z"/>
+    </svg>
+  );
+}
+
+function PlayStoreIcon({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+      <path d="M3 5.27v13.46c0 .87.87 1.41 1.63.97l11.66-6.73c.75-.43.75-1.51 0-1.94L4.63 4.3C3.87 3.86 3 4.4 3 5.27z"/>
+      <path d="M17.47 11.23L4.76 3.89c-.38-.22-.84-.13-1.12.22l11.13 11.13 2.7-2.7c.39-.4.39-1.02 0-1.31z"/>
+    </svg>
+  );
+}
+
 const companyLinks = [
-  ['About Gujarat Post', '/about'],
-  ['Contact newsroom', '/contact'],
+  ['About Us', '/about'],
+  ['Contact Us', '/contact'],
   ['Complaint redressal', '/complaint-redressal'],
   ['Advertise with us', '/advertise'],
   ['Careers', '/careers'],
@@ -15,6 +34,7 @@ const policyLinks = [
   ['Privacy policy', '/privacy-policy'],
   ['Terms & conditions', '/terms'],
   ['Cookie policy', '/cookie-policy'],
+  ['Disclaimer', '/disclaimer'],
   ['DNPA code', '/dnpa-code'],
   ['CSR policy', '/csr-policy'],
 ];
@@ -76,6 +96,27 @@ export default function Footer() {
             <p className="flex items-center gap-2"><Radio className="h-4 w-4 text-red-400" /> Newsroom active 24 × 7</p>
           </div>
           <SocialLinks size="lg" className="mt-6" />
+
+          {/* App Download buttons styled beautifully */}
+          <div className="mt-8">
+            <h3 className="text-xs font-black uppercase tracking-[0.16em] text-white mb-3">Download our App</h3>
+            <div className="flex flex-wrap gap-2.5">
+              <a href="https://apps.apple.com" target="_blank" rel="noreferrer" className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-1.5 hover:bg-white/[0.08] transition shadow-sm hover:border-white/20">
+                <AppleIcon className="h-5 w-5 text-white" />
+                <div className="text-left leading-none">
+                  <span className="block text-[8px] font-medium text-white/45 uppercase tracking-wide">Download on</span>
+                  <span className="block text-xs font-bold text-white mt-0.5">App Store</span>
+                </div>
+              </a>
+              <a href="https://play.google.com" target="_blank" rel="noreferrer" className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-1.5 hover:bg-white/[0.08] transition shadow-sm hover:border-white/20">
+                <PlayStoreIcon className="h-5 w-5 text-white" />
+                <div className="text-left leading-none">
+                  <span className="block text-[8px] font-medium text-white/45 uppercase tracking-wide">Get it on</span>
+                  <span className="block text-xs font-bold text-white mt-0.5">Google Play</span>
+                </div>
+              </a>
+            </div>
+          </div>
         </section>
 
         <section>
@@ -102,16 +143,38 @@ export default function Footer() {
           </ul>
           <h2 className="mb-4 mt-8 text-xs font-black uppercase tracking-[0.16em] text-white">Information</h2>
           <ul className="space-y-3">
-            {policyLinks.slice(0, 3).map(([label, href]) => <li key={href}><FooterLink href={href}>{label}</FooterLink></li>)}
+            {policyLinks.slice(0, 4).map(([label, href]) => <li key={href}><FooterLink href={href}>{label}</FooterLink></li>)}
           </ul>
         </section>
+
+        {/* Reader/Subscriber statistics row spanning 4 columns */}
+        <div className="sm:col-span-2 lg:col-span-4 border-t border-white/10 pt-10">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 text-center hover:border-white/10 transition shadow-inner">
+              <span className="text-2xl font-black tracking-tight text-accent block">5.2M+</span>
+              <span className="text-[10px] font-black uppercase tracking-wider text-white/40 block mt-1">Monthly Active Readers</span>
+            </div>
+            <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 text-center hover:border-white/10 transition shadow-inner">
+              <span className="text-2xl font-black tracking-tight text-accent block">1.5M+</span>
+              <span className="text-[10px] font-black uppercase tracking-wider text-white/40 block mt-1">YouTube Subscribers</span>
+            </div>
+            <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 text-center hover:border-white/10 transition shadow-inner">
+              <span className="text-2xl font-black tracking-tight text-accent block">250K+</span>
+              <span className="text-[10px] font-black uppercase tracking-wider text-white/40 block mt-1">Newsletter Subscribers</span>
+            </div>
+            <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 text-center hover:border-white/10 transition shadow-inner">
+              <span className="text-2xl font-black tracking-tight text-accent block">24 × 7</span>
+              <span className="text-[10px] font-black uppercase tracking-wider text-white/40 block mt-1">Live News Updates</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="relative border-t border-white/10 bg-black/20">
         <div className="mx-auto flex max-w-screen-xl flex-col gap-4 px-4 py-5 text-xs text-white/42 md:flex-row md:items-center md:justify-between">
           <p>© {new Date().getFullYear()} Gujarat Post Media. All rights reserved.</p>
           <div className="flex flex-wrap gap-x-5 gap-y-2">
-            {policyLinks.slice(3).map(([label, href]) => <Link key={href} href={href} className="transition hover:text-white">{label}</Link>)}
+            {policyLinks.slice(4).map(([label, href]) => <Link key={href} href={href} className="transition hover:text-white">{label}</Link>)}
             <Link href="/sitemap.xml" className="transition hover:text-white">Sitemap</Link>
             <Link href="/rss.xml" className="transition hover:text-white">RSS</Link>
           </div>

@@ -18,7 +18,7 @@ export default function CategorySection({ category, categoryGu, cols = 4 }: Cate
   if (articles.length === 0) return null;
 
   return (
-    <section className="py-10">
+    <section className="py-3">
       <div className="max-w-screen-xl mx-auto px-4">
         <SectionHeader
           title={category}
@@ -27,7 +27,7 @@ export default function CategorySection({ category, categoryGu, cols = 4 }: Cate
           href={`/category/${category.toLowerCase()}`}
           language={language}
         />
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {articles.map(article => (
             <NewsCard key={article.id} article={article} variant="default" />
           ))}

@@ -10,12 +10,34 @@ import {
   MessageCircle,
   MoreHorizontal,
   Play,
+  Square,
   Share2,
   Volume2,
   VolumeX,
 } from 'lucide-react';
 import { VIDEOS, formatViews, getLocalized } from '@/data';
 import { useApp } from '@/components/AppProvider';
+
+interface YoutubePlayerProps {
+  youtubeId: string;
+  title: string;
+  initialMuted: boolean;
+  iframeRef: React.RefCallback<HTMLIFrameElement>;
+}
+
+function YoutubePlayer({ youtubeId, title, initialMuted, iframeRef }: YoutubePlayerProps) {
+  return (
+    <iframe
+      ref={iframeRef}
+      id="active-iframe"
+      className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+      src={`https://www.youtube.com/embed/${youtubeId}?enablejsapi=1&autoplay=1&controls=0&mute=${initialMuted ? 1 : 0}&loop=1&playlist=${youtubeId}&rel=0`}
+      title={title}
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowFullScreen
+    />
+  );
+}
 
 const INITIAL_ITEMS = 10;
 const LOAD_MORE_ITEMS = 8;
@@ -47,6 +69,74 @@ export default function WatchPageClient() {
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const cardsRef = useRef<Map<number, HTMLElement>>(new Map());
   const feed = useMemo(() => makeFeed(itemCount), [itemCount]);
+
+  const activeIframeRef = useRef<HTMLIFrameElement | null>(null);
+  const [showHeartAnim, setShowHeartAnim] = useState(false);
+  const [showMuteHud, setShowMuteHud] = useState(false);
+  const isFirstMute = useRef(true);
+
+  // Programmatic play/pause control via postMessage
+  useEffect(() => {
+    const iframe = activeIframeRef.current;
+    if (!iframe || !iframe.contentWindow) return;
+    try {
+      const command = isPlaying ? 'playVideo' : 'pauseVideo';
+      iframe.contentWindow.postMessage(
+        JSON.stringify({ event: 'command', func: command, args: '' }),
+        '*'
+      );
+    } catch (e) {
+      console.error('Error pausing/playing video:', e);
+    }
+  }, [isPlaying]);
+
+  // Programmatic mute/unmute control via postMessage
+  useEffect(() => {
+    const iframe = activeIframeRef.current;
+    if (!iframe || !iframe.contentWindow) return;
+    try {
+      const command = isMuted ? 'mute' : 'unMute';
+      iframe.contentWindow.postMessage(
+        JSON.stringify({ event: 'command', func: command, args: '' }),
+        '*'
+      );
+    } catch (e) {
+      console.error('Error muting/unmuting video:', e);
+    }
+  }, [isMuted]);
+
+  // Toggle mute HUD indicator on mute change
+  useEffect(() => {
+    if (isFirstMute.current) {
+      isFirstMute.current = false;
+      return;
+    }
+    setShowMuteHud(true);
+    const timer = setTimeout(() => setShowMuteHud(false), 800);
+    return () => clearTimeout(timer);
+  }, [isMuted]);
+
+  // Toggle Play/Stop on video click
+  const handleVideoClick = () => {
+    setIsPlaying((prev) => !prev);
+  };
+
+  // Toggle Like and show heart animation on video double click
+  const handleVideoDoubleClick = (e: React.MouseEvent, feedKey: string) => {
+    e.preventDefault();
+    if (!liked.has(feedKey)) {
+      toggleSet(setLiked, feedKey);
+    }
+    setShowHeartAnim(true);
+  };
+
+  // Clear heart animation timer
+  useEffect(() => {
+    if (showHeartAnim) {
+      const timer = setTimeout(() => setShowHeartAnim(false), 800);
+      return () => clearTimeout(timer);
+    }
+  }, [showHeartAnim]);
 
   const scrollTo = useCallback((index: number) => {
     const next = Math.max(0, Math.min(index, feed.length - 1));
@@ -98,7 +188,7 @@ export default function WatchPageClient() {
         event.preventDefault();
         scrollTo(activeIndex - 1);
       }
-      if (event.key === ' ') {
+      if (event.key === ' ' || event.key.toLowerCase() === 'k') {
         event.preventDefault();
         setIsPlaying((value) => !value);
       }
@@ -158,24 +248,66 @@ export default function WatchPageClient() {
               className="watch-reel"
               aria-label={`${index + 1}. ${title}`}
             >
-              <button
-                type="button"
-                className="absolute inset-0 z-[1] cursor-pointer"
-                onClick={() => active && setIsPlaying((value) => !value)}
-                aria-label={isPlaying ? 'Pause video' : 'Play video'}
-              />
-              <Image
-                src={item.thumbnail}
-                alt=""
-                fill
-                priority={index < 2}
-                sizes="(max-width: 640px) 100vw, 520px"
-                className={`watch-reel-image ${active && isPlaying ? 'is-playing' : ''}`}
-              />
+              {active ? (
+                <div className="absolute inset-0 z-0 bg-black">
+                  <YoutubePlayer
+                    youtubeId={item.youtubeId}
+                    title={title}
+                    initialMuted={isMuted}
+                    iframeRef={(node) => {
+                      if (node) activeIframeRef.current = node;
+                    }}
+                  />
+                  {/* Transparent overlay for single click Play/Stop and double click Like */}
+                  <div
+                    className="absolute inset-0 z-[2] cursor-pointer"
+                    onClick={handleVideoClick}
+                    onDoubleClick={(e) => handleVideoDoubleClick(e, item.feedKey)}
+                  />
+                  
+                  {/* Floating heart burst animation on double click */}
+                  {showHeartAnim && (
+                    <div className="absolute top-1/2 left-1/2 z-[10] pointer-events-none animate-heart-burst">
+                      <Heart className="h-20 w-20 fill-red-500 text-red-500 drop-shadow-lg" />
+                    </div>
+                  )}
+
+                  {/* Volume HUD indicator when muted state toggles */}
+                  {showMuteHud && (
+                    <div className="absolute top-1/2 left-1/2 z-[10] pointer-events-none bg-black/65 backdrop-blur-md p-5 rounded-full text-white animate-hud-fade shadow-2xl">
+                      {isMuted ? <VolumeX className="h-10 w-10 text-white" /> : <Volume2 className="h-10 w-10 text-white animate-pulse" />}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    className="absolute inset-0 z-[1] cursor-pointer"
+                    onClick={() => scrollTo(index)}
+                    aria-label="View video"
+                  />
+                  <Image
+                    src={item.thumbnail}
+                    alt=""
+                    fill
+                    priority={index < 2}
+                    sizes="(max-width: 640px) 100vw, 520px"
+                    className="watch-reel-image"
+                  />
+                </>
+              )}
               <div className="watch-reel-shade" />
 
               {active && !isPlaying && (
-                <span className="watch-play-indicator"><Play className="fill-current" /></span>
+                <button
+                  type="button"
+                  onClick={handleVideoClick}
+                  className="watch-play-indicator animate-pulse hover:scale-105 transition duration-150 active:scale-95 z-[10]"
+                  aria-label="Play video"
+                >
+                  <Play className="fill-current text-white h-8 w-8" />
+                </button>
               )}
 
               <div className="watch-story-copy">
@@ -202,6 +334,20 @@ export default function WatchPageClient() {
               </div>
 
               <aside className="watch-actions" aria-label="Video actions">
+                {/* Play / Stop button */}
+                <button type="button" onClick={handleVideoClick} aria-label={isPlaying ? 'Stop video' : 'Play video'}>
+                  <span>
+                    {isPlaying ? <Square className="text-white" /> : <Play className="fill-current text-white" />}
+                  </span>
+                  <small>
+                    {getLocalized(language, {
+                      en: isPlaying ? 'Stop' : 'Play',
+                      gu: isPlaying ? 'થોભાવો' : 'પ્લે',
+                      hi: isPlaying ? 'रोकें' : 'प्ले',
+                    })}
+                  </small>
+                </button>
+
                 <button type="button" onClick={() => toggleSet(setLiked, item.feedKey)} aria-label={isLiked ? 'Unlike' : 'Like'}>
                   <span className={isLiked ? 'is-liked' : ''}><Heart className={isLiked ? 'fill-current' : ''} /></span>
                   <small>{formatViews(item.likes + (isLiked ? 1 : 0))}</small>
@@ -219,7 +365,7 @@ export default function WatchPageClient() {
               </aside>
 
               {active && (
-                <div className="watch-progress" key={`${item.feedKey}-${isPlaying}`}>
+                <div className="watch-progress" key={item.feedKey}>
                   <span style={{ animationPlayState: isPlaying ? 'running' : 'paused' }} />
                 </div>
               )}
