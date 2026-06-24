@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { VIDEOS, formatViews, getLocalized } from '@/data';
 import { useApp } from '@/components/AppProvider';
+import Footer from '@/components/layout/Footer';
 
 interface YoutubePlayerProps {
   youtubeId: string;
@@ -41,6 +42,7 @@ function YoutubePlayer({ youtubeId, title, initialMuted, iframeRef }: YoutubePla
 
 const INITIAL_ITEMS = 10;
 const LOAD_MORE_ITEMS = 8;
+const MAX_FEED_ITEMS = 16;
 
 const makeFeed = (count: number) =>
   Array.from({ length: count }, (_, index) => {
@@ -139,13 +141,16 @@ export default function WatchPageClient() {
   }, [showHeartAnim]);
 
   const scrollTo = useCallback((index: number) => {
-    const next = Math.max(0, Math.min(index, feed.length - 1));
+    const maxIndex = feed.length + (itemCount >= MAX_FEED_ITEMS ? 0 : -1);
+    const next = Math.max(0, Math.min(index, maxIndex));
     cardsRef.current.get(next)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, [feed.length]);
+  }, [feed.length, itemCount]);
 
   useEffect(() => {
     const root = feedRef.current;
     if (!root) return;
+
+    const FOOTER_INDEX = -1; // sentinel value for the footer slide
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -153,15 +158,22 @@ export default function WatchPageClient() {
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (!visible) return;
-        setActiveIndex(Number((visible.target as HTMLElement).dataset.index));
-        setIsPlaying(true);
+        const rawIndex = (visible.target as HTMLElement).dataset.index;
+        const idx = rawIndex !== undefined ? Number(rawIndex) : FOOTER_INDEX;
+        if (idx === FOOTER_INDEX) {
+          // Footer slide is most visible — pause any playing video
+          setIsPlaying(false);
+        } else {
+          setActiveIndex(idx);
+          setIsPlaying(true);
+        }
       },
       { root, threshold: [0.55, 0.75, 0.9] },
     );
 
     cardsRef.current.forEach((card) => observer.observe(card));
     return () => observer.disconnect();
-  }, [feed.length]);
+  }, [feed.length, itemCount]);
 
   useEffect(() => {
     const root = feedRef.current;
@@ -170,7 +182,12 @@ export default function WatchPageClient() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) setItemCount((count) => count + LOAD_MORE_ITEMS);
+        if (entry.isIntersecting) {
+          setItemCount((count) => {
+            if (count >= MAX_FEED_ITEMS) return count;
+            return Math.min(count + LOAD_MORE_ITEMS, MAX_FEED_ITEMS);
+          });
+        }
       },
       { root, rootMargin: '150% 0px' },
     );
@@ -377,14 +394,42 @@ export default function WatchPageClient() {
             </article>
           );
         })}
-        <div ref={loadMoreRef} className="watch-loader" aria-label="Loading more videos">
-          <span /><span /><span />
-        </div>
+        {itemCount >= MAX_FEED_ITEMS && (
+          <div
+            // No data-index so the observer treats this as the footer sentinel
+            ref={(node) => {
+              if (node) cardsRef.current.set(feed.length, node);
+              else cardsRef.current.delete(feed.length);
+            }}
+            className="watch-reel overflow-y-auto scrollbar-hide flex flex-col justify-between"
+            style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
+          >
+            <div className="pt-14 pb-4 px-4 text-center shrink-0">
+              <span className="inline-block px-3 py-1 rounded-full bg-white/10 text-xs font-bold text-white/50 animate-pulse">
+                You&apos;ve caught up!
+              </span>
+            </div>
+            <div className="flex-1">
+              <Footer isInline />
+            </div>
+          </div>
+        )}
+        {itemCount < MAX_FEED_ITEMS && (
+          <div ref={loadMoreRef} className="watch-loader" aria-label="Loading more videos">
+            <span /><span /><span />
+          </div>
+        )}
       </div>
 
       <div className="watch-desktop-nav" aria-hidden="true">
         <button type="button" onClick={() => scrollTo(activeIndex - 1)} disabled={activeIndex === 0}><ChevronDown className="rotate-180" /></button>
-        <button type="button" onClick={() => scrollTo(activeIndex + 1)}><ChevronDown /></button>
+        <button
+          type="button"
+          onClick={() => scrollTo(activeIndex + 1)}
+          disabled={activeIndex === feed.length + (itemCount >= MAX_FEED_ITEMS ? 0 : -1)}
+        >
+          <ChevronDown />
+        </button>
       </div>
     </section>
   );

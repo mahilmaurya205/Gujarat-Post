@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Bookmark, Eye, Heart, MessageCircle, MoreHorizontal, Play, Send, Volume2 } from 'lucide-react';
 import { VIDEOS, formatViews, getLocalized } from '@/data';
 import { useApp } from '@/components/AppProvider';
+import Footer from '@/components/layout/Footer';
 
 const shortItems = VIDEOS.filter((item) => item.type === 'short');
 
@@ -138,6 +139,20 @@ export default function ShortsPageClient() {
               </article>
             );
           })}
+          {/* Last Slide: Footer */}
+          <div
+            className="relative h-[calc(100svh-92px)] min-h-[620px] snap-start overflow-y-auto scrollbar-hide bg-slate-950 flex flex-col justify-between"
+            style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
+          >
+            <div className="pt-10 pb-4 px-4 text-center shrink-0">
+              <span className="inline-block px-3 py-1 rounded-full bg-white/10 text-xs font-bold text-white/50 animate-pulse">
+                You&apos;ve caught up!
+              </span>
+            </div>
+            <div className="flex-1">
+              <Footer isInline />
+            </div>
+          </div>
         </div>
 
         <aside className="hidden lg:block">
