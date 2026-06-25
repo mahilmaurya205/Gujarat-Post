@@ -10,7 +10,7 @@ interface CategorySectionProps {
   cols?: number;
 }
 
-export default function CategorySection({ category, categoryGu, cols = 4 }: CategorySectionProps) {
+export default function CategorySection({ category, categoryGu, cols = 6 }: CategorySectionProps) {
   const { language } = useApp();
   const articles = getArticlesByCategory(category).slice(0, cols);
   const meta = Object.values(CATEGORY_META).find((item) => item.name === category);
@@ -18,8 +18,8 @@ export default function CategorySection({ category, categoryGu, cols = 4 }: Cate
   if (articles.length === 0) return null;
 
   return (
-    <section className="py-3">
-      <div className="max-w-screen-xl mx-auto px-4">
+    <section className="py-0.5">
+      <div className="max-w-screen-xl mx-auto px-3">
         <SectionHeader
           title={category}
           titleGu={meta?.gu || categoryGu}
@@ -27,7 +27,7 @@ export default function CategorySection({ category, categoryGu, cols = 4 }: Cate
           href={`/category/${category.toLowerCase()}`}
           language={language}
         />
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-0.5 sm:grid-cols-3 lg:grid-cols-6">
           {articles.map(article => (
             <NewsCard key={article.id} article={article} variant="default" />
           ))}

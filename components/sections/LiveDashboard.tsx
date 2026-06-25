@@ -115,8 +115,8 @@ export default function LiveDashboard() {
   const liveFootball = football.some((match) => match.state === 'in');
 
   return (
-    <section id="live-dashboard" className="py-3">
-      <div className="mx-auto max-w-screen-xl px-4">
+    <section id="live-dashboard" className="py-1.5">
+      <div className="mx-auto max-w-screen-xl px-3">
         <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.18em] text-accent">Live Center</p>
@@ -135,7 +135,7 @@ export default function LiveDashboard() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-1.5 md:grid-cols-2 xl:grid-cols-4">
           <Panel title={getLocalized(language, { en: 'Weather', gu: 'હવામાન', hi: 'मौसम' })} subtitle={getLocalized(language, { en: 'Search any Indian city', gu: 'કોઈપણ ભારતીય શહેર શોધો', hi: 'कोई भी भारतीय शहर खोजें' })}>
             <form onSubmit={searchCity} className="mb-3 flex gap-2">
               <label className="relative min-w-0 flex-1"><span className="sr-only">{getLocalized(language, { en: 'Indian city', gu: 'ભારતીય શહેર', hi: 'भारतीय शहर' })}</span><Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" /><input value={city} onChange={(event) => setCity(event.target.value)} placeholder={getLocalized(language, { en: 'Mumbai, Jaipur...', gu: 'મુંબઈ, જયપુર...', hi: 'मुंबई, जयपुर...' })} className="h-9 w-full rounded-lg border border-border bg-muted pl-9 pr-3 text-xs font-semibold text-foreground outline-none focus:border-accent" /></label>

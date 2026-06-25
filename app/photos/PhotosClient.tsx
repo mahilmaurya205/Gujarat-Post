@@ -7,7 +7,7 @@ import { useApp } from '@/components/AppProvider';
 
 export default function PhotosClient() {
   const { language } = useApp();
-  const gallery = [...PHOTOS, ...PHOTOS];
+  const gallery = PHOTOS;
   const heights = [220, 170, 290, 210, 190, 260];
 
   return (
