@@ -27,7 +27,6 @@ export default function HomePage() {
       <YouTubeLatest />
 
       {/* Extra category sections */}
-      <CategorySection category="Sports"         categoryGu="રમતગમત"       cols={6} />
       <CategorySection category="Business"       categoryGu="બિઝનેસ"       cols={6} />
       <CategorySection category="Entertainment"  categoryGu="મનોરંજન"      cols={6} />
       <CategorySection category="Technology"     categoryGu="ટેકનોલોજી"    cols={6} />
