@@ -893,7 +893,7 @@ function LiveTVWidget({ language, videoMode, setVideoMode }: LiveTVWidgetProps) 
 function WeatherWidget({ language }: { language: Language }) {
   const [weather, setWeather] = useState<Array<{ city: string; state: string; temperature: number; condition: string; humidity: number; windSpeed: number }> | null>(null);
   useEffect(() => {
-    fetch('/api/live/weather?cities=Ahmedabad,Gandhinagar,Vadodara').then(r => r.json())
+    fetch('/api/live/weather?cities=Ahmedabad,Vadodara').then(r => r.json())
       .then((d: { weather?: Array<{ city: string; state: string; temperature: number; condition: string; humidity: number; windSpeed: number }> }) => {
         setWeather(d.weather ?? []);
       }).catch(() => { setWeather([]); });
@@ -911,7 +911,7 @@ function WeatherWidget({ language }: { language: Language }) {
         <div className="py-8 text-center text-sm font-semibold text-muted-foreground">Weather unavailable</div>
       ) : (
         <div className="space-y-3">
-          {(Array.isArray(weather) ? weather.slice(0, 3) : []).map((item) => (
+          {(Array.isArray(weather) ? weather.slice(0, 2) : []).map((item) => (
             <div key={item.city} className="rounded-2xl border border-border/80 bg-white/95 p-3 shadow-sm">
               <div className="flex items-start justify-between gap-3">
                 <div>
