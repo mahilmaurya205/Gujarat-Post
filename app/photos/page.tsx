@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { prisma } from "@/server/database/prisma";
 import PhotosClient from "./PhotosClient";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Photo Gallery",
   description: "Browse the latest Gujarat news photo gallery on Gujarat Post.",

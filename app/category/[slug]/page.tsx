@@ -4,11 +4,7 @@ import { prisma } from "@/server/database/prisma";
 import { normalizeArticle } from "@/server/utils/article-normalization";
 import { notFound } from "next/navigation";
 
-export async function generateStaticParams() {
-  return Object.keys(CATEGORY_META)
-    .filter((slug) => !["videos", "shorts", "podcasts"].includes(slug))
-    .map((slug) => ({ slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

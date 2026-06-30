@@ -4,17 +4,7 @@ import { prisma } from "@/server/database/prisma";
 import { normalizeArticle } from "@/server/utils/article-normalization";
 import PhotoDetailClient from "./PhotoDetailClient";
 
-export async function generateStaticParams() {
-  try {
-    const photos = await prisma.photo.findMany({
-      where: { deletedAt: null },
-      select: { id: true },
-    });
-    return photos.map((photo) => ({ id: photo.id }));
-  } catch {
-    return [];
-  }
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
