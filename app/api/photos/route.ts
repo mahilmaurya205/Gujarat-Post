@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/server/database/prisma";
+import { PHOTOS } from "@/data";
 import { ApiError } from "@/server/utils/response";
 
 export async function GET(req: NextRequest) {
@@ -10,23 +10,8 @@ export async function GET(req: NextRequest) {
 
     const skip = (page - 1) * limit;
 
-    const [photos, total] = await Promise.all([
-      prisma.photo.findMany({
-        where: {
-          deletedAt: null,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-        skip,
-        take: limit,
-      }),
-      prisma.photo.count({
-        where: {
-          deletedAt: null,
-        },
-      }),
-    ]);
+    const photos = PHOTOS.slice(skip, skip + limit);
+    const total = PHOTOS.length;
 
     return NextResponse.json({
       success: true,

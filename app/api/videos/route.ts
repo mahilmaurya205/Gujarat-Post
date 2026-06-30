@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/server/database/prisma";
+import { VIDEOS } from "@/data";
 import { ApiError } from "@/server/utils/response";
 
 export async function GET(req: NextRequest) {
@@ -11,25 +11,13 @@ export async function GET(req: NextRequest) {
 
     const skip = (page - 1) * limit;
 
-    const where: any = {
-      deletedAt: null,
-    };
-
+    let filteredVideos = VIDEOS;
     if (type) {
-      where.type = type;
+      filteredVideos = VIDEOS.filter((v) => v.type === type);
     }
 
-    const [videos, total] = await Promise.all([
-      prisma.video.findMany({
-        where,
-        orderBy: {
-          publishedAt: "desc",
-        },
-        skip,
-        take: limit,
-      }),
-      prisma.video.count({ where }),
-    ]);
+    const videos = filteredVideos.slice(skip, skip + limit);
+    const total = filteredVideos.length;
 
     return NextResponse.json({
       success: true,
