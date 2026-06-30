@@ -1,10 +1,12 @@
-import { CATEGORY_META } from "@/data";
+import { CATEGORY_META, ARTICLES, getArticlesByCategory } from "@/data";
 import CategoryPageClient from "./CategoryPageClient";
-import { prisma } from "@/server/database/prisma";
-import { normalizeArticle } from "@/server/utils/article-normalization";
 import { notFound } from "next/navigation";
 
-export const dynamic = "force-dynamic";
+export async function generateStaticParams() {
+  return Object.keys(CATEGORY_META)
+    .filter((slug) => !["videos", "shorts", "podcasts"].includes(slug))
+    .map((slug) => ({ slug }));
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -39,71 +41,20 @@ export default async function CategoryPage({
   const limit = parseInt(resolvedSearchParams?.limit || "12", 10);
   const skip = (page - 1) * limit;
 
-  // 1. Fetch category from DB
-  const category = await prisma.category.findFirst({
-    where: {
-      slug,
-      isActive: true,
-      deletedAt: null,
-    },
-  });
+  // 1. Fetch category from static metadata
+  const category = CATEGORY_META[slug as keyof typeof CATEGORY_META];
 
   if (!category) {
     notFound();
   }
 
-  // 2. Fetch paginated articles from DB
-  const [articlesRaw, total] = await Promise.all([
-    prisma.article.findMany({
-      where: {
-        categoryId: category.id,
-        status: "PUBLISHED",
-        isPublished: true,
-        deletedAt: null,
-      },
-      orderBy: {
-        publishedAt: "desc",
-      },
-      skip,
-      take: limit,
-      include: {
-        category: true,
-        author: true,
-        tags: true,
-      },
-    }),
-    prisma.article.count({
-      where: {
-        categoryId: category.id,
-        status: "PUBLISHED",
-        isPublished: true,
-        deletedAt: null,
-      },
-    }),
-  ]);
+  // 2. Fetch paginated articles from static data
+  const allArticles = getArticlesByCategory(category.name);
+  const total = allArticles.length;
+  const articles = allArticles.slice(skip, skip + limit);
 
-  const articles = articlesRaw.map(normalizeArticle);
-
-  // 3. Fetch trending articles from DB
-  const trendingRaw = await prisma.article.findMany({
-    where: {
-      isTrending: true,
-      status: "PUBLISHED",
-      isPublished: true,
-      deletedAt: null,
-    },
-    orderBy: {
-      views: "desc",
-    },
-    take: 10,
-    include: {
-      category: true,
-      author: true,
-      tags: true,
-    },
-  });
-
-  const trending = trendingRaw.map(normalizeArticle);
+  // 3. Fetch trending articles from static data
+  const trending = ARTICLES.filter((art) => art.isTrending).slice(0, 10);
   const totalPages = Math.ceil(total / limit);
 
   return (
@@ -111,8 +62,8 @@ export default async function CategoryPage({
       articles={articles}
       category={{
         name: category.name,
-        nameGu: category.nameGu,
-        nameHi: category.nameHi,
+        nameGu: category.gu,
+        nameHi: category.hi,
       }}
       trending={trending}
       currentPage={page}

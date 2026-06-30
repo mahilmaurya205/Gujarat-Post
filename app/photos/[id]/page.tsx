@@ -1,16 +1,15 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { prisma } from "@/server/database/prisma";
-import { normalizeArticle } from "@/server/utils/article-normalization";
+import { PHOTOS, ARTICLES } from "@/data";
 import PhotoDetailClient from "./PhotoDetailClient";
 
-export const dynamic = "force-dynamic";
+export async function generateStaticParams() {
+  return PHOTOS.map((photo) => ({ id: photo.id }));
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
-  const photo = await prisma.photo.findFirst({
-    where: { id, deletedAt: null }
-  });
+  const photo = PHOTOS.find((p) => p.id === id);
   if (!photo) return {};
 
   return {
@@ -27,49 +26,20 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function PhotoDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   
-  // 1. Fetch photo details
-  const photo = await prisma.photo.findFirst({
-    where: { id, deletedAt: null }
-  });
+  // 1. Fetch photo details from mock data
+  const photo = PHOTOS.find((p) => p.id === id);
   if (!photo) notFound();
 
-  // 2. Fetch all photos for carousel navigation list
-  const allPhotosRaw = await prisma.photo.findMany({
-    where: { deletedAt: null },
-    orderBy: { createdAt: "desc" }
-  });
+  // 2. Use all photos for carousel navigation list
+  const allPhotos = PHOTOS;
 
-  const allPhotos = allPhotosRaw.map((p) => ({
-    ...p,
-    createdAt: p.createdAt.toISOString(),
-    updatedAt: p.updatedAt.toISOString(),
-  }));
-
-  // 3. Fetch trending articles
-  const trendingRaw = await prisma.article.findMany({
-    where: {
-      isTrending: true,
-      status: "PUBLISHED",
-      isPublished: true,
-      deletedAt: null,
-    },
-    orderBy: {
-      views: "desc",
-    },
-    take: 6,
-    include: {
-      category: true,
-      author: true,
-      tags: true,
-    },
-  });
-
-  const trending = trendingRaw.map(normalizeArticle);
+  // 3. Fetch trending articles from mock data
+  const trending = ARTICLES.filter((a) => a.isTrending).slice(0, 6);
 
   return (
     <PhotoDetailClient
       activeId={id}
-      photo={JSON.parse(JSON.stringify(photo))}
+      photo={photo}
       allPhotos={allPhotos}
       trending={trending}
     />

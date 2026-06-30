@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import { prisma } from "@/server/database/prisma";
+import { PHOTOS } from "@/data";
 import PhotosClient from "./PhotosClient";
-
-export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Photo Gallery",
@@ -10,20 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default async function PhotosPage() {
-  const photos = await prisma.photo.findMany({
-    where: {
-      deletedAt: null,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
-  const serialized = photos.map((p) => ({
-    ...p,
-    createdAt: p.createdAt.toISOString(),
-    updatedAt: p.updatedAt.toISOString(),
-  }));
-
-  return <PhotosClient initialPhotos={serialized} />;
+  return <PhotosClient initialPhotos={PHOTOS} />;
 }
