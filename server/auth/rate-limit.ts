@@ -36,31 +36,43 @@ const PREFIX = "rl:login:";
 export async function checkRateLimit(ip: string): Promise<RateLimitResult> {
   const key = `${PREFIX}${ip}`;
 
-  const count = await redis.incr(key);
+  try {
+    const count = await redis.incr(key);
 
-  if (count === 1) {
-    // First request in this window — set the TTL
-    await redis.expire(key, AUTH_CONFIG.RATE_LIMIT_WINDOW_SECONDS);
-  }
+    if (count === 1) {
+      // First request in this window — set the TTL
+      await redis.expire(key, AUTH_CONFIG.RATE_LIMIT_WINDOW_SECONDS);
+    }
 
-  if (count > AUTH_CONFIG.RATE_LIMIT_MAX_ATTEMPTS) {
-    const ttl = await redis.ttl(key);
+    if (count > AUTH_CONFIG.RATE_LIMIT_MAX_ATTEMPTS) {
+      const ttl = await redis.ttl(key);
+      return {
+        success: false,
+        remaining: 0,
+        retryAfterSeconds: ttl > 0 ? ttl : AUTH_CONFIG.RATE_LIMIT_WINDOW_SECONDS,
+      };
+    }
+
     return {
-      success: false,
-      remaining: 0,
-      retryAfterSeconds: ttl > 0 ? ttl : AUTH_CONFIG.RATE_LIMIT_WINDOW_SECONDS,
+      success: true,
+      remaining: AUTH_CONFIG.RATE_LIMIT_MAX_ATTEMPTS - count,
+    };
+  } catch (err) {
+    console.warn(`[RateLimit] Redis is down or unreachable. Bypassing rate limit check. Error:`, err);
+    return {
+      success: true,
+      remaining: 99,
     };
   }
-
-  return {
-    success: true,
-    remaining: AUTH_CONFIG.RATE_LIMIT_MAX_ATTEMPTS - count,
-  };
 }
 
 /**
  * Resets the counter for an IP (call on successful login).
  */
 export async function resetRateLimit(ip: string): Promise<void> {
-  await redis.del(`${PREFIX}${ip}`);
+  try {
+    await redis.del(`${PREFIX}${ip}`);
+  } catch (err) {
+    console.warn(`[RateLimit] Redis is down or unreachable. Ignoring resetRateLimit. Error:`, err);
+  }
 }

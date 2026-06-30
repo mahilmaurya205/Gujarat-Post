@@ -14,6 +14,8 @@ interface InvidiousVideo {
   videoId: string;
   title: string;
   published: number;
+  lengthSeconds?: number;
+  liveNow?: boolean;
 }
 
 // Fallback data matching the look of the channel
@@ -80,7 +82,7 @@ async function fetchFromInvidious(channelId: string): Promise<VideoItem[] | null
       
       if (data && Array.isArray(data.videos)) {
         const videos: VideoItem[] = (data.videos as InvidiousVideo[])
-          .filter((v) => v && v.videoId && v.title)
+          .filter((v) => v && v.videoId && v.title && (v.lengthSeconds === undefined || v.lengthSeconds > 60 || v.liveNow) && !v.title.includes('#'))
           .map((v) => ({
             id: v.videoId,
             title: decodeHtmlEntities(v.title),
@@ -104,6 +106,20 @@ async function fetchFromInvidious(channelId: string): Promise<VideoItem[] | null
 }
 
 export async function GET() {
+  // 1. Try Invidious first to allow duration filtering (> 60s)
+  try {
+    const invidiousVideos = await fetchFromInvidious(CHANNEL_ID);
+    if (invidiousVideos && invidiousVideos.length > 0) {
+      return Response.json({ 
+        videos: invidiousVideos.slice(0, 6), 
+        source: 'invidious' 
+      });
+    }
+  } catch (invidiousError) {
+    console.error('Invidious fetch failed:', invidiousError);
+  }
+
+  // 2. Fall back to RSS feed
   try {
     const res = await fetch(RSS_URL, {
       headers: {
@@ -140,6 +156,12 @@ export async function GET() {
       if (videoIdMatch && titleMatch) {
         const videoId = videoIdMatch[1].trim();
         const title = titleMatch[1].trim();
+        
+        // Filter out YouTube Shorts / Reels (they always have hashtags like #shorts or similar)
+        if (title.includes('#')) {
+          continue;
+        }
+
         const publishedAt = publishedMatch ? publishedMatch[1].trim() : new Date().toISOString();
         const thumbnail = thumbnailMatch ? thumbnailMatch[1].trim() : `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
 
@@ -159,20 +181,8 @@ export async function GET() {
 
     return Response.json({ videos: videos.slice(0, 6), source: 'youtube_rss' });
   } catch (error) {
-    console.error('Error fetching YouTube RSS feed, trying Invidious fallback:', error);
+    console.error('Error fetching YouTube RSS feed:', error);
     
-    try {
-      const invidiousVideos = await fetchFromInvidious(CHANNEL_ID);
-      if (invidiousVideos && invidiousVideos.length > 0) {
-        return Response.json({ 
-          videos: invidiousVideos.slice(0, 6), 
-          source: 'invidious_fallback' 
-        });
-      }
-    } catch (invidiousError) {
-      console.error('Invidious fallback also failed:', invidiousError);
-    }
-
     return Response.json({ 
       videos: FALLBACK_VIDEOS, 
       source: 'fallback_error',

@@ -118,6 +118,10 @@ const ColHead = ({ children }: { children: React.ReactNode }) => (
 export default function Footer({ isInline = false }: { isInline?: boolean }) {
     const pathname = usePathname();
 
+    if (pathname === '/login' || pathname.startsWith('/admin')) {
+        return null;
+    }
+
     // Hide global footer on feed pages — it's rendered inline there
     const isFeedPage = pathname === '/watch' || pathname === '/shorts';
     if (isFeedPage && !isInline) return null;

@@ -18,9 +18,18 @@ export type AuditAction =
   | "ACCOUNT_SUSPENDED"
   | "ACCOUNT_DELETED"
   | "ROLE_CHANGED"
+  | "USER_CREATED"
+  | "USER_UPDATED"
+  | "USER_DELETED"
   | "ARTICLE_CREATED"
   | "ARTICLE_PUBLISHED"
-  | "ARTICLE_DELETED";
+  | "ARTICLE_DELETED"
+  | "GALLERY_UPLOAD"
+  | "GALLERY_UPDATED"
+  | "GALLERY_DELETED"
+  | "VIDEO_CREATED"
+  | "VIDEO_UPDATED"
+  | "VIDEO_DELETED";
 
 // ---------------------------------------------------------------------------
 // Audit Service
@@ -32,6 +41,8 @@ export const AuditService = {
       userId?: string;
       ipAddress?: string;
       userAgent?: string;
+      entity?: string;
+      entityId?: string;
     } = {}
   ): Promise<void> {
     try {
@@ -41,6 +52,8 @@ export const AuditService = {
           userId: options.userId,
           ipAddress: options.ipAddress,
           userAgent: options.userAgent,
+          entity: options.entity,
+          entityId: options.entityId,
         },
       });
     } catch (err) {

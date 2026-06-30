@@ -15,7 +15,7 @@ interface TokenPayload {
 // Map roles to their permitted admin path prefixes
 const ROLE_PERMISSIONS: Record<string, string[]> = {
   SUPER_ADMIN: ["/admin"], // Super admin can access all admin routes
-  EDITOR: ["/admin/articles", "/admin/categories", "/admin/gallery"],
+  EDITOR: ["/admin/articles", "/admin/categories", "/admin/gallery", "/admin/videos", "/admin/stats"],
   REPORTER: ["/admin/articles"],
   SEO: ["/admin/seo"],
   ADVERTISEMENT: ["/admin/ads"],
@@ -54,12 +54,42 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
+    // Allow read-only (GET) access to categories and authors for all authenticated admin dashboard users
+    const isReadOnlySelector = 
+      request.method === "GET" && 
+      (pathname === "/api/admin/categories" || pathname === "/api/admin/authors");
+
+    // Allow authenticated users to upload files
+    const isUploadPath = pathname === "/api/admin/upload";
+
+    if (isReadOnlySelector || isUploadPath) {
+      return NextResponse.next();
+    }
+
+    // Redirect non-super-admins to their first permitted page if they request the root admin path
+    if ((pathname === "/admin" || pathname === "/admin/") && userRole !== "EDITOR") {
+      const permittedPaths = ROLE_PERMISSIONS[userRole] || [];
+      if (permittedPaths.length > 0) {
+        return NextResponse.redirect(new URL(permittedPaths[0], request.url));
+      }
+    }
+
     const permittedPaths = ROLE_PERMISSIONS[userRole] || [];
     
-    // Check if the current pathname is allowed or matches a permitted prefix
-    const isPermitted = permittedPaths.some(
-      (path) => pathname === path || pathname.startsWith(path + "/")
+    // Normalize path by removing the "/api" prefix for route authorization checks
+    const checkPath = pathname.startsWith("/api") ? pathname.slice(4) : pathname;
+
+    // Check if the normalized pathname is allowed or matches a permitted prefix
+    let isPermitted = permittedPaths.some(
+      (path) => checkPath === path || checkPath.startsWith(path + "/")
     );
+
+    // Allow EDITOR to access root dashboard path
+    if (!isPermitted && (checkPath === "/admin" || checkPath === "/admin/")) {
+      if (userRole === "EDITOR") {
+        isPermitted = true;
+      }
+    }
 
     if (!isPermitted) {
       if (pathname.startsWith("/api/")) {

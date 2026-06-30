@@ -51,4 +51,33 @@ export const UserRepository = {
       prisma.user.count(),
     ]);
   },
+
+  listWithSessionsAndAuthors(page = 1, pageSize = 20) {
+    const skip = (page - 1) * pageSize;
+    return Promise.all([
+      prisma.user.findMany({
+        skip,
+        take: pageSize,
+        orderBy: { createdAt: "desc" },
+        include: {
+          author: true,
+          sessions: {
+            where: {
+              expiresAt: { gt: new Date() },
+              revokedAt: null,
+            },
+          },
+        },
+      }),
+      prisma.user.count(),
+    ]);
+  },
+
+  findByIdWithAuthor(id: string) {
+    return prisma.user.findUnique({
+      where: { id },
+      include: { author: true },
+    });
+  },
 };
+

@@ -1,14 +1,41 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Pause, Play } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BREAKING_TICKER, getLocalized } from '@/data';
 import { useApp } from '@/components/AppProvider';
 
 export default function BreakingTicker() {
+  const pathname = usePathname();
+  if (pathname === '/login' || pathname.startsWith('/admin')) {
+    return null;
+  }
+
   const [paused, setPaused] = useState(false);
   const { language } = useApp();
+  const [breaking, setBreaking] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch('/api/news/breaking?limit=10')
+      .then((r) => r.json())
+      .then((json) => {
+        if (json.success && json.data?.articles?.length > 0) {
+          setBreaking(json.data.articles);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const itemsToRender = breaking.length > 0
+    ? breaking.map((art: any) => ({
+        en: art.title,
+        gu: art.titleGu,
+        hi: art.titleHi,
+        slug: art.slug,
+      }))
+    : BREAKING_TICKER;
 
   return (
     <div className="flex h-10 items-center overflow-hidden bg-accent text-white">
@@ -21,7 +48,7 @@ export default function BreakingTicker() {
         onMouseLeave={() => setPaused(false)}
       >
         <div className="ticker-animation text-sm font-bold" style={{ animationPlayState: paused ? 'paused' : 'running' }}>
-          {[...BREAKING_TICKER, ...BREAKING_TICKER].map((item, index) => {
+          {[...itemsToRender, ...itemsToRender].map((item, index) => {
             const label = getLocalized(language, { en: item.en, gu: item.gu, hi: item.hi });
             return (
               <span key={`${item.slug}-${index}`} className="inline-flex items-center">

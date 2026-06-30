@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 import { createElement, useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import {
   ArrowRight,
   BookOpen,
@@ -18,6 +18,7 @@ import {
   Search,
   Sun,
   TrendingUp,
+  User,
   X,
 } from 'lucide-react';
 import { NAV_ITEMS } from '@/data';
@@ -120,10 +121,27 @@ const formatDateShort = (lang: string) => {
 };
 
 export default function Header() {
+  const pathname = usePathname();
+  if (pathname === '/login' || pathname.startsWith('/admin')) {
+    return null;
+  }
+
   const router = useRouter();
   const { theme, toggleTheme, language, setLanguage } = useApp();
   const [mounted, setMounted] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.data?.authenticated) {
+          setIsAuthenticated(true);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -283,6 +301,18 @@ export default function Header() {
           >
             {theme === 'dark' ? <Sun className="h-4 w-4 text-amber-400" /> : <Moon className="h-4 w-4" />}
           </button>
+
+          {/* Auth-Aware User Icon / Login Button */}
+          <a
+            href={isAuthenticated ? "/admin" : "/login"}
+            className={`inline-flex h-10 w-10 items-center justify-center rounded-full bg-muted text-foreground transition hover:bg-secondary ${
+              searchOpen ? 'max-sm:hidden' : ''
+            }`}
+            aria-label={isAuthenticated ? "Go to Admin Dashboard" : "Go to Login Page"}
+            title={isAuthenticated ? "Admin Dashboard" : "Sign In"}
+          >
+            <User className="h-4 w-4" />
+          </a>
 
           <button
             type="button"

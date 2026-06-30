@@ -1,25 +1,26 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Clock, ArrowRight, Flame, Eye, Play, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Clock, ArrowRight, Flame, Eye, Play, ChevronRight, ChevronLeft, Camera } from 'lucide-react';
 import {
-  getFeaturedArticles,
   getArticleTitle,
   getArticleExcerpt,
   formatTime,
   formatDate,
   formatViews,
   getCategoryLabel,
-  getArticlesByCategory,
-  getTrendingArticles,
   VIDEOS,
   getLocalized,
 } from '@/data';
 import { getCategoryColor } from '@/lib/utils';
 import { useApp } from '@/components/AppProvider';
 import type { Article, Language } from '@/types';
+import YouTubeLatest from '@/components/sections/YouTubeLatest';
+import YouTubeShorts from '@/components/sections/YouTubeShorts';
+import InstagramStories from '@/components/sections/InstagramStories';
+import AstrologySection from '@/components/sections/AstrologySection';
 
 const CHANNEL_URL = 'https://www.youtube.com/@Gujaratpostnews';
 const CHANNEL_ID = 'UCqQ8YbFSZ4j8J4iVJOHurTw';
@@ -87,51 +88,87 @@ export default function HeroSection() {
   const { language } = useApp();
   const [videoMode, setVideoMode] = useState<'latest' | 'live'>('latest');
 
-  const featured = getFeaturedArticles();
-// Left column: "મુખ્ય સમાચાર" — 8 compact list items
-  const leftItems = featured.slice(0, 3);
-  // Center top: "ટૉપ સ્ટોરી" — 4×3 grid = 12 cards
-  const topStories = featured.slice(8, 16);
-  // Center bottom row: 4 more cards
-  const centerBot = featured.slice(20, 24);
-  // Category rows below
-  const gujaratArt = getArticlesByCategory('Gujarat').slice(0, 16);
-  const crimeArt = getArticlesByCategory('Crime').slice(0, 4);
-  const nationalArt = getArticlesByCategory('Politics').slice(0, 4);
-  const worldArt = getArticlesByCategory('World').slice(0, 4);
-  const businessArt = getArticlesByCategory('Business').slice(0, 4);
-  const sportsArt = getArticlesByCategory('Sports').slice(0, 5);
-  // Videos
+  // DB-backed article state
+  const [topNews, setTopNews] = useState<Article[]>([]);
+  const [topStories, setTopStories] = useState<Article[]>([]);
+  const [trendingArtDB, setTrendingArtDB] = useState<Article[]>([]);
+  const [gujaratArtDB, setGujaratArtDB] = useState<Article[]>([]);
+  const [crimeArtDB, setCrimeArtDB] = useState<Article[]>([]);
+  const [nationalArtDB, setNationalArtDB] = useState<Article[]>([]);
+  const [worldArtDB, setWorldArtDB] = useState<Article[]>([]);
+  const [businessArtDB, setBusinessArtDB] = useState<Article[]>([]);
+  const [sportsArtDB, setSportsArtDB] = useState<Article[]>([]);
+
+  const fetchArticles = async (url: string): Promise<Article[]> => {
+    try {
+      const res = await fetch(url);
+      const json = await res.json();
+      return json.success ? (json.data?.articles || []) : [];
+    } catch {
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    Promise.all([
+      fetchArticles('/api/news/top-news?limit=6'),
+      fetchArticles('/api/news/top-stories?limit=16'),
+      fetchArticles('/api/news/trending?limit=10'),
+      fetchArticles('/api/category/state?limit=16'),
+      fetchArticles('/api/category/crime?limit=4'),
+      fetchArticles('/api/category/national?limit=4'),
+      fetchArticles('/api/category/world?limit=4'),
+      fetchArticles('/api/category/business?limit=4'),
+      fetchArticles('/api/category/sports?limit=7'),
+    ]).then(([news, stories, trend, guj, crime, natl, world, biz, sports]) => {
+      setTopNews(news);
+      setTopStories(stories);
+      setTrendingArtDB(trend);
+      setGujaratArtDB(guj);
+      setCrimeArtDB(crime);
+      setNationalArtDB(natl);
+      setWorldArtDB(world);
+      setBusinessArtDB(biz);
+      setSportsArtDB(sports);
+    });
+  }, []);
+
+  // Derived slices
+  const leftItems = topNews.slice(0, 5);
+  const topStoriesSlice = topStories.slice(0, 16);
+  const stateRowArticles = [
+    ...gujaratArtDB,
+    ...topStories,
+    ...trendingArtDB,
+    ...topNews,
+  ].filter((article, index, list) => list.findIndex((item) => item.id === article.id) === index).slice(0, 16);
+
+  // Videos — still from static data
   const videos = VIDEOS.filter(v => v.type === 'video').slice(0, 5);
-  const extraRightArticles = featured.slice(24, 28);
-  const trendingArt = getTrendingArticles().slice(0, 10);
+
   const [
     uniqueLeftItems,
     uniqueTopStories,
-    ,
     uniqueGujaratArt,
     uniqueCrimeArt,
     uniqueNationalArt,
     uniqueWorldArt,
     uniqueBusinessArt,
     uniqueSportsArt,
-    uniqueExtraRightArticles,
     uniqueTrendingArt,
   ] = makeHomeImagesUnique([
     leftItems,
-    topStories,
-    centerBot,
-    gujaratArt,
-    crimeArt,
-    nationalArt,
-    worldArt,
-    businessArt,
-    sportsArt,
-    extraRightArticles,
-    trendingArt,
+    topStoriesSlice,
+    stateRowArticles,
+    crimeArtDB,
+    nationalArtDB,
+    worldArtDB,
+    businessArtDB,
+    sportsArtDB,
+    trendingArtDB,
   ]);
 
-  if (!featured.length) return null;
+  if (!topStories.length) return <HeroSectionSkeleton language={language} />;
 
   return (
     <div className="mx-auto max-w-screen-xl px-2 py-0.5 space-y-1">
@@ -139,16 +176,16 @@ export default function HeroSection() {
       {/* ── ROW 1: 3-column main section ─────────────────────────────────── */}
       <div className="grid grid-cols-1 gap-1 lg:grid-cols-[minmax(0,1fr)_280px] items-start">
         <div className="min-w-0">
-          <div className="grid grid-cols-1 gap-1 lg:grid-cols-[260px_minmax(0,1fr)] items-stretch">
+          <div className="grid grid-cols-1 gap-2 lg:grid-cols-[360px_minmax(0,1fr)] items-stretch">
 
             {/* LEFT: Mukhya Samachar list */}
-            <div className="hidden lg:block">
+            <div className="hidden rounded-lg border border-border bg-card p-1.5 shadow-sm lg:flex lg:flex-col">
               <SectionLabel
                 title="Top News"
                 titleGu="મુખ્ય સમાચાર"
                 language={language}
               />
-              <div className="flex flex-col divide-y divide-border">
+              <div className="flex flex-1 flex-col divide-y divide-border">
                 {uniqueLeftItems.map((art) => (
                   <LeftListItem key={art.id} article={art} language={language} />
                 ))}
@@ -158,33 +195,27 @@ export default function HeroSection() {
             {/* CENTER: Top Stories */}
             <div className="min-w-0">
               {/* Top Stories header */}
-              <div>
-                  <div className="flex items-center justify-between mb-1.5">
+              <div className="rounded-lg border border-border bg-card p-1.5 shadow-sm">
+                <div className="mb-1.5 flex items-center justify-between border-b border-border pb-1">
                   <SectionLabel title="Top Stories" titleGu="ટૉપ સ્ટોરી" language={language} />
-                  <Link href="/category/gujarat" className="flex items-center gap-0.5 text-[11px] font-bold text-accent hover:underline">
+                  <Link href="/category/state" className="flex items-center gap-0.5 text-[11px] font-bold text-accent hover:underline">
                     {language === 'gu' ? 'બધા જુઓ' : 'View all'} <ChevronRight className="h-3 w-3" />
                   </Link>
                 </div>
 
-                {/* Row 1 — 4 equal cards */}
-                <div className="grid grid-cols-4 gap-1.5">
-                  {uniqueTopStories.slice(0, 4).map((art) => (
-                    <StoryCard key={art.id} article={art} language={language} />
-                  ))}
+                {/* 2-column layout with horizontal list (title left, image right) */}
+                <div className="grid grid-cols-1 gap-y-4 md:grid-cols-2 md:gap-y-0 md:gap-x-6 md:divide-x md:divide-border mt-1">
+                  <div className="flex flex-col divide-y divide-border h-[385px] overflow-y-auto pr-2 scrollbar-thin">
+                    {uniqueTopStories.slice(0, 8).map((art) => (
+                      <StoryRow key={art.id} article={art} language={language} />
+                    ))}
+                  </div>
+                  <div className="flex flex-col divide-y divide-border h-[385px] overflow-y-auto md:pl-6 pr-2 scrollbar-thin">
+                    {uniqueTopStories.slice(8, 16).map((art) => (
+                      <StoryRow key={art.id} article={art} language={language} />
+                    ))}
+                  </div>
                 </div>
-
-                {/* Row 2 — 4 equal cards */}
-                <div className="grid grid-cols-4 gap-1.5 mt-1.5">
-                  {uniqueTopStories.slice(4, 8).map((art) => (
-                    <StoryCard key={art.id} article={art} language={language} />
-                  ))}
-                </div>
-
-                {/* <div className="grid grid-cols-4 gap-2 mt-2">
-                  {topStories.slice(8, 12).map((art) => (
-                    <StoryCard key={art.id} article={art} language={language} />
-                  ))}
-                </div> */}
               </div>
             </div>
 
@@ -198,7 +229,7 @@ export default function HeroSection() {
             {/* ── Rajya Samachar (fills remaining white space) */}
             <CategoryRow
               title="State News" titleGu="રાજ્ય સમાચાર"
-              href="/category/gujarat"
+              href="/category/state"
               articles={uniqueGujaratArt} language={language}
             />
           </div>
@@ -210,31 +241,28 @@ export default function HeroSection() {
           <LiveTVWidget language={language} videoMode={videoMode} setVideoMode={setVideoMode} />
           <WeatherWidget language={language} />
           <EPaperWidget language={language} />
-          <div className="grid gap-0.5">
-            {uniqueExtraRightArticles.map((art) => (
-              <Link key={art.id} href={`/news/${art.slug}`} className="news-card group flex gap-2 rounded-md border border-border bg-card p-1.5 hover:border-accent/40 transition">
-                <div className="relative h-[56px] w-[72px] shrink-0 overflow-hidden rounded">
-                  <Image src={art.image} alt={art.title} fill sizes="72px" className="object-cover" />
-                </div>
-                <div className="min-w-0">
-                  <p className="line-clamp-2 text-[11px] font-black leading-snug text-foreground">{getArticleTitle(art, language)}</p>
-                  <span className="flex items-center gap-0.5 text-[10px] text-muted-foreground">
-                    <Clock className="h-2.5 w-2.5" />{formatTime(art.publishedAt)}
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
         </div>
       </div>
 
+      {/* YouTube latest videos (moved immediately after Rajya Samachar/Row 1 section) */}
+      <YouTubeLatest />
+
+      {/* YouTube shorts videos */}
+      <YouTubeShorts />
+
+      {/* Web Stories styled like Instagram Stories */}
+      <InstagramStories />
+
       {/* ── ROW 2: 4-column category columns (National, World, Crime, Business) */}
       <div className="grid grid-cols-1 gap-1 md:grid-cols-2 lg:grid-cols-4">
-        <CategoryColumn title="National" titleGu="રાષ્ટ્રીય" href="/category/politics" articles={uniqueNationalArt} language={language} showExcerpt={true} />
+        <CategoryColumn title="National" titleGu="રાષ્ટ્રીય" href="/category/national" articles={uniqueNationalArt} language={language} showExcerpt={true} />
         <CategoryColumn title="World" titleGu="વિશ્વ" href="/category/world" articles={uniqueWorldArt} language={language} />
         <CategoryColumn title="Crime" titleGu="અપરાધ" href="/category/crime" articles={uniqueCrimeArt} language={language} />
         <CategoryColumn title="Business" titleGu="બિઝનેસ" href="/category/business" articles={uniqueBusinessArt} language={language} />
       </div>
+
+      {/* Astrology / Horoscope Section */}
+      <AstrologySection />
 
       <SportsShowcase articles={uniqueSportsArt} language={language} />
 
@@ -245,12 +273,16 @@ export default function HeroSection() {
 }
 
 /* --- Trending Bar ----------------------------------------------------------- */
-function TrendingBar({ articles, language }: { articles: ReturnType<typeof getTrendingArticles>; language: Language }) {
+function TrendingBar({ articles, language }: { articles: Article[]; language: Language }) {
   const label = language === 'gu' ? 'ટ્રેન્ડિંગ સમાચાર' : 'Trending News';
-  const [start, setStart] = useState(0);
-  const visible = 5;
-  const canPrev = start > 0;
-  const canNext = start + visible < articles.length;
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = (direction: 'left' | 'right') => {
+    if (containerRef.current) {
+      const scrollAmount = direction === 'left' ? -300 : 300;
+      containerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="rounded-xl border border-border bg-card overflow-hidden">
@@ -262,16 +294,14 @@ function TrendingBar({ articles, language }: { articles: ReturnType<typeof getTr
         </div>
         <div className="flex items-center gap-1">
           <button
-            onClick={() => setStart((s) => Math.max(0, s - 1))}
-            disabled={!canPrev}
-            className="flex h-6 w-6 items-center justify-center rounded-full border border-border bg-background text-foreground hover:bg-accent hover:text-white hover:border-accent transition disabled:opacity-30 disabled:cursor-not-allowed"
+            onClick={() => handleScroll('left')}
+            className="flex h-6 w-6 items-center justify-center rounded-full border border-border bg-background text-foreground hover:bg-accent hover:text-white hover:border-accent transition cursor-pointer"
           >
             <ChevronLeft className="h-3.5 w-3.5" />
           </button>
           <button
-            onClick={() => setStart((s) => Math.min(articles.length - visible, s + 1))}
-            disabled={!canNext}
-            className="flex h-6 w-6 items-center justify-center rounded-full border border-border bg-background text-foreground hover:bg-accent hover:text-white hover:border-accent transition disabled:opacity-30 disabled:cursor-not-allowed"
+            onClick={() => handleScroll('right')}
+            className="flex h-6 w-6 items-center justify-center rounded-full border border-border bg-background text-foreground hover:bg-accent hover:text-white hover:border-accent transition cursor-pointer"
           >
             <ChevronRight className="h-3.5 w-3.5" />
           </button>
@@ -279,29 +309,33 @@ function TrendingBar({ articles, language }: { articles: ReturnType<typeof getTr
       </div>
 
       {/* Items */}
-      <div className="grid grid-cols-5 divide-x divide-border">
-        {articles.slice(start, start + visible).map((art, idx) => (
+      <div
+        ref={containerRef}
+        className="flex overflow-x-auto divide-x divide-border scrollbar-none scroll-smooth"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
+        {articles.slice(0, 10).map((art: Article, idx: number) => (
           <Link
             key={art.id}
             href={`/news/${art.slug}`}
-            className="group flex items-center gap-3 px-3 py-3 hover:bg-muted/60 transition"
+            className="group flex items-center gap-2 px-3.5 py-3 hover:bg-muted/60 transition shrink-0 w-[240px] md:w-[280px]"
           >
             {/* Number */}
             <span className="text-[28px] font-black leading-none text-accent shrink-0 w-6 text-center">
-              {start + idx + 1}
+              {idx + 1}
             </span>
             {/* Thumbnail */}
-            <div className="relative h-[52px] w-[72px] shrink-0 overflow-hidden rounded-lg">
+            <div className="relative h-[40px] w-[56px] shrink-0 overflow-hidden rounded-lg">
               <Image
                 src={art.image}
                 alt={art.title}
                 fill
-                sizes="72px"
+                sizes="56px"
                 className="object-cover group-hover:scale-105 transition duration-300"
               />
             </div>
             {/* Title */}
-            <p className="line-clamp-2 text-[12px] font-black leading-snug text-foreground group-hover:text-accent transition-colors">
+            <p className="line-clamp-2 text-[13.5px] md:text-[14px] font-black leading-snug text-foreground group-hover:text-accent transition-colors">
               {getArticleTitle(art, language)}
             </p>
           </Link>
@@ -323,70 +357,70 @@ function SectionLabel({ title, titleGu, language }: { title: string; titleGu: st
 }
 
 /* --- Left List Item --------------------------------------------------------- */
-function LeftListItem({ article, language }: { article: ReturnType<typeof getFeaturedArticles>[0]; language: Language }) {
+function LeftListItem({ article, language }: { article: Article; language: Language }) {
   const title = getArticleTitle(article, language);
   const cat = getCategoryLabel(article, language);
   const cc = getCategoryColor(article.category);
   return (
-    <Link href={`/news/${article.slug}`} className="flex min-h-[96px] gap-2 py-2 group hover:bg-muted/50 transition rounded px-1">
-  <div className="relative h-[68px] w-[96px] shrink-0 overflow-hidden rounded">
-    <Image src={article.image} alt={article.title} fill sizes="96px" className="object-cover group-hover:scale-105 transition duration-300" />
-  </div>
-  <div className="min-w-0 flex flex-col justify-between">
-    <div>
-      <span className="cat-badge mb-0.5" style={{ background: cc, fontSize: '0.62rem', padding: '0.08rem 0.42rem' }}>{cat}</span>
-      <p className="line-clamp-3 text-[12.5px] font-black leading-snug text-foreground mt-0.5">{title}</p>
-    </div>
-    <span className="flex items-center gap-0.5 text-[10px] font-semibold text-muted-foreground">
-      <Clock className="h-2.5 w-2.5" />{formatTime(article.publishedAt)}
-    </span>
-  </div>
-</Link>
+    <Link href={`/news/${article.slug}`} className="group flex min-h-[58px] gap-2 rounded px-1 py-1.5 transition hover:bg-muted/50">
+      <div className="relative h-[50px] w-[68px] shrink-0 overflow-hidden rounded-md">
+        <Image src={article.image} alt={article.title} fill sizes="68px" className="object-cover transition duration-300 group-hover:scale-105" />
+      </div>
+      <div className="min-w-0 flex flex-1 flex-col justify-between">
+        <div>
+          <span className="rounded px-1.5 py-[2px] text-[8px] font-black leading-none text-white" style={{ background: cc }}>{cat}</span>
+          <p className="mt-0.5 line-clamp-2 text-[13.5px] font-black leading-[1.2] text-foreground transition-colors group-hover:text-accent">{title}</p>
+        </div>
+        <div className="flex items-center justify-between gap-2 text-[10px] font-semibold text-muted-foreground">
+          <span className="flex items-center gap-1"><Clock className="h-2.5 w-2.5" />{formatTime(article.publishedAt)}</span>
+          <span className="flex items-center gap-1"><Eye className="h-2.5 w-2.5" />{formatViews(article.views)}</span>
+        </div>
+      </div>
+    </Link>
   );
 }
 
-/* --- Story Card (exact match — image 2 design) ------------------------------ */
-function StoryCard({ article, language }: { article: ReturnType<typeof getFeaturedArticles>[0]; language: Language }) {
+/* --- Story Row (horizontal list view matching user design) ----------------- */
+function StoryRow({ article, language }: { article: Article; language: Language }) {
   const title = getArticleTitle(article, language);
-  const cat = getCategoryLabel(article, language);
-  const cc = getCategoryColor(article.category);
+  const cc = getCategoryColor(article.category || '');
+
+  // Decide overlay icons for visual interest matching user screenshot
+  const categoryLower = article.category?.toLowerCase() || '';
+  const showPlay = ['entertainment', 'world', 'politics', 'sports'].includes(categoryLower);
+  const showCamera = ['technology', 'business', 'lifestyle', 'crime'].includes(categoryLower);
+
   return (
     <Link
       href={`/news/${article.slug}`}
-      className="news-card group flex flex-col overflow-hidden rounded-lg border border-border bg-card hover:shadow-md hover:border-accent/30 transition-all duration-200"
+      className="group flex items-center justify-between gap-4 py-3 hover:bg-muted/40 transition-colors duration-200 first:pt-1 last:pb-1"
     >
-      {/* Image */}
-      <div className="relative w-full shrink-0 overflow-hidden" style={{ paddingBottom: '38%' }}>
+      {/* Title (left side) */}
+      <h3 className="flex-1 text-[14px] md:text-[15.5px] font-black leading-snug text-foreground transition-colors duration-200 group-hover:text-accent line-clamp-3 pr-2">
+        {title}
+      </h3>
+
+      {/* Image Thumbnail (right side) */}
+      <div className="relative h-[66px] w-[100px] shrink-0 overflow-hidden rounded-lg border border-border/10 shadow-sm">
         <Image
           src={article.image}
           alt={article.title}
           fill
-          sizes="20vw"
-          className="object-cover group-hover:scale-105 transition-transform duration-400"
+          sizes="100px"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
-        {/* Category badge — top left on image */}
-        <span
-          className="absolute left-1 top-1 z-10 rounded text-white text-[8px] font-black px-1.5 py-[2px] leading-none"
-          style={{ background: cc }}
-        >
-          {cat}
-        </span>
-      </div>
-      {/* Card body */}
-      <div className="flex flex-col p-1">
-        <h3 className="line-clamp-2 text-[11px] font-black leading-snug text-foreground group-hover:text-accent transition-colors duration-200">
-          {title}
-        </h3>
-        <div className="mt-0.5 flex items-center justify-between text-[9px] font-semibold text-muted-foreground pt-0.5">
-          <span className="flex items-center gap-1">
-            <Clock className="h-2.5 w-2.5" />
-            {formatTime(article.publishedAt)}
-          </span>
-          <span className="flex items-center gap-1">
-            <Eye className="h-2.5 w-2.5" />
-            {formatViews(article.views)}
-          </span>
-        </div>
+
+        {/* Overlay icon at bottom-left of image */}
+        {showPlay && (
+          <div className="absolute left-1 bottom-1 bg-red-600 text-white rounded p-1 flex items-center justify-center shadow-lg">
+            <Play className="h-3 w-3 fill-current text-white" />
+          </div>
+        )}
+        {showCamera && (
+          <div className="absolute left-1 bottom-1 bg-red-600 text-white rounded p-1 flex items-center justify-center shadow-lg">
+            <Camera className="h-3 w-3 text-white" />
+          </div>
+        )}
       </div>
     </Link>
   );
@@ -395,7 +429,7 @@ function StoryCard({ article, language }: { article: ReturnType<typeof getFeatur
 /* --- Category Row (4-col horizontal) --------------------------------------- */
 function CategoryRow({
   title, titleGu, href, articles, language
-}: { title: string; titleGu: string; href: string; articles: ReturnType<typeof getArticlesByCategory>; language: Language }) {
+}: { title: string; titleGu: string; href: string; articles: Article[]; language: Language }) {
   const display = language === 'en' ? title : titleGu;
   return (
     <div>
@@ -405,18 +439,18 @@ function CategoryRow({
           {language === 'gu' ? 'બધા જુઓ' : 'View all'} <ArrowRight className="h-3 w-3" />
         </Link>
       </div>
-      <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
-        {articles.map((art) => {
+      <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2 lg:grid-cols-4">
+        {articles.slice(0, 16).map((art: Article) => {
           const t = getArticleTitle(art, language);
           const cc = getCategoryColor(art.category);
           return (
-            <Link key={art.id} href={`/news/${art.slug}`} className="news-card group flex min-h-[78px] gap-2 rounded-md border border-border bg-card p-1.5 shadow-sm hover:border-accent/40 hover:shadow-md transition">
-              <div className="relative h-[66px] w-[88px] shrink-0 overflow-hidden rounded">
-                <Image src={art.image} alt={art.title} fill sizes="76px" className="object-cover group-hover:scale-105 transition" />
+            <Link key={art.id} href={`/news/${art.slug}`} className="news-card group flex h-[98px] gap-2 overflow-hidden rounded-md border border-border bg-card p-1.5 shadow-sm transition hover:border-accent/40 hover:shadow-md">
+              <div className="relative h-full w-[82px] shrink-0 overflow-hidden rounded">
+                <Image src={art.image} alt={art.title} fill sizes="82px" className="object-cover transition group-hover:scale-105" />
               </div>
-              <div className="min-w-0 flex flex-col justify-between">
-                <p className="line-clamp-2 text-[11.5px] font-black leading-snug text-foreground group-hover:text-accent transition-colors">{t}</p>
-                <div className="flex items-center gap-0.5 text-[10px] text-muted-foreground">
+              <div className="min-w-0 flex flex-1 flex-col justify-between py-1">
+                <p className="line-clamp-3 text-[13px] md:text-[13.5px] font-black leading-[1.2] text-foreground transition-colors group-hover:text-accent">{t}</p>
+                <div className="flex items-center gap-1 text-[10.5px] leading-none text-muted-foreground border-t border-border/30 pt-0.5">
                   <div className="h-1.5 w-1.5 rounded-full shrink-0" style={{ background: cc }} />
                   <span>{formatTime(art.publishedAt)}</span>
                 </div>
@@ -437,7 +471,7 @@ function CategoryColumn({
   title: string;
   titleGu: string;
   href: string;
-  articles: ReturnType<typeof getArticlesByCategory>;
+  articles: Article[];
   language: Language;
   showExcerpt?: boolean;
 }) {
@@ -461,7 +495,7 @@ function CategoryColumn({
 
       {/* List */}
       <div className="flex flex-col gap-2">
-        {articles.slice(0, 4).map((art, idx) => {
+        {articles.slice(0, 4).map((art: Article, idx: number) => {
           const t = getArticleTitle(art, language);
           const excerpt = getArticleExcerpt(art, language);
 
@@ -976,6 +1010,186 @@ function EPaperWidget({ language }: { language: Language }) {
           </div>
         </div>
       </Link>
+    </div>
+  );
+}
+
+/* --- Hero Section Skeleton Loader ------------------------------------------- */
+function HeroSectionSkeleton({ language }: { language: Language }) {
+  const isGu = language === 'gu';
+  const labelTopNews = isGu ? 'મુખ્ય સમાચાર' : 'Top News';
+  const labelTopStories = isGu ? 'ટૉપ સ્ટોરી' : 'Top Stories';
+  const labelTrending = isGu ? 'ટ્રેન્ડિંગ સમાચાર' : 'Trending News';
+  const labelStateNews = isGu ? 'રાજ્ય સમાચાર' : 'State News';
+  const labelLiveTV = isGu ? 'લાઈવ ટીવી' : 'Live TV';
+  const labelWeather = isGu ? 'હવામાન' : 'Weather';
+  const labelEPaper = isGu ? 'ઈ-પેપર' : 'E-Paper';
+
+  return (
+    <div className="mx-auto max-w-screen-xl px-2 py-0.5 space-y-2 animate-pulse">
+      {/* ROW 1: 3-column main section */}
+      <div className="grid grid-cols-1 gap-1 lg:grid-cols-[minmax(0,1fr)_280px] items-start">
+        <div className="min-w-0">
+          <div className="grid grid-cols-1 gap-2 lg:grid-cols-[360px_minmax(0,1fr)] items-stretch">
+            {/* LEFT: Mukhya Samachar list skeleton */}
+            <div className="hidden rounded-lg border border-border bg-card p-1.5 shadow-sm lg:flex lg:flex-col">
+              <div className="flex items-center gap-1.5 mb-2 border-b-2 border-accent/20 pb-0.5">
+                <Flame className="h-5 w-5 text-accent/20 shrink-0" />
+                <span className="text-[19px] md:text-[21px] font-black leading-tight text-muted-foreground/35">{labelTopNews}</span>
+              </div>
+              <div className="flex flex-1 flex-col divide-y divide-border space-y-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="flex gap-2 py-1.5">
+                    <div className="h-[50px] w-[68px] shrink-0 rounded-md bg-muted" />
+                    <div className="flex-1 space-y-2 py-0.5">
+                      <div className="h-3 w-12 rounded bg-muted" />
+                      <div className="h-4 w-full rounded bg-muted" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* CENTER: Top Stories skeleton */}
+            <div className="min-w-0">
+              <div className="rounded-lg border border-border bg-card p-1.5 shadow-sm">
+                <div className="mb-1.5 flex items-center justify-between border-b border-border pb-1">
+                  <div className="flex items-center gap-1.5">
+                    <Flame className="h-5 w-5 text-accent/20 shrink-0" />
+                    <span className="text-[19px] md:text-[21px] font-black leading-tight text-muted-foreground/35">{labelTopStories}</span>
+                  </div>
+                  <div className="h-4 w-12 rounded bg-muted" />
+                </div>
+                <div className="grid grid-cols-1 gap-y-4 md:grid-cols-2 md:gap-y-0 md:gap-x-6 md:divide-x md:divide-border mt-1">
+                  <div className="flex flex-col divide-y divide-border h-[385px] space-y-1 pr-2">
+                    {Array.from({ length: 8 }).map((_, i) => (
+                      <div key={i} className="flex justify-between items-center py-2.5">
+                        <div className="flex-1 space-y-2 pr-2">
+                          <div className="h-4 w-full rounded bg-muted" />
+                          <div className="h-3 w-3/4 rounded bg-muted" />
+                        </div>
+                        <div className="h-[66px] w-[100px] shrink-0 rounded-lg bg-muted" />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex flex-col divide-y divide-border h-[385px] space-y-1 md:pl-6 pr-2">
+                    {Array.from({ length: 8 }).map((_, i) => (
+                      <div key={i} className="flex justify-between items-center py-2.5">
+                        <div className="flex-1 space-y-2 pr-2">
+                          <div className="h-4 w-full rounded bg-muted" />
+                          <div className="h-3 w-3/4 rounded bg-muted" />
+                        </div>
+                        <div className="h-[66px] w-[100px] shrink-0 rounded-lg bg-muted" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Trending Bar skeleton */}
+          <div className="min-w-0 mt-2">
+            <div className="rounded-xl border border-border bg-card overflow-hidden">
+              <div className="flex items-center justify-between border-b border-border bg-slate-50 px-3 py-2">
+                <div className="flex items-center gap-1.5">
+                  <Flame className="h-[18px] w-[18px] text-accent/20 fill-current" />
+                  <span className="text-[15px] font-black leading-tight text-muted-foreground/35">{labelTrending}</span>
+                </div>
+                <div className="flex gap-1">
+                  <div className="h-6 w-6 rounded-full bg-muted" />
+                  <div className="h-6 w-6 rounded-full bg-muted" />
+                </div>
+              </div>
+              <div className="flex divide-x divide-border px-1 py-2">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="flex items-center gap-2 px-3.5 py-1 shrink-0 w-[240px] md:w-[280px]">
+                    <div className="h-8 w-4 rounded bg-muted" />
+                    <div className="h-[40px] w-[56px] shrink-0 rounded-lg bg-muted" />
+                    <div className="flex-1 space-y-1.5">
+                      <div className="h-3 w-full rounded bg-muted" />
+                      <div className="h-3 w-3/4 rounded bg-muted" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Rajya Samachar / State News skeleton */}
+          <div className="min-w-0 mt-2">
+            <div className="flex items-center justify-between mb-1 border-b border-border pb-1">
+              <span className="text-[18px] md:text-[20px] font-black leading-tight text-muted-foreground/35">{labelStateNews}</span>
+              <div className="h-4 w-16 rounded bg-muted" />
+            </div>
+            <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2 lg:grid-cols-4">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="flex h-[98px] gap-2 rounded border border-border bg-card p-1.5 shadow-sm">
+                  <div className="h-full w-[82px] shrink-0 rounded bg-muted" />
+                  <div className="flex-1 space-y-2 py-1">
+                    <div className="h-4 w-full rounded bg-muted" />
+                    <div className="h-3 w-5/6 rounded bg-muted" />
+                    <div className="h-3 w-1/2 rounded bg-muted mt-2" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT WIDGETS skeleton */}
+        <div className="flex flex-col gap-1.5 w-full lg:w-[280px]">
+          {/* Live TV Widget Skeleton */}
+          <div className="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
+            <div className="flex items-center justify-between bg-accent/20 px-3 py-1.5">
+              <span className="text-xs md:text-sm font-black text-muted-foreground/30 uppercase tracking-wide">{labelLiveTV}</span>
+              <div className="h-4 w-12 rounded bg-muted" />
+            </div>
+            <div className="relative aspect-[4/3] bg-muted" />
+            <div className="flex items-center justify-between gap-2 px-3 py-2">
+              <div className="h-6 w-24 rounded bg-muted" />
+              <div className="h-6 w-16 rounded bg-muted" />
+            </div>
+          </div>
+
+          {/* Weather Widget Skeleton */}
+          <div className="rounded-lg border border-border bg-card p-3 space-y-3">
+            <div className="flex items-center justify-between border-b border-border pb-2 mb-1">
+              <span className="text-xs md:text-sm font-black text-muted-foreground/30">{labelWeather}</span>
+            </div>
+            <div className="rounded-2xl border border-border/80 bg-white/95 p-3 shadow-sm space-y-3">
+              <div className="flex justify-between items-center">
+                <div className="space-y-1.5 flex-1">
+                  <div className="h-4 w-20 rounded bg-muted" />
+                  <div className="h-3 w-16 rounded bg-muted" />
+                </div>
+                <div className="h-8 w-12 rounded bg-muted" />
+              </div>
+              <div className="grid grid-cols-3 gap-2 mt-2">
+                <div className="h-8 rounded-xl bg-slate-50" />
+                <div className="h-8 rounded-xl bg-slate-50" />
+                <div className="h-8 rounded-xl bg-slate-50" />
+              </div>
+            </div>
+          </div>
+
+          {/* EPaper Widget Skeleton */}
+          <div className="rounded-lg border border-border bg-card p-3 space-y-2">
+            <div className="flex items-center justify-between border-b border-border pb-1 mb-1">
+              <span className="text-xs md:text-sm font-black text-muted-foreground/30">{labelEPaper}</span>
+              <div className="h-3 w-16 rounded bg-muted" />
+            </div>
+            <div className="flex gap-3">
+              <div className="h-[90px] w-[80px] shrink-0 rounded bg-muted" />
+              <div className="flex-1 space-y-2 py-1">
+                <div className="h-4 w-20 rounded bg-muted" />
+                <div className="h-3 w-16 rounded bg-muted" />
+                <div className="h-6 w-24 rounded bg-muted mt-2" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

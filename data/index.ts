@@ -71,7 +71,8 @@ export const AUTHORS: Author[] = [
 ];
 
 export const CATEGORY_META = {
-  gujarat: { name: "Gujarat", gu: "ગુજરાત", hi: "गुजरात" },
+  state: { name: "State", gu: "રાજ્ય સમાચાર", hi: "राज्य समाचार" },
+  national: { name: "National", gu: "રાષ્ટ્રીય", hi: "राष्ट्रीय" },
   ahmedabad: { name: "Ahmedabad", gu: "અમદાવાદ", hi: "अहमदाबाद" },
   rajkot: { name: "Rajkot", gu: "રાજકોટ", hi: "राजकोट" },
   surat: { name: "Surat", gu: "સુરત", hi: "सूरत" },
@@ -92,6 +93,45 @@ export const CATEGORY_META = {
 };
 
 type CategorySlug = keyof typeof CATEGORY_META;
+
+export const categorySlugMapping: Record<string, CategorySlug> = {
+  gujarat: "state",
+  state: "state",
+  national: "national",
+  ahmedabad: "ahmedabad",
+  rajkot: "rajkot",
+  surat: "surat",
+  vadodara: "vadodara",
+  crime: "crime",
+  politics: "politics",
+  business: "business",
+  sports: "sports",
+  entertainment: "entertainment",
+  technology: "technology",
+  lifestyle: "lifestyle",
+  education: "education",
+  world: "world",
+  "election-2027": "election-2027",
+  videos: "videos",
+  shorts: "shorts",
+  podcasts: "podcasts",
+  
+  // Title-cased mappings to lowercase slug
+  Gujarat: "state",
+  Ahmedabad: "ahmedabad",
+  Rajkot: "rajkot",
+  Surat: "surat",
+  Vadodara: "vadodara",
+  Crime: "crime",
+  Politics: "politics",
+  Business: "business",
+  Sports: "sports",
+  Entertainment: "entertainment",
+  Technology: "technology",
+  Lifestyle: "lifestyle",
+  Education: "education",
+  World: "world",
+};
 
 const IMG: Record<string, string[]> = {
   gujarat: [
@@ -256,6 +296,11 @@ const baseStories = [
   ["politics", "AAP expands grassroot network in Gujarat rural areas", "AAPએ ગ્રામ્ય ગુજરાતમાં ભૂ-સ્તરીય નેટવર્ક વિસ્તાર્યું", "AAP ने ग्रामीण गुजरात में जमीनी नेटवर्क का विस्तार किया"],
   ["politics", "New cabinet reshuffle expected in Gujarat government", "ગુજરાત સરકારમાં નવો કેબિનેટ ફેરફાર અપેક્ષિત", "गुजरात सरकार में नया कैबिनेट फेरबदल अपेक्षित"],
   ["politics", "Panchayat elections dates finalised for three districts", "ત્રણ જિલ્લાઓ માટે પંચાયત ચૂંટણીની તારીખ નક્કી", "तीन जिलों के लिए पंचायत चुनाव की तारीखें तय"],
+  // National
+  ["national", "Parliament passes historic bill on digital privacy", "સંસદે ડિજિટલ પ્રાઇવસી પર ઐતિહાસિક બિલ પાસ કર્યું", "संसद ने डिजिटल गोपनीयता पर ऐतिहासिक विधेयक पारित किया"],
+  ["national", "New national highway expansion projects approved by center", "કેન્દ્ર દ્વારા નવા રાષ્ટ્રીય ધોરીમાર્ગ વિસ્તરણ પ્રોજેક્ટ્સને મંજૂરી", "केंद्र द्वारा नए राष्ट्रीय राजमार्ग विस्तार परियोजनाओं को मंजूरी"],
+  ["national", "ISRO announces next lunar exploration mission timeline", "ISRO એ આગામી ચંદ્ર સંશોધન મિશનની સમયરેખા જાહેર કરી", "इसरो ने अगले चंद्र अन्वेषण मिशन की समय-सीमा की घोषणा की"],
+  ["national", "Monsoon covers entire country ahead of schedule, says IMD", "ચોમાસું સમય પહેલાં સમગ્ર દેશને આવરી લે છે, IMD", "मानसून समय से पहले पूरे देश में पहुंचा, आईएमडी ने कहा"],
   // Crime
   ["crime", "Cyber cell busts fake investment app network in Ahmedabad", "અમદાવાદમાં ફેક ઇન્વેસ્ટમેન્ટ એપ નેટવર્કનો પર્દાફાશ", "अहमदाबाद में फेक निवेश ऐप नेटवर्क का खुलासा"],
   ["crime", "Surat police seize contraband worth crores in joint raid", "સુરત પોલીસની સંયુક્ત રેડમાં કરોડોની કિંમતનો મુદ્દામાલ જપ્ત", "सूरत पुलिस की संयुक्त छापेमारी में करोड़ों का माल जब्त"],
@@ -352,7 +397,8 @@ const hashString = (str: string) => {
 };
 
 const imageFor = (category: string, i: number, title: string) => {
-  const key = category === "ahmedabad" || category === "rajkot" || category === "surat" || category === "vadodara" ? "gujarat" : category;
+  const mapped = categorySlugMapping[category] || "politics";
+  const key = mapped === "state" || mapped === "ahmedabad" || mapped === "rajkot" || mapped === "surat" || mapped === "vadodara" ? "gujarat" : mapped;
   const images = IMG[key] || IMG.gujarat;
   const hash = hashString(title) + i;
   return images[hash % images.length];
@@ -360,7 +406,8 @@ const imageFor = (category: string, i: number, title: string) => {
 
 export const ARTICLES: Article[] = Array.from({ length: 120 }, (_, i) => {
   const story = storyPool[i % storyPool.length];
-  const categorySlug = story[0] as CategorySlug;
+  const rawCategorySlug = story[0] as string;
+  const categorySlug = (categorySlugMapping[rawCategorySlug] || "politics") as CategorySlug;
   const meta = CATEGORY_META[categorySlug];
   const day = String(10 - (i % 10)).padStart(2, "0");
   const hour = String(6 + (i % 14)).padStart(2, "0");
@@ -482,7 +529,8 @@ export const BREAKING_TICKER = [
 
 export const NAV_ITEMS: NavItem[] = [
   ["Home", "હોમ", "होम", "/"],
-  ["Gujarat", "ગુજરાત", "गुजरात", "/category/gujarat"],
+  ["State News", "રાજ્ય સમાચાર", "राज्य समाचार", "/category/state"],
+  ["National", "રાષ્ટ્રીય", "राष्ट्रीय", "/category/national"],
   ["Ahmedabad", "અમદાવાદ", "अहमदाबाद", "/category/ahmedabad"],
   ["Rajkot", "રાજકોટ", "राजकोट", "/category/rajkot"],
   ["Surat", "સુરત", "सूरत", "/category/surat"],

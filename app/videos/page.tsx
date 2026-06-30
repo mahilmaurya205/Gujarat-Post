@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { prisma } from "@/server/database/prisma";
 import VideosPageClient from "./VideosPageClient";
 
 export const metadata: Metadata = {
@@ -6,6 +7,22 @@ export const metadata: Metadata = {
   description: "Watch latest Gujarat news videos, shorts, podcasts and interviews on Gujarat Post.",
 };
 
-export default function VideosPage() {
-  return <VideosPageClient />;
+export default async function VideosPage() {
+  const videos = await prisma.video.findMany({
+    where: {
+      deletedAt: null,
+    },
+    orderBy: {
+      publishedAt: "desc",
+    },
+  });
+
+  const serialized = videos.map((v) => ({
+    ...v,
+    publishedAt: v.publishedAt.toISOString(),
+    createdAt: v.createdAt.toISOString(),
+    updatedAt: v.updatedAt.toISOString(),
+  }));
+
+  return <VideosPageClient initialVideos={serialized} />;
 }

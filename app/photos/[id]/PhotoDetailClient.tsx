@@ -62,28 +62,31 @@ const MOCK_DESCRIPTIONS: Record<string, { en: string; gu: string; hi: string; ca
 
 interface Props {
   activeId: string;
+  photo?: any;
+  allPhotos: any[];
+  trending: any[];
 }
 
-export default function PhotoDetailClient({ activeId }: Props) {
+export default function PhotoDetailClient({ activeId, photo: dbPhoto, allPhotos: dbAllPhotos, trending: dbTrending }: Props) {
   const { language } = useApp();
   const router = useRouter();
   const [saved, setSaved] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const activeIndex = PHOTOS.findIndex((item) => item.id === activeId);
-  const photo = PHOTOS[activeIndex === -1 ? 0 : activeIndex];
+  const photosList = dbAllPhotos.length > 0 ? dbAllPhotos : PHOTOS;
+  const photo = dbPhoto || photosList.find(p => p.id === activeId) || photosList[0];
+  const activeIndex = photosList.findIndex((item) => item.id === photo.id);
   const photoUrl = typeof window !== 'undefined' ? window.location.href : 'https://gujaratpost.com/photos';
 
-  // Finding next/prev active indexes excluding the current photo from list is not strictly necessary for simple carousel
-  const nextIndex = (activeIndex + 1) % PHOTOS.length;
-  const prevIndex = (activeIndex - 1 + PHOTOS.length) % PHOTOS.length;
+  const nextIndex = (activeIndex + 1) % photosList.length;
+  const prevIndex = (activeIndex - 1 + photosList.length) % photosList.length;
 
   const handleNext = () => {
-    router.push(`/photos/${PHOTOS[nextIndex].id}`);
+    router.push(`/photos/${photosList[nextIndex].id}`);
   };
 
   const handlePrev = () => {
-    router.push(`/photos/${PHOTOS[prevIndex].id}`);
+    router.push(`/photos/${photosList[prevIndex].id}`);
   };
 
   const copyUrl = async () => {
@@ -95,15 +98,17 @@ export default function PhotoDetailClient({ activeId }: Props) {
   const caption = getLocalized(language, { en: photo.caption, gu: photo.captionGu, hi: photo.captionHi });
   
   const descriptionData = MOCK_DESCRIPTIONS[photo.id] || {
-    category: { en: "Gallery", gu: "ગેલેરી", hi: "गैलरी" },
-    en: caption, gu: caption, hi: caption
+    category: { en: photo.category || "Gallery", gu: photo.captionGu, hi: photo.captionHi },
+    en: photo.caption,
+    gu: photo.captionGu,
+    hi: photo.captionHi
   };
 
   const category = getLocalized(language, descriptionData.category);
   const bodyText = getLocalized(language, descriptionData);
   const paragraphs = bodyText.split(/\n\n+/);
 
-  const trending = ARTICLES.filter((item) => item.isTrending).slice(0, 6);
+  const trendingList = dbTrending.length > 0 ? dbTrending : ARTICLES.filter((item) => item.isTrending).slice(0, 6);
 
   const shareLinks = [
     { 
@@ -160,7 +165,7 @@ export default function PhotoDetailClient({ activeId }: Props) {
               {category}
             </span>
             <span className="text-[10px] font-bold text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
-              {activeIndex + 1} / {PHOTOS.length}
+              {activeIndex + 1} / {photosList.length}
             </span>
           </div>
 
@@ -253,7 +258,7 @@ export default function PhotoDetailClient({ activeId }: Props) {
               {getLocalized(language, { en: 'Browse Photo Gallery', gu: 'ફોટો ગેલેરી બ્રાઉઝ કરો', hi: 'फोटो गैलरी ब्राउज़ करें' })}
             </h3>
             <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-              {PHOTOS.filter((item) => item.id !== photo.id).map((item) => {
+              {photosList.filter((item) => item.id !== photo.id).map((item) => {
                 return (
                   <Link
                     key={item.id}
@@ -331,7 +336,7 @@ export default function PhotoDetailClient({ activeId }: Props) {
               {getLocalized(language, { en: 'Trending Stories', gu: 'ટ્રેન્ડિંગ સ્ટોરીઝ', hi: 'ट्रेंडિંગ स्टोरीज' })}
             </div>
             <div className="p-3 divide-y divide-border/60">
-              {trending.map((item, index) => (
+              {trendingList.map((item, index) => (
                 <div key={item.id} className="flex gap-2 py-2 first:pt-0 last:pb-0">
                   <span className="mt-2.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-black text-muted-foreground">{index + 1}</span>
                   <NewsCard article={item} variant="compact" />

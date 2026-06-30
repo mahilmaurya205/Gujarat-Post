@@ -1,16 +1,9 @@
 import type { Metadata } from "next";
-import { Anek_Gujarati } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/components/AppProvider";
 import Header from "@/components/layout/Header";
 import BreakingTicker from "@/components/layout/BreakingTicker";
 import Footer from "@/components/layout/Footer";
-
-const anekGujarati = Anek_Gujarati({
-  subsets: ["gujarati", "latin"],
-  display: "swap",
-  variable: "--font-anek-gujarati",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gujaratpost.example.com"),
@@ -41,7 +34,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="gu" className={anekGujarati.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html lang="gu" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className="antialiased">
         <AppProvider>
           <Header />

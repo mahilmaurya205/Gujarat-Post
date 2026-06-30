@@ -143,7 +143,26 @@ export default function LiveDashboard() {
             </form>
             {weatherError && !weather.length ? <ErrorState message={weatherError} /> : (
               <div className="scrollbar-hide max-h-[24rem] space-y-3 overflow-y-auto">
-                {loading && !weather.length ? <p className="py-10 text-center text-sm font-bold text-muted-foreground">Loading live weather…</p> : weather.map((item) => (
+                {loading && !weather.length ? (
+                  <div className="space-y-3 animate-pulse">
+                    {Array.from({ length: 2 }).map((_, i) => (
+                      <div key={i} className="rounded-xl bg-muted p-3 space-y-3">
+                        <div className="flex justify-between items-center">
+                          <div className="space-y-1.5 flex-1">
+                            <div className="h-4 w-24 rounded bg-slate-300/60" />
+                            <div className="h-3 w-16 rounded bg-slate-300/60" />
+                          </div>
+                          <div className="h-6 w-10 rounded bg-slate-300/60" />
+                        </div>
+                        <div className="grid grid-cols-3 gap-2 mt-2">
+                          <div className="h-7 rounded bg-slate-200/50" />
+                          <div className="h-7 rounded bg-slate-200/50" />
+                          <div className="h-7 rounded bg-slate-200/50" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : weather.map((item) => (
                   <div key={`${item.city}-${item.state}`} className="rounded-xl bg-muted p-3">
                     <div className="flex items-center justify-between gap-3"><div className="min-w-0"><p className="truncate font-black text-foreground">{item.city}</p><p className="truncate text-[10px] font-bold text-muted-foreground">{item.state}</p></div><span className="text-2xl font-black text-accent">{item.temperature}°</span></div>
                     <div className="mt-2 flex items-center justify-between text-xs font-bold text-muted-foreground"><span className="inline-flex items-center gap-1"><CloudSun className="h-3.5 w-3.5" />{item.condition}</span><span>Feels {item.feelsLike}°</span></div>
@@ -165,7 +184,22 @@ export default function LiveDashboard() {
             isLive={markets.some((item) => item.marketState === 'REGULAR')}
           >
             {marketError && !markets.length ? <ErrorState message={marketError} /> : <div className="space-y-3">
-              {loading && !markets.length ? <p className="py-10 text-center text-sm font-bold text-muted-foreground">Loading market quotes…</p> : markets.map((item) => {
+              {loading && !markets.length ? (
+                <div className="space-y-3 animate-pulse">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="flex justify-between items-center rounded-xl bg-muted p-3">
+                      <div className="space-y-1.5 flex-1">
+                        <div className="h-4 w-20 rounded bg-slate-300/60" />
+                        <div className="h-3 w-12 rounded bg-slate-300/60" />
+                      </div>
+                      <div className="space-y-1 text-right">
+                        <div className="h-4 w-16 rounded bg-slate-300/60 ml-auto" />
+                        <div className="h-3 w-14 rounded bg-slate-300/60 ml-auto" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : markets.map((item) => {
                 const positive = item.change >= 0;
                 return <div key={item.symbol} className="flex items-center justify-between rounded-xl bg-muted p-3"><div><p className="font-black text-foreground">{item.name}</p><p className="text-xs font-semibold text-muted-foreground">{item.exchange}</p></div><div className="text-right"><p className="font-black tabular-nums text-foreground">{item.value.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</p><p className={`text-xs font-black tabular-nums ${positive ? 'text-emerald-500' : 'text-red-500'}`}>{positive ? '+' : ''}{item.change.toFixed(2)} ({positive ? '+' : ''}{item.changePercent.toFixed(2)}%)</p></div></div>;
               })}
@@ -182,12 +216,34 @@ export default function LiveDashboard() {
             }
             isLive={liveCricket}
           >
-            {sportsError && !cricket ? <ErrorState message={sportsError} /> : cricket ? <div className="rounded-xl bg-muted p-4">
-              <div className="flex items-start justify-between gap-2"><div><p className="text-sm font-black text-foreground">{cricket.title}</p><p className="mt-1 text-[10px] font-semibold text-muted-foreground">{cricket.venue}</p></div><span className="shrink-0 text-[10px] font-black uppercase text-accent">{cricket.status}</span></div>
-              <div className="mt-5 space-y-3">{cricket.teams.map((team) => <div key={team.name} className="flex items-center justify-between border-b border-border pb-3 last:border-0"><span className="pr-3 text-sm font-black text-foreground">{team.name}</span><span className="text-right text-sm font-black text-accent">{team.score}</span></div>)}</div>
-              {cricket.summary && <p className="mt-4 rounded-lg bg-card px-3 py-2 text-xs font-bold text-muted-foreground">{cricket.summary}</p>}
-              <p className="mt-3 text-[10px] font-semibold text-muted-foreground">{new Date(cricket.date).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}</p>
-            </div> : <ErrorState message="No cricket score is currently available." />}
+            {sportsError && !cricket ? (
+              <ErrorState message={sportsError} />
+            ) : loading && !cricket ? (
+              <div className="rounded-xl bg-muted p-4 animate-pulse space-y-4">
+                <div className="flex justify-between items-start">
+                  <div className="space-y-2 flex-1">
+                    <div className="h-4 w-28 rounded bg-slate-300/60" />
+                    <div className="h-3 w-20 rounded bg-slate-300/60" />
+                  </div>
+                  <div className="h-4 w-12 rounded bg-slate-300/60" />
+                </div>
+                <div className="space-y-3 pt-3">
+                  <div className="h-6 w-full rounded bg-slate-200/50" />
+                  <div className="h-6 w-full rounded bg-slate-200/50" />
+                </div>
+                <div className="h-5 w-3/4 rounded bg-slate-200/50 mt-4" />
+                <div className="h-3 w-24 rounded bg-slate-200/50" />
+              </div>
+            ) : cricket ? (
+              <div className="rounded-xl bg-muted p-4">
+                <div className="flex items-start justify-between gap-2"><div><p className="text-sm font-black text-foreground">{cricket.title}</p><p className="mt-1 text-[10px] font-semibold text-muted-foreground">{cricket.venue}</p></div><span className="shrink-0 text-[10px] font-black uppercase text-accent">{cricket.status}</span></div>
+                <div className="mt-5 space-y-3">{cricket.teams.map((team) => <div key={team.name} className="flex items-center justify-between border-b border-border pb-3 last:border-0"><span className="pr-3 text-sm font-black text-foreground">{team.name}</span><span className="text-right text-sm font-black text-accent">{team.score}</span></div>)}</div>
+                {cricket.summary && <p className="mt-4 rounded-lg bg-card px-3 py-2 text-xs font-bold text-muted-foreground">{cricket.summary}</p>}
+                <p className="mt-3 text-[10px] font-semibold text-muted-foreground">{new Date(cricket.date).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}</p>
+              </div>
+            ) : (
+              <ErrorState message="No cricket score is currently available." />
+            )}
             <p className="mt-auto pt-3 text-[9px] font-bold text-muted-foreground">Latest available IPL score · ESPN score feed</p>
           </Panel>
 
@@ -200,10 +256,46 @@ export default function LiveDashboard() {
             }
             isLive={liveFootball}
           >
-            {sportsError && !football.length ? <ErrorState message={sportsError} /> : <div className="scrollbar-hide max-h-[24rem] space-y-3 overflow-y-auto">
-              {football.map((match) => <div key={match.id} className="rounded-xl bg-muted p-3"><div className="mb-2 flex items-center justify-between text-[10px] font-black uppercase text-muted-foreground"><span>{match.league}</span><span className={match.state === 'in' ? 'text-accent' : ''}>{match.status}</span></div><div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-xs font-black text-foreground"><span className="truncate">{match.home}</span><span className="rounded-lg bg-card px-2 py-1 text-accent">{match.homeScore} - {match.awayScore}</span><span className="truncate text-right">{match.away}</span></div><p className="mt-2 text-[9px] font-semibold text-muted-foreground">{new Date(match.date).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}</p></div>)}
-              {!football.length && <ErrorState message="No football fixtures are currently available." />}
-            </div>}
+            {sportsError && !football.length ? (
+              <ErrorState message={sportsError} />
+            ) : loading && !football.length ? (
+              <div className="space-y-3 animate-pulse">
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <div key={i} className="rounded-xl bg-muted p-3 space-y-2">
+                    <div className="flex justify-between">
+                      <div className="h-3.5 w-16 rounded bg-slate-300/60" />
+                      <div className="h-3.5 w-12 rounded bg-slate-300/60" />
+                    </div>
+                    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 pt-1">
+                      <div className="h-4 w-full rounded bg-slate-200/50" />
+                      <div className="h-6 w-12 rounded bg-slate-200/50 mx-auto" />
+                      <div className="h-4 w-full rounded bg-slate-200/50" />
+                    </div>
+                    <div className="h-3 w-20 rounded bg-slate-200/50 mt-1" />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="scrollbar-hide max-h-[24rem] space-y-3 overflow-y-auto">
+                {football.map((match) => (
+                  <div key={match.id} className="rounded-xl bg-muted p-3">
+                    <div className="mb-2 flex items-center justify-between text-[10px] font-black uppercase text-muted-foreground">
+                      <span>{match.league}</span>
+                      <span className={match.state === 'in' ? 'text-accent' : ''}>{match.status}</span>
+                    </div>
+                    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-xs font-black text-foreground">
+                      <span className="truncate">{match.home}</span>
+                      <span className="rounded-lg bg-card px-2 py-1 text-accent">{match.homeScore} - {match.awayScore}</span>
+                      <span className="truncate text-right">{match.away}</span>
+                    </div>
+                    <p className="mt-2 text-[9px] font-semibold text-muted-foreground">
+                      {new Date(match.date).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}
+                    </p>
+                  </div>
+                ))}
+                {!football.length && <ErrorState message="No football fixtures are currently available." />}
+              </div>
+            )}
             <p className="mt-auto pt-3 text-[9px] font-bold text-muted-foreground">Live, upcoming or latest result · ESPN score feeds</p>
           </Panel>
         </div>

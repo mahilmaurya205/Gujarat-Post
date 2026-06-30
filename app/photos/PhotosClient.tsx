@@ -5,9 +5,13 @@ import Link from 'next/link';
 import { PHOTOS, getLocalized } from '@/data';
 import { useApp } from '@/components/AppProvider';
 
-export default function PhotosClient() {
+interface PhotosClientProps {
+  initialPhotos: any[];
+}
+
+export default function PhotosClient({ initialPhotos }: PhotosClientProps) {
   const { language } = useApp();
-  const gallery = PHOTOS;
+  const gallery = initialPhotos.length > 0 ? initialPhotos : PHOTOS;
   const heights = [220, 170, 290, 210, 190, 260];
 
   return (

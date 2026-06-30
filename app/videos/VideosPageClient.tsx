@@ -16,11 +16,16 @@ const tabs = [
   { key: 'interview', label: 'Interviews', gu: 'ઇન્ટરવ્યૂ', hi: 'इंटरव्यू', icon: UserRound },
 ] as const;
 
-export default function VideosPageClient() {
+interface VideosPageClientProps {
+  initialVideos: any[];
+}
+
+export default function VideosPageClient({ initialVideos }: VideosPageClientProps) {
   const { language } = useApp();
   const [activeTab, setActiveTab] = useState<TabType>('all');
   const [playingVideoId, setPlayingVideoId] = useState<string | null>(null);
-  const filtered = activeTab === 'all' ? VIDEOS : VIDEOS.filter((item) => item.type === activeTab);
+  const displayVideos = initialVideos.length > 0 ? initialVideos : VIDEOS;
+  const filtered = activeTab === 'all' ? displayVideos : displayVideos.filter((item) => item.type === activeTab);
 
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);

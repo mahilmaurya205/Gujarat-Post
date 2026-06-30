@@ -1,15 +1,45 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Clock, TrendingUp } from 'lucide-react';
-import { formatDate, getArticleTitle, getTrendingArticles } from '@/data';
+import { formatDate, getArticleTitle } from '@/data';
 import SectionHeader from '@/components/ui/SectionHeader';
 import { useApp } from '@/components/AppProvider';
+import type { Article } from '@/types';
 
 export default function TrendingSection() {
   const { language } = useApp();
-  const trending = getTrendingArticles();
+  const [trending, setTrending] = useState<Article[]>([]);
+
+  useEffect(() => {
+    fetch('/api/news/trending?limit=10')
+      .then((r) => r.json())
+      .then((json) => {
+        if (json.success && json.data?.articles?.length > 0) {
+          setTrending(json.data.articles);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  if (!trending.length) {
+    return (
+      <section className="bg-muted py-0.5 animate-pulse">
+        <div className="max-w-screen-xl mx-auto px-3">
+          <div className="mb-2 h-6 w-40 rounded bg-muted/60" />
+          <div className="grid grid-cols-2 gap-0.5 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <div key={i} className="rounded-lg border border-border bg-card overflow-hidden">
+                <div className="aspect-[4/3] w-full bg-muted/40" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="bg-muted py-0.5">
@@ -28,11 +58,14 @@ export default function TrendingSection() {
             >
               <div className="relative aspect-[4/3]">
                 <Image
-                  src={article.image}
+                  src={article.image || 'https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=400&q=80'}
                   alt={article.title}
                   fill
                   sizes="(max-width: 768px) 50vw, 10vw"
                   className="object-cover transition duration-500 group-hover:scale-105"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=400&q=80';
+                  }}
                 />
                 <div className="img-overlay absolute inset-0" />
                 <div

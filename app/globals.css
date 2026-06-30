@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Mukta+Vaani:wght@400;500;600;700;800&family=Noto+Sans+Gujarati:wght@400;500;600;700;800;900&display=swap');
 
 :root {
   --background: #f5f6f8;
@@ -47,7 +48,7 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-  --font-sans: "Noto Sans Devanagari", "Noto Sans", "Nirmala UI", Arial, sans-serif;
+  --font-sans: "Noto Sans Gujarati", "Noto Sans Devanagari", "Noto Sans", "Nirmala UI", Arial, sans-serif;
 }
 
 * {
@@ -66,15 +67,32 @@ body {
     radial-gradient(circle at 15% 0%, rgb(225 29 46 / 0.08), transparent 28rem),
     linear-gradient(180deg, var(--background), var(--background));
   color: var(--foreground);
-  font-family: "Noto Sans Devanagari", "Noto Sans", "Nirmala UI", Arial, sans-serif;
+  font-family: "Noto Sans Gujarati", "Noto Sans Devanagari", "Noto Sans", "Nirmala UI", Arial, sans-serif;
   line-height: 1.5;
 }
 
-html[lang="gu"] body {
-  font-family: var(--font-anek-gujarati), "Nirmala UI", "Shruti", sans-serif;
-  font-optical-sizing: auto;
-  font-variation-settings: "wdth" 100;
+html[lang="gu"] {
+  --font-sans: "Noto Sans Gujarati", "Nirmala UI", "Shruti", sans-serif;
 }
+
+html[lang="gu"] body {
+  font-family: "Noto Sans Gujarati", "Nirmala UI", "Shruti", sans-serif;
+  font-optical-sizing: auto;
+}
+
+html[lang="gu"] h1,
+html[lang="gu"] h2,
+html[lang="gu"] h3,
+html[lang="gu"] h4,
+html[lang="gu"] h5,
+html[lang="gu"] h6,
+html[lang="gu"] .font-black,
+html[lang="gu"] .font-bold,
+html[lang="gu"] .font-semibold {
+  font-family: "Mukta Vaani", "Noto Sans Gujarati", "Nirmala UI", sans-serif !important;
+}
+
+
 
 .max-w-screen-xl {
   width: 100%;

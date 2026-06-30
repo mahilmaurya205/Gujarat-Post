@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PHOTOS, getLocalized } from '@/data';
@@ -9,13 +10,50 @@ import { useApp } from '@/components/AppProvider';
 export default function PhotoGallery() {
   const { language } = useApp();
   const heights = [260, 180, 320, 220, 190, 280];
+  const [photos, setPhotos] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/photos?limit=6')
+      .then((r) => r.json())
+      .then((json) => {
+        if (json.success && json.data?.photos?.length > 0) {
+          setPhotos(json.data.photos);
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-3 animate-pulse">
+        <div className="mx-auto max-w-screen-xl px-4">
+          <div className="mb-4 h-6 w-48 rounded bg-muted/60" />
+          <div className="masonry-grid">
+            {heights.map((height, index) => (
+              <div
+                key={index}
+                className="masonry-item rounded-xl bg-muted/40 border border-border/60"
+                style={{ height }}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const gallery = photos.length > 0 ? photos : PHOTOS.slice(0, 6);
 
   return (
     <section className="py-3">
       <div className="mx-auto max-w-screen-xl px-4">
         <SectionHeader title="Photo Gallery" titleGu="ફોટો ગેલેરી" titleHi="फोटो गैलरी" href="/photos" language={language} />
         <div className="masonry-grid">
-          {PHOTOS.map((photo, index) => (
+          {gallery.map((photo, index) => (
             <Link
               key={photo.id}
               href={`/photos/${photo.id}`}

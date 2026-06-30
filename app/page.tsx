@@ -2,7 +2,7 @@ import HeroSection from "@/components/sections/HeroSection";
 import TrendingSection from "@/components/sections/TrendingSection";
 import Advertisement from "@/components/ads/Advertisement";
 import LiveDashboard from "@/components/sections/LiveDashboard";
-import YouTubeLatest from "@/components/sections/YouTubeLatest";
+
 import CategorySection from "@/components/sections/CategorySection";
 import PhotoGallery from "@/components/sections/PhotoGallery";
 
@@ -23,18 +23,17 @@ export default function HomePage() {
         <Advertisement position="banner" />
       </div>
 
-      {/* YouTube latest videos */}
-      <YouTubeLatest />
+
 
       {/* Extra category sections */}
-      <CategorySection category="Business"       categoryGu="બિઝનેસ"       cols={6} />
-      <CategorySection category="Entertainment"  categoryGu="મનોરંજન"      cols={6} />
-      <CategorySection category="Technology"     categoryGu="ટેકનોલોજી"    cols={6} />
-      <CategorySection category="World"          categoryGu="વિશ્વ"         cols={6} />
-      <CategorySection category="Crime"          categoryGu="ક્રાઇમ"        cols={6} />
-      <CategorySection category="Politics"       categoryGu="રાજકારણ"      cols={6} />
-      <CategorySection category="Lifestyle"      categoryGu="લાઇફસ્ટાઇલ"   cols={6} />
-      <CategorySection category="Education"      categoryGu="શિક્ષણ"       cols={6} />
+      <CategorySection category="Business"       categorySlug="business"       categoryGu="બિઝનેસ"       cols={6} />
+      <CategorySection category="Entertainment"  categorySlug="entertainment"  categoryGu="મનોરંજન"      cols={6} />
+      <CategorySection category="Technology"     categorySlug="technology"     categoryGu="ટેકનોલોજી"    cols={6} />
+      <CategorySection category="World"          categorySlug="world"          categoryGu="વિશ્વ"         cols={6} />
+      <CategorySection category="Crime"          categorySlug="crime"          categoryGu="ક્રાઇમ"        cols={6} />
+      <CategorySection category="Politics"       categorySlug="politics"       categoryGu="રાજકારણ"      cols={6} />
+      <CategorySection category="Lifestyle"      categorySlug="lifestyle"      categoryGu="લાઇફસ્ટાઇલ"   cols={6} />
+      <CategorySection category="Education"      categorySlug="education"      categoryGu="શિક્ષણ"       cols={6} />
 
       {/* Photo gallery */}
       <PhotoGallery />

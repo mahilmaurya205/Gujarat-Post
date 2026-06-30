@@ -1,5 +1,6 @@
 'use client';
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import NewsLoader from '@/components/ui/NewsLoader';
 
 type Theme = 'light' | 'dark';
 type Language = 'gu' | 'en' | 'hi';
@@ -21,6 +22,7 @@ const AppContext = createContext<AppContextType>({
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>('light');
   const [language, setLanguage] = useState<Language>('gu');
+  const [showMicLoader, setShowMicLoader] = useState(true);
   const hydrated = useRef(false);
 
   useEffect(() => {
@@ -40,6 +42,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowMicLoader(false);
+    }, 1000);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -67,7 +76,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AppContext.Provider value={value}>
-      {children}
+      {showMicLoader ? <NewsLoader fullPage /> : children}
     </AppContext.Provider>
   );
 }
