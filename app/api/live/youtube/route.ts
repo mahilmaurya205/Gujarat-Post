@@ -136,21 +136,7 @@ function padVideos(fetched: VideoItem[], fallbackList: VideoItem[], limit = 6): 
 }
 
 export async function GET() {
-  // 1. Try Invidious first to allow duration filtering (> 60s)
-  try {
-    const invidiousVideos = await fetchFromInvidious(CHANNEL_ID);
-    if (invidiousVideos && invidiousVideos.length > 0) {
-      const padded = padVideos(invidiousVideos, FALLBACK_VIDEOS, 6);
-      return Response.json({ 
-        videos: padded, 
-        source: 'invidious' 
-      });
-    }
-  } catch (invidiousError) {
-    console.error('Invidious fetch failed:', invidiousError);
-  }
-
-  // 2. Fall back to RSS feed
+  // 1. Try RSS feed first (more reliable, direct from YouTube, and highly up-to-date)
   try {
     const res = await fetch(RSS_URL, {
       headers: {
@@ -213,14 +199,28 @@ export async function GET() {
     const padded = padVideos(videos, FALLBACK_VIDEOS, 6);
     return Response.json({ videos: padded, source: 'youtube_rss' });
   } catch (error) {
-    console.error('Error fetching YouTube RSS feed:', error);
-    
-    return Response.json({ 
-      videos: FALLBACK_VIDEOS, 
-      source: 'fallback_error',
-      error: error instanceof Error ? error.message : 'Unknown error'
-    });
+    console.error('Error fetching YouTube RSS feed, falling back to Invidious:', error);
   }
+
+  // 2. Fall back to Invidious
+  try {
+    const invidiousVideos = await fetchFromInvidious(CHANNEL_ID);
+    if (invidiousVideos && invidiousVideos.length > 0) {
+      const padded = padVideos(invidiousVideos, FALLBACK_VIDEOS, 6);
+      return Response.json({ 
+        videos: padded, 
+        source: 'invidious' 
+      });
+    }
+  } catch (invidiousError) {
+    console.error('Invidious fetch failed:', invidiousError);
+  }
+
+  // 3. Complete fallback
+  return Response.json({ 
+    videos: FALLBACK_VIDEOS, 
+    source: 'fallback_error'
+  });
 }
 
 // Basic helper to clean XML entities in title
