@@ -21,32 +21,46 @@ interface InvidiousVideo {
 // Fallback data matching the look of the channel
 const FALLBACK_VIDEOS: VideoItem[] = [
   {
-    id: 'A_5vL-ngK4M',
-    title: 'Gujarat Post Live Broadcast - Latest Bulletins and Ground Reports',
-    publishedAt: new Date(Date.now() - 3600000 * 2).toISOString(), // 2 hours ago
-    thumbnail: 'https://i.ytimg.com/vi/A_5vL-ngK4M/hqdefault.jpg',
-    videoUrl: 'https://www.youtube.com/watch?v=A_5vL-ngK4M',
+    id: 'sA6BrUmBXiA',
+    title: 'ધી સાબરકાંઠા જિલ્લા સહકારી ખરીદ વેચાણ સંઘ બન્યો ભ્રષ્ટાચારનો અડ્ડો ! આવી રીતે થાય છે લાખોની ઉચાપત',
+    publishedAt: '2026-06-10T05:34:27.000Z',
+    thumbnail: 'https://i.ytimg.com/vi/sA6BrUmBXiA/hqdefault.jpg',
+    videoUrl: 'https://www.youtube.com/watch?v=sA6BrUmBXiA',
   },
   {
-    id: 'dQw4w9WgXcQ',
-    title: 'Special Report: Gujarat Infrastructure and Industrial Growth 2027',
-    publishedAt: new Date(Date.now() - 3600000 * 12).toISOString(), // 12 hours ago
-    thumbnail: 'https://images.unsplash.com/photo-1599930113854-d6d7fd521f10?w=800&q=80',
-    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    id: 'rQHoqCTiQvI',
+    title: 'કપડવંજ TDO કચેરીમાં ભ્રષ્ટાચારનો સડો, સાંભળો- વિસ્તરણ અધિકારીએ ગરીબોને લૂંટવા વચેટિયાને આપ્યો  આદેશ',
+    publishedAt: '2026-06-10T05:34:27.000Z',
+    thumbnail: 'https://i.ytimg.com/vi/rQHoqCTiQvI/hqdefault.jpg',
+    videoUrl: 'https://www.youtube.com/watch?v=rQHoqCTiQvI',
   },
   {
-    id: 'v1_placeholder',
-    title: 'Gujarat Election 2027 Preparation and Voter Insights',
-    publishedAt: new Date(Date.now() - 3600000 * 24).toISOString(), // 1 day ago
-    thumbnail: 'https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=800&q=80',
-    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    id: 'WF2Kuec5HV0',
+    title: 'વડોદરાના AAP નેતાનું પાપ, ચાર વર્ષ સુધી પક્ષની મહિલા સાથે દુષ્કર્મ આચર્યું, અશ્લિલ વીડિયો બનાવ્યાં',
+    publishedAt: '2026-06-03T05:34:27.000Z',
+    thumbnail: 'https://i.ytimg.com/vi/WF2Kuec5HV0/hqdefault.jpg',
+    videoUrl: 'https://www.youtube.com/watch?v=WF2Kuec5HV0',
   },
   {
-    id: 'v2_placeholder',
-    title: 'Monsoon Alert: Heavy rain forecast across Surat and South Gujarat',
-    publishedAt: new Date(Date.now() - 3600000 * 48).toISOString(), // 2 days ago
-    thumbnail: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&q=80',
-    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    id: 'LDDtOMwdJ_0',
+    title: 'રાજકોટમાં IPS એ પત્રકારની ગુદામાં પ્રવેશ કર્યો ? આ સિનિયર પત્રકારે સંઘવીને કેમ નિષ્ફળ કહ્યાં !',
+    publishedAt: '2026-04-01T05:34:27.000Z',
+    thumbnail: 'https://i.ytimg.com/vi/LDDtOMwdJ_0/hqdefault.jpg',
+    videoUrl: 'https://www.youtube.com/watch?v=LDDtOMwdJ_0',
+  },
+  {
+    id: '-iXZuFoHqiw',
+    title: 'સંમેલન SPG નું કે ભાજપનું ? નીતિન પટેલે ભાજપની વાહવાહી કરી, કોઇએ કહ્યું  કે મોદી ભક્તોના મગજ બંધ છે',
+    publishedAt: '2026-04-01T05:34:27.000Z',
+    thumbnail: 'https://i.ytimg.com/vi/-iXZuFoHqiw/hqdefault.jpg',
+    videoUrl: 'https://www.youtube.com/watch?v=-iXZuFoHqiw',
+  },
+  {
+    id: 'uJalvs-jgFc',
+    title: 'ભાજપ સરકારના ભુક્કા કાઢી નાખ્યાં, સાણંદ દારુ પાર્ટી મુદ્દે શંકરસિંહ વાઘેલા તો સરકાર સામે બગડ્યાં',
+    publishedAt: '2026-03-01T05:34:27.000Z',
+    thumbnail: 'https://i.ytimg.com/vi/uJalvs-jgFc/hqdefault.jpg',
+    videoUrl: 'https://www.youtube.com/watch?v=uJalvs-jgFc',
   }
 ];
 
@@ -105,13 +119,30 @@ async function fetchFromInvidious(channelId: string): Promise<VideoItem[] | null
   return null;
 }
 
+// Helper function to pad videos list with unique fallback videos up to the target limit
+function padVideos(fetched: VideoItem[], fallbackList: VideoItem[], limit = 6): VideoItem[] {
+  const result = [...fetched];
+  const seenIds = new Set(result.map(v => v.id));
+  
+  for (const item of fallbackList) {
+    if (result.length >= limit) break;
+    if (!seenIds.has(item.id)) {
+      result.push(item);
+      seenIds.add(item.id);
+    }
+  }
+  
+  return result.slice(0, limit);
+}
+
 export async function GET() {
   // 1. Try Invidious first to allow duration filtering (> 60s)
   try {
     const invidiousVideos = await fetchFromInvidious(CHANNEL_ID);
     if (invidiousVideos && invidiousVideos.length > 0) {
+      const padded = padVideos(invidiousVideos, FALLBACK_VIDEOS, 6);
       return Response.json({ 
-        videos: invidiousVideos.slice(0, 6), 
+        videos: padded, 
         source: 'invidious' 
       });
     }
@@ -179,7 +210,8 @@ export async function GET() {
       throw new Error('Failed to parse any videos from YouTube RSS XML');
     }
 
-    return Response.json({ videos: videos.slice(0, 6), source: 'youtube_rss' });
+    const padded = padVideos(videos, FALLBACK_VIDEOS, 6);
+    return Response.json({ videos: padded, source: 'youtube_rss' });
   } catch (error) {
     console.error('Error fetching YouTube RSS feed:', error);
     
