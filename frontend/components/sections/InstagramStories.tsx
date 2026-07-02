@@ -199,7 +199,7 @@ export default function InstagramStories() {
       <div className="mx-auto max-w-screen-xl px-4 relative">
         {/* Title Block */}
         <div className="mb-5 flex items-center justify-between border-b border-border/60 pb-3">
-          <span className="rounded bg-[#c0392b] px-3.5 py-1.5 text-xs sm:text-sm font-black text-white uppercase tracking-wider shadow-sm">
+          <span className="rounded bg-accent px-3.5 py-1.5 text-xs sm:text-sm font-black text-white uppercase tracking-wider shadow-sm">
             {getLocalized(language, { en: 'Web Stories', gu: 'વેબ સ્ટોરીઝ', hi: 'वेब स्टोरीज' })}
           </span>
         </div>
@@ -235,31 +235,34 @@ export default function InstagramStories() {
             {STORY_ITEMS.map((story, index) => {
               const displayTitle = language === 'gu' ? story.titleGu : story.title;
               return (
-                <article
+                <div
                   key={story.id}
                   onClick={() => {
                     setActiveStoryIndex(index);
                     setProgress(0);
                   }}
-                  className="group flex-none w-[150px] sm:w-[190px] aspect-[3/4] snap-start relative rounded-2xl border border-border bg-black overflow-hidden shadow-sm hover:shadow-md transition duration-300 cursor-pointer"
+                  className="flex-none w-[130px] sm:w-[160px] cursor-pointer snap-start group"
                 >
-                  {/* Web Story Image - Full bleed with correct height styling */}
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={story.image}
-                    alt={story.title}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    style={{ height: '100%', width: '100%', objectFit: 'cover' }}
-                    loading="lazy"
-                  />
-
-                  {/* Gradient & Clean Overlay at bottom */}
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent p-3 pt-6 z-10">
-                    <span className="text-white text-[11px] sm:text-[12px] font-black leading-snug drop-shadow-sm group-hover:text-red-200 transition-colors">
-                      {displayTitle}
-                    </span>
+                  {/* Vertical Story Card Layout */}
+                  <div className="relative aspect-[3/4.2] w-full overflow-hidden rounded-2xl border border-border/10 bg-muted shadow-sm transition-all duration-300 group-hover:scale-[1.03] group-hover:shadow-md">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={story.image}
+                      alt={story.title}
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    {/* Dark gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                    
+                    {/* Title overlaid at the bottom */}
+                    <div className="absolute bottom-0 inset-x-0 p-3 text-left">
+                      <p className="text-[12px] sm:text-[13px] font-bold leading-snug text-white line-clamp-3 group-hover:text-amber-200 transition-colors duration-200 drop-shadow">
+                        {displayTitle}
+                      </p>
+                    </div>
                   </div>
-                </article>
+                </div>
               );
             })}
           </div>

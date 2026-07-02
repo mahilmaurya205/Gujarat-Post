@@ -25,7 +25,7 @@ import { NAV_ITEMS } from '@/data';
 import { useApp } from '@/components/AppProvider';
 import { SocialLinks } from '@/components/ui/SocialLinks';
 import Advertisement from '@/components/ads/Advertisement';
-import gpLogo from '../../Gujarat Post Logo.gif';
+import gpLogo from '../../public/Gujarat Post Logo.gif';
 
 const languageLabels = {
   gu: 'ગુજરાતી',

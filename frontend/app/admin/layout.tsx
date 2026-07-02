@@ -20,7 +20,7 @@ import {
   Video,
 } from 'lucide-react';
 import { useApp } from '@/components/AppProvider';
-import gpLogo from '../../gplogo.jpg';
+import gpLogo from '../../public/gplogo.jpg';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();

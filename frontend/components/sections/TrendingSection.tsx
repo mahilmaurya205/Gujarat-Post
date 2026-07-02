@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Clock, TrendingUp } from 'lucide-react';
-import { formatDate, getArticleTitle } from '@/data';
+import { formatDate, getArticleTitle, ARTICLES } from '@/data';
 import SectionHeader from '@/components/ui/SectionHeader';
 import { useApp } from '@/components/AppProvider';
 import type { Article } from '@/types';
@@ -19,9 +19,13 @@ export default function TrendingSection() {
       .then((json) => {
         if (json.success && json.data?.articles?.length > 0) {
           setTrending(json.data.articles);
+        } else {
+          setTrending(ARTICLES.filter((a) => a.isTrending).slice(0, 10));
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        setTrending(ARTICLES.filter((a) => a.isTrending).slice(0, 10));
+      });
   }, []);
 
   if (!trending.length) {

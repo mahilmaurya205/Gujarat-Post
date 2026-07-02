@@ -46,6 +46,51 @@ const getMockViews = (videoId: string): string => {
   return `${base}K views`;
 };
 
+const FALLBACK_VIDEOS: VideoItem[] = [
+  {
+    id: 'sA6BrUmBXiA',
+    title: 'ધી સાબરકાંઠા જિલ્લા સહકારી ખરીદ વેચાણ સંઘ બન્યો ભ્રષ્ટાચારનો અડ્ડો ! આવી રીતે થાય છે લાખોની ઉચાપત',
+    publishedAt: '2026-06-10T05:34:27.000Z',
+    thumbnail: 'https://i.ytimg.com/vi/sA6BrUmBXiA/hqdefault.jpg',
+    videoUrl: 'https://www.youtube.com/watch?v=sA6BrUmBXiA',
+  },
+  {
+    id: 'rQHoqCTiQvI',
+    title: 'કપડવંજ TDO કચેરીમાં ભ્રષ્ટાચારનો સડો, સાંભળો- વિસ્તરણ અધિકારીએ ગરીબોને લૂંટવા વચેટિયાને આપ્યો  આદેશ',
+    publishedAt: '2026-06-10T05:34:27.000Z',
+    thumbnail: 'https://i.ytimg.com/vi/rQHoqCTiQvI/hqdefault.jpg',
+    videoUrl: 'https://www.youtube.com/watch?v=rQHoqCTiQvI',
+  },
+  {
+    id: 'WF2Kuec5HV0',
+    title: 'વડોદરાના AAP નેતાનું પાપ, ચાર વર્ષ સુધી પક્ષની મહિલા સાથે દુષ્કર્મ આચર્યું, અશ્લિલ વીડિયો બનાવ્યાં',
+    publishedAt: '2026-06-03T05:34:27.000Z',
+    thumbnail: 'https://i.ytimg.com/vi/WF2Kuec5HV0/hqdefault.jpg',
+    videoUrl: 'https://www.youtube.com/watch?v=WF2Kuec5HV0',
+  },
+  {
+    id: 'LDDtOMwdJ_0',
+    title: 'રાજકોટમાં IPS એ પત્રકારની ગુદામાં પ્રવેશ કર્યો ? આ સિનિયર પત્રકારે સંઘવીને કેમ નિષ્ફળ કહ્યાં !',
+    publishedAt: '2026-04-01T05:34:27.000Z',
+    thumbnail: 'https://i.ytimg.com/vi/LDDtOMwdJ_0/hqdefault.jpg',
+    videoUrl: 'https://www.youtube.com/watch?v=LDDtOMwdJ_0',
+  },
+  {
+    id: '-iXZuFoHqiw',
+    title: 'સંમેલન SPG નું કે ભાજપનું ? નીતિન પટેલે ભાજપની વાહવાહી કરી, કોઇએ કહ્યું  કે મોદી ભક્તોના મગજ બંધ છે',
+    publishedAt: '2026-04-01T05:34:27.000Z',
+    thumbnail: 'https://i.ytimg.com/vi/-iXZuFoHqiw/hqdefault.jpg',
+    videoUrl: 'https://www.youtube.com/watch?v=-iXZuFoHqiw',
+  },
+  {
+    id: 'uJalvs-jgFc',
+    title: 'ભાજપ સરકારના ભુક્કા કાઢી નાખ્યાં, સાણંદ દારુ પાર્ટી મુદ્દે શંકરસિંહ વાઘેલા તો સરકાર સામે બગડ્યાં',
+    publishedAt: '2026-03-01T05:34:27.000Z',
+    thumbnail: 'https://i.ytimg.com/vi/uJalvs-jgFc/hqdefault.jpg',
+    videoUrl: 'https://www.youtube.com/watch?v=uJalvs-jgFc',
+  }
+];
+
 export default function YouTubeLatest() {
   const { language } = useApp();
   const [videos, setVideos] = useState<VideoItem[]>([]);
@@ -64,24 +109,22 @@ export default function YouTubeLatest() {
 
     try {
       const response = await fetch('/api/live/youtube', { cache: 'no-store' });
-      if (!response.ok) throw new Error('Failed to fetch videos');
-      const data = await response.json() as { videos: VideoItem[] };
-      setVideos(data.videos);
+      if (response.ok) {
+        const data = await response.json() as { videos: VideoItem[] };
+        setVideos(data.videos);
+        setError(null);
+      } else {
+        setVideos(FALLBACK_VIDEOS);
+        setError(null);
+      }
+    } catch {
+      setVideos(FALLBACK_VIDEOS);
       setError(null);
-    } catch (err) {
-      console.error(err);
-      setError(
-        getLocalized(language, {
-          en: 'Failed to load latest videos. Please try again.',
-          gu: 'તાજેતરના વીડિયો લોડ કરવામાં નિષ્ફળ. ફરીથી પ્રયાસ કરો.',
-          hi: 'नवीनतम वीडियो લોડ કરવામાં નિષ્ફળ. ફરીથી પ્રયાસ કરો।'
-        })
-      );
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [language]);
+  }, []);
 
   const updateArrows = useCallback(() => {
     const el = scrollContainerRef.current;

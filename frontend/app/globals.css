@@ -79,16 +79,19 @@ html[lang="gu"] body {
   font-optical-sizing: auto;
 }
 
-html[lang="gu"] h1,
-html[lang="gu"] h2,
-html[lang="gu"] h3,
-html[lang="gu"] h4,
-html[lang="gu"] h5,
-html[lang="gu"] h6,
-html[lang="gu"] .font-black,
-html[lang="gu"] .font-bold,
-html[lang="gu"] .font-semibold {
-  font-family: "Mukta Vaani", "Noto Sans Gujarati", "Nirmala UI", sans-serif !important;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-black,
+.font-bold,
+.font-semibold {
+  font-family: "Mukta Vaani", "Mukta", "Noto Sans Gujarati", "Noto Sans Devanagari", "Noto Sans", "Nirmala UI", sans-serif !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
 }
 
 

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Clock, ArrowRight, Flame, Eye, Play, ChevronRight, ChevronLeft, Camera } from 'lucide-react';
+import { Clock, ArrowRight, Flame, Eye, Play, ChevronRight, ChevronLeft, Camera, X } from 'lucide-react';
 import {
   getArticleTitle,
   getArticleExcerpt,
@@ -13,6 +13,8 @@ import {
   getCategoryLabel,
   VIDEOS,
   getLocalized,
+  ARTICLES,
+  getArticlesByCategory,
 } from '@/data';
 import { getCategoryColor } from '@/lib/utils';
 import { useApp } from '@/components/AppProvider';
@@ -30,7 +32,7 @@ const HOME_IMAGE_FALLBACKS = [
   'https://images.unsplash.com/photo-1599930113854-d6d7fd521f10?w=800&q=80',
   'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&q=80',
   'https://images.unsplash.com/photo-1605649487212-47bdab064df7?w=800&q=80',
-  'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800&q=80',
+  'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=800&q=80',
   'https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=800&q=80',
   'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&q=80',
   'https://images.unsplash.com/photo-1555848962-6e79363ec58f?w=800&q=80',
@@ -121,15 +123,15 @@ export default function HeroSection() {
       fetchArticles('/api/category/business?limit=4'),
       fetchArticles('/api/category/sports?limit=7'),
     ]).then(([news, stories, trend, guj, crime, natl, world, biz, sports]) => {
-      setTopNews(news);
-      setTopStories(stories);
-      setTrendingArtDB(trend);
-      setGujaratArtDB(guj);
-      setCrimeArtDB(crime);
-      setNationalArtDB(natl);
-      setWorldArtDB(world);
-      setBusinessArtDB(biz);
-      setSportsArtDB(sports);
+      setTopNews(news.length ? news : ARTICLES.slice(0, 6));
+      setTopStories(stories.length ? stories : ARTICLES.filter((a) => a.isFeatured).slice(0, 16));
+      setTrendingArtDB(trend.length ? trend : ARTICLES.filter((a) => a.isTrending).slice(0, 10));
+      setGujaratArtDB(guj.length ? guj : getArticlesByCategory('state').slice(0, 16));
+      setCrimeArtDB(crime.length ? crime : getArticlesByCategory('crime').slice(0, 4));
+      setNationalArtDB(natl.length ? natl : getArticlesByCategory('national').slice(0, 4));
+      setWorldArtDB(world.length ? world : getArticlesByCategory('world').slice(0, 4));
+      setBusinessArtDB(biz.length ? biz : getArticlesByCategory('business').slice(0, 4));
+      setSportsArtDB(sports.length ? sports : getArticlesByCategory('sports').slice(0, 7));
     });
   }, []);
 
@@ -168,6 +170,16 @@ export default function HeroSection() {
     trendingArtDB,
   ]);
 
+  const leadStoryId = uniqueTopStories[0]?.id;
+  const leadSideArticles = [
+    ...uniqueLeftItems,
+    ...uniqueTopStories.slice(9),
+    ...uniqueGujaratArt,
+  ].filter((article, index, list) => (
+    article.id !== leadStoryId &&
+    list.findIndex((item) => item.id === article.id) === index
+  )).slice(0, 8);
+
   if (!topStories.length) return <HeroSectionSkeleton language={language} />;
 
   return (
@@ -176,54 +188,136 @@ export default function HeroSection() {
       {/* ── ROW 1: 3-column main section ─────────────────────────────────── */}
       <div className="grid grid-cols-1 gap-1 lg:grid-cols-[minmax(0,1fr)_280px] items-start">
         <div className="min-w-0">
-          <div className="grid grid-cols-1 gap-2 lg:grid-cols-[360px_minmax(0,1fr)] items-stretch">
-
-            {/* LEFT: Mukhya Samachar list */}
-            <div className="hidden rounded-lg border border-border bg-card p-1.5 shadow-sm lg:flex lg:flex-col">
-              <SectionLabel
-                title="Top News"
-                titleGu="મુખ્ય સમાચાર"
-                language={language}
-              />
-              <div className="flex flex-1 flex-col divide-y divide-border">
-                {uniqueLeftItems.map((art) => (
-                  <LeftListItem key={art.id} article={art} language={language} />
-                ))}
-              </div>
-            </div>
-
-            {/* CENTER: Top Stories */}
-            <div className="min-w-0">
-              {/* Top Stories header */}
-              <div className="rounded-lg border border-border bg-card p-1.5 shadow-sm">
-                <div className="mb-1.5 flex items-center justify-between border-b border-border pb-1">
-                  <SectionLabel title="Top Stories" titleGu="ટૉપ સ્ટોરી" language={language} />
-                  <Link href="/category/state" className="flex items-center gap-0.5 text-[11px] font-bold text-accent hover:underline">
-                    {language === 'gu' ? 'બધા જુઓ' : 'View all'} <ChevronRight className="h-3 w-3" />
+            {/* ── REDESIGNED HERO NEWS SECTION (3 columns layout: 50% Left, 25% Middle, 25% Right) ── */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
+              
+              {/* LEFT COLUMN (Featured News + compact article list) */}
+              <div className="md:col-span-2 lg:col-span-2 flex flex-col gap-4 w-full">
+                {uniqueTopStories[0] && (
+                  <Link href={`/news/${uniqueTopStories[0].slug}`} className="group relative flex flex-col w-full">
+                    <div className="relative aspect-[2.3/1] w-full overflow-hidden rounded-lg border border-border/10 shadow-sm">
+                      <Image
+                        src={uniqueTopStories[0].image}
+                        alt={uniqueTopStories[0].title}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                        priority
+                      />
+                    </div>
+                    <span className="text-accent font-bold text-[13px] uppercase tracking-wide mt-2.5">
+                      {getCategoryLabel(uniqueTopStories[0], language)}
+                    </span>
+                    <h1 className="text-[#111] dark:text-white font-extrabold text-[22px] md:text-[26px] lg:text-[30px] leading-[1.18] tracking-tight mt-1.5 transition-colors group-hover:text-accent line-clamp-3">
+                      {getArticleTitle(uniqueTopStories[0], language)}
+                    </h1>
                   </Link>
-                </div>
+                )}
 
-                {/* 2-column layout with horizontal list (title left, image right) */}
-                <div className="grid grid-cols-1 gap-y-4 md:grid-cols-2 md:gap-y-0 md:gap-x-6 md:divide-x md:divide-border mt-1">
-                  <div className="flex flex-col divide-y divide-border h-[385px] overflow-y-auto pr-2 scrollbar-thin">
-                    {uniqueTopStories.slice(0, 8).map((art) => (
-                      <StoryRow key={art.id} article={art} language={language} />
+                {leadSideArticles.length > 0 && (
+                  <div className="grid grid-cols-1 gap-x-4 gap-y-2 border-t border-border/70 pt-3 sm:grid-cols-2">
+                    {leadSideArticles.map((art) => (
+                      <Link
+                        key={art.id}
+                        href={`/news/${art.slug}`}
+                        className="group relative flex min-h-[66px] gap-2 rounded-md py-0.5 transition-colors hover:bg-muted/30"
+                      >
+                        <div className="relative h-[60px] w-[88px] shrink-0 overflow-hidden rounded-lg border border-border/10 bg-muted shadow-sm">
+                          <Image
+                            src={art.image}
+                            alt={art.title}
+                            fill
+                            sizes="88px"
+                            className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                          />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <span className="text-accent font-bold text-[10px] uppercase tracking-wide">
+                            {getCategoryLabel(art, language)}
+                          </span>
+                          <h2 className="mt-0.5 line-clamp-3 text-[13.5px] font-black leading-snug text-[#111] transition-colors group-hover:text-accent dark:text-white md:text-[14px]">
+                            {getArticleTitle(art, language)}
+                          </h2>
+                        </div>
+                      </Link>
                     ))}
                   </div>
-                  <div className="flex flex-col divide-y divide-border h-[385px] overflow-y-auto md:pl-6 pr-2 scrollbar-thin">
-                    {uniqueTopStories.slice(8, 16).map((art) => (
-                      <StoryRow key={art.id} article={art} language={language} />
-                    ))}
-                  </div>
-                </div>
+                )}
               </div>
+
+              {/* MIDDLE COLUMN (4 Vertical Cards) */}
+              <div className="md:col-span-1 lg:col-span-1 flex flex-col gap-4 w-full">
+                {uniqueTopStories.slice(1, 5).map((art) => {
+                  const showVideoIcon = art.isTrending || art.isFeatured || Number(art.id) % 3 === 0;
+                  return (
+                    <Link key={art.id} href={`/news/${art.slug}`} className="group relative flex flex-col w-full">
+                      <div className="relative aspect-[2.8/1] w-full overflow-hidden rounded-lg border border-border/10 shadow-sm">
+                        <Image
+                          src={art.image}
+                          alt={art.title}
+                          fill
+                          sizes="(max-width: 640px) 100vw, 25vw"
+                          className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                        />
+                      </div>
+                      <span className="text-accent font-bold text-[11px] uppercase tracking-wide mt-1.5 block">
+                        {getCategoryLabel(art, language)}
+                      </span>
+                      <h2 className="text-[#111] dark:text-white font-bold text-[14px] md:text-[14.5px] lg:text-[15px] leading-snug mt-0.5 transition-colors group-hover:text-accent line-clamp-3">
+                        {showVideoIcon && (
+                          <span className="inline-flex items-center text-red-600 mr-1 shrink-0 -mt-0.5 align-middle">
+                            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M23 7l-7 5 7 5V7z" />
+                              <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+                            </svg>
+                          </span>
+                        )}
+                        {getArticleTitle(art, language)}
+                      </h2>
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {/* RIGHT COLUMN (4 Vertical Cards) */}
+              <div className="md:col-span-1 lg:col-span-1 flex flex-col gap-4 w-full">
+                {uniqueTopStories.slice(5, 9).map((art) => {
+                  const showVideoIcon = art.isTrending || art.isFeatured || Number(art.id) % 3 === 0;
+                  return (
+                    <Link key={art.id} href={`/news/${art.slug}`} className="group relative flex flex-col w-full">
+                      <div className="relative aspect-[2.8/1] w-full overflow-hidden rounded-lg border border-border/10 shadow-sm">
+                        <Image
+                          src={art.image}
+                          alt={art.title}
+                          fill
+                          sizes="(max-width: 640px) 100vw, 25vw"
+                          className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                        />
+                      </div>
+                      <span className="text-accent font-bold text-[11px] uppercase tracking-wide mt-1.5 block">
+                        {getCategoryLabel(art, language)}
+                      </span>
+                      <h2 className="text-[#111] dark:text-white font-bold text-[14px] md:text-[14.5px] lg:text-[15px] leading-snug mt-0.5 transition-colors group-hover:text-accent line-clamp-3">
+                        {showVideoIcon && (
+                          <span className="inline-flex items-center text-red-600 mr-1 shrink-0 -mt-0.5 align-middle">
+                            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M23 7l-7 5 7 5V7z" />
+                              <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+                            </svg>
+                          </span>
+                        )}
+                        {getArticleTitle(art, language)}
+                      </h2>
+                    </Link>
+                  );
+                })}
+              </div>
+
             </div>
 
-          </div>
+          <AapKiAdalatSection videos={videos.slice(0, 5)} language={language} />
 
-          <div className="min-w-0 mt-2">
-            <TrendingBar articles={uniqueTrendingArt} language={language} />
-          </div>
+          {/* Trending News moved to Right Sidebar under EPaper Widget */}
 
           <div className="min-w-0">
             {/* ── Rajya Samachar (fills remaining white space) */}
@@ -233,14 +327,13 @@ export default function HeroSection() {
               articles={uniqueGujaratArt} language={language}
             />
           </div>
-
-          {/* RIGHT: Live TV + Weather + EPaper */}
         </div>
 
         <div className="flex flex-col gap-0.5">
           <LiveTVWidget language={language} videoMode={videoMode} setVideoMode={setVideoMode} />
           <WeatherWidget language={language} />
           <EPaperWidget language={language} />
+          <TrendingSidebarWidget articles={uniqueTrendingArt} language={language} />
         </div>
       </div>
 
@@ -272,72 +365,139 @@ export default function HeroSection() {
   );
 }
 
-/* --- Trending Bar ----------------------------------------------------------- */
-function TrendingBar({ articles, language }: { articles: Article[]; language: Language }) {
-  const label = language === 'gu' ? 'ટ્રેન્ડિંગ સમાચાર' : 'Trending News';
-  const containerRef = useRef<HTMLDivElement>(null);
+/* --- Aap Ki Adalat Video Section ------------------------------------------ */
+function AapKiAdalatSection({ videos, language }: { videos: typeof VIDEOS; language: Language }) {
+  const [playId, setPlayId] = useState<string | null>(null);
 
-  const handleScroll = (direction: 'left' | 'right') => {
-    if (containerRef.current) {
-      const scrollAmount = direction === 'left' ? -300 : 300;
-      containerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
-  };
+  if (!videos.length) return null;
 
   return (
-    <div className="rounded-xl border border-border bg-card overflow-hidden">
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-red-100 bg-gradient-to-r from-red-50 via-white to-slate-50 px-3 py-1.5">
-        <div className="flex items-center gap-1.5">
-          <Flame className="h-[18px] w-[18px] text-accent fill-current" />
-          <span className="text-[15px] font-black leading-tight text-foreground">{label}</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <button
-            onClick={() => handleScroll('left')}
-            className="flex h-6 w-6 items-center justify-center rounded-full border border-border bg-background text-foreground hover:bg-accent hover:text-white hover:border-accent transition cursor-pointer"
-          >
-            <ChevronLeft className="h-3.5 w-3.5" />
-          </button>
-          <button
-            onClick={() => handleScroll('right')}
-            className="flex h-6 w-6 items-center justify-center rounded-full border border-border bg-background text-foreground hover:bg-accent hover:text-white hover:border-accent transition cursor-pointer"
-          >
-            <ChevronRight className="h-3.5 w-3.5" />
-          </button>
-        </div>
+    <section className="mt-5 pb-5">
+      {/* Header with Short Underline */}
+      <div className="mb-3 border-b border-zinc-200 dark:border-zinc-800">
+        <h2 className="inline-block border-b-[3px] border-accent pb-1.5 pr-10 text-[20px] md:text-[24px] font-black text-foreground">
+          {getLocalized(language, { en: 'Gujarat Post Specials', gu: 'ગુજરાત પોસ્ટ વિશેષ', hi: 'गुजरात पोस्ट विशेष' })}
+        </h2>
       </div>
 
-      {/* Items */}
-      <div
-        ref={containerRef}
-        className="flex overflow-x-auto divide-x divide-border scrollbar-none scroll-smooth"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        {articles.slice(0, 10).map((art: Article, idx: number) => (
+      {/* Grid of Videos */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        {videos.map((video) => (
+          <div
+            key={video.id}
+            onClick={() => setPlayId(video.youtubeId)}
+            className="group block overflow-hidden rounded-lg shadow-sm border border-border/10 cursor-pointer bg-accent"
+          >
+            {/* Thumbnail */}
+            <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-950">
+              <Image
+                src={video.thumbnail}
+                alt={video.title}
+                fill
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+              <span className="absolute left-2 bottom-2 flex h-8 w-8 items-center justify-center rounded-full bg-red-600 text-white shadow-lg ring-2 ring-white/70 transition-transform duration-300 group-hover:scale-110">
+                <Play className="ml-0.5 h-3.5 w-3.5 fill-current" />
+              </span>
+            </div>
+            {/* Title Container with Solid Accent Color */}
+            <div className="px-2.5 py-3.5 min-h-[86px] bg-accent text-white">
+              <h3 className="line-clamp-2 text-[13px] md:text-[14px] font-black leading-snug">
+                {getLocalized(language, { en: video.title, gu: video.titleGu, hi: video.titleHi })}
+              </h3>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Centered View More Button */}
+      <div className="mt-4 flex justify-center">
+        <Link
+          href="/videos"
+          className="inline-flex items-center gap-2 bg-zinc-800 px-4.5 py-1.5 text-[12.5px] md:text-[13px] font-black text-white transition hover:bg-zinc-700"
+        >
+          {getLocalized(language, { en: 'View More', gu: 'વધુ જુઓ', hi: 'और देखें' })}
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
+
+      {/* Video Player Modal */}
+      {playId && (
+        <div
+          className="fixed inset-0 z-[120] flex items-center justify-center bg-black/90 backdrop-blur-sm px-4 py-6"
+          onClick={() => setPlayId(null)}
+        >
+          <div
+            className="relative w-full max-w-4xl overflow-hidden rounded-[24px] border border-white/10 bg-black shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="absolute right-4 top-4 z-20">
+              <button
+                type="button"
+                onClick={() => setPlayId(null)}
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/80 transition"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="relative aspect-video bg-black">
+              <iframe
+                src={`https://www.youtube.com/embed/${playId}?autoplay=1&rel=0`}
+                className="absolute inset-0 h-full w-full"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+/* --- Trending Sidebar Widget ------------------------------------------------ */
+function TrendingSidebarWidget({ articles, language }: { articles: Article[]; language: Language }) {
+  if (!articles.length) return null;
+
+  return (
+    <div className="border border-border/85 bg-card rounded-xl p-4 shadow-sm mt-3">
+      {/* Header */}
+      <div className="mb-4 flex items-center gap-2 border-b border-border pb-2">
+        <Flame className="h-5 w-5 text-accent animate-pulse fill-current shrink-0" />
+        <h3 className="text-[16px] font-black text-foreground">
+          {getLocalized(language, { en: 'Trending News', gu: 'ટ્રેન્ડિંગ સમાચાર', hi: 'ट्रेंडिंग समाचार' })}
+        </h3>
+      </div>
+
+      {/* Vertical List */}
+      <div className="flex flex-col gap-3.5">
+        {articles.slice(0, 10).map((art, idx) => (
           <Link
             key={art.id}
             href={`/news/${art.slug}`}
-            className="group flex items-center gap-2 px-3.5 py-3 hover:bg-muted/60 transition shrink-0 w-[240px] md:w-[280px]"
+            className="group flex items-start gap-3 transition-colors pb-3 border-b border-border/40 last:border-0 last:pb-0"
           >
-            {/* Number */}
-            <span className="text-[28px] font-black leading-none text-accent shrink-0 w-6 text-center">
+            {/* Number Rank */}
+            <span className="text-[20px] font-black text-accent/80 group-hover:text-accent w-6 shrink-0 mt-0.5 text-center">
               {idx + 1}
             </span>
-            {/* Thumbnail */}
-            <div className="relative h-[40px] w-[56px] shrink-0 overflow-hidden rounded-lg">
+            {/* Small Thumbnail */}
+            <div className="relative h-[38px] w-[56px] shrink-0 overflow-hidden rounded-md border border-border/10 bg-muted">
               <Image
                 src={art.image}
                 alt={art.title}
                 fill
                 sizes="56px"
-                className="object-cover group-hover:scale-105 transition duration-300"
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </div>
             {/* Title */}
-            <p className="line-clamp-2 text-[13.5px] md:text-[14px] font-black leading-snug text-foreground group-hover:text-accent transition-colors">
-              {getArticleTitle(art, language)}
-            </p>
+            <div className="min-w-0 flex-1">
+              <h4 className="line-clamp-3 text-[13.5px] leading-snug font-medium text-foreground group-hover:text-accent transition-colors duration-150">
+                {getArticleTitle(art, language)}
+              </h4>
+            </div>
           </Link>
         ))}
       </div>
@@ -355,6 +515,8 @@ function SectionLabel({ title, titleGu, language }: { title: string; titleGu: st
     </div>
   );
 }
+
+/* --- Article Hover Preview Removed ----------------------------------------- */
 
 /* --- Left List Item --------------------------------------------------------- */
 function LeftListItem({ article, language }: { article: Article; language: Language }) {
@@ -927,10 +1089,14 @@ function LiveTVWidget({ language, videoMode, setVideoMode }: LiveTVWidgetProps) 
 function WeatherWidget({ language }: { language: Language }) {
   const [weather, setWeather] = useState<Array<{ city: string; state: string; temperature: number; condition: string; humidity: number; windSpeed: number }> | null>(null);
   useEffect(() => {
+    const FALLBACK_WEATHER = [
+      { city: 'Ahmedabad', state: 'Gujarat', temperature: 32, condition: 'Partly cloudy', humidity: 65, windSpeed: 12 },
+      { city: 'Vadodara', state: 'Gujarat', temperature: 31, condition: 'Sunny', humidity: 62, windSpeed: 10 }
+    ];
     fetch('/api/live/weather?cities=Ahmedabad,Vadodara').then(r => r.json())
       .then((d: { weather?: Array<{ city: string; state: string; temperature: number; condition: string; humidity: number; windSpeed: number }> }) => {
-        setWeather(d.weather ?? []);
-      }).catch(() => { setWeather([]); });
+        setWeather(d.weather && d.weather.length ? d.weather : FALLBACK_WEATHER);
+      }).catch(() => { setWeather(FALLBACK_WEATHER); });
   }, []);
   const label = language === 'gu' ? 'હવામાન' : language === 'hi' ? 'मौसम' : 'Weather';
   return (
@@ -1030,63 +1196,44 @@ function HeroSectionSkeleton({ language }: { language: Language }) {
       {/* ROW 1: 3-column main section */}
       <div className="grid grid-cols-1 gap-1 lg:grid-cols-[minmax(0,1fr)_280px] items-start">
         <div className="min-w-0">
-          <div className="grid grid-cols-1 gap-2 lg:grid-cols-[360px_minmax(0,1fr)] items-stretch">
-            {/* LEFT: Mukhya Samachar list skeleton */}
-            <div className="hidden rounded-lg border border-border bg-card p-1.5 shadow-sm lg:flex lg:flex-col">
-              <div className="flex items-center gap-1.5 mb-2 border-b-2 border-accent/20 pb-0.5">
-                <Flame className="h-5 w-5 text-accent/20 shrink-0" />
-                <span className="text-[19px] md:text-[21px] font-black leading-tight text-muted-foreground/35">{labelTopNews}</span>
-              </div>
-              <div className="flex flex-1 flex-col divide-y divide-border space-y-1">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <div key={i} className="flex gap-2 py-1.5">
-                    <div className="h-[50px] w-[68px] shrink-0 rounded-md bg-muted" />
-                    <div className="flex-1 space-y-2 py-0.5">
-                      <div className="h-3 w-12 rounded bg-muted" />
-                      <div className="h-4 w-full rounded bg-muted" />
+            {/* ── REDESIGNED HERO NEWS SECTION SKELETON ── */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start animate-pulse">
+              
+              {/* LEFT COLUMN (Featured News + 3 Horizontal Cards Skeleton) */}
+              <div className="w-full flex flex-col gap-6">
+                <div className="w-full">
+                  <div className="relative aspect-[16/9] w-full rounded-lg bg-muted" />
+                  <div className="h-3.5 w-16 bg-muted rounded mt-3" />
+                  <div className="h-8 w-full bg-muted rounded mt-2" />
+                  <div className="h-8 w-3/4 bg-muted rounded mt-2" />
+                </div>
+                <div className="flex flex-col gap-5 border-t border-border/80 pt-5">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="flex gap-4 items-start">
+                      <div className="relative w-[88px] h-[58px] rounded-lg bg-muted shrink-0" />
+                      <div className="flex-1 space-y-1.5 py-1">
+                        <div className="h-3 w-16 bg-muted rounded" />
+                        <div className="h-4.5 w-full bg-muted rounded" />
+                        <div className="h-4.5 w-5/6 bg-muted rounded" />
+                      </div>
                     </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* RIGHT SIDE (2-Column Grid of 6 Small Cards Skeleton) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-6">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="flex flex-col w-full">
+                    <div className="relative aspect-[2/1] w-full rounded-lg bg-muted" />
+                    <div className="h-3 w-16 bg-muted rounded mt-2" />
+                    <div className="h-4.5 w-full bg-muted rounded mt-2" />
+                    <div className="h-4.5 w-5/6 bg-muted rounded mt-1.5" />
                   </div>
                 ))}
               </div>
-            </div>
 
-            {/* CENTER: Top Stories skeleton */}
-            <div className="min-w-0">
-              <div className="rounded-lg border border-border bg-card p-1.5 shadow-sm">
-                <div className="mb-1.5 flex items-center justify-between border-b border-border pb-1">
-                  <div className="flex items-center gap-1.5">
-                    <Flame className="h-5 w-5 text-accent/20 shrink-0" />
-                    <span className="text-[19px] md:text-[21px] font-black leading-tight text-muted-foreground/35">{labelTopStories}</span>
-                  </div>
-                  <div className="h-4 w-12 rounded bg-muted" />
-                </div>
-                <div className="grid grid-cols-1 gap-y-4 md:grid-cols-2 md:gap-y-0 md:gap-x-6 md:divide-x md:divide-border mt-1">
-                  <div className="flex flex-col divide-y divide-border h-[385px] space-y-1 pr-2">
-                    {Array.from({ length: 8 }).map((_, i) => (
-                      <div key={i} className="flex justify-between items-center py-2.5">
-                        <div className="flex-1 space-y-2 pr-2">
-                          <div className="h-4 w-full rounded bg-muted" />
-                          <div className="h-3 w-3/4 rounded bg-muted" />
-                        </div>
-                        <div className="h-[66px] w-[100px] shrink-0 rounded-lg bg-muted" />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="flex flex-col divide-y divide-border h-[385px] space-y-1 md:pl-6 pr-2">
-                    {Array.from({ length: 8 }).map((_, i) => (
-                      <div key={i} className="flex justify-between items-center py-2.5">
-                        <div className="flex-1 space-y-2 pr-2">
-                          <div className="h-4 w-full rounded bg-muted" />
-                          <div className="h-3 w-3/4 rounded bg-muted" />
-                        </div>
-                        <div className="h-[66px] w-[100px] shrink-0 rounded-lg bg-muted" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
 
           {/* Trending Bar skeleton */}
           <div className="min-w-0 mt-2">

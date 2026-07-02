@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Mail, Lock, Eye, EyeOff, Loader2, Newspaper, ArrowRight, AlertCircle } from 'lucide-react';
-import gpLogo from '../../Gujarat Post Logo.gif';
+import gpLogo from '../../public/Gujarat Post Logo.gif';
 
 function LoginForm() {
   const router = useRouter();

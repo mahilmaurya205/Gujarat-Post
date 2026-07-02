@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { CATEGORY_META } from '@/data';
+import { CATEGORY_META, getArticlesByCategory } from '@/data';
 import NewsCard from '@/components/ui/NewsCard';
 import SectionHeader from '@/components/ui/SectionHeader';
 import { useApp } from '@/components/AppProvider';
@@ -25,9 +25,13 @@ export default function CategorySection({ category, categorySlug, categoryGu, co
       .then((json) => {
         if (json.success && json.data?.articles?.length > 0) {
           setArticles(json.data.articles);
+        } else {
+          setArticles(getArticlesByCategory(categorySlug).slice(0, cols));
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        setArticles(getArticlesByCategory(categorySlug).slice(0, cols));
+      });
   }, [categorySlug, cols]);
 
   if (!articles.length) {
