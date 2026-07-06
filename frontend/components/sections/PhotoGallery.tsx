@@ -14,17 +14,8 @@ export default function PhotoGallery() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/photos?limit=6')
-      .then((r) => r.json())
-      .then((json) => {
-        if (json.success && json.data?.photos?.length > 0) {
-          setPhotos(json.data.photos);
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        setLoading(false);
-      });
+    setPhotos(PHOTOS.slice(0, 6));
+    setLoading(false);
   }, []);
 
   if (loading) {

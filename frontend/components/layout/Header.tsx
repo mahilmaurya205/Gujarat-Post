@@ -133,14 +133,7 @@ export default function Header() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    fetch('/api/auth/me')
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.data?.authenticated) {
-          setIsAuthenticated(true);
-        }
-      })
-      .catch(() => {});
+    setIsAuthenticated(false);
   }, []);
 
   useEffect(() => {

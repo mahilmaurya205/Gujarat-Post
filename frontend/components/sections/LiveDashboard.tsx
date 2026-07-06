@@ -97,54 +97,19 @@ export default function LiveDashboard() {
 
   const loadDashboard = useCallback(async (manual = false) => {
     if (manual) setRefreshing(true);
-    try {
-      const [weatherResponse, marketResponse, sportsResponse] = await Promise.all([
-        fetch('/api/live/weather', { cache: 'no-store' }),
-        fetch('/api/live/markets', { cache: 'no-store' }),
-        fetch('/api/live/sports', { cache: 'no-store' }),
-      ]);
-      if (weatherResponse.ok) {
-        const data = await weatherResponse.json() as { weather: WeatherItem[] };
-        setWeather(data.weather);
-        setWeatherError('');
-      } else {
-        setWeather(FALLBACK_WEATHER);
-        setWeatherError('');
-      }
-
-      if (marketResponse.ok) {
-        const data = await marketResponse.json() as { markets: MarketItem[] };
-        setMarkets(data.markets);
-        setMarketError('');
-      } else {
-        setMarkets(FALLBACK_MARKETS);
-        setMarketError('');
-      }
-
-      if (sportsResponse.ok) {
-        const data = await sportsResponse.json() as { cricket: CricketMatch | null; football: FootballMatch[] };
-        setCricket(data.cricket);
-        setFootball(data.football);
-        setSportsError('');
-      } else {
-        setCricket(FALLBACK_CRICKET);
-        setFootball(FALLBACK_FOOTBALL);
-        setSportsError('');
-      }
-      setUpdatedAt(new Date().toISOString());
-    } catch {
-      setWeather(FALLBACK_WEATHER);
-      setMarkets(FALLBACK_MARKETS);
-      setCricket(FALLBACK_CRICKET);
-      setFootball(FALLBACK_FOOTBALL);
-      setWeatherError('');
-      setMarketError('');
-      setSportsError('');
-      setUpdatedAt(new Date().toISOString());
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
+    if (manual) {
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
+    setWeather(FALLBACK_WEATHER);
+    setMarkets(FALLBACK_MARKETS);
+    setCricket(FALLBACK_CRICKET);
+    setFootball(FALLBACK_FOOTBALL);
+    setWeatherError('');
+    setMarketError('');
+    setSportsError('');
+    setUpdatedAt(new Date().toISOString());
+    setLoading(false);
+    setRefreshing(false);
   }, []);
 
   useEffect(() => {
@@ -161,34 +126,11 @@ export default function LiveDashboard() {
     const query = city.trim();
     if (!query) return;
     setWeatherError('');
-    try {
-      const response = await fetch(`/api/live/weather?city=${encodeURIComponent(query)}`, { cache: 'no-store' });
-      if (!response.ok) {
-        const mockCity = FALLBACK_WEATHER.find((w) => w.city.toLowerCase() === query.toLowerCase());
-        if (mockCity) {
-          setWeather((current) => [mockCity, ...current.filter((item) => item.city !== mockCity.city)].slice(0, 5));
-          setCity('');
-        } else {
-          const simulatedWeather: WeatherItem = {
-            city: query.charAt(0).toUpperCase() + query.slice(1),
-            state: 'India',
-            temperature: Math.round(25 + Math.random() * 12),
-            feelsLike: Math.round(27 + Math.random() * 12),
-            humidity: Math.round(50 + Math.random() * 40),
-            rainChance: Math.round(Math.random() * 90),
-            windSpeed: Math.round(5 + Math.random() * 20),
-            condition: 'Clear sky',
-            observedAt: new Date().toISOString()
-          };
-          setWeather((current) => [simulatedWeather, ...current.filter((item) => item.city !== simulatedWeather.city)].slice(0, 5));
-          setCity('');
-        }
-        return;
-      }
-      const data = await response.json() as { weather: WeatherItem[] };
-      setWeather((current) => [data.weather[0], ...current.filter((item) => item.city !== data.weather[0].city)].slice(0, 5));
+    const mockCity = FALLBACK_WEATHER.find((w) => w.city.toLowerCase() === query.toLowerCase());
+    if (mockCity) {
+      setWeather((current) => [mockCity, ...current.filter((item) => item.city !== mockCity.city)].slice(0, 5));
       setCity('');
-    } catch {
+    } else {
       const simulatedWeather: WeatherItem = {
         city: query.charAt(0).toUpperCase() + query.slice(1),
         state: 'India',

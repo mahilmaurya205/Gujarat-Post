@@ -101,38 +101,16 @@ export default function HeroSection() {
   const [businessArtDB, setBusinessArtDB] = useState<Article[]>([]);
   const [sportsArtDB, setSportsArtDB] = useState<Article[]>([]);
 
-  const fetchArticles = async (url: string): Promise<Article[]> => {
-    try {
-      const res = await fetch(url);
-      const json = await res.json();
-      return json.success ? (json.data?.articles || []) : [];
-    } catch {
-      return [];
-    }
-  };
-
   useEffect(() => {
-    Promise.all([
-      fetchArticles('/api/news/top-news?limit=6'),
-      fetchArticles('/api/news/top-stories?limit=16'),
-      fetchArticles('/api/news/trending?limit=10'),
-      fetchArticles('/api/category/state?limit=16'),
-      fetchArticles('/api/category/crime?limit=4'),
-      fetchArticles('/api/category/national?limit=4'),
-      fetchArticles('/api/category/world?limit=4'),
-      fetchArticles('/api/category/business?limit=4'),
-      fetchArticles('/api/category/sports?limit=7'),
-    ]).then(([news, stories, trend, guj, crime, natl, world, biz, sports]) => {
-      setTopNews(news.length ? news : ARTICLES.slice(0, 6));
-      setTopStories(stories.length ? stories : ARTICLES.filter((a) => a.isFeatured).slice(0, 16));
-      setTrendingArtDB(trend.length ? trend : ARTICLES.filter((a) => a.isTrending).slice(0, 10));
-      setGujaratArtDB(guj.length ? guj : getArticlesByCategory('state').slice(0, 16));
-      setCrimeArtDB(crime.length ? crime : getArticlesByCategory('crime').slice(0, 4));
-      setNationalArtDB(natl.length ? natl : getArticlesByCategory('national').slice(0, 4));
-      setWorldArtDB(world.length ? world : getArticlesByCategory('world').slice(0, 4));
-      setBusinessArtDB(biz.length ? biz : getArticlesByCategory('business').slice(0, 4));
-      setSportsArtDB(sports.length ? sports : getArticlesByCategory('sports').slice(0, 7));
-    });
+    setTopNews(ARTICLES.slice(0, 6));
+    setTopStories(ARTICLES.filter((a) => a.isFeatured).slice(0, 16));
+    setTrendingArtDB(ARTICLES.filter((a) => a.isTrending).slice(0, 10));
+    setGujaratArtDB(getArticlesByCategory('state').slice(0, 16));
+    setCrimeArtDB(getArticlesByCategory('crime').slice(0, 4));
+    setNationalArtDB(getArticlesByCategory('national').slice(0, 4));
+    setWorldArtDB(getArticlesByCategory('world').slice(0, 4));
+    setBusinessArtDB(getArticlesByCategory('business').slice(0, 4));
+    setSportsArtDB(getArticlesByCategory('sports').slice(0, 7));
   }, []);
 
   // Derived slices
@@ -850,16 +828,8 @@ function SportsScorePanel({ language }: { language: Language }) {
   const [football, setFootball] = useState<SportsFootballScore[]>([]);
 
   useEffect(() => {
-    fetch('/api/live/sports', { cache: 'no-store' })
-      .then((response) => response.json())
-      .then((data: { cricket?: SportsCricketScore | null; football?: SportsFootballScore[] }) => {
-        setCricket(data.cricket ?? null);
-        setFootball(data.football ?? []);
-      })
-      .catch(() => {
-        setCricket(null);
-        setFootball([]);
-      });
+    setCricket(null);
+    setFootball([]);
   }, []);
 
   const cricketRows = cricket?.teams.length
@@ -1033,10 +1003,8 @@ interface LiveTVWidgetProps { language: Language; videoMode: 'latest' | 'live'; 
 function LiveTVWidget({ language, videoMode, setVideoMode }: LiveTVWidgetProps) {
   const [liveStatus, setLiveStatus] = useState<'checking' | 'live' | 'offline'>('checking');
   useEffect(() => {
-    fetch('/api/live/tv').then(r => r.json()).then((d: { isLive: boolean }) => {
-      setLiveStatus(d.isLive ? 'live' : 'offline');
-      setVideoMode(d.isLive ? 'live' : 'latest');
-    }).catch(() => { setLiveStatus('offline'); setVideoMode('latest'); });
+    setLiveStatus('offline');
+    setVideoMode('latest');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const isLive = liveStatus === 'live';
@@ -1093,10 +1061,7 @@ function WeatherWidget({ language }: { language: Language }) {
       { city: 'Ahmedabad', state: 'Gujarat', temperature: 32, condition: 'Partly cloudy', humidity: 65, windSpeed: 12 },
       { city: 'Vadodara', state: 'Gujarat', temperature: 31, condition: 'Sunny', humidity: 62, windSpeed: 10 }
     ];
-    fetch('/api/live/weather?cities=Ahmedabad,Vadodara').then(r => r.json())
-      .then((d: { weather?: Array<{ city: string; state: string; temperature: number; condition: string; humidity: number; windSpeed: number }> }) => {
-        setWeather(d.weather && d.weather.length ? d.weather : FALLBACK_WEATHER);
-      }).catch(() => { setWeather(FALLBACK_WEATHER); });
+    setWeather(FALLBACK_WEATHER);
   }, []);
   const label = language === 'gu' ? 'હવામાન' : language === 'hi' ? 'मौसम' : 'Weather';
   return (

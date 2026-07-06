@@ -18,14 +18,7 @@ export default function BreakingTicker() {
   const [breaking, setBreaking] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch('/api/news/breaking?limit=10')
-      .then((r) => r.json())
-      .then((json) => {
-        if (json.success && json.data?.articles?.length > 0) {
-          setBreaking(json.data.articles);
-        }
-      })
-      .catch(() => {});
+    setBreaking([]);
   }, []);
 
   const itemsToRender = breaking.length > 0

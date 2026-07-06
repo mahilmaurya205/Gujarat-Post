@@ -107,23 +107,13 @@ export default function YouTubeLatest() {
     if (isManual) setRefreshing(true);
     else setLoading(true);
 
-    try {
-      const response = await fetch('/api/live/youtube', { cache: 'no-store' });
-      if (response.ok) {
-        const data = await response.json() as { videos: VideoItem[] };
-        setVideos(data.videos);
-        setError(null);
-      } else {
-        setVideos(FALLBACK_VIDEOS);
-        setError(null);
-      }
-    } catch {
-      setVideos(FALLBACK_VIDEOS);
-      setError(null);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
+    if (isManual) {
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
+    setVideos(FALLBACK_VIDEOS);
+    setError(null);
+    setLoading(false);
+    setRefreshing(false);
   }, []);
 
   const updateArrows = useCallback(() => {

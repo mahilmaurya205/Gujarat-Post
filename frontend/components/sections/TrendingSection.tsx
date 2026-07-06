@@ -14,18 +14,7 @@ export default function TrendingSection() {
   const [trending, setTrending] = useState<Article[]>([]);
 
   useEffect(() => {
-    fetch('/api/news/trending?limit=10')
-      .then((r) => r.json())
-      .then((json) => {
-        if (json.success && json.data?.articles?.length > 0) {
-          setTrending(json.data.articles);
-        } else {
-          setTrending(ARTICLES.filter((a) => a.isTrending).slice(0, 10));
-        }
-      })
-      .catch(() => {
-        setTrending(ARTICLES.filter((a) => a.isTrending).slice(0, 10));
-      });
+    setTrending(ARTICLES.filter((a) => a.isTrending).slice(0, 10));
   }, []);
 
   if (!trending.length) {

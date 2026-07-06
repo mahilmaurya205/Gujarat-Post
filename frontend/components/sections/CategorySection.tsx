@@ -20,18 +20,7 @@ export default function CategorySection({ category, categorySlug, categoryGu, co
   const meta = Object.values(CATEGORY_META).find((item) => item.name === category);
 
   useEffect(() => {
-    fetch(`/api/category/${encodeURIComponent(categorySlug)}?limit=${cols}`)
-      .then((r) => r.json())
-      .then((json) => {
-        if (json.success && json.data?.articles?.length > 0) {
-          setArticles(json.data.articles);
-        } else {
-          setArticles(getArticlesByCategory(categorySlug).slice(0, cols));
-        }
-      })
-      .catch(() => {
-        setArticles(getArticlesByCategory(categorySlug).slice(0, cols));
-      });
+    setArticles(getArticlesByCategory(categorySlug).slice(0, cols));
   }, [categorySlug, cols]);
 
   if (!articles.length) {
