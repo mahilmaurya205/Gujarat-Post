@@ -1855,7 +1855,10 @@ function PopularStoriesSection({
 }: {
   language: Language;
 }) {
-  const [startIndex, setStartIndex] = useState(0);
+  const ITEMS_PER_SLIDE = 3;
+  // groupIndex: 0 = items 1-3, 1 = items 4-6, 2 = items 7-9, 3 = item 10
+  const [groupIndex, setGroupIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
 
   const mockArticles = [
     {
@@ -1901,23 +1904,118 @@ function PopularStoriesSection({
       relativeTime: '4 hours ago',
       viewsGu: '૯૫K',
       views: '95K'
+    },
+    {
+      id: 'za4',
+      slug: 'ahmedabad-metro-phase2-update-405',
+      image: '/assets/demo/1.jpg',
+      titleGu: 'અમદાવાદ મેટ્રો ફેઝ-૨: કામ ઝડપથી આગળ, ક્યારે ઉઘડશે?',
+      title: 'Ahmedabad Metro Phase-2: Work fast, when will it open?',
+      relativeTimeGu: '૫ કલાક પહેલાં',
+      relativeTime: '5 hours ago',
+      viewsGu: '૮૫K',
+      views: '85K'
+    },
+    {
+      id: 'za5',
+      slug: 'surat-diamond-industry-boom-406',
+      image: '/assets/demo/2.jpg',
+      titleGu: 'સુરત ડાયમંડ ઉદ્યોગ: નિકાસમાં નવો વિક્રમ, ૨૦,૦૦૦ નોકરી',
+      title: 'Surat Diamond Industry: New export record, 20,000 jobs',
+      relativeTimeGu: '૬ કલાક પહેલાં',
+      relativeTime: '6 hours ago',
+      viewsGu: '૭૨K',
+      views: '72K'
+    },
+    {
+      id: 'za6',
+      slug: 'gujarat-cricket-ranji-trophy-407',
+      image: '/assets/demo/4.jpg',
+      titleGu: 'ગુજરાત ક્રિકેટ: રણજી ટ્રોફીમાં ઐતિહાસિક જીત, ચાહકો ઉત્સાહિત',
+      title: 'Gujarat Cricket: Historic win in Ranji Trophy, fans excited',
+      relativeTimeGu: '૭ કલાક પહેલાં',
+      relativeTime: '7 hours ago',
+      viewsGu: '૬૮K',
+      views: '68K'
+    },
+    {
+      id: 'za7',
+      slug: 'solar-power-gujarat-village-408',
+      image: '/assets/demo/8.jpg',
+      titleGu: 'ગ્રામ્ય ગુજરાત: સૌર ઊર્જાથી ૫૦૦ ગામ રોશન, ખેડૂતો ખુશ',
+      title: 'Rural Gujarat: 500 villages lit by solar energy, farmers happy',
+      relativeTimeGu: '૮ કલાક પહેલાં',
+      relativeTime: '8 hours ago',
+      viewsGu: '૬૦K',
+      views: '60K'
+    },
+    {
+      id: 'za8',
+      slug: 'gandhinagar-startup-summit-409',
+      image: '/assets/demo/5.jpg',
+      titleGu: 'ગાંધીનગર સ્ટાર્ટઅપ સમિટ: ૫૦૦ ઉદ્યોગ સાહસિક, ₹૧૦૦ Cr રોકાણ',
+      title: 'Gandhinagar Startup Summit: 500 entrepreneurs, ₹100 Cr investment',
+      relativeTimeGu: '૯ કલાક પહેલાં',
+      relativeTime: '9 hours ago',
+      viewsGu: '૫૫K',
+      views: '55K'
+    },
+    {
+      id: 'za9',
+      slug: 'gujarat-tourism-record-2025-410',
+      image: '/assets/demo/6.jpg',
+      titleGu: 'ગુજરાત પ્રવાસન: ૨૦૨૫માં ૩ કરોડ પ્રવાસી, નવો રેકોર્ડ',
+      title: 'Gujarat Tourism: 3 crore tourists in 2025, new record',
+      relativeTimeGu: '૧૦ કલાક પહેલાં',
+      relativeTime: '10 hours ago',
+      viewsGu: '૪૮K',
+      views: '48K'
+    },
+    {
+      id: 'za10',
+      slug: 'rajkot-smart-city-development-411',
+      image: '/assets/demo/3.jpg',
+      titleGu: 'રાજકોટ સ્માર્ટ સિટી: નવા પ્રોજેક્ટ સાથે શહેર બનશે અત્યાધુનિક',
+      title: 'Rajkot Smart City: City to become ultra-modern with new projects',
+      relativeTimeGu: '૧૧ કલાક પહેલાં',
+      relativeTime: '11 hours ago',
+      viewsGu: '૪૨K',
+      views: '42K'
+    },
+    {
+      id: 'za11',
+      slug: 'gujarat-education-new-policy-2025-412',
+      image: '/assets/demo/4.jpg',
+      titleGu: 'ગુજરાત શિક્ષણ નીતિ ૨૦૨૫: વિદ્યાર્થીઓ માટે નવી સુવિધાઓ જાહેર',
+      title: 'Gujarat Education Policy 2025: New facilities announced for students',
+      relativeTimeGu: '૧૨ કલાક પહેલાં',
+      relativeTime: '12 hours ago',
+      viewsGu: '૩૮K',
+      views: '38K'
     }
   ];
 
-  // Show 3 articles at a time
-  const visibleArticles = [
-    mockArticles[startIndex],
-    mockArticles[(startIndex + 1) % mockArticles.length],
-    mockArticles[(startIndex + 2) % mockArticles.length]
-  ];
+  // Total groups: ceil(12 / 3) = 4  (groups: 0→[1-3], 1→[4-6], 2→[7-9], 3→[10-12])
+  const totalGroups = Math.ceil(mockArticles.length / ITEMS_PER_SLIDE);
+  const startIndex = groupIndex * ITEMS_PER_SLIDE;
+  const visibleArticles = mockArticles.slice(startIndex, startIndex + ITEMS_PER_SLIDE);
+
+  // Auto-scroll: advance one group every 3.5 s, loops back to group 0
+  useEffect(() => {
+    if (paused) return;
+    const timer = setInterval(() => {
+      setGroupIndex((prev) => (prev + 1) % totalGroups);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [paused, totalGroups]);
 
   const getGoldNumberGu = (idx: number) => {
-    const val = (startIndex + idx + 3);
+    const val = startIndex + idx + 1; // 1-based
     return toGuLocal(val);
   };
 
   const getGoldNumber = (idx: number) => {
-    return String(startIndex + idx + 3);
+    return String(startIndex + idx + 1); // 1-based
   };
 
   return (
@@ -1941,19 +2039,23 @@ function PopularStoriesSection({
           </div>
 
           {/* Slider Row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
-            
-            {/* Left and Right floating chevrons */}
+          <div
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 relative"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+          >
+            {/* Left chevron: go to previous group */}
             <button
               type="button"
-              onClick={() => setStartIndex((prev) => (prev - 1 + mockArticles.length) % mockArticles.length)}
+              onClick={() => setGroupIndex((prev) => (prev - 1 + totalGroups) % totalGroups)}
               className="absolute left-[-16px] top-[100px] -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-neutral-600/80 text-white hover:bg-neutral-700 transition z-20 cursor-pointer shadow-md select-none border border-white/10"
             >
               <ChevronLeft className="h-4.5 w-4.5 stroke-[3]" />
             </button>
+            {/* Right chevron: go to next group */}
             <button
               type="button"
-              onClick={() => setStartIndex((prev) => (prev + 1) % mockArticles.length)}
+              onClick={() => setGroupIndex((prev) => (prev + 1) % totalGroups)}
               className="absolute right-[-16px] top-[100px] -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-neutral-600/80 text-white hover:bg-neutral-700 transition z-20 cursor-pointer shadow-md select-none border border-white/10"
             >
               <ChevronRight className="h-4.5 w-4.5 stroke-[3]" />

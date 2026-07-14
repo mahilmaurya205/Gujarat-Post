@@ -4,6 +4,7 @@ import { AppProvider } from "@/components/AppProvider";
 import Header from "@/components/layout/Header";
 import BreakingTicker from "@/components/layout/BreakingTicker";
 import Footer from "@/components/layout/Footer";
+import ScrollToTop from "@/components/ui/ScrollToTop";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gujaratpost.example.com"),
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main>{children}</main>
           <Footer />
         </AppProvider>
+        <ScrollToTop />
       </body>
     </html>
   );
