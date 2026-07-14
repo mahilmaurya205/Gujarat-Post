@@ -26,8 +26,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const hydrated = useRef(false);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('gp-theme');
-    const savedLanguage = localStorage.getItem('gp-lang');
+    let savedTheme: string | null = null;
+    let savedLanguage: string | null = null;
+    try {
+      savedTheme = localStorage.getItem('gp-theme');
+      savedLanguage = localStorage.getItem('gp-lang');
+    } catch (e) {
+      console.warn('LocalStorage not accessible:', e);
+    }
 
     const frame = window.requestAnimationFrame(() => {
       if (savedTheme === 'light' || savedTheme === 'dark') {
@@ -57,8 +63,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
     if (!hydrated.current) return;
 
-    localStorage.setItem('gp-theme', theme);
-    localStorage.setItem('gp-lang', language);
+    try {
+      localStorage.setItem('gp-theme', theme);
+      localStorage.setItem('gp-lang', language);
+    } catch (e) {
+      console.warn('Failed to save to localStorage:', e);
+    }
   }, [theme, language]);
 
   const toggleTheme = () => {

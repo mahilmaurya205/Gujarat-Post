@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback, useRef } from 'react';
+import Link from 'next/link';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '@/components/AppProvider';
 import { getLocalized } from '@/data';
@@ -18,75 +19,66 @@ interface StoryItem {
 const STORY_ITEMS: StoryItem[] = [
   {
     id: 'story1',
-    title: 'Ayurvedic Wellness',
-    titleGu: 'આયુર્વેદિક ઉપચાર',
-    avatar: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=150&h=150&fit=crop&q=80',
-    image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=500&q=80',
-    description: 'Ancient Ayurvedic herbs for modern healthy living and daily wellness.',
-    descriptionGu: 'આધુનિક તંદુરસ્ત જીવન અને દૈનિક સુખાકારી માટે પ્રાચીન આયુર્વેદિક જડીબુટ્ટીઓ.',
-  },
-  {
-    id: 'story2',
-    title: 'Celebrity Diary',
-    titleGu: 'સ્ટાર ડાયરી',
-    avatar: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=150&h=150&fit=crop&q=80',
-    image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=500&q=80',
-    description: 'Inside look at the most anticipated celebrity events of the season.',
-    descriptionGu: 'સિઝનના સૌથી વધુ પ્રખ્યાત સેલિબ્રિટી કાર્યક્રમોની અંદરની એક ઝલક.',
-  },
-  {
-    id: 'story3',
-    title: 'Fashion Trends',
-    titleGu: 'ફેશન હબ',
-    avatar: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=150&h=150&fit=crop&q=80',
-    image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&q=80',
-    description: 'Discover the trending jacket styles and color palettes for this winter.',
-    descriptionGu: 'આ શિયાળા માટે ટ્રેન્ડિંગ જેકેટ શૈલીઓ અને કલર કોમ્બિનેશન શોધો.',
-  },
-  {
-    id: 'story4',
-    title: 'Smile & Care',
-    titleGu: 'સ્મિત કાળજી',
-    avatar: 'https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=150&h=150&fit=crop&q=80',
-    image: 'https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=500&q=80',
-    description: 'Simple dental hygiene habits to keep your smile bright and healthy.',
-    descriptionGu: 'તમારા સ્મિતને તેજસ્વી અને સ્વસ્થ રાખવા માટે ડેન્ટલ હાઇજિન ટિપ્સ.',
-  },
-  {
-    id: 'story5',
-    title: 'Cricket Update',
-    titleGu: 'સ્પોર્ટ્સ અપડેટ',
-    avatar: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=150&h=150&fit=crop&q=80',
-    image: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=500&q=80',
-    description: 'Team India begins intense practice sessions ahead of the upcoming championship.',
-    descriptionGu: 'ટીમ ઈન્ડિયા આગામી ચેમ્પિયનશિપ પહેલા સઘન પ્રેક્ટિસ સેશન શરૂ કરે છે.',
-  },
-  {
-    id: 'story6',
-    title: 'Travel Vibes',
-    titleGu: 'પ્રવાસ ગાઇડ',
-    avatar: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=150&h=150&fit=crop&q=80',
-    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&q=80',
-    description: 'Exploring the most beautiful hidden beaches across Western India.',
-    descriptionGu: 'પશ્ચિમ ભારતના સૌથી સુંદર અને છુપાયેલા બીચનું અન્વેષણ કરવું.',
-  },
-  {
-    id: 'story7',
     title: 'Future Tech',
     titleGu: 'ભવિષ્ય ટેકનોલોજી',
     avatar: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=150&h=150&fit=crop&q=80',
-    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&q=80',
+    image: '/assets/demo/7.jpg',
     description: 'How AI and augmented reality are transforming modern architecture.',
     descriptionGu: 'AI અને ઓગમેન્ટેડ રિયાલિટી કેવી રીતે આધુનિક આર્કિટેક્ચરને બદલી રહ્યા છે.',
   },
   {
-    id: 'story8',
+    id: 'story2',
     title: 'Healthy Bites',
     titleGu: 'ફૂડ ડાયરી',
     avatar: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=150&h=150&fit=crop&q=80',
-    image: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=500&q=80',
+    image: '/assets/demo/1.jpg',
     description: 'Nutritionist-approved quick meals to boost your energy throughout the day.',
     descriptionGu: 'આખો દિવસ તમારી એનર્જી વધારવા માટે ઝડપી પૌષ્ટિક આહાર રેસિપી.',
+  },
+  {
+    id: 'story3',
+    title: 'Ayurvedic Wellness',
+    titleGu: 'આયુર્વેદિક ઉપચાર',
+    avatar: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=150&h=150&fit=crop&q=80',
+    image: '/assets/demo/2.jpg',
+    description: 'Ancient Ayurvedic herbs for modern healthy living and daily wellness.',
+    descriptionGu: 'આધુનિક તંદુરસ્ત જીવન અને દૈનિક સુખાકારી માટે પ્રાચીન આયુર્વેદિક જડીબુટ્ટીઓ.',
+  },
+  {
+    id: 'story4',
+    title: 'Celebrity Diary',
+    titleGu: 'સ્ટાર ડાયરી',
+    avatar: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=150&h=150&fit=crop&q=80',
+    image: '/assets/demo/6.jpg',
+    description: 'Inside look at the most anticipated celebrity events of the season.',
+    descriptionGu: 'સિઝનના સૌથી વધુ પ્રખ્યાત સેલિબ્રિટી કાર્યક્રમોની અંદરની એક ઝલક.',
+  },
+  {
+    id: 'story5',
+    title: 'Fashion Trends',
+    titleGu: 'ફેશન હબ',
+    avatar: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=150&h=150&fit=crop&q=80',
+    image: '/assets/demo/4.jpg',
+    description: 'Discover the trending jacket styles and color palettes for this winter.',
+    descriptionGu: 'આ શિયાળા માટે ટ્રેન્ડિંગ જેકેટ શૈલીઓ અને કલર કોમ્બિનેશન શોધો.',
+  },
+  {
+    id: 'story6',
+    title: 'Smile & Care',
+    titleGu: 'સ્મિત કલાજી',
+    avatar: 'https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=150&h=150&fit=crop&q=80',
+    image: '/assets/demo/3.jpg',
+    description: 'Simple dental hygiene habits to keep your smile bright and healthy.',
+    descriptionGu: 'તમારા સ્મિતને તેજસ્વી અને સ્વસ્થ રાખવા માટે ડેન્ટલ હાઇજિન ટિપ્સ.',
+  },
+  {
+    id: 'story7',
+    title: 'Fact Check',
+    titleGu: 'ફેક્ટ ચેક',
+    avatar: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=150&h=150&fit=crop&q=80',
+    image: '/assets/demo/8.jpg',
+    description: 'Verifying trending claims and statements to reveal the truth.',
+    descriptionGu: 'સત્ય જાહેર કરવા માટે ટ્રેન્ડિંગ દાવાઓ અને નિવેદનોની ચકાસણી કરવી.',
   }
 ];
 
@@ -195,22 +187,34 @@ export default function InstagramStories() {
   };
 
   return (
-    <section className="bg-card border-b border-border py-6 relative overflow-hidden">
+    <section className="bg-card border-t border-b border-border py-8 relative overflow-hidden">
       <div className="mx-auto max-w-screen-xl px-4 relative">
         {/* Title Block */}
-        <div className="mb-5 flex items-center justify-between border-b border-border/60 pb-3">
-          <span className="rounded bg-accent px-3.5 py-1.5 text-xs sm:text-sm font-black text-white uppercase tracking-wider shadow-sm">
+        <div className="flex items-center justify-between mb-4">
+          <span className="bg-[#B3121B] text-white text-[12.5px] font-black px-4 py-1.5 rounded select-none leading-tight">
             {getLocalized(language, { en: 'Web Stories', gu: 'વેબ સ્ટોરીઝ', hi: 'वेब स्टोरीज' })}
           </span>
+          <Link
+            href="/web-stories"
+            className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13.5px] md:text-[14.5px] flex items-center gap-1"
+          >
+            {language === 'gu' ? 'બધી' : 'All'} →
+          </Link>
         </div>
+
+        {/* Black underline bar */}
+        <div className="h-[3px] w-full bg-black mb-8" />
 
         {/* Stories Horizontal Grid Scroll */}
         <div className="relative group/slider-wrap">
           {showLeftArrow && (
             <button
               type="button"
-              onClick={() => handleScroll('left')}
-              className="absolute left-1 sm:-left-5 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/85 dark:bg-slate-900/85 backdrop-blur shadow-lg text-foreground hover:bg-white dark:hover:bg-slate-950 transition-all duration-200"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleScroll('left');
+              }}
+              className="absolute left-4 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white hover:bg-black/60 transition-all duration-200 shadow-md backdrop-blur-sm cursor-pointer border-0"
               aria-label="Scroll left"
             >
               <ChevronLeft className="h-5 w-5 stroke-[2.5]" />
@@ -220,8 +224,11 @@ export default function InstagramStories() {
           {showRightArrow && (
             <button
               type="button"
-              onClick={() => handleScroll('right')}
-              className="absolute right-1 sm:-right-5 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/85 dark:bg-slate-900/85 backdrop-blur shadow-lg text-foreground hover:bg-white dark:hover:bg-slate-950 transition-all duration-200"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleScroll('right');
+              }}
+              className="absolute right-4 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white hover:bg-black/60 transition-all duration-200 shadow-md backdrop-blur-sm cursor-pointer border-0"
               aria-label="Scroll right"
             >
               <ChevronRight className="h-5 w-5 stroke-[2.5]" />
@@ -230,7 +237,7 @@ export default function InstagramStories() {
 
           <div
             ref={scrollContainerRef}
-            className="scrollbar-hide flex gap-3.5 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2"
+            className="scrollbar-hide flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2"
           >
             {STORY_ITEMS.map((story, index) => {
               const displayTitle = language === 'gu' ? story.titleGu : story.title;
@@ -241,23 +248,29 @@ export default function InstagramStories() {
                     setActiveStoryIndex(index);
                     setProgress(0);
                   }}
-                  className="flex-none w-[130px] sm:w-[160px] cursor-pointer snap-start group"
+                  className="flex-none w-[130px] sm:w-[155px] cursor-pointer snap-start group"
                 >
                   {/* Vertical Story Card Layout */}
-                  <div className="relative aspect-[3/4.2] w-full overflow-hidden rounded-2xl border border-border/10 bg-muted shadow-sm transition-all duration-300 group-hover:scale-[1.03] group-hover:shadow-md">
+                  <div className="relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-border/10 bg-muted shadow-sm transition-all duration-300 group-hover:scale-[1.03] group-hover:shadow-md">
+                    {/* Badge at top-left */}
+                    <span className="absolute top-3 left-3 bg-[#c36f30]/90 text-white text-[9.5px] font-extrabold px-2 py-0.5 rounded-sm uppercase tracking-wide z-10 select-none">
+                      {language === 'gu' ? 'વેબ સ્ટોરી' : 'Web Story'}
+                    </span>
+
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={story.image}
                       alt={story.title}
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      style={{ height: '100%', width: '100%', objectFit: 'cover' }}
                       loading="lazy"
                     />
                     {/* Dark gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                     
                     {/* Title overlaid at the bottom */}
                     <div className="absolute bottom-0 inset-x-0 p-3 text-left">
-                      <p className="text-[12px] sm:text-[13px] font-bold leading-snug text-white line-clamp-3 group-hover:text-amber-200 transition-colors duration-200 drop-shadow">
+                      <p className="text-[12.5px] sm:text-[13.5px] font-extrabold leading-snug text-white line-clamp-3 group-hover:text-amber-200 transition-colors duration-200 drop-shadow">
                         {displayTitle}
                       </p>
                     </div>

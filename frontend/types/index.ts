@@ -39,6 +39,10 @@ export interface Article {
   isBreaking: boolean;
   isFeatured: boolean;
   views: number;
+  isLive?: boolean;
+  relativeTime?: string;
+  relativeTimeGu?: string;
+  relativeTimeHi?: string;
 }
 
 export interface Video {

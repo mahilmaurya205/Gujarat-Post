@@ -137,7 +137,7 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
             <div className="pointer-events-none absolute -right-32 -top-32 h-72 w-72 rounded-full bg-red-600/8 blur-[80px]" />
             <div className="pointer-events-none absolute bottom-0 left-1/4 h-48 w-96 rounded-full bg-red-600/5 blur-[60px]" />
 
-            <div className={`relative mx-auto max-w-screen-xl px-4 ${wrap}`}>
+            <div className={`relative mx-auto max-w-screen-xl max-w-header-layout px-4 ${wrap}`}>
 
                 {/* ── ROW 1: Brand  +  Newsletter ── */}
                 <div className="flex flex-col gap-4 border-b border-white/[0.07] pb-4 lg:flex-row lg:items-center lg:justify-between">
@@ -310,7 +310,7 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
 
             {/* ── Copyright bar ── */}
             <div className="border-t border-white/[0.06] bg-black/20">
-                <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between gap-2 px-4 py-2.5 text-[10px] text-white/35">
+                <div className="mx-auto flex max-w-screen-xl max-w-header-layout flex-wrap items-center justify-between gap-2 px-4 py-2.5 text-[10px] text-white/35">
                     <p>© {new Date().getFullYear()} Gujarat Post Media. All rights reserved.</p>
                     <div className="flex flex-wrap gap-x-3 gap-y-1">
                         {[['DNPA Code', '/dnpa-code'], ['CSR Policy', '/csr-policy'], ['Sitemap', '/sitemap.xml'], ['RSS', '/rss.xml']].map(([label, href]) => (

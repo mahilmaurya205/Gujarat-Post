@@ -22,7 +22,7 @@ const ROLE_PERMISSIONS: Record<string, string[]> = {
   PHOTOGRAPHER: ["/admin/gallery"],
 };
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Only run middleware on /admin routes and /api/admin routes
@@ -111,7 +111,7 @@ export async function middleware(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error("Middleware JWT verification failed:", error);
+    console.error("Proxy JWT verification failed:", error);
     
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "Invalid or expired token" }, { status: 401 });

@@ -90,6 +90,8 @@ export const CATEGORY_META = {
   videos: { name: "Videos", gu: "વીડિયો", hi: "वीडियो" },
   shorts: { name: "Shorts", gu: "શોર્ટ્સ", hi: "शॉर्ट्स" },
   podcasts: { name: "Podcasts", gu: "પોડકાસ્ટ", hi: "पॉडकास्ट" },
+  trending: { name: "Trending", gu: "લોકપ્રિય સ્ટોરીઝ", hi: "ट्रेंडिंग" },
+  "fact-check": { name: "Fact Check", gu: "ફેક્ટ ચેક", hi: "फैक्ट चेक" },
 };
 
 type CategorySlug = keyof typeof CATEGORY_META;
@@ -115,7 +117,9 @@ export const categorySlugMapping: Record<string, CategorySlug> = {
   videos: "videos",
   shorts: "shorts",
   podcasts: "podcasts",
-  
+  trending: "trending",
+  "fact-check": "fact-check",
+
   // Title-cased mappings to lowercase slug
   Gujarat: "state",
   Ahmedabad: "ahmedabad",
@@ -278,16 +282,19 @@ const IMG: Record<string, string[]> = {
 
 const baseStories = [
   // Gujarat
-  ["gujarat", "Ahmedabad receives heavy rain alert as riverfront gates opened", "અમદાવાદમાં ભારે વરસાદનું એલર્ટ, રિવરફ્રન્ટના ગેટ ખોલાયા", "अहमदाबाद में भारी बारिश का अलर्ट, रिवरफ्रंट के गेट खुले"],
-  ["gujarat", "Rajkot international airport gets new domestic routes", "રાજકોટ ઇન્ટરનેશનલ એરપોર્ટને નવા ડોમેસ્ટિક રૂટ મળ્યા", "राजकोट अंतरराष्ट्रीय एयरपोर्ट को नए घरेलू रूट मिले"],
-  ["gujarat", "Vadodara heritage corridor work enters final phase", "વડોદરા હેરિટેજ કોરિડોરનું કામ અંતિમ તબક્કામાં", "वडोदरा हेरिटेज कॉरिडोर का काम अंतिम चरण में"],
-  ["gujarat", "New expressway to connect Surat and Navsari by 2028", "સુરત-નવસારીને જોડતો નવો એક્સપ્રેસવે 2028 સુધીમાં", "सूरत-नवसारी को जोड़ने वाला नया एक्सप्रेसवे 2028 तक"],
-  ["gujarat", "Gujarat gets record FDI inflow this quarter", "આ ત્રિમાસિકમાં ગુજરાતને રેકોર્ડ FDI પ્રવાહ", "इस तिमाही गुजरात को रिकॉर्ड FDI प्रवाह"],
-  ["gujarat", "Solar power targets set for all major Gujarat cities", "ગુજરાતના મોટા શહેરો માટે સોલાર પાવર લક્ષ્યાંક", "गुजरात के प्रमुख शहरों के लिए सौर ऊर्जा लक्ष्य"],
+  ["gujarat", "New traffic rules implemented in Ahmedabad from today, details of penalty and locations", "અમદાવાદમાં આજથી નવા ટ્રાફિક નિયમ લાગુ! ક્યાં લાગશે દંડ, જાણો પૂરી વિગત", "अहमदाबाद में आज से नए ट्रैफिक नियम लागू! कहां लगेगा जुर्माना, जानें पूरी जानकारी"],
+  ["gujarat", "Big gift for Gujarat: New semiconductor policy announced, thousands of jobs to be created", "ગુજરાતને મોટી ભેટ! નવી સેમિકન્ડક્ટર પોલિસી જાહેર, હજારો નોકરીઓ મળશે", "गुजरात को बड़ी सौगात! नई सेमीकंडक्टर नीति घोषित, हजारों नौकरियां मिलेंगी"],
+  ["sports", "Huge clash today at Narendra Modi Stadium, rush for tickets among fans", "નરેન્દ્ર મોદી સ્ટેડિયમમાં આજે મહામુકાબલો, ટિકિટ માટે પડાપડી", "नरेंद्र मोदी स्टेडियम में आज महामुकाबला, टिकटों के लिए मची मारामारी"],
+  ["gujarat", "Major change in Darshan timings at Dwarka Temple, important update for devotees", "દ્વારકા મંદિરના દર્શન સમયમાં મોટો ફેરફાર, શ્રદ્ધાળુઓ જરૂર વાંચે", "द्वारका मंदिर के दर्शन समय में बड़ा बदलाव, श्रद्धालु जरूर पढ़ें"],
+  ["national", "Parliament Monsoon Session begins today: clash expected over key bills", "સંસદનું ચોમાસુ સત્ર આજથી: આ મોટા ખરડા પર થશે ઘમાસાણ", "संसद का मानसून सत्र आज से: इन बड़े विधेयकों पर होगा हंगामा"],
+  ["gujarat", "Warning! Heavy rain alert in Gujarat for next three days", "સાવધાન! ગુજરાતમાં આગામી ત્રણ દિવસ ધોધમાર વરસાદની આગાહી", "सावधान! गुजरात में अगले तीन दिनों तक भारी बारिश की चेतावनी"],
   // Business
-  ["business", "Surat diamond units announce new export recovery plan", "સુરતના ડાયમંડ ઉદ્યોગે નિકાસ સુધારણા યોજના જાહેર કરી", "सूरत डायमंड उद्योग ने निर्यात सुधार योजना घोषित की"],
+  ["business", "Strong boom in Surat textile market, wave of joy among traders", "સુરત ટેક્સટાઇલ માર્કેટમાં જોરદાર તેજી, વેપારીઓમાં ખુશીની લહેર", "सूरत कपड़ा बाजार में जोरदार तेजी, व्यापारियों में खुशी की लहर"],
 
-  ["business", "Gujarat SMEs benefit from new RBI credit scheme", "ગુજરાત SMEsને RBIની નવી ક્રેડિટ સ્કીમ ફાયદો", "गुजरात SME को RBI की नई क्रेडिट स्कीम का फायदा"],
+  ["sports", "Team India blast! Spectacular win to clinch series 2-0", "ટીમ ઈન્ડિયાનો ધમાકો! શાનદાર જીત સાથે શ્રેણી ૨-૦થી કબજે", "टीम इंडिया का धमाका! शानदार जीत के साथ सीरीज 2-0 से कब्जा"],
+  ["gujarat", "Tourists flock to Girnar Ropeway: Huge increase in numbers", "ગિરનાર રોપ-વે પર ઉમટ્યા પ્રવાસીઓ! સંખ્યામાં જોરદાર વધારો", "गिरनार रोपवे पर उमड़े पर्यटक: संख्या में भारी बढ़ोतरी"],
+  ["world", "New trade agreement signed in Europe, India to benefit too", "યુરોપમાં નવી વ્યાપાર સંધિ પર હસ્તાક્ષર, ભારતને પણ ફાયદો", "यूरोप में नए व्यापार समझौते पर हस्ताक्षर, भारत को भी फायदा"],
+  ["business", "Sharp rise in gold and silver prices! Know today's latest rates", "સોના-ચાંદીના ભાવમાં જોરદાર ઉછાળો! જાણો આજના લેટેસ્ટ રેટ", "सोने-चांदी की कीमतों में भारी उछाल! जानें आज के ताजा भाव"],
   ["business", "Stock market rally: Gujarat-based stocks outperform index", "શેરબજાર રેલી: ગુજરાત આધારિત શેરો ઇન્ડેક્સ કરતા આગળ", "शेयर बाजार रैली: गुजरात आधारित शेयर सूचकांक से आगे"],
   // Politics
   ["politics", "Gujarat Election 2027 preparations intensify across districts", "ગુજરાત ચૂંટણી 2027 માટે જિલ્લાઓમાં તૈયારીઓ તેજ", "गुजरात चुनाव 2027 की तैयारियां जिलों में तेज"],
@@ -481,6 +488,14 @@ const getLongTitleExtension = (category: string, i: number) => {
   return pool[i % pool.length];
 };
 
+const toGu = (num: number | string): string => {
+  const guDigits = ["૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯"];
+  return String(num).split("").map(char => {
+    const digit = parseInt(char, 10);
+    return isNaN(digit) ? char : guDigits[digit];
+  }).join("");
+};
+
 export const ARTICLES: Article[] = Array.from({ length: 120 }, (_, i) => {
   const story = storyPool[i % storyPool.length];
   const rawCategorySlug = story[0] as string;
@@ -488,9 +503,9 @@ export const ARTICLES: Article[] = Array.from({ length: 120 }, (_, i) => {
   const meta = CATEGORY_META[categorySlug];
   const day = String(10 - (i % 10)).padStart(2, "0");
   const hour = String(6 + (i % 14)).padStart(2, "0");
-  const titleSuffix = i >= storyPool.length ? `: ગ્રાઉન્ડ રિપોર્ટ ${i + 1}` : "";
-  const titleSuffixHi = i >= storyPool.length ? `: ग्राउंड रिपोर्ट ${i + 1}` : "";
-  const titleSuffixEn = i >= storyPool.length ? `: Ground Report ${i + 1}` : "";
+  const titleSuffix = i >= storyPool.length ? ": ગ્રાઉન્ડ રિપોર્ટ ${i + 1}" : "";
+  const titleSuffixHi = i >= storyPool.length ? ": Ground Report ${i + 1}" : "";
+  const titleSuffixEn = i >= storyPool.length ? ": Ground Report ${i + 1}" : "";
 
   const ext = getLongTitleExtension(categorySlug, i);
 
@@ -506,7 +521,29 @@ export const ARTICLES: Article[] = Array.from({ length: 120 }, (_, i) => {
     content: contentEn.join("\n\n"),
     contentGu: contentGu.join("\n\n"),
     contentHi: contentHi.join("\n\n"),
-    image: imageFor(categorySlug, i, story[1]),
+    image: (() => {
+      if (i === 0) return "/assets/demo/1.jpg";
+      if (i === 1) return "/assets/demo/4.jpg";
+      if (i === 2) return "/assets/demo/8.jpg";
+      if (i === 3) return "/assets/demo/5.jpg";
+      if (i === 4) return "/assets/demo/2.jpg";
+      if (i === 5) return "/assets/demo/3.jpg";
+      if (i === 6) return "/assets/demo/4.jpg";
+      if (i === 7) return "/assets/demo/8.jpg";
+      if (i === 8) return "/assets/demo/3.jpg";
+      if (i === 9) return "/assets/demo/1.jpg";
+      if (i === 10) return "/assets/demo/5.jpg";
+      
+      const mapped = categorySlugMapping[categorySlug] || "politics";
+      if (mapped === "state" || mapped === "ahmedabad" || mapped === "rajkot" || mapped === "surat" || mapped === "vadodara") {
+        const gujImages = ["/assets/demo/2.jpg", "/assets/demo/4.jpg", "/assets/demo/1.jpg", "/assets/demo/6.jpg", "/assets/demo/3.jpg"];
+        return gujImages[i % gujImages.length];
+      }
+      if (mapped === "business") return "/assets/demo/5.jpg";
+      if (mapped === "sports") return i % 2 === 0 ? "/assets/demo/7.jpg" : "/assets/demo/8.jpg";
+      if (mapped === "entertainment") return "/assets/demo/3.jpg";
+      return "/assets/demo/1.jpg";
+    })(),
     category: meta.name,
     categoryGu: meta.gu,
     categoryHi: meta.hi,
@@ -514,13 +551,66 @@ export const ARTICLES: Article[] = Array.from({ length: 120 }, (_, i) => {
     tagsGu: [meta.gu, "ગુજરાત", i % 2 === 0 ? "બ્રેકિંગ" : "અપડેટ"],
     tagsHi: [meta.hi, "गुजरात", i % 2 === 0 ? "ब्रेकिंग" : "अपडेट"],
     author: AUTHORS[i % AUTHORS.length],
-    publishedAt: `2026-06-${day}T${hour}:00:00+05:30`,
+    publishedAt: (() => {
+      if (i === 8) return "2026-07-13T10:00:00+05:30"; // 4 hours ago
+      if (i === 9) return "2026-07-13T11:00:00+05:30"; // 3 hours ago
+      if (i === 10) return "2026-07-13T12:00:00+05:30"; // 2 hours ago
+      return `2026-06-${day}T${hour}:00:00+05:30`;
+    })(),
     updatedAt: `2026-06-${day}T${hour}:45:00+05:30`,
     readingTime: 3 + (i % 5),
     isTrending: i < 10 || i % 7 === 0,
     isBreaking: i % 9 === 0,
     isFeatured: i < 24,
-    views: 8200 + i * 3150,
+    views: (() => {
+      if (i === 8) return 52000;
+      if (i === 9) return 74000;
+      if (i === 10) return 150000; // 1.5L
+      return 82000 + i * 3150;
+    })(),
+    isLive: i === 2,
+    relativeTime: (() => {
+      if (i === 0) return "25 mins ago";
+      if (i === 1) return "50 mins ago";
+      if (i === 2) return "1 hour ago";
+      if (i === 3) return "2 hours ago";
+      if (i === 4) return "1 hour ago";
+      if (i === 5) return "2 hours ago";
+      if (i === 6) return "3 hours ago";
+      if (i === 7) return "4 hours ago";
+      if (i === 8) return "4 hours ago";
+      if (i === 9) return "3 hours ago";
+      if (i === 10) return "2 hours ago";
+      return `${1 + (i % 12)} hours ago`;
+    })(),
+    relativeTimeGu: (() => {
+      if (i === 0) return "૨૫ મિનિટ પહેલાં";
+      if (i === 1) return "૫૦ મિનિટ પહેલાં";
+      if (i === 2) return "૧ કલાક પહેલાં";
+      if (i === 3) return "૨ કલાક પહેલાં";
+      if (i === 4) return "૧ કલાક પહેલાં";
+      if (i === 5) return "૨ કલાક પહેલાં";
+      if (i === 6) return "૩ કલાક પહેલાં";
+      if (i === 7) return "૪ કલાક પહેલાં";
+      if (i === 8) return "૪ કલાક પહેલાં";
+      if (i === 9) return "૩ કલાક પહેલાં";
+      if (i === 10) return "૨ કલાક પહેલાં";
+      return `${toGu(1 + (i % 12))} કલાક પહેલાં`;
+    })(),
+    relativeTimeHi: (() => {
+      if (i === 0) return "25 मिनट पहले";
+      if (i === 1) return "50 मिनट पहले";
+      if (i === 2) return "1 घंटा पहले";
+      if (i === 3) return "2 घंटे पहले";
+      if (i === 4) return "1 घंटा पहले";
+      if (i === 5) return "2 घंटे पहले";
+      if (i === 6) return "3 घंटे पहले";
+      if (i === 7) return "4 घंटे पहले";
+      if (i === 8) return "4 घंटे पहले";
+      if (i === 9) return "3 घंटे पहले";
+      if (i === 10) return "2 घंटे पहले";
+      return `${1 + (i % 12)} घंटे पहले`;
+    })(),
   };
 });
 
@@ -551,33 +641,40 @@ export const VIDEOS: Video[] = [
 
   const isReal = i < 6;
   const youtubeId = isReal ? realVideos[i].youtubeId : ["sA6BrUmBXiA", "rQHoqCTiQvI", "WF2Kuec5HV0", "LDDtOMwdJ_0", "-iXZuFoHqiw", "uJalvs-jgFc"][i % 6];
-  const thumbnail = isReal ? realVideos[i].thumb : imageFor(["politics", "gujarat", "business", "crime", "sports", "entertainment"][i % 6], i, title as string);
+  const thumbnail = (() => {
+    if (i === 0) return "/assets/demo/4.jpg";
+    if (i === 1) return "/assets/demo/2.jpg";
+    if (i === 2) return "/assets/demo/6.jpg";
+    if (i === 3) return "/assets/demo/1.jpg";
+    if (i === 4) return "/assets/demo/8.jpg";
+    return isReal ? realVideos[i].thumb : imageFor(["politics", "gujarat", "business", "crime", "sports", "entertainment"][i % 6], i, title as string);
+  })();
 
   return {
     id: id as string,
     title: isReal ? [
-      "Sabarkantha District Cooperative Purchase and Sales Union Corruption Scam Expose",
-      "Kapadvanj TDO Office Corruption: Extension officer orders middleman to exploit poor",
-      "Vadodara AAP Leader Sin: Exploited party woman for four years, made obscene videos",
-      "Rajkot IPS officer enters journalist's query: Why senior journalist called Sanghavi failure",
-      "Nitin Patel at SPG event: Praises BJP, some say Modi bhakts minds are shut",
-      "BJP Government challenged: Shankersinh Vaghela fumes over Sanand liquor party issue",
+      "Sabarkantha District Cooperative purchase and Sales Union scam",
+      "Kapadvanj TDO office corruption - poor looting scheme",
+      "AAP leader's 'sin' - four years of exploitation",
+      "IPS poured petrol on journalist? Why senior journalist failed",
+      "SPG convention or BJP? Nitin Patel forced or strong?",
+      "BJP Government challenged: Shankersinh Vaghela fumes",
     ][i] : title as string,
     titleGu: isReal ? [
-      "ધી સાબરકાંઠા જિલ્લા સહકારી ખરીદ વેચાણ સંઘ બન્યો ભ્રષ્ટાચારનો અડ્ડો ! આવી રીતે થાય છે લાખોની ઉચાપત",
-      "કપડવંજ TDO કચેરીમાં ભ્રષ્ટાચારનો સડો, સાંભળો- વિસ્તરણ અધિકારીએ ગરીબોને લૂંટવા વચેટિયાને આપ્યો  આદેશ",
-      "વડોદરાના AAP નેતાનું પાપ, ચાર વર્ષ સુધી પક્ષની મહિલા સાથે દુષ્કર્મ આચર્યું, અશ્લિલ વીડિયો બનાવ્યાં",
-      "રાજકોટમાં IPS એ પત્રકારની ગુદામાં પ્રવેશ કર્યો ? આ સિનિયર પત્રકારે સંઘવીને કેમ નિષ્ફળ કહ્યાં !",
-      "સંમેલન SPG નું કે ભાજપનું ? નીતિન પટેલે ભાજપની વાહવાહી કરી, કોઇએ કહ્યું  કે મોદી ભક્તોના મગજ બંધ છે",
-      "ભાજપ સરકારના ભુક્કા કાઢી નાખ્યાં, સાણંદ દારુ પાર્ટી મુદ્દે શંકરસિંહ વાઘેલા તો સરકાર સામે બગડ્યાં",
+      "ધી સાબરકાંઠા જિલ્લા સહકારી સંઘમાં ગોટાળો — મંત્રી જીતુ વાઘાણી ક્યારે કરાવશે તપાસ?",
+      "કપડવંજ TDO કચેરીમાં ભ્રષ્ટાચારનો સડો — ગરીબોને લૂંટવાની સ્કીમ",
+      "AAP ના નેતાનું \"પાપ\" — ચાર વર્ષ સુધી મહિલા સાથે દુષ્કર્મ",
+      "IPS એ પત્રકારની \"ગુદામાં\" પેટ્રોલ નાખ્યું? સિનિયર પત્રકાર કેમ નિષ્ફળ",
+      "સંમેલન SPG નું કે ભાજપનું? નીતિન પટેલ મજબૂર કે મજબૂત?",
+      "ભાજપ સરકારના ભુક્કા કાઢી નાખ્યાં, સાણંદ દારુ પાર્ટી મુદ્દે શંકરસિંહ વાઘેલા",
     ][i] : titleGu as string,
     titleHi: isReal ? [
-      "साबरकांठा जिला सहकारी खरीद बिक्री संघ भ्रष्टाचार घोटाला खुलासा",
-      "कपड़वंज टीडीओ कार्यालय में भ्रष्टाचार: विस्तार अधिकारी ने बिचौलिए को दिए गरीबों को लूटने के आदेश",
-      "वडोदरा के आप नेता का पाप, चार साल तक पार्टी की महिला का किया शोषण, बनाए अश्लील वीडियो",
-      "राजकोट आईपीएस और पत्रकार विवाद: क्यों वरिष्ठ पत्रकार ने संघवी को बताया असफल",
-      "नीतिन पटेल ने की बीजेपी की तारीफ, किसी ने कहा मोदी भक्तों के दिमाग बंद हैं",
-      "बीजेपी सरकार पर बरसे शंकरसिंह वाघेला, साणंद दारू पार्टी मुद्दे पर सरकार को घेरा",
+      "साबरकांठा जिला सहकारी संघ में घोटाला - मंत्री जीतू वाघाणी कब कराएंगे जांच?",
+      "कपड़वंज टीडीओ कार्यालय में भ्रष्टाचार का कीड़ा - गरीबों को लूटने की योजना",
+      "आप नेता का 'पाप' - चार साल तक महिला के साथ दुष्कर्म",
+      "आईपीएस ने पत्रकार के प्राइवेट पार्ट में पेट्रोल डाला? सीनियर पत्रकार क्यों विफल",
+      "सम्मेलन एसपीजी का या बीजेपी का? नितिन पटेल मजबूर या मजबूत?",
+      "बीजेपी सरकार को चुनौती: शंकरसिंह वाघेला का गुस्सा फूटा",
     ][i] : titleHi as string,
     thumbnail,
     youtubeId,
@@ -643,22 +740,27 @@ export const BREAKING_TICKER = [
 ];
 
 export const NAV_ITEMS: NavItem[] = [
-  ["Home", "હોમ", "होम", "/"],
+  ["Home", "મુખ્ય પૃષ્ઠ", "होम", "/"],
+  ["Gujarat", "ગુજરાત", "गुजरात", "/category/gujarat"],
+  ["National", "દેશ", "देश", "/category/national"],
+  ["World", "વિશ્વ", "विश्व", "/category/world"],
+  ["Politics", "રાજકારણ", "राजनीति", "/category/politics"],
+  ["Crime", "ક્રાઈમ", "क्राइम", "/category/crime"],
+  ["Trending", "લોકપ્રિય સ્ટોરીઝ", "ट्रेंडिंग", "/category/trending"],
+  ["Fact Check", "ફેક્ટ ચેક", "फैक्ट चेक", "/category/fact-check"],
+  ["Entertainment", "મનોરંજન", "मनोरंजन", "/category/entertainment"],
+  ["Technology", "ટેક્નોલોજી", "टेक्नोलॉजी", "/category/technology"],
+  ["Lifestyle", "લાઈફસ્ટાઈલ", "लाइफस्टाइल", "/category/lifestyle"],
+  ["YouTube", "યુટ્યુબ", "यूट्यूब", "/videos"],
+  // Extended items kept for other references in the codebase
   ["State News", "રાજ્ય સમાચાર", "राज्य समाचार", "/category/state"],
-  ["National", "રાષ્ટ્રીય", "राष्ट्रीय", "/category/national"],
   ["Ahmedabad", "અમદાવાદ", "अहमदाबाद", "/category/ahmedabad"],
   ["Rajkot", "રાજકોટ", "राजकोट", "/category/rajkot"],
   ["Surat", "સુરત", "सूरत", "/category/surat"],
   ["Vadodara", "વડોદરા", "वडोदरा", "/category/vadodara"],
-  ["Crime", "ક્રાઇમ", "क्राइम", "/category/crime"],
-  ["Politics", "રાજકારણ", "राजनीति", "/category/politics"],
   ["Business", "બિઝનેસ", "बिजनेस", "/category/business"],
   ["Sports", "રમતગમત", "खेल", "/category/sports"],
-  ["Entertainment", "મનોરંજન", "मनोरंजन", "/category/entertainment"],
-  ["Technology", "ટેકનોલોજી", "टेक्नोलॉजी", "/category/technology"],
-  ["Lifestyle", "લાઇફસ્ટાઇલ", "लाइफस्टाइल", "/category/lifestyle"],
   ["Education", "શિક્ષણ", "शिक्षा", "/category/education"],
-  ["World", "વિશ્વ", "विश्व", "/category/world"],
   ["Gujarat Election 2027", "ગુજરાત ચૂંટણી 2027", "गुजरात चुनाव 2027", "/category/election-2027"],
   ["Videos", "વીડિયો", "वीडियो", "/videos"],
   ["Watch Never Ends", "વોચ ક્યારેય અટકતું નથી", "देखना कभी खत्म नहीं होता", "/watch"],
@@ -687,6 +789,12 @@ export const getCategoryLabel = (article: Article, language: Language) =>
 
 export const getArticlesByCategory = (cat: string) => {
   const normalized = cat.toLowerCase();
+  if (normalized === "trending") {
+    return ARTICLES.filter((article) => article.isTrending);
+  }
+  if (normalized === "fact check" || normalized === "fact-check") {
+    return ARTICLES.filter((article) => article.tags?.some((tag) => tag.toLowerCase().includes("fact")) || article.tagsGu?.some((tag) => tag.includes("ફેક્ટ")) || article.category.toLowerCase() === "fact-check");
+  }
   const meta = Object.values(CATEGORY_META).find((item) => item.name.toLowerCase() === normalized);
   if (meta?.name === "Gujarat") {
     return ARTICLES.filter((article) => ["Gujarat", "Ahmedabad", "Rajkot", "Surat", "Vadodara"].includes(article.category));

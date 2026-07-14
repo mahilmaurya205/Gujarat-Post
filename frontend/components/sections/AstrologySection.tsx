@@ -5,7 +5,7 @@ import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '@/components/AppProvider';
 import { getLocalized } from '@/data';
 
-interface ZodiacSign {
+export interface ZodiacSign {
   id: string;
   name: string;
   nameGu: string;
@@ -15,7 +15,7 @@ interface ZodiacSign {
   predictionGu: string;
 }
 
-const ZODIAC_SIGNS: ZodiacSign[] = [
+export const ZODIAC_SIGNS: ZodiacSign[] = [
   {
     id: 'aries',
     name: 'Aries',

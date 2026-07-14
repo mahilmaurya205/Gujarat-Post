@@ -98,7 +98,7 @@ h6,
 
 .max-w-screen-xl {
   width: 100%;
-  max-width: 1680px;
+  max-width: 1250px !important;
 }
 
 a {
@@ -889,5 +889,35 @@ img {
 
 .animate-hud-fade {
   animation: hud-fade 800ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.max-w-header-layout {
+  max-width: 100% !important;
+}
+
+/* Custom scrollbar for specials rail in dark red panel */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 3px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+}
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.08);
+}
+
+/* Hide scrollbar utility – used by nav bar overflow-x-auto */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
 
