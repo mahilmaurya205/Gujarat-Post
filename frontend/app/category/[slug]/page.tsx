@@ -1,16 +1,18 @@
-import { CATEGORY_META, ARTICLES, getArticlesByCategory } from "@/data";
+import { CATEGORY_META, ARTICLES, getArticlesByCategory, categorySlugMapping } from "@/data";
 import CategoryPageClient from "./CategoryPageClient";
 import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
-  return Object.keys(CATEGORY_META)
-    .filter((slug) => !["videos", "shorts", "podcasts"].includes(slug))
-    .map((slug) => ({ slug }));
+  const metaKeys = Object.keys(CATEGORY_META).filter((slug) => !["videos", "shorts", "podcasts"].includes(slug));
+  const mappingKeys = Object.keys(categorySlugMapping).filter((key) => !["videos", "shorts", "podcasts"].includes(key));
+  const allSlugs = Array.from(new Set([...metaKeys, ...mappingKeys]));
+  return allSlugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const category = CATEGORY_META[slug as keyof typeof CATEGORY_META];
+  const resolvedSlug = categorySlugMapping[slug] || slug;
+  const category = CATEGORY_META[resolvedSlug as keyof typeof CATEGORY_META];
   const name = category?.name || slug;
 
   return {
@@ -38,11 +40,12 @@ export default async function CategoryPage({
   const { slug } = await params;
   const resolvedSearchParams = await searchParams;
   const page = parseInt(resolvedSearchParams?.page || "1", 10);
-  const limit = parseInt(resolvedSearchParams?.limit || "12", 10);
+  const limit = parseInt(resolvedSearchParams?.limit || "40", 10);
   const skip = (page - 1) * limit;
 
-  // 1. Fetch category from static metadata
-  const category = CATEGORY_META[slug as keyof typeof CATEGORY_META];
+  // 1. Fetch category from static metadata after resolving mapped slug
+  const resolvedSlug = categorySlugMapping[slug] || slug;
+  const category = CATEGORY_META[resolvedSlug as keyof typeof CATEGORY_META];
 
   if (!category) {
     notFound();

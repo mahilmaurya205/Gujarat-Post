@@ -17,7 +17,12 @@ import { useApp } from '@/components/AppProvider';
 
 interface NewsCardProps {
   article: Article;
-  variant?: 'default' | 'hero' | 'small' | 'horizontal' | 'compact';
+  variant?: 'default' | 'hero' | 'small' | 'horizontal' | 'compact' | 'flat';
+}
+
+function toGu(n: number | string) {
+  const guDigits = ["૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯"];
+  return String(n).replace(/\d/g, (d) => guDigits[+d]);
 }
 
 export default function NewsCard({ article, variant = 'default' }: NewsCardProps) {
@@ -98,6 +103,53 @@ export default function NewsCard({ article, variant = 'default' }: NewsCardProps
         <div className="min-w-0">
           <p className="line-clamp-2 text-sm font-black leading-snug text-foreground">{title}</p>
           <p className="mt-1 text-xs font-semibold text-muted-foreground">{formatDate(article.publishedAt)}</p>
+        </div>
+      </Link>
+    );
+  }
+
+  if (variant === 'flat') {
+    const displayCategory = language === 'gu'
+      ? article.categoryGu || article.tagsGu?.[0] || category
+      : language === 'hi'
+      ? article.categoryHi || article.tagsHi?.[0] || category
+      : article.category || article.tags?.[0] || category;
+
+    const relativeTime = language === 'gu'
+      ? (article as any).relativeTimeGu || formatDate(article.publishedAt)
+      : language === 'hi'
+      ? (article as any).relativeTimeHi || formatDate(article.publishedAt)
+      : article.relativeTime || formatDate(article.publishedAt);
+
+    const viewsLabel = language === 'gu'
+      ? (article as any).viewsGu || toGu(formatViews(article.views))
+      : language === 'hi'
+      ? (article as any).viewsHi || formatViews(article.views)
+      : (article as any).views || formatViews(article.views);
+
+    return (
+      <Link href={`/news/${article.slug}`} className="group block">
+        <div className="relative aspect-[16/10] w-full overflow-hidden rounded bg-muted shadow-sm">
+          <Image
+            src={article.image}
+            alt={article.title}
+            fill
+            sizes="(max-width: 768px) 50vw, 33vw"
+            className="object-cover transition duration-300 group-hover:scale-105"
+          />
+        </div>
+        <div className="mt-2.5">
+          <span className="text-[11px] font-black uppercase tracking-wide text-accent">
+            {displayCategory}
+          </span>
+          <h3 className="line-clamp-2 text-[13.5px] md:text-[14px] font-bold leading-snug text-foreground group-hover:text-accent transition-colors mt-0.5 tracking-tight">
+            {title}
+          </h3>
+          <div className="mt-1.5 flex items-center gap-2 text-[10px] font-semibold text-muted-foreground">
+            <span>{relativeTime}</span>
+            <span>·</span>
+            <span className="flex items-center gap-0.5"><Eye className="h-2.5 w-2.5 text-muted-foreground/75" />{viewsLabel}</span>
+          </div>
         </div>
       </Link>
     );

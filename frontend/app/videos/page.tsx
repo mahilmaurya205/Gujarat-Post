@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default async function VideosPage() {
-  return <VideosPageClient initialVideos={VIDEOS} />;
+  return <VideosPageClient />;
 }

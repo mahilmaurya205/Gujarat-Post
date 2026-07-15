@@ -805,7 +805,7 @@ export const getArticlesByCategory = (cat: string) => {
 export const getTrendingArticles = () => ARTICLES.filter((article) => article.isTrending).slice(0, 10);
 export const getFeaturedArticles = () => ARTICLES.filter((article) => article.isFeatured).slice(0, 24);
 export const getRelatedArticles = (article: Article) =>
-  ARTICLES.filter((item) => item.category === article.category && item.id !== article.id).slice(0, 4);
+  ARTICLES.filter((item) => item.category === article.category && item.id !== article.id).slice(0, 6);
 
 export const searchArticles = (query: string) => {
   const terms = query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);

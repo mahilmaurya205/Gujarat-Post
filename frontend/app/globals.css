@@ -1,37 +1,98 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f5f6f8;
-  --foreground: #101114;
-  --card: #ffffff;
-  --card-foreground: #101114;
-  --muted: #eef1f5;
-  --muted-foreground: #667085;
-  --border: #dde2ea;
-  --accent: #e11d2e;
-  --accent-hover: #be1524;
-  --primary: #101828;
-  --primary-foreground: #ffffff;
-  --secondary: #eceff3;
-  --secondary-foreground: #111827;
-  --ring: #c62828;
-  --radius: 0.5rem;
+  /* ==========================================
+     GUJARAT POST — Redesign Rebuild Variables
+     ========================================== */
+  --paper: #FFFFFF;
+  --paper-2: #FAFAFA;
+  --paper-3: #F2F2F2;
+  --ink: #171310;
+  --ink-2: #6A6157;
+  --ink-3: #948A7C;
+  --line: #E0D7C6;
+  --line-2: #CFC4AF;
+  --ink-rule: #171310;
+  --red: #B3121B;
+  --red-2: #8E0E15;
+  --red-wash: #F4E3DF;
+  --char: #17130E;
+  --char-2: #211B14;
+  --gold: #B98A2E;
+  --green: #16794A;
+  --sel: #B3121B;
+
+  /* Standard Variables mapped to Rebuild Variables */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--paper-2);
+  --card-foreground: var(--ink);
+  --muted: var(--paper-3);
+  --muted-foreground: var(--ink-2);
+  --border: var(--line);
+  --accent: var(--red);
+  --accent-hover: var(--red-2);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --secondary: var(--paper-3);
+  --secondary-foreground: var(--ink);
+  --ring: var(--red);
+  --radius: 3px;
+
+  /* Fluid typography and spacing sizes from rebuild */
+  --fs: 1;
+  --t-hero: clamp(1.95rem, 1.1rem + 2.4vw, 3.2rem);
+  --t-lead: clamp(1.5rem, 1rem + 1.6vw, 2.15rem);
+  --t-desk: clamp(2.8rem, 1.9rem + 3.4vw, 4.4rem);
+  --t-std: clamp(1.02rem, .92rem + .32vw, 1.2rem);
+  --t-compact: clamp(.94rem, .89rem + .18vw, 1.02rem);
+  --t-meta: clamp(.72rem, .69rem + .12vw, .8rem);
+  --t-body: clamp(1.06rem, 1rem + .28vw, 1.22rem);
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px;
+  --shell: 1220px; --rail: 336px;
+  --rule: 1px solid var(--line);
+  --rule-2: 1px solid var(--line-2);
+  --sh: 0 1px 2px rgba(30,20,8,.05);
 }
 
-.dark {
-  --background: #111722;
-  --foreground: #f7f9fc;
-  --card: #182131;
-  --card-foreground: #f5f6f8;
-  --muted: #202a3b;
-  --muted-foreground: #b8c1cf;
-  --border: #314058;
-  --accent: #ff3b4f;
-  --accent-hover: #ef2338;
-  --primary: #0b111c;
-  --primary-foreground: #ffffff;
-  --secondary: #242b38;
-  --secondary-foreground: #f5f6f8;
+.dark,
+[data-theme="dark"] {
+  /* ==========================================
+     GUJARAT POST — Redesign Rebuild Variables (Dark)
+     ========================================== */
+  --paper: #12100C;
+  --paper-2: #1B1712;
+  --paper-3: #241F18;
+  --ink: #F3ECDE;
+  --ink-2: #A79C8B;
+  --ink-3: #7E7566;
+  --line: #2E2820;
+  --line-2: #3F3830;
+  --ink-rule: #C9BEA9;
+  --red: #E6535B;
+  --red-2: #F06B72;
+  --red-wash: #2E1815;
+  --char: #0D0B08;
+  --char-2: #17130E;
+  --gold: #D9B266;
+  --green: #43BE81;
+  --sel: #E6535B;
+
+  /* Standard Variables mapped to Rebuild Variables (Dark) */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--paper-2);
+  --card-foreground: var(--ink);
+  --muted: var(--paper-3);
+  --muted-foreground: var(--ink-2);
+  --border: var(--line);
+  --accent: var(--red);
+  --accent-hover: var(--red-2);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --secondary: var(--paper-3);
+  --secondary-foreground: var(--ink);
 }
 
 @theme inline {
@@ -57,6 +118,7 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  font-size: var(--gp-font-size, 16px);
 }
 
 body {
@@ -68,6 +130,13 @@ body {
   color: var(--foreground);
   font-family: "Noto Sans Gujarati", "Noto Sans Devanagari", "Noto Sans", "Nirmala UI", Arial, sans-serif;
   line-height: 1.5;
+}
+
+.dark body,
+[data-theme="dark"] body {
+  background:
+    radial-gradient(circle at 15% 0%, rgb(230 83 91 / 0.12), transparent 28rem),
+    linear-gradient(180deg, var(--background), var(--background));
 }
 
 html[lang="gu"] {
@@ -88,8 +157,8 @@ h6,
 .font-black,
 .font-bold,
 .font-semibold {
-  font-family: "Mukta Vaani", "Mukta", "Noto Sans Gujarati", "Noto Sans Devanagari", "Noto Sans", "Nirmala UI", sans-serif !important;
-  font-weight: 500 !important;
+  font-family: "Mukta Vaani", "Mukta", "Noto Sans Gujarati", "Noto Sans Devanagari", "Noto Sans", "Nirmala UI", sans-serif;
+  font-weight: 500;
   letter-spacing: -0.01em;
   line-height: 1.25;
 }
@@ -131,14 +200,29 @@ img {
   animation: ticker-scroll 36s linear infinite;
 }
 
+@keyframes shimmer {
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+
 .news-card {
   box-shadow: 0 1px 2px rgb(15 23 42 / 0.05);
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
 }
 
+.dark .news-card {
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+}
+
 .news-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 22px 50px rgb(15 23 42 / 0.18);
+}
+
+.dark .news-card:hover {
+  box-shadow: 0 12px 36px rgb(0 0 0 / 0.5);
 }
 
 .cat-badge {
@@ -920,4 +1004,800 @@ img {
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
+/* Gist and Blockquote styles for Articles */
+.gist {
+  margin: 24px 0;
+  border-left: 3px solid var(--accent);
+  padding: 4px 0 4px 20px;
+}
+.gist .gt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--foreground);
+  margin-bottom: 12px;
+}
+.gist .gt .d {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  transform: rotate(45deg);
+}
+.gist ul {
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.gist li {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--foreground);
+}
+
+.article-body blockquote {
+  margin: 28px 0;
+  padding: 2px 0 2px 22px;
+  border-left: 3px solid var(--accent);
+}
+.article-body blockquote p {
+  font-weight: 700;
+  font-size: 1.3rem;
+  line-height: 1.5;
+  color: var(--foreground);
+  margin: 0;
+}
+.article-body blockquote cite {
+  font-size: 13px;
+  color: var(--muted-foreground);
+  font-style: normal;
+  display: block;
+  margin-top: 10px;
+}
+
+/* Sidebar widgets from Redesign Final */
+.wtitle {
+  font-family: 'Hind Vadodara', serif;
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--foreground);
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.wtitle .d {
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  transform: rotate(45deg);
+}
+
+.wa-card {
+  border: 1px solid #25D366;
+  border-radius: 5px;
+  padding: 18px;
+  background: var(--card);
+}
+.wa-card .h {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: 'Hind Vadodara', serif;
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--foreground);
+}
+.wa-card .h .wi {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: #25D366;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+.wa-card p {
+  font-size: 12px;
+  color: var(--muted-foreground);
+  line-height: 1.55;
+  margin: 10px 0 12px;
+}
+.wa-card button {
+  background: #25D366;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 9px 16px;
+  border-radius: 3px;
+  width: 100%;
+}
+
+.sidetags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 10px;
+}
+.sidetags a, .sidetags span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  border: 1px solid var(--border);
+  padding: 5px 11px;
+  border-radius: 999px;
+  transition: all .15s;
+  cursor: pointer;
+}
+.sidetags a:hover, .sidetags span:hover {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Share button row styling from Redesign Final */
+.share-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+}
+.share-row .lbl {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted-foreground);
+}
+.share-row button, .share-row a {
+  font-weight: 700;
+  font-size: 13px;
+  padding: 9px 16px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: opacity 0.15s;
+  cursor: pointer;
+}
+.share-row button:hover, .share-row a:hover {
+  opacity: 0.9;
+}
+.share-wa {
+  background: #25D366;
+  color: #fff !important;
+}
+.share-fb {
+  background: #1877F2;
+  color: #fff !important;
+}
+.share-x {
+  background: #171310;
+  color: #fff !important;
+}
+html[data-theme="dark"] .share-x {
+  background: #F3ECDE;
+  color: #12100C !important;
+}
+.share-cp {
+  border: 1px solid var(--border);
+  color: var(--foreground);
+}
+
+/* Rank widget layout rules from Redesign Final */
+.s-rank {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 13px;
+  align-items: start;
+  padding: 13px 0;
+  border-top: 1px solid var(--border);
+}
+.s-rank:first-child {
+  border-top: none;
+}
+.s-rank .n {
+  font-family: 'Hind Vadodara', serif;
+  font-weight: 800;
+  font-size: 24px;
+  line-height: .9;
+  color: transparent;
+  -webkit-text-stroke: 1.2px var(--accent);
+}
+.s-rank h3 {
+  font-family: 'Hind Vadodara', serif;
+  font-weight: 600;
+  font-size: 14.5px;
+  line-height: 1.42;
+  color: var(--foreground);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.mostread .s-rank .n {
+  -webkit-text-stroke: 1.2px var(--muted-foreground);
+}
+
+/* Byline layout rules from Redesign Final */
+.byline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 15px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+/* Deskhead section title bar styling from Redesign Final */
+.deskhead {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-bottom: 24px;
+  border-bottom: 4px solid var(--border);
+  padding-bottom: 18px;
+}
+.deskhead h2 {
+  font-family: 'Hind Vadodara', serif;
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: -.5px;
+  color: #fff !important;
+  background: var(--accent);
+  padding: .26em .5em .3em .48em;
+  border-radius: 5px;
+  display: inline-block;
+}
+.deskhead .spacer {
+  flex: 1;
+}
+
+/* Primitives for standards and compact cards */
+.kick {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: .3px;
+  text-transform: uppercase;
+}
+.kick .loc {
+  color: var(--foreground);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: clamp(.72rem,.69rem+.12vw,.8rem);
+  color: var(--muted-foreground);
+  margin-top: 8px;
+}
+
+.s-compact {
+  display: grid;
+  grid-template-columns: 1fr 92px;
+  gap: 14px;
+  align-items: start;
+  padding: 15px 0;
+  border-top: 1px solid var(--border);
+}
+.s-compact:first-child {
+  border-top: none;
+}
+.s-compact .imgwrap {
+  aspect-ratio: 1;
+  border-radius: var(--radius);
+  position: relative;
+  overflow: hidden;
+  height: 92px;
+  width: 92px;
+}
+.s-compact .kick {
+  margin-bottom: 6px;
+  font-size: 10.5px;
+}
+.s-compact h3 {
+  font-family: 'Hind Vadodara', serif;
+  font-weight: 600;
+  font-size: clamp(.94rem,.89rem+.18vw,1.02rem);
+  line-height: 1.42;
+  color: var(--foreground);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.s-standard {
+  display: flex;
+  flex-direction: column;
+}
+.s-standard .imgwrap {
+  aspect-ratio: 3/2;
+  border-radius: var(--radius);
+  margin-bottom: 11px;
+  position: relative;
+}
+.s-standard .kick {
+  margin-bottom: 7px;
+}
+.s-standard h3 {
+  font-family: 'Hind Vadodara', serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--foreground);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ============================================================
+   ARTICLE PAGE REDESIGN CLASSES
+   ============================================================ */
+.wrap {
+  max-width: var(--shell);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.article-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--rail);
+  gap: var(--sp-8);
+  padding: var(--sp-6) 0 0;
+  align-items: start;
+}
+.article-grid > article {
+  min-width: 0;
+  max-width: 760px;
+  justify-self: center;
+  width: 100%;
+}
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--ink-3);
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.breadcrumb a {
+  transition: color 0.15s;
+}
+.breadcrumb a:hover {
+  color: var(--red);
+}
+.art-kick {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--red);
+  margin-bottom: 12px;
+}
+.art-kick .bar {
+  width: 3px;
+  height: 14px;
+  background: var(--red);
+}
+.article-title {
+  font-family: 'Hind Vadodara', serif;
+  font-weight: 800;
+  font-size: clamp(1.35rem, 1.15rem + 0.6vw, 1.75rem);
+  line-height: 1.25;
+  color: var(--ink);
+  letter-spacing: -.5px;
+  margin-bottom: 16px;
+}
+.article-sub {
+  font-family: 'Hind Vadodara', serif;
+  font-size: clamp(0.95rem, 0.95rem + 0.2vw, 1.15rem);
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin-bottom: 22px;
+}
+.byline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 15px 0;
+  border-top: var(--rule);
+  border-bottom: var(--rule);
+}
+.gist {
+  margin: 24px 0;
+  border-left: 4px solid var(--red) !important;
+  padding: 4px 0 4px 24px !important;
+}
+.gist .gt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Hind Vadodara', serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.gist .gt .d {
+  width: 8px;
+  height: 8px;
+  background: var(--red);
+  transform: rotate(45deg);
+}
+.gist ul {
+  list-style-type: disc !important;
+  list-style-position: outside !important;
+  padding-left: 20px !important;
+}
+.gist li {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink);
+  display: list-item !important;
+  margin-bottom: 9px;
+}
+.gist li:last-child {
+  margin-bottom: 0;
+}
+.share-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+}
+.share-row .lbl {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-2);
+}
+.share-row button, .share-row a {
+  font-weight: 700;
+  font-size: 13px;
+  padding: 9px 16px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.share-row button:hover, .share-row a:hover {
+  opacity: 0.9;
+}
+.share-wa {
+  background: var(--green);
+  color: #fff !important;
+}
+.share-fb {
+  background: #1877F2;
+  color: #fff !important;
+}
+.share-x {
+  background: var(--ink);
+  color: var(--paper) !important;
+}
+.share-cp {
+  border: var(--rule);
+  color: var(--ink);
+  background: transparent;
+}
+.article-fig {
+  margin: 0 0 24px;
+}
+.article-fig .imgwrap {
+  aspect-ratio: 16/9;
+  border-radius: var(--radius);
+  position: relative;
+  overflow: hidden;
+}
+.article-fig figcaption {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-top: 9px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.article-body {
+  font-family: 'Hind Vadodara', serif;
+  font-size: var(--t-body);
+  line-height: 1.85;
+  color: var(--ink);
+  text-align: justify;
+}
+.article-body p {
+  margin: 0 0 22px;
+  text-align: justify;
+  text-justify: inter-word;
+}
+.article-body blockquote {
+  margin: 28px 0;
+  padding: 2px 0 2px 22px;
+  border-left: 3px solid var(--red);
+}
+.article-body blockquote p {
+  font-weight: 700;
+  font-size: 1.3rem;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0;
+  text-align: left;
+}
+.article-body blockquote cite {
+  font-size: 13px;
+  color: var(--ink-3);
+  font-style: normal;
+  display: block;
+  margin-top: 10px;
+}
+.art-related {
+  margin-top: var(--sp-7);
+}
+.art-more-btn {
+  border: 1.5px solid var(--red);
+  color: var(--red);
+  background: transparent;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 11px 28px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.art-more-btn:hover {
+  background: var(--red);
+  color: #fff !important;
+}
+
+/* Sidebar Widgets adjustments */
+.wa-card {
+  border: 1px solid var(--green) !important;
+  background: var(--paper-2) !important;
+}
+.wa-card .h {
+  color: var(--ink) !important;
+}
+.wa-card .h .wi {
+  background: var(--green) !important;
+  color: #fff !important;
+}
+.wa-card p {
+  color: var(--ink-2) !important;
+}
+.wa-card button {
+  background: var(--green) !important;
+  color: #fff !important;
+}
+.mostread .s-rank .n {
+  -webkit-text-stroke: 1.2px var(--ink-3) !important;
+}
+.s-rank .n {
+  -webkit-text-stroke: 1.2px var(--accent) !important;
+}
+
+@media (max-width: 960px) {
+  .article-grid {
+    grid-template-columns: 1fr;
+    gap: var(--sp-6);
+  }
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .wrap {
+    padding: 0 16px;
+  }
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Simple grids (article related) ---- */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-5);
+}
+
+/* ---- Sidebar layout ---- */
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+.side-sticky {
+  position: sticky;
+  top: 148px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+/* ---- Author head (article page) ---- */
+.author-head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-bottom: 22px;
+  border-bottom: 2px solid var(--ink-rule);
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.author-head h2 {
+  font-family: 'Hind Vadodara', serif;
+  font-weight: 800;
+  font-size: 1.7rem;
+  color: var(--ink);
+}
+.author-head p {
+  font-size: 14px;
+  color: var(--ink-2);
+  margin: 5px 0 0;
+  max-width: 560px;
+  line-height: 1.6;
+}
+
+/* ---- Deskhead more link + accent override ---- */
+.deskhead .more {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--red);
+  white-space: nowrap;
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+}
+
+/* ---- Kick color override ---- */
+.kick {
+  color: var(--red) !important;
+}
+.kick .loc {
+  color: var(--ink) !important;
+}
+
+/* ============================================================
+   STORY PRIMITIVES FROM REDESIGN PROTOTYPE
+   ============================================================ */
+.s-standard {
+  display: flex;
+  flex-direction: column;
+}
+.s-standard .imgwrap {
+  aspect-ratio: 3/2;
+  border-radius: var(--radius);
+  margin-bottom: 11px;
+}
+.s-standard .kick {
+  margin-bottom: 7px;
+}
+.s-standard h3 {
+  font-family: 'Hind Vadodara', serif;
+  font-weight: 600;
+  font-size: var(--t-compact);
+  line-height: 1.4;
+  color: var(--ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  letter-spacing: -0.01em;
+}
+
+.s-compact {
+  display: grid;
+  grid-template-columns: 1fr 92px;
+  gap: 14px;
+  align-items: start;
+  padding: 15px 0;
+  border-top: var(--rule);
+}
+.s-compact.nt, .s-compact:first-child {
+  border-top: none;
+}
+.s-compact .imgwrap {
+  aspect-ratio: 1;
+  border-radius: var(--radius);
+}
+.s-compact .kick {
+  margin-bottom: 6px;
+  font-size: 10.5px;
+}
+.s-compact h3 {
+  font-family: 'Hind Vadodara', serif;
+  font-weight: 600;
+  font-size: var(--t-compact);
+  line-height: 1.42;
+  color: var(--ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.s-text {
+  padding: 13px 0;
+  border-top: var(--rule);
+}
+.s-text:first-child {
+  border-top: none;
+}
+.s-text .kick {
+  margin-bottom: 5px;
+  font-size: 10.5px;
+}
+.s-text h3 {
+  font-family: 'Hind Vadodara', serif;
+  font-weight: 600;
+  font-size: var(--t-compact);
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.s-rank {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 13px;
+  align-items: start;
+  padding: 13px 0;
+  border-top: var(--rule);
+}
+.s-rank:first-child {
+  border-top: none;
+}
+.s-rank .n {
+  font-family: 'Hind Vadodara', serif;
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 0.9;
+  color: transparent;
+  -webkit-text-stroke: 1.2px var(--gold);
+}
+.s-rank h3 {
+  font-family: 'Hind Vadodara', serif;
+  font-weight: 600;
+  font-size: var(--t-compact);
+  line-height: 1.42;
+  color: var(--ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.s-rank.big .n {
+  font-size: 30px;
+}
+
+
+
+
+
+
+
 

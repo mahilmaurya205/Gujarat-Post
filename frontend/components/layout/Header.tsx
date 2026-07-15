@@ -3,6 +3,7 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import {
   BookOpen,
@@ -67,10 +68,58 @@ export default function Header() {
   }
 
   const router = useRouter();
-  const { theme, toggleTheme, language, setLanguage } = useApp();
+  const { theme, toggleTheme, language, setLanguage, fsLevel, incFs, decFs } = useApp();
   const [mounted, setMounted] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [selectedCity, setSelectedCity] = useState('');
+  const [cityModalOpen, setCityModalOpen] = useState(false);
+  const [savedCount, setSavedCount] = useState(0);
+
+  const updateSavedCount = () => {
+    try {
+      const stored = localStorage.getItem('gp-saved-articles');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          setSavedCount(parsed.length);
+          return;
+        }
+      }
+      setSavedCount(0);
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
+  useEffect(() => {
+    try {
+      const savedCity = localStorage.getItem('gp-selected-city');
+      if (savedCity) {
+        setSelectedCity(savedCity);
+      }
+    } catch (e) {
+      console.warn(e);
+    }
+    updateSavedCount();
+    window.addEventListener('gp-saved-changed', updateSavedCount);
+    window.addEventListener('storage', updateSavedCount);
+    return () => {
+      window.removeEventListener('gp-saved-changed', updateSavedCount);
+      window.removeEventListener('storage', updateSavedCount);
+    };
+  }, []);
+
+  const handleSelectCity = (city: string) => {
+    setSelectedCity(city);
+    setCityModalOpen(false);
+    try {
+      localStorage.setItem('gp-selected-city', city);
+      window.dispatchEvent(new CustomEvent('gp-city-changed', { detail: city }));
+    } catch (e) {
+      console.warn(e);
+    }
+  };
 
   useEffect(() => {
     setIsAuthenticated(false);
@@ -123,26 +172,31 @@ export default function Header() {
       {/* Top bar: date + social */}
       <div className="bg-primary text-primary-foreground">
         <div className="mx-auto flex max-w-screen-xl max-w-header-layout items-center justify-between gap-3 px-4 py-1.5">
-          <div className="min-w-0 truncate text-sm font-semibold opacity-85">
+          <div className="min-w-0 flex items-center gap-3 truncate text-sm font-semibold opacity-85">
             <span className="hidden sm:inline">
               {mounted ? formatDateLong(language) : 'Sunday, 21 June 2026'}
             </span>
             <span className="sm:hidden">
               {mounted ? formatDateShort(language) : '21 Jun 2026'}
             </span>
-            <span className="mx-2 opacity-40">|</span>
-            <span>ગુજરાતનું વિશ્વસનીય ન્યૂઝ નેટવર્ક</span>
+            <span className="opacity-40">|</span>
+            <button 
+              type="button"
+              onClick={() => setCityModalOpen(true)}
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-white hover:text-red-200 transition duration-150 cursor-pointer bg-white/10 hover:bg-white/20 px-2.5 py-0.5 rounded-full select-none font-sans"
+            >
+              <span>📍</span>
+              <span>{selectedCity || (language === 'gu' ? 'શહેર પસંદ કરો' : language === 'hi' ? 'शहर चुनें' : 'Select City')}</span>
+            </button>
           </div>
           <SocialLinks size="sm" className="shrink-0 max-sm:hidden" />
         </div>
       </div>
 
-      {/* Logo + Ad + Controls */}
+      {/* Logo + Controls */}
       <div className="mx-auto flex max-w-screen-xl max-w-header-layout items-center justify-between gap-5 px-4 py-2.5">
         <a href="/" className="logo-3d group flex shrink-0 items-center">
-          <span className={`logo-3d-inner relative block h-14 overflow-hidden rounded-lg bg-white shadow-md ring-1 ring-black/10 transition-all duration-300 sm:h-14 lg:h-16 ${
-            searchOpen ? 'w-24 sm:w-36 lg:w-44' : 'w-40 sm:w-48 lg:w-56'
-          }`}>
+          <span className="logo-3d-inner relative block h-14 overflow-hidden rounded-lg bg-white shadow-md ring-1 ring-black/10 transition-all duration-300 sm:h-14 lg:h-16 w-40 sm:w-48 lg:w-56">
             <Image
               src={gpLogo}
               alt="Gujarat Post"
@@ -155,11 +209,24 @@ export default function Header() {
           </span>
         </a>
 
-        <Advertisement position="header" className="hidden min-w-0 flex-1 lg:block [&>div]:!min-h-16" />
+        {/* Right-side compact search (desktop only, click opens /search page) */}
+        <div className="flex-1 min-w-0 max-w-[220px] lg:max-w-[280px] ml-auto mr-3 hidden md:block">
+          <div
+            className="relative w-full flex items-center cursor-pointer group"
+            onClick={() => router.push('/search')}
+          >
+            <div className="h-10 w-full rounded-full border border-border bg-muted py-2 pl-12 pr-4 text-sm text-muted-foreground transition-all duration-200 group-hover:border-accent group-hover:bg-card select-none flex items-center">
+              સમાચાર શોધો...
+            </div>
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-muted-foreground group-hover:text-accent transition-colors">
+              <Search className="h-4 w-4" />
+            </span>
+          </div>
+        </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          {/* Search */}
-          <div className={`relative flex items-center transition-all duration-300 ease-in-out ${searchOpen ? 'w-44 sm:w-72 md:w-80 lg:w-[28rem]' : 'w-10'}`}>
+          {/* Mobile Search Button (only on mobile screen widths) */}
+          <div className={`md:hidden relative flex items-center transition-all duration-300 ease-in-out ${searchOpen ? 'w-44 sm:w-64' : 'w-10'}`}>
             <form onSubmit={submitSearch} className="relative w-full flex items-center">
               <input
                 ref={searchInputRef}
@@ -239,6 +306,45 @@ export default function Header() {
               </div>
             )}
           </div>
+
+          {/* Saved Articles button */}
+          {/* <Link
+            href="/saved"
+            className={`inline-flex h-10 w-10 relative items-center justify-center rounded-full bg-muted text-foreground transition hover:bg-secondary ${
+              searchOpen ? 'max-sm:hidden' : ''
+            }`}
+            aria-label="Saved articles"
+            title={language === 'gu' ? 'સાચવેલા લેખ' : 'Saved Articles'}
+          >
+            <span className="text-[15px]">🔖</span>
+            {savedCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-accent text-[9px] font-black text-white px-1 shadow-sm font-sans">
+                {savedCount}
+              </span>
+            )}
+          </Link> */}
+
+          {/* Font Sizing Controls */}
+          {/* <div className={`inline-flex items-center rounded-full bg-muted p-0.5 border border-border/20 font-sans ${searchOpen ? 'max-sm:hidden' : ''}`}>
+            <button
+              type="button"
+              onClick={decFs}
+              className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-black hover:bg-secondary transition-colors cursor-pointer text-foreground/80 hover:text-foreground"
+              title="Decrease font size"
+              disabled={fsLevel <= 0}
+            >
+              A−
+            </button>
+            <button
+              type="button"
+              onClick={incFs}
+              className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-black hover:bg-secondary transition-colors cursor-pointer text-foreground/80 hover:text-foreground"
+              title="Increase font size"
+              disabled={fsLevel >= 3}
+            >
+              A+
+            </button>
+          </div> */}
 
           {/* Theme toggle */}
           <button
@@ -370,6 +476,42 @@ export default function Header() {
             </div>
           </div>
         </nav>
+      )}
+      {/* City selection modal */}
+      {cityModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4 backdrop-blur-xs transition-opacity duration-300">
+          <div className="w-full max-w-sm scale-100 rounded-lg border border-border bg-card p-5 shadow-2xl transition-all duration-300">
+            <div className="mb-4 flex items-center justify-between border-b border-border pb-2.5">
+              <h3 className="text-[15px] font-black text-foreground flex items-center gap-1.5 select-none">
+                <span>📍</span>
+                {language === 'gu' ? 'શહેર પસંદ કરો' : language === 'hi' ? 'शहर का चयन करें' : 'Select Your City'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setCityModalOpen(false)}
+                className="flex h-7 w-7 items-center justify-center rounded-full hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-2.5">
+              {['અમદાવાદ', 'સુરત', 'વડોદરા', 'રાજકોટ', 'ગાંધીનગર', 'અન્ય'].map((city) => (
+                <button
+                  key={city}
+                  type="button"
+                  onClick={() => handleSelectCity(city)}
+                  className={`rounded border py-2.5 text-xs font-black transition-all cursor-pointer text-center ${
+                    selectedCity === city
+                      ? 'border-accent bg-accent/5 text-accent shadow-sm font-sans'
+                      : 'border-border bg-card hover:bg-muted hover:border-foreground/20 text-foreground'
+                  }`}
+                >
+                  {city}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       )}
     </header>
   );

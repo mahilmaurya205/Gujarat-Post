@@ -492,7 +492,7 @@ export default function HeroSection() {
           </div>
 
           {/* Popular Articles */}
-          <div className="w-full rounded-sm border border-slate-200 bg-card p-4 shadow-sm flex flex-col gap-3">
+          <div className="w-full rounded-sm border border-border bg-card p-4 shadow-sm flex flex-col gap-3">
             <div className="flex items-center justify-between border-b border-border pb-2">
               <span className="text-[#B3121B] font-black text-[13.5px] md:text-[14px] select-none">
                 {language === 'gu' ? 'લોકપ્રિય અત્યારે' : 'Popular Now'}
@@ -505,17 +505,17 @@ export default function HeroSection() {
               </Link>
             </div>
             
-            <div className="flex flex-col divide-y divide-slate-100">
+            <div className="flex flex-col divide-y divide-border">
               {uniqueTrendingArt.slice(0, 4).map((art, idx) => (
                 <Link
                   key={art.id}
                   href={`/news/${art.slug}`}
-                  className="group flex items-start gap-3 py-2.5 hover:bg-slate-50/70 rounded-sm transition-all px-1.5 first:pt-1 last:pb-1"
+                  className="group flex items-start gap-3 py-2.5 hover:bg-muted/60 rounded-sm transition-all px-1.5 first:pt-1 last:pb-1"
                 >
                   <span className="text-[18px] font-black text-[#B3121B]/85 group-hover:text-[#B3121B] font-serif w-5 shrink-0 mt-0.5 transition-colors select-none text-center">
                     {language === 'gu' ? toGuLocal(idx + 1) : idx + 1}
                   </span>
-                  <h4 className="text-[12.5px] font-black leading-snug text-slate-800 group-hover:text-[#B3121B] transition-colors flex-1 line-clamp-3">
+                  <h4 className="text-[12.5px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors flex-1 line-clamp-3">
                     {getArticleTitle(art, language)}
                   </h4>
                 </Link>
@@ -531,11 +531,20 @@ export default function HeroSection() {
 
       <CityHyperlocalSection language={language} />
 
-      <LatestUpdatesSection />
-
-      <CrimeSection language={language} />
-
-      <PopularStoriesSection language={language} />
+      <section className="mt-8 border-t border-border/60 pt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_336px] gap-8 items-start">
+          <div className="flex flex-col gap-10 min-w-0">
+            <LatestUpdatesSection view="timeline" />
+            <CrimeSection language={language} view="content" />
+            <PopularStoriesSection language={language} view="content" />
+          </div>
+          <div className="flex flex-col gap-6 sticky top-20 select-none">
+            <LatestUpdatesSection view="sidebar" />
+            <CrimeSection language={language} view="sidebar" />
+            <PopularStoriesSection language={language} view="sidebar" />
+          </div>
+        </div>
+      </section>
 
       <PoliticsSection language={language} />
 
@@ -669,13 +678,9 @@ function VideoDesk({ videos, language, showShorts = true }: { videos: typeof VID
   return (
     <section className="mt-6">
       {/* ── Red Panel ─────────────────────────────────────────────────── */}
-      <div className="w-full bg-gradient-to-b from-[#B3121B] to-[#8f0d14] text-white rounded-sm px-5 md:px-8 pt-6 pb-8 border border-white/10 relative overflow-hidden shadow-lg">
+      <div className="w-full bg-[#B3121B] text-white rounded-sm px-5 md:px-8 pt-6 pb-8 border border-white/10 relative overflow-hidden shadow-lg">
 
-        {/* Subtle texture overlay */}
-        <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
-          style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\' fill-rule=\'evenodd\'%3E%3Cpath d=\'M0 40L40 0H20L0 20M40 40V20L20 40\'/%3E%3C/g%3E%3C/svg%3E")' }} />
-
-        {/* Header */}
+      {/* Header */}
         <div className="relative z-10 flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <span className="text-white font-black text-[18px] md:text-[20px] select-none tracking-tight">
@@ -1305,8 +1310,10 @@ function CityHyperlocalSection({
 /* --- Crime & Regional Updates Section ------------------------------------ */
 function CrimeSection({
   language,
+  view = 'all',
 }: {
   language: Language;
+  view?: 'content' | 'sidebar' | 'all';
 }) {
   const [slideIdx, setSlideIdx] = useState(0);
   const [popularStartIndex, setPopularStartIndex] = useState(0);
@@ -1537,314 +1544,301 @@ function CrimeSection({
 
   const currentSlide = mockSlides[slideIdx];
 
-  return (
-    <section className="mt-2.5 border-t border-border pt-3.5">
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 items-start">
-        
-        {/* Left Column: Crime news items and sub-grids */}
-        <div className="flex flex-col min-w-0">
-          
-          {/* Crime Header */}
-          <div className="flex items-center justify-between border-b-[3px] border-slate-950 pb-2.5 mb-6">
-            <span className="bg-[#B3121B] text-white px-4.5 py-1.5 font-extrabold text-[14px] md:text-[15px] rounded-sm tracking-tight leading-none uppercase">
-              {language === 'gu' ? 'ક્રાઇમ' : 'Crime'}
+  const leftContent = (
+    <div className="flex flex-col min-w-0">
+      
+      {/* Crime Header */}
+      <div className="flex items-center justify-between border-b-[3px] border-slate-950 pb-2.5 mb-6">
+        <span className="bg-[#B3121B] text-white px-4.5 py-1.5 font-extrabold text-[14px] md:text-[15px] rounded-sm tracking-tight leading-none uppercase">
+          {language === 'gu' ? 'ક્રાઇમ' : 'Crime'}
+        </span>
+        <Link
+          href="/category/crime"
+          className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline"
+        >
+          {language === 'gu' ? 'બધા ક્રાઇમ સમાચાર →' : 'All Crime News →'}
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-[1.15fr_1fr] gap-8 items-start">
+        {/* Slide Carousel */}
+        {currentSlide && (
+          <div className="group relative flex flex-col min-w-0">
+            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted">
+              <Image
+                src={currentSlide.image}
+                alt={currentSlide.titleGu}
+                fill
+                sizes="(max-width: 768px) 100vw, 40vw"
+                className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+              />
+              <button
+                onClick={() => setSlideIdx((prev) => (prev - 1 + mockSlides.length) % mockSlides.length)}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 z-10 text-[18px] font-bold select-none cursor-pointer"
+              >
+                ‹
+              </button>
+              <button
+                onClick={() => setSlideIdx((prev) => (prev + 1) % mockSlides.length)}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 z-10 text-[18px] font-bold select-none cursor-pointer"
+              >
+                ›
+              </button>
+              <span className="absolute top-2.5 left-2.5 bg-black/70 text-white text-[11px] font-extrabold px-2 py-0.5 rounded-sm z-10 select-none">
+                {language === 'gu'
+                  ? `${toGuLocal(slideIdx + 1)} / ${toGuLocal(mockSlides.length)}`
+                  : `${slideIdx + 1} / ${mockSlides.length}`}
+              </span>
+            </div>
+
+            <div className="mt-3.5 flex flex-col">
+              <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] mb-1 select-none uppercase tracking-wide">
+                {getLocalized(language, { en: currentSlide.category, gu: currentSlide.categoryGu, hi: currentSlide.categoryHi })}
+              </span>
+              <Link href={`/news/${currentSlide.slug}`} className="group/link">
+                <h3 className="font-extrabold text-[15.5px] md:text-[17px] leading-snug tracking-tight text-foreground hover:text-[#B3121B] transition-colors line-clamp-3">
+                  {getLocalized(language, { en: currentSlide.title, gu: currentSlide.titleGu, hi: currentSlide.titleHi })}
+                </h3>
+              </Link>
+              <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground font-semibold mt-2.5">
+                <span>
+                  {getLocalized(language, { en: currentSlide.relativeTime, gu: currentSlide.relativeTimeGu, hi: currentSlide.relativeTimeHi })}
+                </span>
+                <span>•</span>
+                <span className="flex items-center gap-1">
+                  <Eye className="h-3.5 w-3.5 text-muted-foreground/70" />
+                  {language === 'gu' ? toGuLocal(currentSlide.viewsGu) : currentSlide.views}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* List side updates (Text lists only, no images, matching the screen!) */}
+        <div className="flex flex-col min-w-0 md:border-l md:border-border/60 md:pl-6 gap-2">
+          <div className="flex flex-col mb-1 select-none">
+            <span className="text-[14px] md:text-[15px] font-black text-slate-700 dark:text-slate-300 pb-1">
+              {language === 'gu' ? 'જિલ્લા અપડેટ' : 'District Updates'}
             </span>
-            <Link
-              href="/category/crime"
-              className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline"
-            >
-              {language === 'gu' ? 'બધા ક્રાઇમ સમાચાર →' : 'All Crime News →'}
-            </Link>
+            <div className="border-b border-slate-900" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-[1.15fr_1fr] gap-8 items-start">
-            {/* Slide Carousel */}
-            {currentSlide && (
-              <div className="group relative flex flex-col min-w-0">
-                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted">
-                  <Image
-                    src={currentSlide.image}
-                    alt={currentSlide.titleGu}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 40vw"
-                    className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                  />
-                  <button
-                    onClick={() => setSlideIdx((prev) => (prev - 1 + mockSlides.length) % mockSlides.length)}
-                    className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 z-10 text-[18px] font-bold select-none cursor-pointer"
-                  >
-                    ‹
-                  </button>
-                  <button
-                    onClick={() => setSlideIdx((prev) => (prev + 1) % mockSlides.length)}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 z-10 text-[18px] font-bold select-none cursor-pointer"
-                  >
-                    ›
-                  </button>
-                  <span className="absolute top-2.5 left-2.5 bg-black/70 text-white text-[11px] font-extrabold px-2 py-0.5 rounded-sm z-10 select-none">
-                    {language === 'gu'
-                      ? `${toGuLocal(slideIdx + 1)} / ${toGuLocal(mockSlides.length)}`
-                      : `${slideIdx + 1} / ${mockSlides.length}`}
-                  </span>
-                </div>
-
-                <div className="mt-3.5 flex flex-col">
-                  <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] mb-1 select-none uppercase tracking-wide">
-                    {getLocalized(language, { en: currentSlide.category, gu: currentSlide.categoryGu, hi: currentSlide.categoryHi })}
-                  </span>
-                  <Link href={`/news/${currentSlide.slug}`} className="group/link">
-                    <h3 className="font-extrabold text-[15.5px] md:text-[17px] leading-snug tracking-tight text-foreground hover:text-[#B3121B] transition-colors line-clamp-3">
-                      {getLocalized(language, { en: currentSlide.title, gu: currentSlide.titleGu, hi: currentSlide.titleHi })}
-                    </h3>
-                  </Link>
-                  <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground font-semibold mt-2.5">
-                    <span>
-                      {getLocalized(language, { en: currentSlide.relativeTime, gu: currentSlide.relativeTimeGu, hi: currentSlide.relativeTimeHi })}
-                    </span>
-                    <span>•</span>
-                    <span className="flex items-center gap-1">
-                      <Eye className="h-3.5 w-3.5 text-muted-foreground/70" />
-                      {language === 'gu' ? toGuLocal(currentSlide.viewsGu) : currentSlide.views}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* List side updates (Text lists only, no images, matching the screen!) */}
-            <div className="flex flex-col min-w-0 md:border-l md:border-border/60 md:pl-6 gap-2">
-              <div className="flex flex-col mb-1 select-none">
-                <span className="text-[14px] md:text-[15px] font-black text-slate-700 dark:text-slate-300 pb-1">
-                  {language === 'gu' ? 'જિલ્લા અપડેટ' : 'District Updates'}
+          {mockList.map((item) => (
+            <Link
+              key={item.id}
+              href={`/news/${item.slug}`}
+              className="group flex flex-col py-3.5 border-b border-border/40 last:border-b-0"
+            >
+              <span className="text-red-600 font-extrabold text-[11px] uppercase tracking-wide mb-1">
+                {getLocalized(language, { en: item.category, gu: item.categoryGu, hi: item.categoryHi })}
+              </span>
+              <h4 className="text-[14px] md:text-[14.5px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2">
+                {getLocalized(language, { en: item.title, gu: item.titleGu, hi: item.titleHi })}
+              </h4>
+              <div className="flex items-center gap-1.5 mt-2.5 text-[10.5px] text-muted-foreground font-semibold">
+                <span>
+                  {getLocalized(language, { en: item.relativeTime, gu: item.relativeTimeGu, hi: item.relativeTimeHi })}
                 </span>
-                <div className="border-b border-slate-900" />
+                <span>•</span>
+                <span className="flex items-center gap-1">
+                  <Eye className="h-3 w-3 text-muted-foreground/60" />
+                  {language === 'gu' ? toGuLocal(item.viewsGu) : item.views}
+                </span>
               </div>
+            </Link>
+          ))}
+        </div>
+      </div>
 
-              {mockList.map((item) => (
+      {/* 3-Column Popular Stories Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-border/40 pt-5 mt-6">
+        {mockPopularColumns.map((col) => (
+          <div key={col.colId} className="flex flex-col min-w-0">
+            <Link
+              href={`/news/${col.featured.slug}`}
+              className="group flex flex-col mb-2.5"
+            >
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
+                <Image
+                  src={col.featured.image}
+                  alt={col.featured.titleGu}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 25vw"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <h3 className="text-[13px] md:text-[13.5px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2">
+                {language === 'gu' ? col.featured.titleGu : col.featured.title}
+              </h3>
+            </Link>
+
+            <div className="flex flex-col divide-y divide-border/40 border-t border-border/40 mt-1">
+              {col.subs.map((sub) => (
                 <Link
-                  key={item.id}
-                  href={`/news/${item.slug}`}
-                  className="group flex flex-col py-3.5 border-b border-border/40 last:border-b-0"
+                  key={sub.id}
+                  href={`/news/${sub.slug}`}
+                  className="group py-2 block"
                 >
-                  <span className="text-red-600 font-extrabold text-[11px] uppercase tracking-wide mb-1">
-                    {getLocalized(language, { en: item.category, gu: item.categoryGu, hi: item.categoryHi })}
-                  </span>
-                  <h4 className="text-[14px] md:text-[14.5px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2">
-                    {getLocalized(language, { en: item.title, gu: item.titleGu, hi: item.titleHi })}
+                  <h4 className="text-[12px] md:text-[12.5px] font-bold leading-snug line-clamp-2 text-foreground group-hover:text-[#B3121B] transition-colors">
+                    {sub.titleGu}
                   </h4>
-                  <div className="flex items-center gap-1.5 mt-2.5 text-[10.5px] text-muted-foreground font-semibold">
-                    <span>
-                      {getLocalized(language, { en: item.relativeTime, gu: item.relativeTimeGu, hi: item.relativeTimeHi })}
-                    </span>
-                    <span>•</span>
-                    <span className="flex items-center gap-1">
-                      <Eye className="h-3 w-3 text-muted-foreground/60" />
-                      {language === 'gu' ? toGuLocal(item.viewsGu) : item.views}
-                    </span>
-                  </div>
                 </Link>
               ))}
             </div>
           </div>
+        ))}
+      </div>
 
-          {/* 3-Column Popular Stories Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-border/40 pt-5 mt-6">
-            {mockPopularColumns.map((col) => (
-              <div key={col.colId} className="flex flex-col min-w-0">
-                <Link
-                  href={`/news/${col.featured.slug}`}
-                  className="group flex flex-col mb-2.5"
-                >
-                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
-                    <Image
-                      src={col.featured.image}
-                      alt={col.featured.titleGu}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 25vw"
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  </div>
-                  <h3 className="text-[13px] md:text-[13.5px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2">
-                    {language === 'gu' ? col.featured.titleGu : col.featured.title}
-                  </h3>
-                </Link>
+    </div>
+  );
 
-                <div className="flex flex-col divide-y divide-border/40 border-t border-border/40 mt-1">
-                  {col.subs.map((sub) => (
-                    <Link
-                      key={sub.id}
-                      href={`/news/${sub.slug}`}
-                      className="group py-2 block"
-                    >
-                      <h4 className="text-[12px] md:text-[12.5px] font-bold leading-snug line-clamp-2 text-foreground group-hover:text-[#B3121B] transition-colors">
-                        {sub.titleGu}
-                      </h4>
-                    </Link>
-                  ))}
+  const sidebarContent = (
+    <div className="flex flex-col gap-6 select-none">
+      
+      {/* Weather Widget */}
+      <div className="rounded-sm bg-[#1A1A1A] text-white p-5 border border-border/10 shadow-md">
+        <div className="flex items-center gap-1.5 mb-4 select-none">
+          <span className="h-1.5 w-1.5 rounded-full bg-red-600 animate-pulse" />
+          <span className="text-[12px] md:text-[13px] font-black uppercase tracking-wider text-white/90">
+            {language === 'gu' ? 'હવામાન - અમદાવાદ' : 'Weather - Ahmedabad'}
+          </span>
+        </div>
+        
+        <div className="flex justify-between items-center">
+          <div>
+            <span className="text-4xl font-extrabold tracking-tight select-none">
+              {language === 'gu' ? toGuLocal('32') : '32'}°
+            </span>
+            <p className="text-[12px] text-white/70 font-bold mt-1.5 select-none">
+              {language === 'gu' ? 'આંશિક વાદળછાયું' : 'Partly cloudy'}
+            </p>
+          </div>
+          
+          <div className="relative h-12 w-12 text-yellow-400 select-none">
+            <svg viewBox="0 0 24 24" className="h-full w-full fill-current">
+              <path d="M19 12a7 7 0 1 0-7 7 7 7 0 0 0 7-7zm-7 5a5 5 0 1 1 5-5 5 5 0 0 1-5 5z" />
+              <path d="M12 2a1 1 0 0 0-1 1v1a1 1 0 0 0 2 0V3a1 1 0 0 0-1-1zm0 16a1 1 0 0 0-1 1v1a1 1 0 0 0 2 0v-1a1 1 0 0 0-1-1zm10-7h-1a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2zM4 11H3a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2zm15.07-5.07a1 1 0 0 0-1.42 0l-.7.7a1 1 0 0 0 1.42 1.42l.7-.7a1 1 0 0 0 0-1.42zm-12.73 12.7a1 1 0 0 0-1.42 0l-.7.7a1 1 0 0 0 1.42 1.42l.7-.7a1 1 0 0 0 0-1.42zm12.73 0a1 1 0 0 0 0-1.42l-.7-.7a1 1 0 0 0-1.42 1.42l.7.7a1 1 0 0 0 1.42 0zm-12.73-12.7a1 1 0 0 0 0-1.42l-.7-.7a1 1 0 0 0-1.42 1.42l.7.7a1 1 0 0 0 1.42 0z" />
+            </svg>
+          </div>
+        </div>
+        
+        <div className="mt-5 pt-4 border-t border-white/10 flex items-center gap-6 text-[12px] font-bold text-white/80">
+          <span className="flex items-center gap-1.5 select-none">
+            <svg viewBox="0 0 24 24" className="h-4.5 w-4.5 fill-none stroke-current stroke-2">
+              <path d="M12 22a7 7 0 0 0 7-7c0-4.3-7-13-7-13S5 10.7 5 15a7 7 0 0 0 7 7z" />
+            </svg>
+            {language === 'gu' ? `ભેજ ૬૮%` : `Humidity 68%`}
+          </span>
+          <span className="flex items-center gap-1.5 select-none">
+            <svg viewBox="0 0 24 24" className="h-4.5 w-4.5 fill-none stroke-current stroke-2">
+              <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.59-6.59A2 2 0 1 1 19 12H2" />
+            </svg>
+            {language === 'gu' ? `પવન ૧૪ કિમી` : `Wind 14 km/h`}
+          </span>
+        </div>
+      </div>
+
+      {/* WhatsApp Channel widget */}
+      <div className="w-full rounded-sm border border-[#16794A] bg-card p-5 shadow-sm">
+        <div className="flex items-center gap-2.5 font-black text-[14.5px] text-foreground">
+          <span className="flex h-7.5 w-7.5 items-center justify-center rounded-sm bg-[#16794A] text-white text-[15px] font-bold select-none">
+            💬
+          </span>
+          <span>{language === 'gu' ? 'WhatsApp ચેનલ' : 'WhatsApp Channel'}</span>
+        </div>
+        <p className="text-[12px] text-muted-foreground leading-relaxed my-3 font-semibold">
+          {language === 'gu' ? 'બ્રેકિંગ ન્યૂઝ સૌથી પહેલા સીધા તમારા ફોન પર મેળવો.' : 'Get breaking news first directly on your phone.'}
+        </p>
+        <button className="w-full bg-[#16794A] hover:bg-[#12613b] text-white font-extrabold text-[12.5px] py-2.5 rounded-sm active:scale-[0.99] transition-all cursor-pointer">
+          {language === 'gu' ? 'ચેનલ ફોલો કરો' : 'Follow Channel'}
+        </button>
+      </div>
+
+      {/* Today's Horoscope Widget */}
+      <div>
+        <div className="flex items-center gap-1.5 border-b border-border pb-2.5 mb-3.5">
+          <span className="text-[#B3121B] font-black text-[13.5px] md:text-[14px]">
+            {language === 'gu' ? '• આજનું રાશિફળ' : '• Today\'s Horoscope'}
+          </span>
+        </div>
+        <div className="border border-border rounded-sm bg-card p-4 shadow-sm">
+          <div className="grid grid-cols-4 gap-x-2 gap-y-3.5">
+            {ZODIAC_SIGNS.map((sign) => (
+              <div
+                key={sign.id}
+                onClick={() => setSelectedZodiac(sign)}
+                className="flex flex-col items-center justify-center p-2.5 rounded-sm border border-border bg-card hover:border-[#B3121B] hover:bg-muted/10 transition duration-200 cursor-pointer select-none group text-center"
+              >
+                <div className="flex h-7 w-7 items-center justify-center rounded-[4px] bg-[#5038A6] text-white text-[13px] font-extrabold shadow-sm mb-1.5 transition duration-200 group-hover:scale-105 select-none leading-none">
+                  {getZodiacSymbol(sign.id)}
                 </div>
+                <span className="text-[11px] font-extrabold text-foreground group-hover:text-[#B3121B] transition-colors select-none leading-none">
+                  {language === 'gu' ? sign.nameGu : sign.name}
+                </span>
               </div>
             ))}
           </div>
-
         </div>
-
-        {/* Right Column: Sidebar (Silver Rate, Weather, WhatsApp, Horoscope) */}
-        <div className="flex flex-col gap-6 sticky top-20 select-none">
-          
-          {/* Silver Rate Widget */}
-          <div className="rounded-sm border border-slate-200 bg-card p-4.5 shadow-sm flex items-center justify-between select-none">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500">
-                <svg viewBox="0 0 24 24" className="h-5.5 w-5.5 fill-none stroke-current stroke-2">
-                  <ellipse cx="12" cy="5" rx="9" ry="3" />
-                  <path d="M3 5v6c0 1.66 4 3 9 3s9-1.34 9-3V5" />
-                  <path d="M3 11v6c0 1.66 4 3 9 3s9-1.34 9-3v-6" />
-                </svg>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[13.5px] font-black text-foreground">
-                  {language === 'gu' ? 'ચાંદી (૧ કિલો)' : 'Silver (1 kg)'}
-                </span>
-                <span className="text-[10px] text-muted-foreground font-semibold mt-0.5">
-                  {language === 'gu' ? 'પ્રતિ કિલો' : 'per kg'}
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-col items-end">
-              <span className="text-[15.5px] font-black text-foreground">
-                {language === 'gu' ? '₹૯૨,૮૦૦' : '₹92,800'}
-              </span>
-              <span className="text-[10.5px] text-slate-500 font-bold mt-0.5">
-                {language === 'gu' ? '— સ્થિર' : '— Stable'}
-              </span>
-            </div>
-          </div>
-
-          {/* Weather Widget */}
-          <div className="rounded-sm bg-[#1A1A1A] text-white p-5 border border-border/10 shadow-md">
-            <div className="flex items-center gap-1.5 mb-4 select-none">
-              <span className="h-1.5 w-1.5 rounded-full bg-red-600 animate-pulse" />
-              <span className="text-[12px] md:text-[13px] font-black uppercase tracking-wider text-white/90">
-                {language === 'gu' ? 'હવામાન - અમદાવાદ' : 'Weather - Ahmedabad'}
-              </span>
-            </div>
-            
-            <div className="flex justify-between items-center">
-              <div>
-                <span className="text-4xl font-extrabold tracking-tight select-none">
-                  {language === 'gu' ? toGuLocal('32') : '32'}°
-                </span>
-                <p className="text-[12px] text-white/70 font-bold mt-1.5 select-none">
-                  {language === 'gu' ? 'આંશિક વાદળછાયું' : 'Partly cloudy'}
-                </p>
-              </div>
-              
-              <div className="relative h-12 w-12 text-yellow-400 select-none">
-                <svg viewBox="0 0 24 24" className="h-full w-full fill-current">
-                  <path d="M19 12a7 7 0 1 0-7 7 7 7 0 0 0 7-7zm-7 5a5 5 0 1 1 5-5 5 5 0 0 1-5 5z" />
-                  <path d="M12 2a1 1 0 0 0-1 1v1a1 1 0 0 0 2 0V3a1 1 0 0 0-1-1zm0 16a1 1 0 0 0-1 1v1a1 1 0 0 0 2 0v-1a1 1 0 0 0-1-1zm10-7h-1a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2zM4 11H3a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2zm15.07-5.07a1 1 0 0 0-1.42 0l-.7.7a1 1 0 0 0 1.42 1.42l.7-.7a1 1 0 0 0 0-1.42zm-12.73 12.7a1 1 0 0 0-1.42 0l-.7.7a1 1 0 0 0 1.42 1.42l.7-.7a1 1 0 0 0 0-1.42zm12.73 0a1 1 0 0 0 0-1.42l-.7-.7a1 1 0 0 0-1.42 1.42l.7.7a1 1 0 0 0 1.42 0zm-12.73-12.7a1 1 0 0 0 0-1.42l-.7-.7a1 1 0 0 0-1.42 1.42l.7.7a1 1 0 0 0 1.42 0z" />
-                </svg>
-              </div>
-            </div>
-            
-            <div className="mt-5 pt-4 border-t border-white/10 flex items-center gap-6 text-[12px] font-bold text-white/80">
-              <span className="flex items-center gap-1.5 select-none">
-                <svg viewBox="0 0 24 24" className="h-4.5 w-4.5 fill-none stroke-current stroke-2">
-                  <path d="M12 22a7 7 0 0 0 7-7c0-4.3-7-13-7-13S5 10.7 5 15a7 7 0 0 0 7 7z" />
-                </svg>
-                {language === 'gu' ? `ભેજ ૬૮%` : `Humidity 68%`}
-              </span>
-              <span className="flex items-center gap-1.5 select-none">
-                <svg viewBox="0 0 24 24" className="h-4.5 w-4.5 fill-none stroke-current stroke-2">
-                  <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.59-6.59A2 2 0 1 1 19 12H2" />
-                </svg>
-                {language === 'gu' ? `પવન ૧૪ કિમી` : `Wind 14 km/h`}
-              </span>
-            </div>
-          </div>
-
-          {/* WhatsApp Channel widget */}
-          <div className="w-full rounded-sm border border-[#16794A] bg-card p-5 shadow-sm">
-            <div className="flex items-center gap-2.5 font-black text-[14.5px] text-foreground">
-              <span className="flex h-7.5 w-7.5 items-center justify-center rounded-sm bg-[#16794A] text-white text-[15px] font-bold select-none">
-                💬
-              </span>
-              <span>{language === 'gu' ? 'WhatsApp ચેનલ' : 'WhatsApp Channel'}</span>
-            </div>
-            <p className="text-[12px] text-muted-foreground leading-relaxed my-3 font-semibold">
-              {language === 'gu' ? 'બ્રેકિંગ ન્યૂઝ સૌથી પહેલા સીધા તમારા ફોન પર મેળવો.' : 'Get breaking news first directly on your phone.'}
-            </p>
-            <button className="w-full bg-[#16794A] hover:bg-[#12613b] text-white font-extrabold text-[12.5px] py-2.5 rounded-sm active:scale-[0.99] transition-all cursor-pointer">
-              {language === 'gu' ? 'ચેનલ ફોલો કરો' : 'Follow Channel'}
-            </button>
-          </div>
-
-          {/* Today's Horoscope Widget */}
-          <div>
-            <div className="flex items-center gap-1.5 border-b border-border pb-2.5 mb-3.5">
-              <span className="text-[#B3121B] font-black text-[13.5px] md:text-[14px]">
-                {language === 'gu' ? '• આજનું રાશિફળ' : '• Today\'s Horoscope'}
-              </span>
-            </div>
-            <div className="border border-border rounded-sm bg-card p-4 shadow-sm">
-              <div className="grid grid-cols-4 gap-x-2 gap-y-3.5">
-                {ZODIAC_SIGNS.map((sign) => (
-                  <div
-                    key={sign.id}
-                    onClick={() => setSelectedZodiac(sign)}
-                    className="flex flex-col items-center justify-center p-2.5 rounded-sm border border-border bg-card hover:border-[#B3121B] hover:bg-muted/10 transition duration-200 cursor-pointer select-none group text-center"
-                  >
-                    <div className="flex h-7 w-7 items-center justify-center rounded-[4px] bg-[#5038A6] text-white text-[13px] font-extrabold shadow-sm mb-1.5 transition duration-200 group-hover:scale-105 select-none leading-none">
-                      {getZodiacSymbol(sign.id)}
-                    </div>
-                    <span className="text-[11px] font-extrabold text-foreground group-hover:text-[#B3121B] transition-colors select-none leading-none">
-                      {language === 'gu' ? sign.nameGu : sign.name}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-        </div>
-
       </div>
 
-      {/* Daily Rashifal Horoscope Modal */}
-      {selectedZodiac && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="absolute inset-0" onClick={() => setSelectedZodiac(null)} />
-          
-          <div className="relative w-full max-w-md rounded-3xl overflow-hidden bg-card border border-border p-6 shadow-2xl z-10 animate-in zoom-in-95 duration-200 text-center">
-            <button
-              type="button"
-              onClick={() => setSelectedZodiac(null)}
-              className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-muted-foreground/10 transition"
-            >
-              <X className="h-4 w-4" />
-            </button>
-            <div className="mx-auto mt-4 rounded-full border border-border p-1 shadow-md w-24 h-24 overflow-hidden relative">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={selectedZodiac.image}
-                alt={selectedZodiac.name}
-                className="rounded-full w-full h-full object-cover"
-              />
-            </div>
-            <h3 className="mt-4 text-xl font-black text-foreground">
-              {language === 'gu' ? selectedZodiac.nameGu : selectedZodiac.name}
-            </h3>
-            <p className="text-xs font-semibold text-accent uppercase tracking-wider mt-1">
-              {getLocalized(language, { en: 'Daily Horoscope', gu: 'આજનું રાશિફળ', hi: 'आज का राशिफल' })}
-            </p>
-            <div className="mt-5 border-t border-border/80 pt-4 text-left">
-              <p className="text-sm font-black text-foreground leading-relaxed">
-                {language === 'gu' ? selectedZodiac.predictionGu : selectedZodiac.prediction}
-              </p>
-            </div>
-          </div>
+    </div>
+  );
+
+  const zodiacModal = selectedZodiac && (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="absolute inset-0" onClick={() => setSelectedZodiac(null)} />
+      
+      <div className="relative w-full max-w-md rounded-3xl overflow-hidden bg-card border border-border/10 p-6 shadow-2xl z-10 animate-in zoom-in-95 duration-200 text-center">
+        <button
+          type="button"
+          onClick={() => setSelectedZodiac(null)}
+          className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-muted-foreground/10 transition"
+        >
+          <X className="h-4 w-4" />
+        </button>
+        <div className="mx-auto mt-4 rounded-full border border-border/10 p-1 shadow-md w-24 h-24 overflow-hidden relative">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={selectedZodiac.image}
+            alt={selectedZodiac.name}
+            className="rounded-full w-full h-full object-cover"
+          />
         </div>
-      )}
+        <h3 className="mt-4 text-xl font-black text-foreground">
+          {language === 'gu' ? selectedZodiac.nameGu : selectedZodiac.name}
+        </h3>
+        <p className="text-xs font-semibold text-accent uppercase tracking-wider mt-1">
+          {getLocalized(language, { en: 'Daily Horoscope', gu: 'આજનું રાશિફળ', hi: 'आज का राशिफल' })}
+        </p>
+        <div className="mt-5 border-t border-border/80 pt-4 text-left">
+          <p className="text-sm font-black text-foreground leading-relaxed">
+            {language === 'gu' ? selectedZodiac.predictionGu : selectedZodiac.prediction}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (view === 'content') {
+    return leftContent;
+  }
+
+  if (view === 'sidebar') {
+    return (
+      <>
+        {sidebarContent}
+        {zodiacModal}
+      </>
+    );
+  }
+
+  return (
+    <section className="mt-2.5 border-t border-border pt-3.5">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 items-start">
+        {leftContent}
+        {sidebarContent}
+      </div>
+      {zodiacModal}
     </section>
   );
 }
@@ -1852,11 +1846,12 @@ function CrimeSection({
 /* --- Popular Stories Slider Section -------------------------------------- */
 function PopularStoriesSection({
   language,
+  view = 'all',
 }: {
   language: Language;
+  view?: 'content' | 'sidebar' | 'all';
 }) {
   const ITEMS_PER_SLIDE = 3;
-  // groupIndex: 0 = items 1-3, 1 = items 4-6, 2 = items 7-9, 3 = item 10
   const [groupIndex, setGroupIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
@@ -2018,129 +2013,136 @@ function PopularStoriesSection({
     return String(startIndex + idx + 1); // 1-based
   };
 
+  const leftContent = (
+    <div className="flex flex-col min-w-0">
+      
+      {/* Header */}
+      <div className="flex items-center justify-between border-b-[3px] border-slate-950 pb-2.5 mb-6">
+        <span className="bg-[#B3121B] text-white px-5 py-1.5 font-extrabold text-[14px] md:text-[15px] rounded-sm tracking-tight leading-none uppercase">
+          {language === 'gu' ? 'લોકપ્રિય સ્ટોરીઝ' : 'Popular Stories'}
+        </span>
+        <Link
+          href="/category/trending"
+          className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline"
+        >
+          {language === 'gu' ? 'વધુ →' : 'More →'}
+        </Link>
+      </div>
+
+      {/* Slider Row */}
+      <div
+        className="relative overflow-hidden"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {visibleArticles.map((art, idx) => (
+            <div key={art.id} className="flex flex-col min-w-0">
+              <Link href={`/news/${art.slug}`} className="group flex flex-col gap-2.5">
+                {/* Image wrapper */}
+                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted">
+                  {/* Overlay index badge matching tv9 style */}
+                  <span className="absolute top-2 left-2 z-10 bg-black/75 text-white text-[12px] font-black h-6 w-6 flex items-center justify-center rounded-sm select-none">
+                    {language === 'gu' ? getGoldNumberGu(idx) : getGoldNumber(idx)}
+                  </span>
+                  
+                  <Image
+                    src={art.image}
+                    alt={art.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 25vw"
+                    className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                  />
+                </div>
+                <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2">
+                  {language === 'gu' ? art.titleGu : art.title}
+                </h3>
+              </Link>
+
+              {/* Metadata */}
+              <div className="text-[11px] text-muted-foreground font-bold mt-1 select-none">
+                {language === 'gu' ? `${art.relativeTimeGu} · ${toGuLocal(art.viewsGu)}` : `${art.relativeTime} · ${art.views}`}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Carousel controls - visual indicators */}
+        <div className="flex justify-center items-center gap-1.5 mt-5 mb-1 select-none">
+          {Array.from({ length: totalGroups }).map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setGroupIndex(idx)}
+              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                groupIndex === idx ? 'w-5 bg-[#B3121B]' : 'w-2 bg-slate-300 hover:bg-slate-400'
+              }`}
+              aria-label={`Go to slide group ${idx + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+
+    </div>
+  );
+
+  const sidebarContent = (
+    <div className="flex flex-col gap-6 select-none">
+      
+      {/* E-Paper Widget */}
+      <div className="w-full rounded-sm border border-slate-200 bg-card p-4.5 shadow-sm flex items-center justify-between hover:border-red-300 transition-colors cursor-pointer select-none">
+        <div className="flex items-center gap-3">
+          <span className="bg-[#B3121B] text-white px-2.5 py-1 text-[11.5px] font-black rounded-sm">
+            {language === 'gu' ? 'ઈ-પેપર' : 'E-Paper'}
+          </span>
+          <div className="flex flex-col">
+            <span className="text-[12.5px] font-black text-foreground">
+              {language === 'gu' ? 'આજનું ઈ-પેપર વાંચો' : 'Read today\'s E-paper'}
+            </span>
+            <span className="text-[10px] text-muted-foreground font-bold mt-0.5">
+              {language === 'gu' ? '૧૪ જૂન ૨૦૨૫ · PDF' : '14 June 2025 · PDF'}
+            </span>
+          </div>
+        </div>
+        <span className="text-[#B3121B] font-extrabold text-[15px] pr-1">→</span>
+      </div>
+
+      {/* Recharge Plus Ad Widget */}
+      <div className="flex flex-col min-w-0">
+        <div className="bg-slate-100/95 border border-slate-200 border-b-0 text-[10px] text-slate-500 font-black py-1.5 text-center uppercase tracking-widest rounded-t-sm">
+          {language === 'gu' ? 'જાહેરાત' : 'ADVERTISEMENT'}
+        </div>
+        <div className="w-full rounded-b-sm bg-gradient-to-br from-[#5D3FD3] to-[#4A2CA8] text-white p-6 flex flex-col items-center justify-center relative overflow-hidden border border-slate-200 text-center" style={{ minHeight: 180 }}>
+          <h4 className="text-[20px] font-black tracking-tight select-none">
+            {language === 'gu' ? 'રિચાર્જ પ્લસ' : 'Recharge Plus'}
+          </h4>
+          <p className="text-[12px] text-white/90 font-bold mt-1.5 leading-snug">
+            {language === 'gu' ? 'અનલિમિટેડ ડેટા + કોલિંગ ફક્ત ₹૧૯૯/મહિને' : 'Unlimited data + calling only ₹199/month'}
+          </p>
+          <button
+            type="button"
+            className="mt-4 bg-white text-[#5D3FD3] font-black text-[12.5px] px-6 py-2.5 rounded-full shadow-sm hover:bg-white/90 active:scale-[0.98] transition-all cursor-pointer"
+          >
+            {language === 'gu' ? 'રિચાર્જ કરો ›' : 'Recharge Now ›'}
+          </button>
+        </div>
+      </div>
+
+    </div>
+  );
+
+  if (view === 'content') {
+    return leftContent;
+  }
+
+  if (view === 'sidebar') {
+    return sidebarContent;
+  }
+
   return (
     <section className="mt-6 border-t border-border pt-5">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 items-start">
-        
-        {/* Left Column: Popular Stories Slider */}
-        <div className="flex flex-col min-w-0">
-          
-          {/* Header */}
-          <div className="flex items-center justify-between border-b-[3px] border-slate-950 pb-2.5 mb-6">
-            <span className="bg-[#B3121B] text-white px-5 py-1.5 font-extrabold text-[14px] md:text-[15px] rounded-sm tracking-tight leading-none uppercase">
-              {language === 'gu' ? 'લોકપ્રિય સ્ટોરીઝ' : 'Popular Stories'}
-            </span>
-            <Link
-              href="/category/trending"
-              className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline"
-            >
-              {language === 'gu' ? 'વધુ →' : 'More →'}
-            </Link>
-          </div>
-
-          {/* Slider Row */}
-          <div
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 relative"
-            onMouseEnter={() => setPaused(true)}
-            onMouseLeave={() => setPaused(false)}
-          >
-            {/* Left chevron: go to previous group */}
-            <button
-              type="button"
-              onClick={() => setGroupIndex((prev) => (prev - 1 + totalGroups) % totalGroups)}
-              className="absolute left-[-16px] top-[100px] -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-neutral-600/80 text-white hover:bg-neutral-700 transition z-20 cursor-pointer shadow-md select-none border border-white/10"
-            >
-              <ChevronLeft className="h-4.5 w-4.5 stroke-[3]" />
-            </button>
-            {/* Right chevron: go to next group */}
-            <button
-              type="button"
-              onClick={() => setGroupIndex((prev) => (prev + 1) % totalGroups)}
-              className="absolute right-[-16px] top-[100px] -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-neutral-600/80 text-white hover:bg-neutral-700 transition z-20 cursor-pointer shadow-md select-none border border-white/10"
-            >
-              <ChevronRight className="h-4.5 w-4.5 stroke-[3]" />
-            </button>
-
-            {visibleArticles.map((art, idx) => (
-              <div key={art.id} className="flex flex-col min-w-0">
-                {/* Gold Number Index */}
-                <div className="text-[#C5A85A] font-extrabold text-[22px] md:text-[24px] mb-1.5 select-none leading-none font-serif">
-                  {language === 'gu' ? getGoldNumberGu(idx) : getGoldNumber(idx)}
-                </div>
-
-                {/* Preview Image */}
-                <Link
-                  href={`/news/${art.slug}`}
-                  className="group flex flex-col"
-                >
-                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2">
-                    <Image
-                      src={art.image}
-                      alt={art.titleGu}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 25vw"
-                      className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                    />
-                  </div>
-                  <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2">
-                    {language === 'gu' ? art.titleGu : art.title}
-                  </h3>
-                </Link>
-
-                {/* Metadata */}
-                <div className="text-[11px] text-muted-foreground font-bold mt-1 select-none">
-                  {language === 'gu' ? `${art.relativeTimeGu} · ${toGuLocal(art.viewsGu)}` : `${art.relativeTime} · ${art.views}`}
-                </div>
-              </div>
-            ))}
-          </div>
-
-        </div>
-
-        {/* Right Column Sidebar: E-Paper and Ad */}
-        <div className="flex flex-col gap-6 sticky top-20 select-none">
-          
-          {/* E-Paper Widget */}
-          <div className="w-full rounded-sm border border-slate-200 bg-card p-4.5 shadow-sm flex items-center justify-between hover:border-red-300 transition-colors cursor-pointer select-none">
-            <div className="flex items-center gap-3">
-              <span className="bg-[#B3121B] text-white px-2.5 py-1 text-[11.5px] font-black rounded-sm">
-                {language === 'gu' ? 'ઈ-પેપર' : 'E-Paper'}
-              </span>
-              <div className="flex flex-col">
-                <span className="text-[12.5px] font-black text-foreground">
-                  {language === 'gu' ? 'આજનું ઈ-પેપર વાંચો' : 'Read today\'s E-paper'}
-                </span>
-                <span className="text-[10px] text-muted-foreground font-bold mt-0.5">
-                  {language === 'gu' ? '૧૪ જૂન ૨૦૨૫ · PDF' : '14 June 2025 · PDF'}
-                </span>
-              </div>
-            </div>
-            <span className="text-[#B3121B] font-extrabold text-[15px] pr-1">→</span>
-          </div>
-
-          {/* Recharge Plus Ad Widget */}
-          <div className="flex flex-col min-w-0">
-            <div className="bg-slate-100/95 border border-slate-200 border-b-0 text-[10px] text-slate-500 font-black py-1.5 text-center uppercase tracking-widest rounded-t-sm">
-              {language === 'gu' ? 'જાહેરાત' : 'ADVERTISEMENT'}
-            </div>
-            <div className="w-full rounded-b-sm bg-gradient-to-br from-[#5D3FD3] to-[#4A2CA8] text-white p-6 flex flex-col items-center justify-center relative overflow-hidden border border-slate-200 text-center" style={{ minHeight: 180 }}>
-              <h4 className="text-[20px] font-black tracking-tight select-none">
-                {language === 'gu' ? 'રિચાર્જ પ્લસ' : 'Recharge Plus'}
-              </h4>
-              <p className="text-[12px] text-white/90 font-bold mt-1.5 leading-snug">
-                {language === 'gu' ? 'અનલિમિટેડ ડેટા + કોલિંગ ફક્ત ₹૧૯૯/મહિને' : 'Unlimited data + calling only ₹199/month'}
-              </p>
-              <button
-                type="button"
-                className="mt-4 bg-white text-[#5D3FD3] font-black text-[12.5px] px-6 py-2.5 rounded-full shadow-sm hover:bg-white/90 active:scale-[0.98] transition-all cursor-pointer"
-              >
-                {language === 'gu' ? 'રિચાર્જ કરો ›' : 'Recharge Now ›'}
-              </button>
-            </div>
-          </div>
-
-        </div>
-
+        {leftContent}
+        {sidebarContent}
       </div>
     </section>
   );
@@ -2815,7 +2817,7 @@ function WeatherWidget({ language }: { language: Language }) {
       ) : (
         <div className="space-y-3">
           {(Array.isArray(weather) ? weather.slice(0, 2) : []).map((item) => (
-            <div key={item.city} className="rounded-2xl border border-border/80 bg-white/95 p-3 shadow-sm">
+            <div key={item.city} className="rounded-2xl border border-border/80 bg-card p-3 shadow-sm">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-sm font-black text-foreground">{item.city}</p>
@@ -2824,15 +2826,15 @@ function WeatherWidget({ language }: { language: Language }) {
                 <span className="text-3xl font-black text-accent">{item.temperature}°C</span>
               </div>
               <div className="mt-3 grid grid-cols-3 gap-2 text-[10px] text-muted-foreground">
-                <div className="rounded-xl bg-slate-50 p-2 text-center">
+                <div className="rounded-xl bg-muted p-2 text-center">
                   <p className="font-semibold text-foreground">Humidity</p>
                   <p>{item.humidity}%</p>
                 </div>
-                <div className="rounded-xl bg-slate-50 p-2 text-center">
+                <div className="rounded-xl bg-muted p-2 text-center">
                   <p className="font-semibold text-foreground">Wind</p>
                   <p>{item.windSpeed} km/h</p>
                 </div>
-                <div className="rounded-xl bg-slate-50 p-2 text-center">
+                <div className="rounded-xl bg-muted p-2 text-center">
                   <p className="font-semibold text-foreground">Feels like</p>
                   <p>{item.temperature}°C</p>
                 </div>
@@ -3007,7 +3009,7 @@ function HeroSectionSkeleton({ language }: { language: Language }) {
             <div className="flex items-center justify-between border-b border-border pb-2 mb-1">
               <span className="text-xs md:text-sm font-black text-muted-foreground/30">{labelWeather}</span>
             </div>
-            <div className="rounded-2xl border border-border/80 bg-white/95 p-3 shadow-sm space-y-3">
+            <div className="rounded-2xl border border-border/80 bg-card p-3 shadow-sm space-y-3">
               <div className="flex justify-between items-center">
                 <div className="space-y-1.5 flex-1">
                   <div className="h-4 w-20 rounded bg-muted" />
@@ -3016,9 +3018,9 @@ function HeroSectionSkeleton({ language }: { language: Language }) {
                 <div className="h-8 w-12 rounded bg-muted" />
               </div>
               <div className="grid grid-cols-3 gap-2 mt-2">
-                <div className="h-8 rounded-xl bg-slate-50" />
-                <div className="h-8 rounded-xl bg-slate-50" />
-                <div className="h-8 rounded-xl bg-slate-50" />
+                <div className="h-8 rounded-xl bg-muted" />
+                <div className="h-8 rounded-xl bg-muted" />
+                <div className="h-8 rounded-xl bg-muted" />
               </div>
             </div>
           </div>
@@ -3829,20 +3831,20 @@ export function WorldSection({ language }: { language: Language }) {
         <div className="flex flex-col gap-6">
           
           {/* Green Dream Home Ad */}
-          <div className="w-full rounded-sm bg-[#0E8044] text-white p-6 flex flex-col items-center justify-center relative overflow-hidden border border-border/10 shadow-md text-center">
+          <div className="w-full rounded-sm bg-[#0E8044] text-white p-8 flex flex-col items-center justify-center relative overflow-hidden border border-border/10 shadow-md text-center" style={{ minHeight: 210 }}>
             {/* Small Ad Label at top */}
-            <span className="absolute top-2.5 left-3 text-[9px] text-white/50 font-black tracking-wider uppercase select-none">
+            <span className="absolute top-3 left-4.5 text-[10px] text-white/50 font-black tracking-wider uppercase select-none">
               {language === 'gu' ? 'જાહેરાત' : 'Advertisement'}
             </span>
-            <h4 className="text-[20px] font-black tracking-tight select-none mt-2">
+            <h4 className="text-[25px] font-black tracking-tight select-none mt-3">
               {language === 'gu' ? 'ડ્રીમ હોમ્સ' : 'Dream Homes'}
             </h4>
-            <p className="text-[12px] text-white/95 font-bold mt-2 leading-snug">
+            <p className="text-[14px] text-white/95 font-bold mt-2.5 leading-snug max-w-[240px]">
               {language === 'gu' ? 'તમારું સપનાનું ઘર — 0% પ્રોસેસિંગ ફી સાથે' : 'Your dream home — with 0% processing fee'}
             </p>
             <button
               type="button"
-              className="mt-4.5 bg-white text-[#0E8044] font-black text-[12px] px-5 py-2.5 rounded-full shadow-sm hover:bg-white/90 active:scale-[0.98] transition-all cursor-pointer"
+              className="mt-5 bg-white text-[#0E8044] font-black text-[13.5px] px-8 py-3 rounded-full shadow-sm hover:bg-white/90 active:scale-[0.98] transition-all cursor-pointer"
             >
               {language === 'gu' ? 'વધુ જાણો ›' : 'Learn More ›'}
             </button>
@@ -4253,7 +4255,7 @@ export function EntertainTechLifeSection({ language }: { language: Language }) {
       </div>
 
       {/* Black underline bar */}
-      <div className="h-[3px] w-full bg-black mb-6" />
+      <div className="h-[3px] w-full bg-foreground/80 mb-6" />
 
       {/* 3-Column Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-y-8 md:gap-y-0 md:divide-x md:divide-border">
@@ -4328,7 +4330,7 @@ function PhotoGallerySection({ language }: { language: Language }) {
           </Link>
         </div>
         {/* Underline */}
-        <div className="h-[2.5px] w-full bg-black mb-5" />
+        <div className="h-[2.5px] w-full bg-foreground/80 mb-5" />
 
         {/* 3-column × 2-row grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -4382,7 +4384,7 @@ function TrendingNewsSection({ articles, language }: { articles: Article[]; lang
           </span>
         </div>
         {/* Underline */}
-        <div className="h-[2.5px] w-full bg-black mb-5" />
+        <div className="h-[2.5px] w-full bg-foreground/80 mb-5" />
 
         {/* Grid layout */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
