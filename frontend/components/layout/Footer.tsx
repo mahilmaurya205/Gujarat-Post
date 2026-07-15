@@ -66,12 +66,12 @@ const mediaLinks = [
     { label: 'E-Paper', href: '/epaper', isNew: true },
 ];
 
-const stats = [
-    { icon: Users,       value: '5.2M+',  label: 'Monthly Readers',  color: 'text-red-400',  bg: 'bg-red-500/10',  border: 'border-red-500/20'  },
-    { icon: YouTubeIcon, value: '1.5M+',  label: 'Subscribers',      color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/20' },
-    { icon: Mail,        value: '250K+',  label: 'Newsletter',        color: 'text-red-300',  bg: 'bg-red-400/10',  border: 'border-red-400/20'  },
-    { icon: Radio,       value: '24 × 7', label: 'Live Updates',      color: 'text-red-500',  bg: 'bg-red-500/10',  border: 'border-red-500/20'  },
-];
+// const stats = [
+//     { icon: Users, value: '5.2M+', label: 'Monthly Readers', color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20' },
+//     { icon: YouTubeIcon, value: '1.5M+', label: 'Subscribers', color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/20' },
+//     { icon: Mail, value: '250K+', label: 'Newsletter', color: 'text-red-300', bg: 'bg-red-400/10', border: 'border-red-400/20' },
+//     { icon: Radio, value: '24 × 7', label: 'Live Updates', color: 'text-red-500', bg: 'bg-red-500/10', border: 'border-red-500/20' },
+// ];
 
 /* ─── FooterLink ────────────────────────────────────────────────────────── */
 const FooterLink = ({
@@ -87,19 +87,20 @@ const FooterLink = ({
 }) => (
     <Link
         href={href}
-        className="group flex items-center justify-between text-[12px] font-medium text-white/50 transition-all duration-200 hover:text-red-400"
+        className="group flex items-center justify-between text-[12.5px] font-medium text-white/45 transition-all duration-200 hover:text-red-400 py-0.5"
     >
-        <div className="flex items-center gap-1 overflow-hidden">
+        <div className="flex items-center gap-1.5 overflow-hidden">
             <ChevronRight className="h-3 w-3 text-red-500 opacity-0 -ml-3 transition-all duration-200 group-hover:opacity-100 group-hover:ml-0 shrink-0" />
             <span className="transition-transform duration-200 group-hover:translate-x-0.5 truncate">{children}</span>
         </div>
         {isLive && (
-            <span className="ml-2 shrink-0 inline-flex items-center rounded-full bg-red-500/10 px-1.5 py-px text-[8px] font-black text-red-400 ring-1 ring-inset ring-red-500/25 animate-pulse">
+            <span className="ml-2 shrink-0 inline-flex items-center gap-0.5 rounded-full bg-red-500/10 border border-red-500/25 px-1.5 py-px text-[7.5px] font-black text-red-400 shadow-[0_0_6px_rgba(239,68,68,0.2)] animate-pulse">
+                <span className="h-1 w-1 rounded-full bg-red-500" />
                 LIVE
             </span>
         )}
         {isNew && (
-            <span className="ml-2 shrink-0 inline-flex items-center rounded-full bg-blue-500/10 px-1.5 py-px text-[8px] font-black text-blue-400 ring-1 ring-inset ring-blue-500/25">
+            <span className="ml-2 shrink-0 inline-flex items-center rounded-full bg-blue-500/10 border border-blue-500/25 px-1.5 py-px text-[7.5px] font-black text-blue-400">
                 NEW
             </span>
         )}
@@ -108,10 +109,13 @@ const FooterLink = ({
 
 /* ─── Column heading ────────────────────────────────────────────────────── */
 const ColHead = ({ children }: { children: React.ReactNode }) => (
-    <h3 className="mb-2.5 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.15em] text-white/70">
-        <span className="h-[5px] w-[5px] rounded-full bg-red-500 shrink-0" />
-        {children}
-    </h3>
+    <div className="flex flex-col gap-1.5 mb-4">
+        <h3 className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-white/75 select-none">
+            <span className="h-[5px] w-[5px] rounded-full bg-red-500 shrink-0 shadow-[0_0_6px_#ef4444]" />
+            {children}
+        </h3>
+        <div className="h-0.5 w-7 bg-red-500/40 rounded-full" />
+    </div>
 );
 
 /* ─── Footer ────────────────────────────────────────────────────────────── */
@@ -126,12 +130,12 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
     const isFeedPage = pathname === '/watch' || pathname === '/shorts';
     if (isFeedPage && !isInline) return null;
 
-    const wrap = isInline ? 'pt-3 pb-2' : 'pt-5 pb-0';
+    const wrap = isInline ? 'pt-4 pb-2' : 'pt-8 pb-0';
 
     return (
-        <footer className="relative overflow-hidden bg-gradient-to-b from-[#07101e] to-[#040810] text-white">
+        <footer data-theme="dark" className="relative overflow-hidden bg-[#080d16] text-white" style={{ background: 'linear-gradient(180deg, #0e1726 0%, #080d16 50%, #04060b 100%)' }}>
             {/* Top accent line */}
-            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-red-500/50 to-transparent" />
+            <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-red-500/80 to-transparent shadow-[0_1px_8px_rgba(239,68,68,0.4)]" />
 
             {/* Subtle glow orbs */}
             <div className="pointer-events-none absolute -right-32 -top-32 h-72 w-72 rounded-full bg-red-600/8 blur-[80px]" />
@@ -140,12 +144,12 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
             <div className={`relative mx-auto max-w-screen-xl max-w-header-layout px-4 ${wrap}`}>
 
                 {/* ── ROW 1: Brand  +  Newsletter ── */}
-                <div className="flex flex-col gap-4 border-b border-white/[0.07] pb-4 lg:flex-row lg:items-center lg:justify-between">
+                <div className="flex flex-col gap-5 border-b border-white/[0.07] pb-5 lg:flex-row lg:items-center lg:justify-between">
 
                     {/* Brand block */}
                     <div className="flex items-center gap-3 shrink-0">
                         <Link href="/" className="group/logo flex items-center gap-2.5">
-                            <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-tr from-red-600 to-rose-500 text-sm font-black shadow-lg ring-1 ring-red-500/30 transition-transform duration-300 group-hover/logo:scale-105">
+                            <span className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-tr from-red-600 to-rose-500 text-sm font-black shadow-lg ring-1 ring-red-500/30 transition-transform duration-300 group-hover/logo:scale-105">
                                 GP
                             </span>
                             <span>
@@ -153,7 +157,7 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
                                 <span className="block text-[9px] font-semibold text-white/40">ગુજરાતનું વિશ્વસનીય ન્યૂઝ નેટવર્ક</span>
                             </span>
                         </Link>
-                        <div className="hidden sm:flex items-center gap-3 pl-3 border-l border-white/10">
+                        <div className="hidden sm:flex items-center gap-3.5 pl-3.5 border-l border-white/10">
                             <p className="flex items-center gap-1.5 text-[11px] text-white/45">
                                 <MapPin className="h-3 w-3 text-red-500 shrink-0" />
                                 Ahmedabad, Gujarat
@@ -167,72 +171,75 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
 
                     {/* Newsletter form */}
                     <form
-                        className="flex w-full max-w-md items-center gap-2"
+                        className="flex w-full max-w-md items-center gap-3"
                         onSubmit={(e) => e.preventDefault()}
                     >
-                        <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.15em] text-red-400 shrink-0">
-                            <Mail className="h-3 w-3 text-red-500" />
+                        <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-red-400 shrink-0 select-none">
+                            <Mail className="h-3.5 w-3.5 text-red-500" />
                             <span className="hidden sm:inline">Daily Brief</span>
                         </div>
                         <label className="sr-only" htmlFor="footer-email">Email address</label>
-                        <input
-                            id="footer-email"
-                            type="email"
-                            required
-                            placeholder="Your email address"
-                            className="h-8 min-w-0 flex-1 rounded-lg border border-white/10 bg-white/[0.03] px-3 text-xs text-white outline-none transition placeholder:text-white/25 focus:border-red-500/60 focus:bg-white/[0.05] focus:ring-1 focus:ring-red-500/20"
-                        />
-                        <button
-                            type="submit"
-                            className="inline-flex h-8 shrink-0 items-center gap-1 rounded-lg bg-gradient-to-r from-red-600 to-rose-500 px-3.5 text-[11px] font-black text-white shadow-md transition-all duration-200 hover:from-red-500 hover:to-rose-400 hover:-translate-y-px"
-                        >
-                            Subscribe <ArrowRight className="h-3 w-3" />
-                        </button>
+                        <div className="flex flex-1 items-stretch rounded-xl border border-white/10 bg-white/[0.02] focus-within:border-red-500/50 focus-within:ring-1 focus-within:ring-red-500/25 transition-all overflow-hidden">
+                            <input
+                                id="footer-email"
+                                type="email"
+                                required
+                                placeholder="Your email address"
+                                className="h-9 min-w-0 flex-1 bg-transparent px-3.5 text-xs text-white outline-none placeholder:text-white/20"
+                            />
+                            <button
+                                type="submit"
+                                className="inline-flex items-center gap-1.5 bg-gradient-to-r from-red-600 to-rose-500 px-4 text-xs font-black text-white hover:from-red-500 hover:to-rose-400 transition-colors cursor-pointer select-none active:scale-95 duration-155 shrink-0"
+                            >
+                                <span>Subscribe</span>
+                                <ArrowRight className="h-3.5 w-3.5" />
+                            </button>
+                        </div>
                     </form>
                 </div>
 
                 {/* ── ROW 2: Links grid ── */}
-                <div className="grid grid-cols-2 gap-x-4 gap-y-4 py-4 sm:grid-cols-3 lg:grid-cols-[1.6fr_1fr_1fr_1fr_1fr]">
+                <div className="grid grid-cols-2 gap-x-6 gap-y-8 py-8 sm:grid-cols-3 lg:grid-cols-[1.8fr_1fr_1fr_1fr_1fr]">
 
                     {/* Col 1: Brand description + socials + app */}
-                    <div className="col-span-2 sm:col-span-3 lg:col-span-1 flex flex-col gap-2.5">
-                        <p className="text-[11px] leading-relaxed text-white/45">
+                    <div className="col-span-2 sm:col-span-3 lg:col-span-1 flex flex-col gap-4 bg-white/[0.01] border border-white/[0.04] rounded-2xl p-5 shadow-inner backdrop-blur-xs">
+                        <p className="text-[11.5px] leading-relaxed text-white/45">
                             Independent reporting &amp; breaking news from every corner of Gujarat—in Gujarati, Hindi &amp; English.
                         </p>
                         <SocialLinks size="sm" className="mt-0.5" />
                         {/* App buttons */}
-                        <div className="flex flex-wrap gap-1.5 mt-1">
+                        <div className="flex flex-wrap gap-3 mt-2">
                             <a
                                 href="https://apps.apple.com"
                                 target="_blank"
                                 rel="noreferrer"
-                                className="flex items-center gap-1.5 rounded-md border border-white/8 bg-white/[0.015] px-2 py-1 text-white hover:border-red-500/30 hover:bg-red-500/[0.03] transition-all duration-200"
+                                className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-5 py-2.5 text-white hover:border-red-500/30 hover:bg-red-500/[0.04] transition-all duration-300 active:scale-95 shadow-sm"
                             >
-                                <AppleIcon className="h-3.5 w-3.5" />
-                                <div className="leading-none">
-                                    <span className="block text-[6.5px] text-white/40 uppercase tracking-wide">Download on</span>
-                                    <span className="block text-[9px] font-bold mt-px">App Store</span>
+                                <AppleIcon className="h-6.5 w-6.5 text-white/95" />
+                                <div className="leading-none text-left">
+                                    <span className="block text-[8px] text-white/40 uppercase tracking-widest font-bold">Download on</span>
+                                    <span className="block text-[13.5px] font-black mt-0.5">App Store</span>
                                 </div>
                             </a>
                             <a
                                 href="https://play.google.com"
                                 target="_blank"
                                 rel="noreferrer"
-                                className="flex items-center gap-1.5 rounded-md border border-white/8 bg-white/[0.015] px-2 py-1 text-white hover:border-red-500/30 hover:bg-red-500/[0.03] transition-all duration-200"
+                                className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-5 py-2.5 text-white hover:border-red-500/30 hover:bg-red-500/[0.04] transition-all duration-300 active:scale-95 shadow-sm"
                             >
-                                <PlayStoreIcon className="h-3.5 w-3.5" />
-                                <div className="leading-none">
-                                    <span className="block text-[6.5px] text-white/40 uppercase tracking-wide">Get it on</span>
-                                    <span className="block text-[9px] font-bold mt-px">Google Play</span>
+                                <PlayStoreIcon className="h-6.5 w-6.5 text-white/95" />
+                                <div className="leading-none text-left">
+                                    <span className="block text-[8px] text-white/40 uppercase tracking-widest font-bold">Get it on</span>
+                                    <span className="block text-[13.5px] font-black mt-0.5">Google Play</span>
                                 </div>
                             </a>
                         </div>
                     </div>
 
                     {/* Col 2: Explore */}
-                    <div>
+                    <div className="lg:border-r border-white/[0.05] lg:pr-6">
                         <ColHead>Explore</ColHead>
-                        <ul className="space-y-1.5">
+                        <ul className="space-y-2">
                             {NAV_ITEMS.slice(1, 9).map((item) => (
                                 <li key={item.href}>
                                     <FooterLink href={item.href}>{item.label}</FooterLink>
@@ -242,9 +249,9 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
                     </div>
 
                     {/* Col 3: Watch & Read */}
-                    <div>
+                    <div className="lg:border-r border-white/[0.05] lg:pr-6">
                         <ColHead>Watch &amp; Read</ColHead>
-                        <ul className="space-y-1.5 mb-2.5">
+                        <ul className="space-y-2 mb-3.5">
                             {mediaLinks.map((item) => (
                                 <li key={item.href}>
                                     <FooterLink href={item.href} isLive={item.isLive} isNew={item.isNew}>
@@ -255,16 +262,16 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
                         </ul>
                         <Link
                             href="/epaper"
-                            className="inline-flex items-center gap-1.5 rounded-md border border-red-500/20 bg-red-500/[0.03] px-2 py-1 text-[9px] font-bold text-red-400 transition-all duration-200 hover:border-red-500/40 hover:bg-red-500/8 hover:text-white"
+                            className="inline-flex items-center gap-1.5 rounded-md border border-red-500/20 bg-red-500/[0.03] px-2.5 py-1 text-[9px] font-black text-red-400 transition-all duration-200 hover:border-red-500/40 hover:bg-red-500/8 hover:text-white"
                         >
                             <BookOpen className="h-3 w-3 text-red-500 shrink-0" /> E-Paper
                         </Link>
                     </div>
 
                     {/* Col 4: Company */}
-                    <div>
+                    <div className="lg:border-r border-white/[0.05] lg:pr-6">
                         <ColHead>Company</ColHead>
-                        <ul className="space-y-1.5">
+                        <ul className="space-y-2">
                             {companyLinks.map(([label, href]) => (
                                 <li key={href}>
                                     <FooterLink href={href}>{label}</FooterLink>
@@ -276,7 +283,7 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
                     {/* Col 5: Information */}
                     <div>
                         <ColHead>Information</ColHead>
-                        <ul className="space-y-1.5">
+                        <ul className="space-y-2">
                             {informationLinks.map(([label, href]) => (
                                 <li key={href}>
                                     <FooterLink href={href}>{label}</FooterLink>
@@ -287,34 +294,34 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
                 </div>
 
                 {/* ── ROW 3: Stats strip ── */}
-                <div className="border-t border-white/[0.07] py-3">
-                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {/* <div className="border-t border-white/[0.07] py-4">
+                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                         {stats.map(({ icon: Icon, value, label, color, bg, border }) => (
                             <div
                                 key={label}
-                                className={`group flex items-center gap-2.5 rounded-lg border ${border} ${bg} px-3 py-2 transition-all duration-200 hover:brightness-125`}
+                                className={`group flex items-center gap-3.5 rounded-xl border border-white/[0.04] bg-white/[0.015] hover:bg-white/[0.035] hover:border-red-500/20 px-4 py-3 transition-all duration-300 shadow-sm hover:shadow-[0_4px_15px_rgba(239,68,68,0.03)] hover:-translate-y-0.5`}
                             >
-                                <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md ${bg} ${color} border ${border}`}>
-                                    <Icon className="h-3.5 w-3.5" />
+                                <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-white/[0.04] to-white/[0.01] group-hover:from-red-600/10 group-hover:to-rose-500/5 ${color} border border-white/10 group-hover:border-red-500/30 transition-all duration-300`}>
+                                    <Icon className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
                                 </div>
                                 <div>
-                                    <span className="block text-sm font-black leading-none text-white">{value}</span>
-                                    <span className="block text-[8px] font-bold uppercase tracking-wider text-white/35 mt-0.5">{label}</span>
+                                    <span className="block text-base font-black leading-none bg-gradient-to-r from-white via-white to-red-100 bg-clip-text text-transparent tracking-tight">{value}</span>
+                                    <span className="block text-[8.5px] font-black uppercase tracking-widest text-white/30 group-hover:text-red-400 transition-colors mt-1.5">{label}</span>
                                 </div>
                             </div>
                         ))}
                     </div>
-                </div>
+                </div> */}
 
             </div>
 
             {/* ── Copyright bar ── */}
-            <div className="border-t border-white/[0.06] bg-black/20">
-                <div className="mx-auto flex max-w-screen-xl max-w-header-layout flex-wrap items-center justify-between gap-2 px-4 py-2.5 text-[10px] text-white/35">
+            <div className="border-t border-white/[0.06]" style={{ background: 'rgba(0,0,0,0.4)' }}>
+                <div className="mx-auto flex max-w-screen-xl max-w-header-layout flex-wrap items-center justify-between gap-2 px-4 py-3.5 text-[10px]" style={{ color: 'rgba(255,255,255,0.35)' }}>
                     <p>© {new Date().getFullYear()} Gujarat Post Media. All rights reserved.</p>
                     <div className="flex flex-wrap gap-x-3 gap-y-1">
                         {[['DNPA Code', '/dnpa-code'], ['CSR Policy', '/csr-policy'], ['Sitemap', '/sitemap.xml'], ['RSS', '/rss.xml']].map(([label, href]) => (
-                            <Link key={href} href={href} className="transition duration-200 hover:text-red-400">{label}</Link>
+                            <Link key={href} href={href} className="transition duration-200 hover:text-red-400 font-medium">{label}</Link>
                         ))}
                     </div>
                     <p className="font-semibold text-white/20 tracking-wider">RNI/GJ-DEMO/2026</p>

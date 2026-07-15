@@ -26,6 +26,32 @@ const languageLabels = {
   hi: 'हिन्दी',
 };
 
+const cityTranslations: Record<string, { gu: string; hi: string; en: string }> = {
+  'અમદાવાદ': { gu: 'અમદાવાદ', hi: 'अहमदाबाद', en: 'Ahmedabad' },
+  'સુરત': { gu: 'સુરત', hi: 'सूरत', en: 'Surat' },
+  'વડોદરા': { gu: 'વડોદરા', hi: 'वडोदरा', en: 'Vadodara' },
+  'રાજકોટ': { gu: 'રાજકોટ', hi: 'राजकोट', en: 'Rajkot' },
+  'ગાંધીનગર': { gu: 'ગાંધીનગર', hi: 'गांधीनगर', en: 'Gandhinagar' },
+  'અન્ય': { gu: 'અન્ય', hi: 'अन्य', en: 'Other' },
+};
+
+function AppleIcon({ className = 'h-4 w-4' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-1 .04-2.22.67-2.94 1.5-.63.72-1.18 1.86-1.03 2.97 1.12.09 2.27-.6 2.98-1.41z" />
+    </svg>
+  );
+}
+
+function PlayStoreIcon({ className = 'h-4 w-4' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+      <path d="M3 5.27v13.46c0 .87.87 1.41 1.63.97l11.66-6.73c.75-.43.75-1.51 0-1.94L4.63 4.3C3.87 3.86 3 4.4 3 5.27z" />
+      <path d="M17.47 11.23L4.76 3.89c-.38-.22-.84-.13-1.12.22l11.13 11.13 2.7-2.7c.39-.4.39-1.02 0-1.31z" />
+    </svg>
+  );
+}
+
 // The 12 flat navigation links shown in the nav bar
 const NAV_LINKS = [
   { label: 'Home',          labelGu: 'મુખ્ય પૃષ્ઠ',        labelHi: 'होम',               href: '/' },
@@ -72,7 +98,7 @@ export default function Header() {
   const [mounted, setMounted] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedCity, setSelectedCity] = useState('અમદાવાદ');
   const [cityModalOpen, setCityModalOpen] = useState(false);
   const [savedCount, setSavedCount] = useState(0);
 
@@ -97,6 +123,8 @@ export default function Header() {
       const savedCity = localStorage.getItem('gp-selected-city');
       if (savedCity) {
         setSelectedCity(savedCity);
+      } else {
+        localStorage.setItem('gp-selected-city', 'અમદાવાદ');
       }
     } catch (e) {
       console.warn(e);
@@ -168,9 +196,10 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur">
+    <>
+      <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur">
       {/* Top bar: date + social */}
-      <div className="bg-primary text-primary-foreground">
+      <div className="bg-[#171310] dark:bg-[#0D0B08] text-white/95">
         <div className="mx-auto flex max-w-screen-xl max-w-header-layout items-center justify-between gap-3 px-4 py-1.5">
           <div className="min-w-0 flex items-center gap-3 truncate text-sm font-semibold opacity-85">
             <span className="hidden sm:inline">
@@ -186,12 +215,37 @@ export default function Header() {
               className="inline-flex items-center gap-1.5 text-xs font-bold text-white hover:text-red-200 transition duration-150 cursor-pointer bg-white/10 hover:bg-white/20 px-2.5 py-0.5 rounded-full select-none font-sans"
             >
               <span>📍</span>
-              <span>{selectedCity || (language === 'gu' ? 'શહેર પસંદ કરો' : language === 'hi' ? 'शहर चुनें' : 'Select City')}</span>
+              <span>{cityTranslations[selectedCity]?.[language] || selectedCity}</span>
             </button>
           </div>
-          <SocialLinks size="sm" className="shrink-0 max-sm:hidden" />
+          <div className="flex items-center gap-3.5 shrink-0 max-sm:hidden">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] uppercase tracking-widest font-black text-red-400 select-none mr-1 animate-pulse">★ Download:</span>
+              <a
+                href="https://apps.apple.com"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-1.5 rounded-md border border-red-500/40 bg-red-500/5 px-3 py-1.5 text-[10.5px] font-black text-white hover:border-red-600 hover:bg-red-600 transition-all hover:scale-[1.03] active:scale-95 shadow-[0_2px_8px_rgba(239,68,68,0.2)] select-none cursor-pointer"
+              >
+                <AppleIcon className="h-3.5 w-3.5 text-white" />
+                <span>App Store</span>
+              </a>
+              <a
+                href="https://play.google.com"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-1.5 rounded-md border border-red-500/40 bg-red-500/5 px-3 py-1.5 text-[10.5px] font-black text-white hover:border-red-600 hover:bg-red-600 transition-all hover:scale-[1.03] active:scale-95 shadow-[0_2px_8px_rgba(239,68,68,0.2)] select-none cursor-pointer"
+              >
+                <PlayStoreIcon className="h-3.5 w-3.5 text-white" />
+                <span>Google Play</span>
+              </a>
+            </div>
+            <span className="opacity-20 select-none text-current">|</span>
+            <SocialLinks size="sm" />
+          </div>
         </div>
       </div>
+
 
       {/* Logo + Controls */}
       <div className="mx-auto flex max-w-screen-xl max-w-header-layout items-center justify-between gap-5 px-4 py-2.5">
@@ -450,6 +504,31 @@ export default function Header() {
               ઈ-પેપર
             </a>
 
+            {/* App downloads CTA */}
+            <div className="mb-3.5 flex items-center justify-between gap-2 p-3 rounded-xl bg-muted/40 border border-border">
+              <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">App:</span>
+              <div className="flex gap-2">
+                <a
+                  href="https://apps.apple.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 rounded-lg border border-red-500/40 bg-red-500/5 px-2.5 py-1 text-[10px] font-black text-white hover:border-red-600 hover:bg-red-600 transition active:scale-95 shadow-sm"
+                >
+                  <AppleIcon className="h-3.5 w-3.5 animate-pulse text-white" />
+                  <span>App Store</span>
+                </a>
+                <a
+                  href="https://play.google.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 rounded-lg border border-red-500/40 bg-red-500/5 px-2.5 py-1 text-[10px] font-black text-white transition active:scale-95 shadow-sm hover:border-red-600 hover:bg-red-600"
+                >
+                  <PlayStoreIcon className="h-3.5 w-3.5 text-white" />
+                  <span>Google Play</span>
+                </a>
+              </div>
+            </div>
+
             {/* Flat link grid */}
             <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
               {NAV_LINKS.map((link) => {
@@ -477,6 +556,8 @@ export default function Header() {
           </div>
         </nav>
       )}
+      </header>
+
       {/* City selection modal */}
       {cityModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4 backdrop-blur-xs transition-opacity duration-300">
@@ -513,6 +594,6 @@ export default function Header() {
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }

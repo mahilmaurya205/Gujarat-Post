@@ -28,7 +28,7 @@ export function SocialLinks({ size = 'md', className = '' }: { size?: 'sm' | 'md
   return (
     <div className={`flex flex-wrap items-center gap-2 ${className}`}>
       {SOCIAL_LINKS.map((item) => (
-        <a key={item.label} href={item.href} target={item.platform === 'youtube' ? '_blank' : undefined} rel={item.platform === 'youtube' ? 'noreferrer' : undefined} aria-label={item.label} title={item.label} className={`group inline-flex ${dimensions} items-center justify-center rounded-full border border-white/10 bg-white/10 text-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-transparent hover:text-white hover:shadow-lg ${item.hover}`}>
+        <a key={item.label} href={item.href} target={item.platform === 'youtube' ? '_blank' : undefined} rel={item.platform === 'youtube' ? 'noreferrer' : undefined} aria-label={item.label} title={item.label} className={`group inline-flex ${dimensions} items-center justify-center rounded-full border border-current/15 bg-current/8 text-current shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-transparent hover:text-white hover:shadow-lg ${item.hover}`}>
           <SocialIcon platform={item.platform} className={`${iconSize} transition-transform duration-200 group-hover:scale-110`} />
         </a>
       ))}

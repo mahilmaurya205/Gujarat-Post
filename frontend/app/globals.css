@@ -139,6 +139,22 @@ body {
     linear-gradient(180deg, var(--background), var(--background));
 }
 
+/* ── Force footer to always display in dark mode regardless of page theme ── */
+footer[data-theme="dark"] {
+  --paper: #12100C;
+  --paper-2: #1B1712;
+  --paper-3: #241F18;
+  --ink: #F3ECDE;
+  --ink-2: #A79C8B;
+  --ink-3: #7E7566;
+  --line: #2E2820;
+  --background: #12100C;
+  --foreground: #F3ECDE;
+  --red: #E6535B;
+  color-scheme: dark;
+  color: rgba(255,255,255,0.9);
+}
+
 html[lang="gu"] {
   --font-sans: "Noto Sans Gujarati", "Nirmala UI", "Shruti", sans-serif;
 }
