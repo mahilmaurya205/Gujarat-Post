@@ -128,7 +128,7 @@ body {
     radial-gradient(circle at 15% 0%, rgb(225 29 46 / 0.08), transparent 28rem),
     linear-gradient(180deg, var(--background), var(--background));
   color: var(--foreground);
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", "Nirmala UI", Arial, sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", "Nirmala UI", Arial, sans-serif;
   line-height: 1.5;
 }
 
@@ -160,7 +160,7 @@ html[lang="gu"] {
 }
 
 html[lang="gu"] body {
-  font-family: "Noto Sans Gujarati", "Nirmala UI", "Shruti", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", "Nirmala UI", "Shruti", sans-serif;
   font-optical-sizing: auto;
 }
 
@@ -173,7 +173,7 @@ h6,
 .font-black,
 .font-bold,
 .font-semibold {
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", "Nirmala UI", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", "Nirmala UI", sans-serif;
   letter-spacing: -0.01em;
   line-height: 1.25;
 }
@@ -1022,7 +1022,7 @@ img {
 
 /* Sidebar widgets from Redesign Final */
 .wtitle {
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", sans-serif;
   font-weight: 800;
   font-size: 15px;
   color: var(--foreground);
@@ -1050,7 +1050,7 @@ img {
   display: flex;
   align-items: center;
   gap: 9px;
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", sans-serif;
   font-weight: 700;
   font-size: 14.5px;
   color: var(--foreground);
@@ -1165,7 +1165,7 @@ html[data-theme="dark"] .share-x {
   border-top: none;
 }
 .s-rank .n {
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", sans-serif;
   font-weight: 800;
   font-size: 24px;
   line-height: .9;
@@ -1173,7 +1173,7 @@ html[data-theme="dark"] .share-x {
   -webkit-text-stroke: 1.2px var(--accent);
 }
 .s-rank h3 {
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", sans-serif;
   font-weight: 600;
   font-size: 14.5px;
   line-height: 1.42;
@@ -1211,7 +1211,7 @@ html[data-theme="dark"] .share-x {
   padding-bottom: 18px;
 }
 .deskhead h2 {
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", sans-serif;
   font-weight: 800;
   font-size: 20px;
   line-height: 1;
@@ -1274,7 +1274,7 @@ html[data-theme="dark"] .share-x {
   font-size: 10.5px;
 }
 .s-compact h3 {
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", sans-serif;
   font-weight: 600;
   font-size: clamp(.94rem,.89rem+.18vw,1.02rem);
   line-height: 1.42;
@@ -1299,7 +1299,7 @@ html[data-theme="dark"] .share-x {
   margin-bottom: 7px;
 }
 .s-standard h3 {
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", sans-serif;
   font-weight: 700;
   font-size: 16px;
   line-height: 1.4;
@@ -1361,7 +1361,7 @@ html[data-theme="dark"] .share-x {
   background: var(--red);
 }
 .article-title {
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", sans-serif;
   font-weight: 800;
   font-size: clamp(1.35rem, 1.15rem + 0.6vw, 1.75rem);
   line-height: 1.25;
@@ -1370,7 +1370,7 @@ html[data-theme="dark"] .share-x {
   margin-bottom: 16px;
 }
 .article-sub {
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", sans-serif;
   font-size: clamp(0.95rem, 0.95rem + 0.2vw, 1.15rem);
   line-height: 1.55;
   color: var(--ink-2);
@@ -1395,7 +1395,7 @@ html[data-theme="dark"] .share-x {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", sans-serif;
   font-weight: 700;
   font-size: 15px;
   color: var(--ink);
@@ -1483,7 +1483,7 @@ html[data-theme="dark"] .share-x {
   gap: 12px;
 }
 .article-body {
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", sans-serif;
   font-size: var(--t-body);
   line-height: 1.85;
   color: var(--ink);
@@ -1612,7 +1612,7 @@ html[data-theme="dark"] .share-x {
   flex-wrap: wrap;
 }
 .author-head h2 {
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", sans-serif;
   font-weight: 800;
   font-size: 1.7rem;
   color: var(--ink);
@@ -1660,7 +1660,7 @@ html[data-theme="dark"] .share-x {
   margin-bottom: 7px;
 }
 .s-standard h3 {
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", sans-serif;
   font-weight: 600;
   font-size: var(--t-compact);
   line-height: 1.4;
@@ -1692,7 +1692,7 @@ html[data-theme="dark"] .share-x {
   font-size: 10.5px;
 }
 .s-compact h3 {
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", sans-serif;
   font-weight: 600;
   font-size: var(--t-compact);
   line-height: 1.42;
@@ -1715,7 +1715,7 @@ html[data-theme="dark"] .share-x {
   font-size: 10.5px;
 }
 .s-text h3 {
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", sans-serif;
   font-weight: 600;
   font-size: var(--t-compact);
   line-height: 1.45;
@@ -1734,7 +1734,7 @@ html[data-theme="dark"] .share-x {
   border-top: none;
 }
 .s-rank .n {
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", sans-serif;
   font-weight: 800;
   font-size: 24px;
   line-height: 0.9;
@@ -1742,7 +1742,7 @@ html[data-theme="dark"] .share-x {
   -webkit-text-stroke: 1.2px var(--gold);
 }
 .s-rank h3 {
-  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
+  font-family: "Hind Vadodara", "Noto Sans Gujarati", sans-serif;
   font-weight: 600;
   font-size: var(--t-compact);
   line-height: 1.42;

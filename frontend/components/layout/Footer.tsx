@@ -332,4 +332,4 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
         </footer>
     );
 }
-    
+
