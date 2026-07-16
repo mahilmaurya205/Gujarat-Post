@@ -843,9 +843,5 @@ export const formatViews = (value: number): string => {
 };
 
 export const toGuLocal = (num: number | string): string => {
-  const guDigits = ["૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯"];
-  return String(num).split("").map(char => {
-    const digit = parseInt(char, 10);
-    return isNaN(digit) ? char : guDigits[digit];
-  }).join("");
+  return String(num);
 };

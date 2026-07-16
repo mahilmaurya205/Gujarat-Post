@@ -57,7 +57,6 @@ const informationLinks = [
     ['Terms & Conditions', '/terms'],
     ['Cookie Policy', '/cookie-policy'],
     ['Disclaimer', '/disclaimer'],
-    ['Sitemap', '/sitemap.xml'],
 ];
 
 const mediaLinks = [
@@ -322,7 +321,7 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
                 <div className="mx-auto flex max-w-screen-xl max-w-header-layout flex-wrap items-center justify-between gap-2 px-4 py-3.5 text-[10px]" style={{ color: 'rgba(255,255,255,0.35)' }}>
                     <p>© {new Date().getFullYear()} Gujarat Post Media. All rights reserved.</p>
                     <div className="flex flex-wrap gap-x-3 gap-y-1">
-                        {[['DNPA Code', '/dnpa-code'], ['CSR Policy', '/csr-policy'], ['Sitemap', '/sitemap.xml'], ['RSS', '/rss.xml']].map(([label, href]) => (
+                        {[['DNPA Code', '/dnpa-code'], ['CSR Policy', '/csr-policy'], ['RSS', '/rss.xml']].map(([label, href]) => (
                             <Link key={href} href={href} className="transition duration-200 hover:text-red-400 font-medium">{label}</Link>
                         ))}
                     </div>

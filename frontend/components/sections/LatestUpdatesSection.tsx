@@ -10,11 +10,7 @@ import type { Article, Language } from '@/types';
 
 // Helper to convert standard digits to Gujarati digits
 const toGuDigits = (num: number | string): string => {
-  const guDigits = ["૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯"];
-  return String(num).split("").map(char => {
-    const digit = parseInt(char, 10);
-    return isNaN(digit) ? char : guDigits[digit];
-  }).join("");
+  return String(num);
 };
 
 export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timeline' | 'sidebar' | 'all' }) {
@@ -351,37 +347,37 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
     hi: "सबसे ज्यादा पढ़े गए"
   });
 
-  const labelGoldSilverRates = getLocalized(language, {
+  const labelGoldSilverRates = getLocalized('en', {
     en: "Gold-Silver Rates",
     gu: "સોના-ચાંદીના ભાવ",
     hi: "सोने-चांदी के भाव"
   });
 
-  const labelGold = getLocalized(language, {
+  const labelGold = getLocalized('en', {
     en: "Gold (10 Grams)",
-    gu: "સોનું (૧૦ ગ્રામ)",
+    gu: "સોનું (10 ગ્રામ)",
     hi: "सोना (10 ग्राम)"
   });
 
-  const labelKarat = getLocalized(language, {
+  const labelKarat = getLocalized('en', {
     en: "24 Karat",
-    gu: "૨૪ કેરેટ",
+    gu: "24 કેરેટ",
     hi: "24 कैरेट"
   });
 
-  const labelSilver = getLocalized(language, {
+  const labelSilver = getLocalized('en', {
     en: "Silver (1 Kg)",
-    gu: "ચાંદી (૧ કિલો)",
+    gu: "ચાંદી (1 કિલો)",
     hi: "चांदी (1 किलो)"
   });
 
-  const labelPerKg = getLocalized(language, {
+  const labelPerKg = getLocalized('en', {
     en: "Per Kg",
     gu: "પ્રતિ કિલો",
     hi: "प्रति किलो"
   });
 
-  const labelStable = getLocalized(language, {
+  const labelStable = getLocalized('en', {
     en: "Stable",
     gu: "સ્થિર",
     hi: "स्थिर"

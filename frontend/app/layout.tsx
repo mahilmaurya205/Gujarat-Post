@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AppProvider } from "@/components/AppProvider";
 import Header from "@/components/layout/Header";
+import DistrictBar from "@/components/layout/DistrictBar";
 import BreakingTicker from "@/components/layout/BreakingTicker";
 import Footer from "@/components/layout/Footer";
 import ScrollToTop from "@/components/ui/ScrollToTop";
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="antialiased">
         <AppProvider>
           <Header />
+          <DistrictBar />
           <BreakingTicker />
           <main>{children}</main>
           <Footer />

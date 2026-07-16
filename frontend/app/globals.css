@@ -958,6 +958,27 @@ img {
   scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.08);
 }
 
+/* Custom red scrollbar for video sidebar and scroll containers */
+.custom-scrollbar-red::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.custom-scrollbar-red::-webkit-scrollbar-track {
+  background: rgba(179, 18, 27, 0.1);
+  border-radius: 999px;
+}
+.custom-scrollbar-red::-webkit-scrollbar-thumb {
+  background: #B3121B;
+  border-radius: 999px;
+}
+.custom-scrollbar-red::-webkit-scrollbar-thumb:hover {
+  background: #d41822;
+}
+.custom-scrollbar-red {
+  scrollbar-width: thin;
+  scrollbar-color: #B3121B rgba(179, 18, 27, 0.1);
+}
+
 /* Hide scrollbar utility – used by nav bar overflow-x-auto */
 .scrollbar-none {
   scrollbar-width: none;
