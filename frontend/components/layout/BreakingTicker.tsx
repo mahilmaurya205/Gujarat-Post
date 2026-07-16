@@ -32,7 +32,7 @@ export default function BreakingTicker() {
 
   return (
     <div className="flex h-10 items-center overflow-hidden bg-accent text-white">
-      <div className="z-10 flex h-full shrink-0 items-center bg-black/25 px-3 text-xs font-black uppercase tracking-wide">
+      <div className="z-10 flex h-full shrink-0 items-center bg-[#8E0E15] px-4 text-xs font-black uppercase tracking-wide">
         {getLocalized(language, { en: 'BREAKING', gu: 'બ્રેકિંગ', hi: 'ब्रेकिंग' })}
       </div>
       <div
@@ -57,7 +57,7 @@ export default function BreakingTicker() {
       <button
         type="button"
         onClick={() => setPaused((value) => !value)}
-        className="flex h-full w-10 shrink-0 items-center justify-center bg-black/20"
+        className="flex h-full w-10 shrink-0 items-center justify-center bg-[#8E0E15]"
         aria-label={paused ? 'Play ticker' : 'Pause ticker'}
       >
         {paused ? <Play className="h-3.5 w-3.5" /> : <Pause className="h-3.5 w-3.5" />}

@@ -14,6 +14,7 @@ import {
   Sun,
   User,
   X,
+  Home,
 } from 'lucide-react';
 import { useApp } from '@/components/AppProvider';
 import { SocialLinks } from '@/components/ui/SocialLinks';
@@ -45,27 +46,40 @@ function AppleIcon({ className = 'h-4 w-4' }: { className?: string }) {
 
 function PlayStoreIcon({ className = 'h-4 w-4' }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
-      <path d="M3 5.27v13.46c0 .87.87 1.41 1.63.97l11.66-6.73c.75-.43.75-1.51 0-1.94L4.63 4.3C3.87 3.86 3 4.4 3 5.27z" />
-      <path d="M17.47 11.23L4.76 3.89c-.38-.22-.84-.13-1.12.22l11.13 11.13 2.7-2.7c.39-.4.39-1.02 0-1.31z" />
+    <svg viewBox="0 0 466 511.98" className={className}>
+      <path fill="#EA4335" d="M199.9 237.8 1.4 470.17c7.22 24.57 30.16 41.81 55.8 41.81 11.16 0 20.93-2.79 29.3-8.37l244.16-139.46L199.9 237.8z"/>
+      <path fill="#FBBC04" d="m433.91 205.1-104.65-60-111.61 110.22 113.01 108.83 104.64-58.6c18.14-9.77 30.7-29.3 30.7-50.23-1.4-20.93-13.95-40.46-32.09-50.22z"/>
+      <path fill="#34A853" d="M199.42 273.45 329.27 145.1 87.9 8.37C79.53 2.79 68.36 0 57.2 0 30.7 0 6.98 18.14 1.4 41.86l198.02 231.59z"/>
+      <path fill="#4285F4" d="M1.39 41.86C0 46.04 0 51.63 0 57.2v397.64c0 5.57 0 9.76 1.4 15.34l216.27-214.86L1.39 41.86z"/>
     </svg>
   );
 }
 
 // The 12 flat navigation links shown in the nav bar
 const NAV_LINKS = [
-  { label: 'Home',          labelGu: 'મુખ્ય પૃષ્ઠ',        labelHi: 'होम',               href: '/' },
+  { label: 'Home',          labelGu: 'હોમ',                 labelHi: 'होम',               href: '/' },
+  { label: 'Videos',        labelGu: 'વીડિયો',               labelHi: 'वीडियो',           href: '/videos' },
   { label: 'Gujarat',       labelGu: 'ગુજરાત',              labelHi: 'गुजरात',           href: '/category/gujarat' },
-  { label: 'National',      labelGu: 'દેશ',                 labelHi: 'देश',               href: '/category/national' },
+  { label: 'India',         labelGu: 'ભારત',                labelHi: 'भारत',             href: '/category/national' },
   { label: 'World',         labelGu: 'વિશ્વ',               labelHi: 'विश्व',            href: '/category/world' },
-  { label: 'Politics',      labelGu: 'રાજકારણ',             labelHi: 'राजनीति',          href: '/category/politics' },
-  { label: 'Crime',         labelGu: 'ક્રાઈમ',              labelHi: 'क्राइम',           href: '/category/crime' },
-  { label: 'Trending',      labelGu: 'લોકપ્રિય સ્ટોરીઝ',   labelHi: 'ट्रेंडिंग',        href: '/category/trending' },
-  { label: 'Fact Check',    labelGu: 'ફેક્ટ ચેક',          labelHi: 'फैक्ट चेक',        href: '/category/fact-check' },
+  { label: 'Politics',      labelGu: 'રાજનીતિ',             labelHi: 'राजनीति',          href: '/category/politics' },
+  { label: 'Crime',         labelGu: 'ક્રાઇમ',               labelHi: 'क्राइम',           href: '/category/crime' },
+  { label: 'Health',        labelGu: 'હેલ્થ',               labelHi: 'health',           href: '/category/health' },
   { label: 'Entertainment', labelGu: 'મનોરંજન',             labelHi: 'मनोरंजन',          href: '/category/entertainment' },
   { label: 'Technology',    labelGu: 'ટેક્નોલોજી',          labelHi: 'टेक्नोलॉजी',       href: '/category/technology' },
-  { label: 'Lifestyle',     labelGu: 'લાઈફસ્ટાઈલ',         labelHi: 'लाइफस्टाइल',       href: '/category/lifestyle' },
-  { label: 'YouTube',       labelGu: 'યુટ્યુબ',             labelHi: 'यूट्यूब',          href: '/videos' },
+  { label: 'Photos',        labelGu: 'ફોટો ગેલેરી',          labelHi: 'फोटो गैलरी',       href: '/photos' },
+  { label: 'Fact Check',    labelGu: 'ફેક્ટચેક',             labelHi: 'फैक्ट चेक',        href: '/category/fact-check' },
+  { label: 'Trending',      labelGu: 'ટ્રેન્ડિંગ',           labelHi: 'ट्रेंडिंग',        href: '/category/trending' },
+  { label: 'Election 2027', labelGu: 'ચૂંટણી 2027',         labelHi: 'चुनाव 2027',        href: '/category/election-2027' },
+  { label: 'Podcast',       labelGu: 'પોડકાસ્ટ',             labelHi: 'पॉडकास्ट',         href: '/videos?tab=podcast' },
+];
+
+// The links shown under the "More/Other" (અન્ય) dropdown
+const OTHER_LINKS = [
+  { label: 'Instagram',     labelGu: 'ઇન્સ્ટાગ્રામ',         labelHi: 'इन्स्टाग्राम',      href: '/category/instagram' },
+  { label: 'Webstory',      labelGu: 'વેબસ્ટોરી',           labelHi: 'वेब स्टोरीज',       href: '/category/webstory' },
+  { label: 'Weather',       labelGu: 'હવામાન',              labelHi: 'मौसम',             href: '/category/weather' },
+  { label: 'Gold-Silver',   labelGu: 'ગોલ્ડ-સિલ્વર',         labelHi: 'गोल्ड-सिल्वर',     href: '/category/gold-silver' },
 ];
 
 const formatDateLong = (lang: string) => {
@@ -101,6 +115,9 @@ export default function Header() {
   const [selectedCity, setSelectedCity] = useState('અમદાવાદ');
   const [cityModalOpen, setCityModalOpen] = useState(false);
   const [savedCount, setSavedCount] = useState(0);
+  const [otherMenuOpen, setOtherMenuOpen] = useState(false);
+  const triggerRef = useRef<HTMLLIElement>(null);
+  const [dropdownLeft, setDropdownLeft] = useState<number | null>(null);
 
   const updateSavedCount = () => {
     try {
@@ -199,7 +216,7 @@ export default function Header() {
     <>
       <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur">
       {/* Top bar: date + social */}
-      <div className="bg-[#171310] dark:bg-[#0D0B08] text-white/95">
+      <div className="bg-black dark:bg-black text-white/95">
         <div className="mx-auto flex max-w-screen-xl max-w-header-layout items-center justify-between gap-3 px-4 py-1.5">
           <div className="min-w-0 flex items-center gap-3 truncate text-sm font-semibold opacity-85">
             <span className="hidden sm:inline">
@@ -220,12 +237,11 @@ export default function Header() {
           </div>
           <div className="flex items-center gap-3.5 shrink-0 max-sm:hidden">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] uppercase tracking-widest font-black text-red-400 select-none mr-1 animate-pulse">★ Download:</span>
               <a
                 href="https://apps.apple.com"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-1.5 rounded-md border border-red-500/40 bg-red-500/5 px-3 py-1.5 text-[10.5px] font-black text-white hover:border-red-600 hover:bg-red-600 transition-all hover:scale-[1.03] active:scale-95 shadow-[0_2px_8px_rgba(239,68,68,0.2)] select-none cursor-pointer"
+                className="flex items-center gap-1.5 rounded-md border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-[10.5px] font-black text-white hover:border-zinc-500 hover:bg-zinc-800 transition-all hover:scale-[1.03] active:scale-95 shadow-sm select-none cursor-pointer"
               >
                 <AppleIcon className="h-3.5 w-3.5 text-white" />
                 <span>App Store</span>
@@ -234,7 +250,7 @@ export default function Header() {
                 href="https://play.google.com"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-1.5 rounded-md border border-red-500/40 bg-red-500/5 px-3 py-1.5 text-[10.5px] font-black text-white hover:border-red-600 hover:bg-red-600 transition-all hover:scale-[1.03] active:scale-95 shadow-[0_2px_8px_rgba(239,68,68,0.2)] select-none cursor-pointer"
+                className="flex items-center gap-1.5 rounded-md border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-[10.5px] font-black text-white hover:border-zinc-500 hover:bg-zinc-800 transition-all hover:scale-[1.03] active:scale-95 shadow-sm select-none cursor-pointer"
               >
                 <PlayStoreIcon className="h-3.5 w-3.5 text-white" />
                 <span>Google Play</span>
@@ -441,9 +457,75 @@ export default function Header() {
         className="hidden border-t border-border bg-card/98 md:block"
         aria-label="Main navigation"
       >
-        <div className="relative mx-auto max-w-screen-xl max-w-header-layout px-4">
-          {/* E-Paper CTA – absolutely pinned to the right */}
-          <div className="absolute right-4 top-1/2 -translate-y-1/2">
+        <div className="mx-auto max-w-screen-xl max-w-header-layout px-4 flex items-center justify-between gap-4 relative">
+          {/* Main scrollable navigation list */}
+          <div className="flex-1 min-w-0 overflow-hidden">
+            <ul className="flex items-center gap-0 overflow-x-auto scrollbar-none">
+              {NAV_LINKS.map((link) => {
+                const active = isActive(link.href);
+                return (
+                  <li key={link.href} className="shrink-0">
+                    <a
+                      href={link.href}
+                      className={`relative flex h-11 items-center whitespace-nowrap px-3.5 text-sm font-semibold transition-colors duration-150 lg:px-4 ${
+                        active
+                          ? 'text-accent'
+                          : 'text-foreground hover:text-accent'
+                      }`}
+                      aria-current={active ? 'page' : undefined}
+                    >
+                      {link.href === '/' ? (
+                        <span className="flex items-center gap-1.5">
+                          <Home className="h-4 w-4 shrink-0" />
+                          <span>{getNavLabel(link)}</span>
+                        </span>
+                      ) : (
+                        getNavLabel(link)
+                      )}
+                      {/* Active indicator – thick red underline */}
+                      {active && (
+                        <span
+                          className="absolute bottom-0 left-0 right-0 h-[3px] rounded-t-full bg-accent"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </a>
+                  </li>
+                );
+              })}
+
+              {/* Other / અન્ય Dropdown Trigger */}
+              <li 
+                ref={triggerRef}
+                className="relative shrink-0"
+                onMouseEnter={() => {
+                  setOtherMenuOpen(true);
+                  const rect = triggerRef.current?.getBoundingClientRect();
+                  const navWrapper = triggerRef.current?.closest('.max-w-header-layout');
+                  const navRect = navWrapper?.getBoundingClientRect();
+                  if (rect && navRect) {
+                    setDropdownLeft(rect.left - navRect.left);
+                  }
+                }}
+                onMouseLeave={() => setOtherMenuOpen(false)}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOtherMenuOpen(!otherMenuOpen)}
+                  className={`relative flex h-11 items-center gap-1 whitespace-nowrap px-3.5 text-sm font-semibold transition-colors duration-150 lg:px-4 cursor-pointer ${
+                    otherMenuOpen ? 'text-accent' : 'text-foreground hover:text-accent'
+                  }`}
+                >
+                  <span>{language === 'gu' ? 'અન્ય' : language === 'hi' ? 'अन्य' : 'More'}</span>
+                  <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${otherMenuOpen ? 'rotate-180' : ''}`} />
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Non-scrollable controls pinned to the right (E-Paper CTA only) */}
+          <div className="flex items-center gap-4 shrink-0 pl-4 border-l border-border/40 h-11 relative">
+            {/* E-Paper CTA */}
             <a
               href="/epaper"
               className="group relative inline-flex h-9 items-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-accent to-red-700 px-4 text-xs font-black text-white shadow-md shadow-red-900/30 ring-1 ring-red-700/40 transition-all duration-200 hover:shadow-lg hover:shadow-red-900/40 hover:scale-[1.03] active:scale-95"
@@ -459,37 +541,36 @@ export default function Header() {
               </span>
             </a>
           </div>
-          <ul className="flex items-center justify-center gap-0 overflow-x-auto scrollbar-none pr-24">
-            {NAV_LINKS.map((link) => {
-              const active = isActive(link.href);
-              return (
-                <li key={link.href} className="shrink-0">
+          
+          {otherMenuOpen && (
+            <div 
+              className="absolute z-50 min-w-40 rounded-lg border border-border bg-card p-1.5 shadow-xl animate-in fade-in slide-in-from-top-2 duration-200"
+              style={{
+                top: '100%',
+                left: dropdownLeft !== null ? `${dropdownLeft}px` : undefined,
+              }}
+              onMouseEnter={() => setOtherMenuOpen(true)}
+              onMouseLeave={() => setOtherMenuOpen(false)}
+            >
+              {OTHER_LINKS.map((link) => {
+                const active = isActive(link.href);
+                return (
                   <a
+                    key={link.href}
                     href={link.href}
-                    className={`relative flex h-11 items-center whitespace-nowrap px-3.5 text-sm font-semibold transition-colors duration-150 lg:px-4 ${
+                    className={`block rounded-md px-3.5 py-2 text-left text-xs font-semibold transition-colors duration-150 ${
                       active
-                        ? 'text-accent'
-                        : 'text-foreground hover:text-accent'
+                        ? 'bg-accent/10 text-accent'
+                        : 'text-foreground hover:bg-muted hover:text-accent'
                     }`}
-                    aria-current={active ? 'page' : undefined}
                   >
                     {getNavLabel(link)}
-                    {/* Active indicator – thick red underline */}
-                    {active && (
-                      <span
-                        className="absolute bottom-0 left-0 right-0 h-[3px] rounded-t-full bg-accent"
-                        aria-hidden="true"
-                      />
-                    )}
                   </a>
-                </li>
-              );
-            })}
-
-
-          </ul>
-        </div>
-      </nav>
+                );
+              })}
+            </div>
+          )}
+        </div></nav>
 
       {/* ── Mobile Drawer ────────────────────────────────────────────────── */}
       {menuOpen && (
@@ -512,7 +593,7 @@ export default function Header() {
                   href="https://apps.apple.com"
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-1.5 rounded-lg border border-red-500/40 bg-red-500/5 px-2.5 py-1 text-[10px] font-black text-white hover:border-red-600 hover:bg-red-600 transition active:scale-95 shadow-sm"
+                  className="flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-1 text-[10px] font-black text-white hover:border-zinc-500 hover:bg-zinc-800 transition active:scale-95 shadow-sm"
                 >
                   <AppleIcon className="h-3.5 w-3.5 animate-pulse text-white" />
                   <span>App Store</span>
@@ -521,7 +602,7 @@ export default function Header() {
                   href="https://play.google.com"
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-1.5 rounded-lg border border-red-500/40 bg-red-500/5 px-2.5 py-1 text-[10px] font-black text-white transition active:scale-95 shadow-sm hover:border-red-600 hover:bg-red-600"
+                  className="flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-1 text-[10px] font-black text-white transition active:scale-95 shadow-sm hover:border-zinc-500 hover:bg-zinc-800"
                 >
                   <PlayStoreIcon className="h-3.5 w-3.5 text-white" />
                   <span>Google Play</span>
@@ -531,7 +612,7 @@ export default function Header() {
 
             {/* Flat link grid */}
             <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
-              {NAV_LINKS.map((link) => {
+              {[...NAV_LINKS, ...OTHER_LINKS].map((link) => {
                 const active = isActive(link.href);
                 return (
                   <a

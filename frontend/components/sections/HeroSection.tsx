@@ -199,9 +199,16 @@ export default function HeroSection() {
               </div>
               {/* Category tags */}
               <div className="flex items-center gap-1.5 mt-2.5">
-                <span className="bg-accent text-white text-[10px] font-black px-2 py-0.5 rounded-sm uppercase tracking-wide">
-                  {language === 'gu' ? 'ટ્રેન્ડ' : 'Trending'}
-                </span>
+                {uniqueTopStories[0].isLive ? (
+                  <span className="bg-accent text-white text-[10px] font-black px-2 py-0.5 rounded-sm uppercase tracking-wide flex items-center gap-1 animate-pulse">
+                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-white" />
+                    LIVE
+                  </span>
+                ) : (
+                  <span className="bg-accent text-white text-[10px] font-black px-2 py-0.5 rounded-sm uppercase tracking-wide">
+                    {language === 'gu' ? 'ટ્રેન્ડ' : 'Trending'}
+                  </span>
+                )}
                 <span className="text-muted-foreground text-[11px] font-semibold">
                   {getCategoryLabel(uniqueTopStories[0], language)}
                 </span>
@@ -265,11 +272,11 @@ export default function HeroSection() {
 
             {[uniqueTopStories[4], uniqueTopStories[5], uniqueTopStories[8]]
               .filter(Boolean)
-              .map((art) => (
+              .map((art, idx) => (
                 <Link
                   key={art.id}
                   href={`/news/${art.slug}`}
-                  className="group flex flex-col pt-3.5 border-t border-border/40 hover:bg-muted/10 transition-colors"
+                  className="group flex flex-col py-3.5 px-2.5 border-t border-border/40 hover:bg-muted/10 transition-colors rounded-md"
                 >
                   <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-accent transition-colors line-clamp-3">
                     {getArticleTitle(art, language)}
@@ -311,11 +318,11 @@ export default function HeroSection() {
 
             {[uniqueTopStories[6], uniqueTopStories[7], uniqueTopStories[11]]
               .filter(Boolean)
-              .map((art) => (
+              .map((art, idx) => (
                 <Link
                   key={art.id}
                   href={`/news/${art.slug}`}
-                  className="group flex flex-col pt-3.5 border-t border-border/40 hover:bg-muted/10 transition-colors"
+                  className="group flex flex-col py-3.5 px-2.5 border-t border-border/40 hover:bg-muted/10 transition-colors rounded-md"
                 >
                   <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-accent transition-colors line-clamp-3">
                     {getArticleTitle(art, language)}
@@ -449,46 +456,45 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* YouTube Latest */}
-          <div className="w-full rounded-sm border border-slate-200 bg-card p-4 shadow-sm flex flex-col gap-2.5">
-            <div className="flex items-center gap-1.5 border-b border-border pb-2">
+          {/* YouTube Live TV */}
+          <div className="w-full rounded-md border border-slate-200 bg-card p-4 shadow-sm flex flex-col gap-2.5">
+            <div className="flex items-center justify-between border-b border-border pb-2">
               <span className="text-[#B3121B] font-black text-[13.5px] md:text-[14px] flex items-center gap-1.5 select-none">
-                <span className="text-[12px]">▶</span>
-                {language === 'gu' ? 'યુટ્યુબ પર લેટેસ્ટ' : 'Latest on YouTube'}
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#B3121B] opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[#B3121B]" />
+                </span>
+                {language === 'gu' ? 'યુટ્યુબ લાઈવ ટીવી' : 'YouTube Live TV'}
+              </span>
+              <span className="bg-accent text-white text-[9px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wider animate-pulse">
+                LIVE
               </span>
             </div>
             
-            <Link
-              href={`https://www.youtube.com/watch?v=${LATEST_VIDEO_ID}`}
-              target="_blank"
-              rel="noreferrer"
-              className="group block relative w-full overflow-hidden rounded-sm border border-slate-200/60 bg-slate-950 shadow-sm"
+            <div 
+              className="relative w-full overflow-hidden rounded-sm border border-slate-200/60 bg-black shadow-inner"
               style={{ aspectRatio: '16/9' }}
             >
-              <Image
-                src={`https://img.youtube.com/vi/${LATEST_VIDEO_ID}/mqdefault.jpg`}
-                alt="Latest YouTube Video"
-                fill
-                sizes="280px"
-                className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+              <iframe
+                src={`https://www.youtube.com/embed/${LATEST_VIDEO_ID}?autoplay=0&mute=1&rel=0&modestbranding=1&controls=1`}
+                title="YouTube Live Stream"
+                className="absolute inset-0 h-full w-full border-0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
               />
-              <span className="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/25 transition-all">
-                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#FF0000] text-white shadow-lg transition-transform duration-300 group-hover:scale-110">
-                  <Play className="h-4.5 w-4.5 fill-current ml-0.5" />
-                </span>
-              </span>
-            </Link>
+            </div>
             
-            <Link
-              href={`https://www.youtube.com/watch?v=${LATEST_VIDEO_ID}`}
-              target="_blank"
-              rel="noreferrer"
-              className="text-[13px] font-black leading-snug text-foreground hover:text-[#B3121B] transition-colors"
-            >
-              {language === 'gu'
-                ? 'ધી સાબરકાંઠા જિલ્લા સહકારી સંઘ ભ્રષ્ટાચારનો અડ્ડો — યુટ્યુબ પર જુઓ'
-                : 'Sabarkantha District Cooperative Union corruption hub — Watch on YouTube'}
-            </Link>
+            <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground pt-1 border-t border-border/40 mt-1">
+              <span>{language === 'gu' ? 'ગુજરાત પોસ્ટ લાઈવ પ્રસારણ' : 'Gujarat Post Live Broadcast'}</span>
+              <a 
+                href={`https://www.youtube.com/watch?v=${LATEST_VIDEO_ID}`}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[#B3121B] hover:underline flex items-center gap-1 font-black"
+              >
+                {language === 'gu' ? 'યુટ્યુબ પર જુઓ ↗' : 'Watch on YouTube ↗'}
+              </a>
+            </div>
           </div>
 
           {/* Popular Articles */}
@@ -501,7 +507,7 @@ export default function HeroSection() {
                 href="/category/trending"
                 className="text-[11px] font-black text-[#B3121B]/95 hover:text-[#B3121B] hover:underline"
               >
-                {language === 'gu' ? 'બધું જુઓ →' : 'View all →'}
+                {language === 'gu' ? 'વધુ જુઓ →' : 'View all →'}
               </Link>
             </div>
             
@@ -510,7 +516,7 @@ export default function HeroSection() {
                 <Link
                   key={art.id}
                   href={`/news/${art.slug}`}
-                  className="group flex items-start gap-3 py-2.5 hover:bg-muted/60 rounded-sm transition-all px-1.5 first:pt-1 last:pb-1"
+                  className="group flex items-start gap-3 py-3.5 hover:bg-muted/10 rounded-md transition-all px-2.5 first:pt-1 last:pb-1"
                 >
                   <span className="text-[18px] font-black text-[#B3121B]/85 group-hover:text-[#B3121B] font-serif w-5 shrink-0 mt-0.5 transition-colors select-none text-center">
                     {language === 'gu' ? toGuLocal(idx + 1) : idx + 1}
@@ -684,17 +690,14 @@ function VideoDesk({ videos, language, showShorts = true }: { videos: typeof VID
         <div className="relative z-10 flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <span className="text-white font-black text-[18px] md:text-[20px] select-none tracking-tight">
-              {language === 'gu' ? 'ગુજરાત પોસ્ટ વિશેષ' : 'Gujarat Post Special'}
-            </span>
-            <span className="border border-white/40 text-white text-[11px] font-black px-2.5 py-1 rounded-sm select-none tracking-wider bg-white/5">
-              {language === 'gu' ? 'તપાસ - એક્સક્લુઝિવ' : 'INVESTIGATION'}
+              {language === 'gu' ? 'ગુજરાત પોસ્ટ વીડિયો' : 'Gujarat Post Videos'}
             </span>
           </div>
           <Link
             href="/videos"
             className="text-white/95 font-extrabold text-[13px] md:text-[14px] hover:text-white hover:underline flex items-center gap-1"
           >
-            {language === 'gu' ? 'બધું જુઓ →' : 'See All →'}
+            {language === 'gu' ? 'વધુ જુઓ →' : 'See All →'}
           </Link>
         </div>
 
@@ -724,11 +727,6 @@ function VideoDesk({ videos, language, showShorts = true }: { videos: typeof VID
                 {featuredVideo.duration}
               </span>
             </div>
-
-            {/* Category badge */}
-            <span className="inline-flex items-center text-[10.5px] font-black bg-white text-[#B3121B] px-2.5 py-1 rounded-sm w-max mb-2.5 select-none tracking-wide uppercase">
-              {language === 'gu' ? 'એક્સક્લુઝિવ તપાસ' : 'EXCLUSIVE INVESTIGATION'}
-            </span>
 
             {/* Title */}
             <h3 className="font-extrabold text-[16px] md:text-[19px] leading-snug text-white group-hover:underline transition-all line-clamp-2">
@@ -3250,7 +3248,7 @@ export function PoliticsSection({ language }: { language: Language }) {
                     <Link
                       key={sub.id}
                       href={`/news/${sub.slug}`}
-                      className="group py-2.5 block"
+                      className="group py-3.5 px-2.5 hover:bg-muted/10 transition-colors rounded-md block"
                     >
                       <h4 className="text-[12px] md:text-[12.5px] font-extrabold leading-snug line-clamp-3 text-foreground group-hover:text-[#B3121B] transition-colors">
                         {sub.titleGu}

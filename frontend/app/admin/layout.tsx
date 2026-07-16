@@ -20,7 +20,7 @@ import {
   Video,
 } from 'lucide-react';
 import { useApp } from '@/components/AppProvider';
-import gpLogo from '../../public/gplogo.jpg';
+import gpLogo from '../../public/assets/gujarat-post-logo-chip.png';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -110,13 +110,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Brand Header */}
         <div className="flex h-16 items-center justify-between px-6 border-b border-zinc-200 dark:border-zinc-800">
           <a href="/admin" className="flex items-center gap-2">
-            <div className="relative h-10 w-40 overflow-hidden rounded bg-white">
+            <div className="relative h-10 w-40 overflow-hidden rounded">
               <Image
                 src={gpLogo}
                 alt="Gujarat Post"
                 fill
                 priority
-                unoptimized
                 className="object-contain"
               />
             </div>

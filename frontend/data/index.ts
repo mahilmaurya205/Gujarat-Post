@@ -282,9 +282,9 @@ const IMG: Record<string, string[]> = {
 
 const baseStories = [
   // Gujarat
-  ["gujarat", "New traffic rules implemented in Ahmedabad from today, details of penalty and locations", "અમદાવાદમાં આજથી નવા ટ્રાફિક નિયમ લાગુ! ક્યાં લાગશે દંડ, જાણો પૂરી વિગત", "अहमदाबाद में आज से नए ट्रैफिक नियम लागू! कहां लगेगा जुर्माना, जानें पूरी जानकारी"],
-  ["gujarat", "Big gift for Gujarat: New semiconductor policy announced, thousands of jobs to be created", "ગુજરાતને મોટી ભેટ! નવી સેમિકન્ડક્ટર પોલિસી જાહેર, હજારો નોકરીઓ મળશે", "गुजरात को बड़ी सौगात! नई सेमीकंडक्टर नीति घोषित, हजारों नौकरियां मिलेंगी"],
   ["sports", "Huge clash today at Narendra Modi Stadium, rush for tickets among fans", "નરેન્દ્ર મોદી સ્ટેડિયમમાં આજે મહામુકાબલો, ટિકિટ માટે પડાપડી", "नरेंद्र मोदी स्टेडियम में आज महामुकाबला, टिकटों के लिए मची मारामारी"],
+  ["gujarat", "Big gift for Gujarat: New semiconductor policy announced, thousands of jobs to be created", "ગુજરાતને મોટી ભેટ! નવી સેમિકન્ડક્ટર પોલિસી જાહેર, હજારો નોકરીઓ મળશે", "गुजरात को बड़ी सौगात! नई सेमीकंडक्टर नीति घोषित, हजारों नौकरियां मिलेंगी"],
+  ["gujarat", "New traffic rules implemented in Ahmedabad from today, details of penalty and locations", "અમદાવાદમાં આજથી નવા ટ્રાફિક નિયમ લાગુ! ક્યાં લાગશે દંડ, જાણો પૂરી વિગત", "अहमदाबाद में आज से नए ट्रैफिक नियम लागू! कहां लगेगा जुर्माना, जानें पूरी जानकारी"],
   ["gujarat", "Major change in Darshan timings at Dwarka Temple, important update for devotees", "દ્વારકા મંદિરના દર્શન સમયમાં મોટો ફેરફાર, શ્રદ્ધાળુઓ જરૂર વાંચે", "द्वारका मंदिर के दर्शन समय में बड़ा बदलाव, श्रद्धालु जरूर पढ़ें"],
   ["national", "Parliament Monsoon Session begins today: clash expected over key bills", "સંસદનું ચોમાસુ સત્ર આજથી: આ મોટા ખરડા પર થશે ઘમાસાણ", "संसद का मानसून सत्र आज से: इन बड़े विधेयकों पर होगा हंगामा"],
   ["gujarat", "Warning! Heavy rain alert in Gujarat for next three days", "સાવધાન! ગુજરાતમાં આગામી ત્રણ દિવસ ધોધમાર વરસાદની આગાહી", "सावधान! गुजरात में अगले तीन दिनों तक भारी बारिश की चेतावनी"],
@@ -568,7 +568,7 @@ export const ARTICLES: Article[] = Array.from({ length: 120 }, (_, i) => {
       if (i === 10) return 150000; // 1.5L
       return 82000 + i * 3150;
     })(),
-    isLive: i === 2,
+    isLive: i === 0,
     relativeTime: (() => {
       if (i === 0) return "25 mins ago";
       if (i === 1) return "50 mins ago";
@@ -740,33 +740,37 @@ export const BREAKING_TICKER = [
 ];
 
 export const NAV_ITEMS: NavItem[] = [
-  ["Home", "મુખ્ય પૃષ્ઠ", "होम", "/"],
+  ["Home", "હોમ", "होम", "/"],
+  ["Videos", "વીડિયો", "वीडियो", "/videos"],
   ["Gujarat", "ગુજરાત", "गुजरात", "/category/gujarat"],
-  ["National", "દેશ", "देश", "/category/national"],
+  ["India", "ભારત", "भारत", "/category/national"],
   ["World", "વિશ્વ", "विश्व", "/category/world"],
-  ["Politics", "રાજકારણ", "राजनीति", "/category/politics"],
-  ["Crime", "ક્રાઈમ", "क्राइम", "/category/crime"],
-  ["Trending", "લોકપ્રિય સ્ટોરીઝ", "ट्रेंडिंग", "/category/trending"],
-  ["Fact Check", "ફેક્ટ ચેક", "फैक्ट चेक", "/category/fact-check"],
+  ["Politics", "રાજનીતિ", "राजनीति", "/category/politics"],
+  ["Crime", "ક્રાઇમ", "क्राइम", "/category/crime"],
+  ["Health", "હેલ્થ", "स्वास्थ्य", "/category/health"],
   ["Entertainment", "મનોરંજન", "मनोरंजन", "/category/entertainment"],
   ["Technology", "ટેક્નોલોજી", "टेक्नोलॉजी", "/category/technology"],
-  ["Lifestyle", "લાઈફસ્ટાઈલ", "लाइफस्टाइल", "/category/lifestyle"],
-  ["YouTube", "યુટ્યુબ", "यूट्यूब", "/videos"],
+  ["Photos", "ફોટો ગેલેરી", "फोटो गैलरी", "/photos"],
+  ["Fact Check", "ફેક્ટચેક", "फैक्ट चेक", "/category/fact-check"],
+  ["Trending", "ટ્રેન્ડિંગ", "ट्रेंडિંગ", "/category/trending"],
+  ["Election 2027", "ચૂંટણી 2027", "चुनाव 2027", "/category/election-2027"],
+  ["Podcast", "પોડકાસ્ટ", "पॉडकास्ट", "/videos?tab=podcast"],
+  ["Instagram", "ઇન્સ્ટાગ્રામ", "इन्स्टाग्राम", "/category/instagram"],
+  ["Webstory", "વેબસ્ટોરી", "वेब स्टोरीज", "/category/webstory"],
+  ["Weather", "હવામાન", "मौसम", "/category/weather"],
+  ["Gold-Silver", "ગોલ્ડ-સિલ્વર", "गोल्ड-सिल्वर", "/category/gold-silver"],
   // Extended items kept for other references in the codebase
   ["State News", "રાજ્ય સમાચાર", "राज्य समाचार", "/category/state"],
   ["Ahmedabad", "અમદાવાદ", "अहमदाबाद", "/category/ahmedabad"],
   ["Rajkot", "રાજકોટ", "राजकोट", "/category/rajkot"],
   ["Surat", "સુરત", "सूरत", "/category/surat"],
-  ["Vadodara", "વડોદરા", "वडोदरा", "/category/vadodara"],
+  ["Vadodara", "વડોદરા", "वडोदરા", "/category/vadodara"],
   ["Business", "બિઝનેસ", "बिजनेस", "/category/business"],
   ["Sports", "રમતગમત", "खेल", "/category/sports"],
   ["Education", "શિક્ષણ", "शिक्षा", "/category/education"],
-  ["Gujarat Election 2027", "ગુજરાત ચૂંટણી 2027", "गुजरात चुनाव 2027", "/category/election-2027"],
-  ["Videos", "વીડિયો", "वीडियो", "/videos"],
   ["Watch Never Ends", "વોચ ક્યારેય અટકતું નથી", "देखना कभी खत्म नहीं होता", "/watch"],
-  ["Shorts", "શોર્ટ્સ", "शॉर्ट्स", "/shorts"],
-  ["Podcasts", "પોડકાસ્ટ", "पॉडकास्ट", "/videos?tab=podcast"],
-  ["E-paper", "ઈ-પેપર", "ई-पेपर", "/epaper"],
+  ["Shorts", "શોર્ટ્સ", "शॉर्टส์", "/shorts"],
+  ["E-paper", "ઈ-પેપર", "ई-পেপার", "/epaper"],
 ].map(([label, labelGu, labelHi, href]) => ({ label, labelGu, labelHi, href }));
 
 export const getLocalized = (language: Language, values: { en: string; gu: string; hi: string }) => {
@@ -836,4 +840,12 @@ export const formatViews = (value: number): string => {
   if (value >= 100000) return `${(value / 100000).toFixed(1)}L`;
   if (value >= 1000) return `${(value / 1000).toFixed(0)}K`;
   return String(value);
+};
+
+export const toGuLocal = (num: number | string): string => {
+  const guDigits = ["૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯"];
+  return String(num).split("").map(char => {
+    const digit = parseInt(char, 10);
+    return isNaN(digit) ? char : guDigits[digit];
+  }).join("");
 };

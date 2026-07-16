@@ -590,7 +590,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
               </span>
               
               {/* Headline */}
-              <h4 className="text-[14.5px] md:text-[15px] leading-snug text-foreground group-hover:text-[#B3121B] transition-colors duration-150 line-clamp-3 flex-1 mt-0.5" style={{ fontFamily: "'Hind Vadodara', serif", fontWeight: 700 }}>
+              <h4 className="text-[14.5px] md:text-[15px] leading-snug text-foreground group-hover:text-[#B3121B] transition-colors duration-150 line-clamp-3 flex-1 mt-0.5" style={{ fontFamily: "'Noto Sans Gujarati', 'Hind Vadodara', sans-serif", fontWeight: 700 }}>
                 {getArticleTitle(art, language)}
               </h4>
             </Link>
@@ -615,7 +615,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
                 🏅
               </div>
               <div>
-                <h4 className="text-[14px] text-foreground leading-tight" style={{ fontFamily: "'Hind Vadodara', serif", fontWeight: 700 }}>
+                <h4 className="text-[14px] text-foreground leading-tight" style={{ fontFamily: "'Noto Sans Gujarati', 'Hind Vadodara', sans-serif", fontWeight: 700 }}>
                   {labelGold}
                 </h4>
                 <p className="text-[11px] font-medium text-muted-foreground mt-0.5">
@@ -624,7 +624,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
               </div>
             </div>
             <div className="text-right">
-              <p className="text-[16px] text-foreground leading-none" style={{ fontFamily: "'Hind Vadodara', serif", fontWeight: 800 }}>
+              <p className="text-[16px] text-foreground leading-none" style={{ fontFamily: "'Noto Sans Gujarati', 'Hind Vadodara', sans-serif", fontWeight: 800 }}>
                 ₹{formatPrice(goldPrice)}
               </p>
               <p className="text-[11px] font-bold text-emerald-600 flex items-center justify-end gap-0.5 mt-1 select-none">
@@ -643,7 +643,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
                 🥈
               </div>
               <div>
-                <h4 className="text-[14px] text-foreground leading-tight" style={{ fontFamily: "'Hind Vadodara', serif", fontWeight: 700 }}>
+                <h4 className="text-[14px] text-foreground leading-tight" style={{ fontFamily: "'Noto Sans Gujarati', 'Hind Vadodara', sans-serif", fontWeight: 700 }}>
                   {labelSilver}
                 </h4>
                 <p className="text-[11px] font-medium text-muted-foreground mt-0.5">
@@ -652,7 +652,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
               </div>
             </div>
             <div className="text-right">
-              <p className="text-[16px] text-foreground leading-none" style={{ fontFamily: "'Hind Vadodara', serif", fontWeight: 800 }}>
+              <p className="text-[16px] text-foreground leading-none" style={{ fontFamily: "'Noto Sans Gujarati', 'Hind Vadodara', sans-serif", fontWeight: 800 }}>
                 ₹{formatPrice(silverPrice)}
               </p>
               <p className="text-[11px] font-bold text-muted-foreground flex items-center justify-end gap-0.5 mt-1 select-none">

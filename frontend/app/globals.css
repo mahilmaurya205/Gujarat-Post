@@ -7,19 +7,19 @@
   --paper: #FFFFFF;
   --paper-2: #FAFAFA;
   --paper-3: #F2F2F2;
-  --ink: #171310;
-  --ink-2: #6A6157;
-  --ink-3: #948A7C;
-  --line: #E0D7C6;
-  --line-2: #CFC4AF;
-  --ink-rule: #171310;
+  --ink: #0a0a0a;
+  --ink-2: #4b5563;
+  --ink-3: #9ca3af;
+  --line: #e4e4e7;
+  --line-2: #d4d4d8;
+  --ink-rule: #0a0a0a;
   --red: #B3121B;
   --red-2: #8E0E15;
   --red-wash: #F4E3DF;
-  --char: #17130E;
-  --char-2: #211B14;
-  --gold: #B98A2E;
-  --green: #16794A;
+  --char: #09090b;
+  --char-2: #18181b;
+  --gold: #b3121b;
+  --green: #b3121b;
   --sel: #B3121B;
 
   /* Standard Variables mapped to Rebuild Variables */
@@ -61,22 +61,22 @@
   /* ==========================================
      GUJARAT POST — Redesign Rebuild Variables (Dark)
      ========================================== */
-  --paper: #12100C;
-  --paper-2: #1B1712;
-  --paper-3: #241F18;
-  --ink: #F3ECDE;
-  --ink-2: #A79C8B;
-  --ink-3: #7E7566;
-  --line: #2E2820;
-  --line-2: #3F3830;
-  --ink-rule: #C9BEA9;
+  --paper: #09090b;
+  --paper-2: #18181b;
+  --paper-3: #27272a;
+  --ink: #fafafa;
+  --ink-2: #a1a1aa;
+  --ink-3: #71717a;
+  --line: #27272a;
+  --line-2: #3f3f46;
+  --ink-rule: #fafafa;
   --red: #E6535B;
   --red-2: #F06B72;
   --red-wash: #2E1815;
-  --char: #0D0B08;
-  --char-2: #17130E;
-  --gold: #D9B266;
-  --green: #43BE81;
+  --char: #09090b;
+  --char-2: #18181b;
+  --gold: #e6535b;
+  --green: #e6535b;
   --sel: #E6535B;
 
   /* Standard Variables mapped to Rebuild Variables (Dark) */
@@ -108,7 +108,7 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-  --font-sans: "Noto Sans Gujarati", "Noto Sans Devanagari", "Noto Sans", "Nirmala UI", Arial, sans-serif;
+  --font-sans: "Mukta Vaani", "Mukta", "Nirmala UI", Arial, sans-serif;
 }
 
 * {
@@ -128,7 +128,7 @@ body {
     radial-gradient(circle at 15% 0%, rgb(225 29 46 / 0.08), transparent 28rem),
     linear-gradient(180deg, var(--background), var(--background));
   color: var(--foreground);
-  font-family: "Noto Sans Gujarati", "Noto Sans Devanagari", "Noto Sans", "Nirmala UI", Arial, sans-serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", "Nirmala UI", Arial, sans-serif;
   line-height: 1.5;
 }
 
@@ -141,16 +141,16 @@ body {
 
 /* ── Force footer to always display in dark mode regardless of page theme ── */
 footer[data-theme="dark"] {
-  --paper: #12100C;
-  --paper-2: #1B1712;
-  --paper-3: #241F18;
-  --ink: #F3ECDE;
-  --ink-2: #A79C8B;
-  --ink-3: #7E7566;
-  --line: #2E2820;
-  --background: #12100C;
-  --foreground: #F3ECDE;
-  --red: #E6535B;
+  --paper: #09090b;
+  --paper-2: #18181b;
+  --paper-3: #27272a;
+  --ink: #fafafa;
+  --ink-2: #a1a1aa;
+  --ink-3: #71717a;
+  --line: #27272a;
+  --background: #09090b;
+  --foreground: #fafafa;
+  --red: #e6535b;
   color-scheme: dark;
   color: rgba(255,255,255,0.9);
 }
@@ -173,8 +173,7 @@ h6,
 .font-black,
 .font-bold,
 .font-semibold {
-  font-family: "Mukta Vaani", "Mukta", "Noto Sans Gujarati", "Noto Sans Devanagari", "Noto Sans", "Nirmala UI", sans-serif;
-  font-weight: 500;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", "Nirmala UI", sans-serif;
   letter-spacing: -0.01em;
   line-height: 1.25;
 }
@@ -269,59 +268,6 @@ img {
     linear-gradient(180deg, rgb(255 255 255 / 0.03), transparent);
 }
 
-.logo-3d {
-  perspective: 700px;
-}
-
-.logo-3d-inner {
-  transform-style: preserve-3d;
-  animation: logo-float-3d 4.8s ease-in-out infinite;
-}
-
-.logo-3d-inner::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(115deg, transparent 20%, rgb(255 255 255 / 0.45) 45%, transparent 68%);
-  mix-blend-mode: screen;
-  opacity: 0.35;
-  transform: translateX(-120%);
-  animation: logo-shine 4.8s ease-in-out infinite;
-}
-
-.logo-3d:hover .logo-3d-inner {
-  animation-play-state: paused;
-  transform: rotateX(7deg) rotateY(-11deg) translateY(-1px);
-}
-
-@keyframes logo-float-3d {
-  0%,
-  100% {
-    transform: rotateX(0deg) rotateY(0deg) translateY(0);
-  }
-  50% {
-    transform: rotateX(4deg) rotateY(-7deg) translateY(-2px);
-  }
-}
-
-@keyframes logo-shine {
-  0%,
-  45% {
-    transform: translateX(-120%);
-  }
-  70%,
-  100% {
-    transform: translateX(120%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .logo-3d-inner,
-  .logo-3d-inner::after {
-    animation: none;
-  }
-}
 
 @keyframes live-pulse {
   0%,
@@ -1076,7 +1022,7 @@ img {
 
 /* Sidebar widgets from Redesign Final */
 .wtitle {
-  font-family: 'Hind Vadodara', serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
   font-weight: 800;
   font-size: 15px;
   color: var(--foreground);
@@ -1104,7 +1050,7 @@ img {
   display: flex;
   align-items: center;
   gap: 9px;
-  font-family: 'Hind Vadodara', serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
   font-weight: 700;
   font-size: 14.5px;
   color: var(--foreground);
@@ -1194,12 +1140,12 @@ img {
   color: #fff !important;
 }
 .share-x {
-  background: #171310;
+  background: #000000;
   color: #fff !important;
 }
 html[data-theme="dark"] .share-x {
-  background: #F3ECDE;
-  color: #12100C !important;
+  background: #ffffff;
+  color: #09090b !important;
 }
 .share-cp {
   border: 1px solid var(--border);
@@ -1219,7 +1165,7 @@ html[data-theme="dark"] .share-x {
   border-top: none;
 }
 .s-rank .n {
-  font-family: 'Hind Vadodara', serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
   font-weight: 800;
   font-size: 24px;
   line-height: .9;
@@ -1227,7 +1173,7 @@ html[data-theme="dark"] .share-x {
   -webkit-text-stroke: 1.2px var(--accent);
 }
 .s-rank h3 {
-  font-family: 'Hind Vadodara', serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
   font-weight: 600;
   font-size: 14.5px;
   line-height: 1.42;
@@ -1265,7 +1211,7 @@ html[data-theme="dark"] .share-x {
   padding-bottom: 18px;
 }
 .deskhead h2 {
-  font-family: 'Hind Vadodara', serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
   font-weight: 800;
   font-size: 20px;
   line-height: 1;
@@ -1328,7 +1274,7 @@ html[data-theme="dark"] .share-x {
   font-size: 10.5px;
 }
 .s-compact h3 {
-  font-family: 'Hind Vadodara', serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
   font-weight: 600;
   font-size: clamp(.94rem,.89rem+.18vw,1.02rem);
   line-height: 1.42;
@@ -1353,7 +1299,7 @@ html[data-theme="dark"] .share-x {
   margin-bottom: 7px;
 }
 .s-standard h3 {
-  font-family: 'Hind Vadodara', serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
   font-weight: 700;
   font-size: 16px;
   line-height: 1.4;
@@ -1415,7 +1361,7 @@ html[data-theme="dark"] .share-x {
   background: var(--red);
 }
 .article-title {
-  font-family: 'Hind Vadodara', serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
   font-weight: 800;
   font-size: clamp(1.35rem, 1.15rem + 0.6vw, 1.75rem);
   line-height: 1.25;
@@ -1424,7 +1370,7 @@ html[data-theme="dark"] .share-x {
   margin-bottom: 16px;
 }
 .article-sub {
-  font-family: 'Hind Vadodara', serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
   font-size: clamp(0.95rem, 0.95rem + 0.2vw, 1.15rem);
   line-height: 1.55;
   color: var(--ink-2);
@@ -1449,7 +1395,7 @@ html[data-theme="dark"] .share-x {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Hind Vadodara', serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
   font-weight: 700;
   font-size: 15px;
   color: var(--ink);
@@ -1537,7 +1483,7 @@ html[data-theme="dark"] .share-x {
   gap: 12px;
 }
 .article-body {
-  font-family: 'Hind Vadodara', serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
   font-size: var(--t-body);
   line-height: 1.85;
   color: var(--ink);
@@ -1666,7 +1612,7 @@ html[data-theme="dark"] .share-x {
   flex-wrap: wrap;
 }
 .author-head h2 {
-  font-family: 'Hind Vadodara', serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
   font-weight: 800;
   font-size: 1.7rem;
   color: var(--ink);
@@ -1714,7 +1660,7 @@ html[data-theme="dark"] .share-x {
   margin-bottom: 7px;
 }
 .s-standard h3 {
-  font-family: 'Hind Vadodara', serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
   font-weight: 600;
   font-size: var(--t-compact);
   line-height: 1.4;
@@ -1746,7 +1692,7 @@ html[data-theme="dark"] .share-x {
   font-size: 10.5px;
 }
 .s-compact h3 {
-  font-family: 'Hind Vadodara', serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
   font-weight: 600;
   font-size: var(--t-compact);
   line-height: 1.42;
@@ -1769,7 +1715,7 @@ html[data-theme="dark"] .share-x {
   font-size: 10.5px;
 }
 .s-text h3 {
-  font-family: 'Hind Vadodara', serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
   font-weight: 600;
   font-size: var(--t-compact);
   line-height: 1.45;
@@ -1788,7 +1734,7 @@ html[data-theme="dark"] .share-x {
   border-top: none;
 }
 .s-rank .n {
-  font-family: 'Hind Vadodara', serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
   font-weight: 800;
   font-size: 24px;
   line-height: 0.9;
@@ -1796,7 +1742,7 @@ html[data-theme="dark"] .share-x {
   -webkit-text-stroke: 1.2px var(--gold);
 }
 .s-rank h3 {
-  font-family: 'Hind Vadodara', serif;
+  font-family: "Noto Sans Gujarati", "Hind Vadodara", sans-serif;
   font-weight: 600;
   font-size: var(--t-compact);
   line-height: 1.42;
@@ -1817,3 +1763,15 @@ html[data-theme="dark"] .share-x {
 
 
 
+
+/* ── Gujarati Typography Safety Overrides to Prevent Descender Clipping ── */
+html[lang="gu"] h1,
+html[lang="gu"] h2,
+html[lang="gu"] h3,
+html[lang="gu"] h4,
+html[lang="gu"] h5,
+html[lang="gu"] h6,
+html[lang="gu"] .leading-snug,
+html[lang="gu"] .leading-tight {
+  line-height: 1.55 !important;
+}

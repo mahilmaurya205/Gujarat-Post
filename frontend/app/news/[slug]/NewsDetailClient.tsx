@@ -227,7 +227,7 @@ export default function NewsDetailClient({ article, related, trending, articleUr
           <article>
             <nav className="breadcrumb select-none">
               <Link href="/">
-                {language === 'gu' ? 'મુખ્ય પૃષ્ઠ' : language === 'hi' ? 'मुख्य पृष्ठ' : 'Home'}
+                {language === 'gu' ? 'હોમ' : language === 'hi' ? 'होम' : 'Home'}
               </Link>
               <span>›</span>
               <Link href={`/category/${article.category.toLowerCase().replace(/\s+/g, '-')}`}>{article.category}</Link>

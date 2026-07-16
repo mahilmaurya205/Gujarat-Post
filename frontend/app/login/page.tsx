@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Mail, Lock, Eye, EyeOff, Loader2, Newspaper, ArrowRight, AlertCircle } from 'lucide-react';
-import gpLogo from '../../public/Gujarat Post Logo.gif';
+import gpLogo from '../../public/assets/gujarat-post-logo-chip.png';
 
 function LoginForm() {
   const router = useRouter();
@@ -66,14 +66,13 @@ function LoginForm() {
       
       {/* Brand Header */}
       <div className="mb-8 text-center">
-        <div className="relative mx-auto mb-4 h-16 w-44 overflow-hidden rounded-lg bg-white p-1 shadow-md ring-1 ring-black/5">
+        <div className="relative mx-auto mb-4 h-16 w-44">
           <Image
             src={gpLogo}
             alt="Gujarat Post"
             fill
             priority
-            unoptimized
-            className="object-cover"
+            className="object-contain"
           />
         </div>
         <h2 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">
