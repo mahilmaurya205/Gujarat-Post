@@ -484,7 +484,7 @@ export default function CategoryPageClient({ articles, category, slug }: Props) 
                 <div className="mt-2 flex items-center gap-3 text-[11px] text-muted-foreground font-semibold">
                   <span className="flex items-center gap-1"><Clock className="h-3 w-3 text-muted-foreground/70" />{getArticleTime(heroArticle)}</span>
                   <span>·</span>
-                  <span className="flex items-center gap-1"><Eye className="h-3 w-3 text-muted-foreground/70" />{getArticleViews(heroArticle)}</span>
+                  <span>{formatDate(heroArticle.publishedAt)}</span>
                 </div>
               </div>
             </Link>
@@ -510,7 +510,7 @@ export default function CategoryPageClient({ articles, category, slug }: Props) 
                       <div className="mt-1 flex items-center gap-2 text-[10px] text-muted-foreground font-semibold">
                         <span>{getArticleTime(art)}</span>
                         <span>·</span>
-                        <span className="flex items-center gap-0.5"><Eye className="h-2.5 w-2.5 text-muted-foreground/70" />{getArticleViews(art)}</span>
+                        <span>{formatDate(art.publishedAt)}</span>
                       </div>
                     </div>
                     <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-sm bg-muted shadow-sm">

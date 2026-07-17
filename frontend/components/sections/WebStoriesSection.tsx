@@ -2,9 +2,9 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useApp } from '@/components/AppProvider';
-import { getLocalized } from '@/data';
 
 interface StoryItem {
   id: string;
@@ -18,7 +18,7 @@ interface StoryItem {
 
 const STORY_ITEMS: StoryItem[] = [
   {
-    id: 'story1',
+    id: 'webstory1',
     title: 'Future Tech',
     titleGu: 'ભવિષ્ય ટેકનોલોજી',
     avatar: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=150&h=150&fit=crop&q=80',
@@ -27,7 +27,7 @@ const STORY_ITEMS: StoryItem[] = [
     descriptionGu: 'AI અને ઓગમેન્ટેડ રિયાલિટી કેવી રીતે આધુનિક આર્કિટેક્ચરને બદલી રહ્યા છે.',
   },
   {
-    id: 'story2',
+    id: 'webstory2',
     title: 'Healthy Bites',
     titleGu: 'ફૂડ ડાયરી',
     avatar: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=150&h=150&fit=crop&q=80',
@@ -36,7 +36,7 @@ const STORY_ITEMS: StoryItem[] = [
     descriptionGu: 'આખો દિવસ તમારી એનર્જી વધારવા માટે ઝડપી પૌષ્ટિક આહાર રેસિપી.',
   },
   {
-    id: 'story3',
+    id: 'webstory3',
     title: 'Ayurvedic Wellness',
     titleGu: 'આયુર્વેદિક ઉપચાર',
     avatar: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=150&h=150&fit=crop&q=80',
@@ -45,7 +45,7 @@ const STORY_ITEMS: StoryItem[] = [
     descriptionGu: 'આધુનિક તંદુરસ્ત જીવન અને દૈનિક સુખાકારી માટે પ્રાચીન આયુર્વેદિક જડીબુટ્ટીઓ.',
   },
   {
-    id: 'story4',
+    id: 'webstory4',
     title: 'Celebrity Diary',
     titleGu: 'સ્ટાર ડાયરી',
     avatar: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=150&h=150&fit=crop&q=80',
@@ -54,7 +54,7 @@ const STORY_ITEMS: StoryItem[] = [
     descriptionGu: 'સિઝનના સૌથી વધુ પ્રખ્યાત સેલિબ્રિટી કાર્યક્રમોની અંદરની એક ઝલક.',
   },
   {
-    id: 'story5',
+    id: 'webstory5',
     title: 'Fashion Trends',
     titleGu: 'ફેશન હબ',
     avatar: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=150&h=150&fit=crop&q=80',
@@ -63,7 +63,7 @@ const STORY_ITEMS: StoryItem[] = [
     descriptionGu: 'આ શિયાળા માટે ટ્રેન્ડિંગ જેકેટ શૈલીઓ અને કલર કોમ્બિનેશન શોધો.',
   },
   {
-    id: 'story6',
+    id: 'webstory6',
     title: 'Smile & Care',
     titleGu: 'સ્મિત કલાજી',
     avatar: 'https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=150&h=150&fit=crop&q=80',
@@ -72,7 +72,7 @@ const STORY_ITEMS: StoryItem[] = [
     descriptionGu: 'તમારા સ્મિતને તેજસ્વી અને સ્વસ્થ રાખવા માટે ડેન્ટલ હાઇજિન ટિપ્સ.',
   },
   {
-    id: 'story7',
+    id: 'webstory7',
     title: 'Fact Check',
     titleGu: 'ફેક્ટ ચેક',
     avatar: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=150&h=150&fit=crop&q=80',
@@ -84,7 +84,7 @@ const STORY_ITEMS: StoryItem[] = [
 
 const AUTO_PLAY_DURATION = 5000;
 
-export default function InstagramStories() {
+export default function WebStoriesSection() {
   const { language } = useApp();
   const [activeStoryIndex, setActiveStoryIndex] = useState<number | null>(null);
   const [progress, setProgress] = useState(0);
@@ -187,18 +187,18 @@ export default function InstagramStories() {
   };
 
   return (
-    <section className="mx-auto max-w-screen-xl px-4 mt-10 relative overflow-hidden">
+    <section className="mx-auto max-w-screen-xl px-4 mt-10 relative overflow-hidden select-none">
       <div className="relative">
         {/* Section Header */}
         <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
           <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[13.5px] md:text-[14.5px] font-black rounded-lg select-none leading-none tracking-tight">
-            {language === 'gu' ? 'ઇન્સ્ટાગ્રામ રિલ્સ' : language === 'hi' ? 'इन्स्टाग्राम रील्स' : 'Instagram Reels'}
+            {language === 'gu' ? 'વેબસ્ટોરી' : language === 'hi' ? 'वेब स्टोरीज' : 'Web Stories'}
           </span>
           <Link
-            href="/web-stories"
+            href="/category/webstory"
             className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline"
           >
-            {language === 'gu' ? 'વધુ ઇન્સ્ટાગ્રામ રિલ્સ →' : 'More →'}
+            {language === 'gu' ? 'વધુ વેબસ્ટોરી →' : 'More →'}
           </Link>
         </div>
 
@@ -211,10 +211,10 @@ export default function InstagramStories() {
                 e.stopPropagation();
                 handleScroll('left');
               }}
-              className="absolute left-4 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white hover:bg-black/60 transition-all duration-200 shadow-md backdrop-blur-sm cursor-pointer border-0"
+              className="absolute -left-4 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-white/70 backdrop-blur-md shadow-lg text-[#B3121B] hover:bg-[#B3121B] hover:border-[#B3121B] transition-all cursor-pointer select-none group/btn"
               aria-label="Scroll left"
             >
-              <ChevronLeft className="h-5 w-5 stroke-[2.5]" />
+              <ChevronLeft className="h-6 w-6 stroke-[3.5px] text-[#B3121B] group-hover/btn:text-white transition-colors" />
             </button>
           )}
 
@@ -225,16 +225,16 @@ export default function InstagramStories() {
                 e.stopPropagation();
                 handleScroll('right');
               }}
-              className="absolute right-4 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/45 text-white hover:bg-black/60 transition-all duration-200 shadow-md backdrop-blur-sm cursor-pointer border-0"
+              className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-white/70 backdrop-blur-md shadow-lg text-[#B3121B] hover:bg-[#B3121B] hover:border-[#B3121B] transition-all cursor-pointer select-none group/btn"
               aria-label="Scroll right"
             >
-              <ChevronRight className="h-5 w-5 stroke-[2.5]" />
+              <ChevronRight className="h-6 w-6 stroke-[3.5px] text-[#B3121B] group-hover/btn:text-white transition-colors" />
             </button>
           )}
 
           <div
             ref={scrollContainerRef}
-            className="scrollbar-hide flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2"
+            className="scrollbar-none flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2"
           >
             {STORY_ITEMS.map((story, index) => {
               const displayTitle = language === 'gu' ? story.titleGu : story.title;
@@ -254,22 +254,36 @@ export default function InstagramStories() {
                       {language === 'gu' ? 'વેબ સ્ટોરી' : 'Web Story'}
                     </span>
 
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    {/* Image */}
+                    <Image
                       src={story.image}
-                      alt={story.title}
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      style={{ height: '100%', width: '100%', objectFit: 'cover' }}
-                      loading="lazy"
+                      alt={displayTitle}
+                      fill
+                      sizes="(max-width: 640px) 130px, 155px"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    {/* Dark gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                    
-                    {/* Title overlaid at the bottom */}
-                    <div className="absolute bottom-0 inset-x-0 p-3 text-left">
-                      <p className="text-[12.5px] sm:text-[13.5px] font-extrabold leading-snug text-white line-clamp-3 group-hover:text-amber-200 transition-colors duration-200 drop-shadow">
+
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
+
+                    {/* Bottom Title Container */}
+                    <div className="absolute bottom-0 inset-x-0 p-3 flex flex-col gap-1.5">
+                      {/* Avatar & Title Group */}
+                      <div className="flex items-center gap-2">
+                        <div className="h-[22px] w-[22px] rounded-full border border-white/60 overflow-hidden shrink-0">
+                          <img
+                            src={story.avatar}
+                            alt="avatar"
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                        <span className="text-[10px] text-white/95 font-black truncate drop-shadow">
+                          Gujarat Post
+                        </span>
+                      </div>
+                      <h4 className="text-[11px] sm:text-[11.5px] font-black leading-tight text-white line-clamp-2 drop-shadow-md">
                         {displayTitle}
-                      </p>
+                      </h4>
                     </div>
                   </div>
                 </div>
@@ -279,49 +293,47 @@ export default function InstagramStories() {
         </div>
       </div>
 
-      {/* Full-Screen Web Story Slideshow Viewer Modal */}
+      {/* Story View Modal */}
       {activeStoryIndex !== null && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="absolute inset-0" onClick={() => setActiveStoryIndex(null)} />
-          
-          <div className="relative w-full max-w-[360px] aspect-[9/16] max-h-[85vh] rounded-3xl overflow-hidden bg-black shadow-2xl border border-white/10 z-10 animate-in zoom-in-95 duration-200">
-            {/* Story Image Container */}
-            <div
-              className="relative w-full h-full cursor-pointer"
-              onClick={handleModalClick}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center">
+          <div className="relative w-full max-w-[420px] aspect-[9/16] bg-slate-900 rounded-lg overflow-hidden shadow-2xl mx-4">
+            
+            {/* Background Layer with opacity blur */}
+            <div className="absolute inset-0">
+              <Image
                 src={STORY_ITEMS[activeStoryIndex].image}
-                alt={STORY_ITEMS[activeStoryIndex].title}
-                className="absolute inset-0 h-full w-full object-cover"
-                style={{ height: '100%', width: '100%', objectFit: 'cover' }}
+                alt="Story background"
+                fill
+                className="object-cover opacity-75"
               />
+            </div>
 
-              {/* Progress Segment indicators at the top */}
-              <div className="absolute top-3.5 inset-x-3.5 z-30 flex gap-1.5">
-                {STORY_ITEMS.map((_, idx) => (
-                  <div key={idx} className="h-1 flex-1 bg-white/30 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-white rounded-full transition-all duration-75 ease-linear"
-                      style={{
-                        width:
-                          idx < activeStoryIndex
-                            ? '100%'
-                            : idx === activeStoryIndex
-                            ? `${progress}%`
-                            : '0%'
-                      }}
-                    />
-                  </div>
-                ))}
+            {/* Click/Interact Overlay */}
+            <div className="absolute inset-0 z-10 cursor-pointer" onClick={handleModalClick} />
+
+            {/* Top Bar with Progress indicators */}
+            <div className="absolute top-0 inset-x-0 p-3 bg-gradient-to-b from-black/80 to-transparent z-20 flex flex-col gap-3">
+              <div className="flex gap-1">
+                {STORY_ITEMS.map((_, idx) => {
+                  let widthPercent = 0;
+                  if (idx < activeStoryIndex) widthPercent = 100;
+                  else if (idx === activeStoryIndex) widthPercent = progress;
+
+                  return (
+                    <div key={idx} className="h-1 flex-1 bg-white/30 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-white transition-all duration-75 ease-linear"
+                        style={{ width: `${widthPercent}%` }}
+                      />
+                    </div>
+                  );
+                })}
               </div>
 
-              {/* Story User details header */}
-              <div className="absolute top-7 inset-x-3.5 z-30 flex items-center justify-between">
+              {/* Author & Header Close bar */}
+              <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                  <div className="h-7 w-7 rounded-full border border-white/40 overflow-hidden bg-slate-900">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <div className="h-7 w-7 rounded-full border border-white/60 overflow-hidden">
                     <img
                       src={STORY_ITEMS[activeStoryIndex].avatar}
                       alt="avatar"
@@ -342,7 +354,7 @@ export default function InstagramStories() {
                     e.stopPropagation();
                     setActiveStoryIndex(null);
                   }}
-                  className="flex h-7 w-7 items-center justify-center rounded-full bg-black/40 text-white hover:bg-black/60 transition"
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-black/40 text-white hover:bg-black/60 transition z-20"
                 >
                   <X className="h-4 w-4" />
                 </button>

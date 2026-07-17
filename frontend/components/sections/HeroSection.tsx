@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Clock, ArrowRight, Flame, Eye, Play, ChevronRight, ChevronLeft, Camera, X, Bookmark, Sun, Cloud, CloudRain, Shield, Trophy, TrendingUp, TrendingDown } from 'lucide-react';
+import { Clock, ArrowRight, Flame, Eye, Play, ChevronRight, ChevronLeft, Camera, X, Bookmark, Sun, Cloud, CloudRain, Shield, Trophy, TrendingUp, TrendingDown, Wind, ChevronDown, ArrowUpRight, Thermometer, Droplet } from 'lucide-react';
 import {
   getArticleTitle,
   getArticleExcerpt,
@@ -21,8 +21,10 @@ import { getCategoryColor } from '@/lib/utils';
 import { useApp } from '@/components/AppProvider';
 import type { Article, Language } from '@/types';
 import InstagramStories from '@/components/sections/InstagramStories';
+import WebStoriesSection from '@/components/sections/WebStoriesSection';
 import { ZODIAC_SIGNS, ZodiacSign } from '@/components/sections/AstrologySection';
 import LatestUpdatesSection from '@/components/sections/LatestUpdatesSection';
+import TrendingSection from '@/components/sections/TrendingSection';
 
 const CHANNEL_URL = 'https://www.youtube.com/@Gujaratpostnews';
 const CHANNEL_ID = 'UCqQ8YbFSZ4j8J4iVJOHurTw';
@@ -174,270 +176,270 @@ export default function HeroSection() {
 
       {/* ── ROW 1: Content + Sidebar Grid ──────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 items-start">
-        
+
         {/* Left Content Side */}
         <div className="flex flex-col gap-6">
-          
+
           {/* Top Row: Hero Story & Middle Column */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-            
+
             {/* Hero Story Column */}
             <div className="flex flex-col gap-3">
-          {uniqueTopStories[0] && (
-            <Link href={`/news/${uniqueTopStories[0].slug}`} className="group flex flex-col w-full">
-              {/* Hero image */}
-              <div className="relative w-full overflow-hidden rounded-sm shadow-sm" style={{ aspectRatio: '3/2' }}>
+              {uniqueTopStories[0] && (
+                <Link href={`/news/${uniqueTopStories[0].slug}`} className="group flex flex-col w-full">
+                  {/* Hero image */}
+                  <div className="relative w-full overflow-hidden rounded-sm shadow-sm" style={{ aspectRatio: '3/2' }}>
+                    <Image
+                      src={uniqueTopStories[0].image}
+                      alt={uniqueTopStories[0].title}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 36vw"
+                      className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                      priority
+                      loading="eager"
+                    />
+                  </div>
+                  {/* Category tags */}
+                  <div className="flex items-center gap-1.5 mt-2.5">
+                    {uniqueTopStories[0].isLive ? (
+                      <span className="bg-accent text-white text-[10px] font-black px-2 py-0.5 rounded-sm uppercase tracking-wide flex items-center gap-1 animate-pulse">
+                        <span className="inline-block h-1.5 w-1.5 rounded-full bg-white" />
+                        LIVE
+                      </span>
+                    ) : (
+                      <span className="bg-accent text-white text-[10px] font-black px-2 py-0.5 rounded-sm uppercase tracking-wide">
+                        {language === 'gu' ? 'ટ્રેન્ડ' : 'Trending'}
+                      </span>
+                    )}
+                    <span className="text-muted-foreground text-[11px] font-semibold">
+                      {getCategoryLabel(uniqueTopStories[0], language)}
+                    </span>
+                  </div>
+                  {/* Headline */}
+                  <h1 className="text-foreground font-extrabold text-[22px] md:text-[24px] leading-[1.22] tracking-tight mt-1.5 group-hover:text-accent transition-colors line-clamp-4">
+                    {getArticleTitle(uniqueTopStories[0], language)}
+                  </h1>
+                  {/* Excerpt */}
+                  <p className="text-muted-foreground text-[13px] leading-relaxed mt-1.5 line-clamp-2 font-medium">
+                    {getArticleExcerpt(uniqueTopStories[0], language)}
+                  </p>
+                  {/* Meta */}
+                  <div className="flex items-center gap-3 mt-2 text-[11px] text-muted-foreground font-semibold border-t border-border/50 pt-2">
+                    {uniqueTopStories[0].author && (
+                      <span className="font-black text-foreground">
+                        {getLocalized(language, {
+                          en: uniqueTopStories[0].author.name,
+                          gu: uniqueTopStories[0].author.nameGu,
+                          hi: uniqueTopStories[0].author.nameHi,
+                        })}
+                      </span>
+                    )}
+                    <span className="flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      {formatTime(uniqueTopStories[0].publishedAt)}
+                    </span>
+                  </div>
+                </Link>
+              )}
+
+            </div>
+
+            {/* ═══ MIDDLE COLUMN — 2-Column Newspaper Grid ════════════════ */}
+            <div className="grid grid-cols-2 gap-x-4 border-l border-r border-border/40 px-4 min-w-0">
+              {/* Left Sub-Column */}
+              <div className="flex flex-col gap-2">
+                {uniqueTopStories[1] && (
+                  <Link href={`/news/${uniqueTopStories[1].slug}`} className="group flex flex-col gap-2">
+                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted">
+                      <Image
+                        src={uniqueTopStories[1].image}
+                        alt={uniqueTopStories[1].title}
+                        fill
+                        sizes="(max-width: 1024px) 50vw, 15vw"
+                        className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                      />
+                    </div>
+                    {uniqueTopStories[1].isLive && (
+                      <div className="flex items-center gap-1">
+                        <span className="bg-accent text-white text-[9px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wide">
+                          LIVE
+                        </span>
+                      </div>
+                    )}
+                    <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-accent transition-colors line-clamp-3">
+                      {getArticleTitle(uniqueTopStories[1], language)}
+                    </h3>
+                  </Link>
+                )}
+
+                {[uniqueTopStories[4], uniqueTopStories[5], uniqueTopStories[8], uniqueTopStories[9]]
+                  .filter(Boolean)
+                  .map((art, idx) => (
+                    <Link
+                      key={art.id}
+                      href={`/news/${art.slug}`}
+                      className="group flex flex-col py-2 px-2 border-t border-border/40 hover:bg-muted/10 transition-colors rounded-md"
+                    >
+                      <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-accent transition-colors line-clamp-3">
+                        {getArticleTitle(art, language)}
+                      </h3>
+                    </Link>
+                  ))}
+              </div>
+
+              {/* Right Sub-Column */}
+              <div className="flex flex-col gap-2">
+                {uniqueTopStories[2] && (
+                  <Link href={`/news/${uniqueTopStories[2].slug}`} className="group flex flex-col gap-2">
+                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted">
+                      <Image
+                        src={uniqueTopStories[2].image}
+                        alt={uniqueTopStories[2].title}
+                        fill
+                        sizes="(max-width: 1024px) 50vw, 15vw"
+                        className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                      />
+                    </div>
+                    {uniqueTopStories[2].isLive && (
+                      <div className="flex items-center gap-1">
+                        <span className="bg-accent text-white text-[9px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wide">
+                          LIVE
+                        </span>
+                      </div>
+                    )}
+                    <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-accent transition-colors line-clamp-3">
+                      {getArticleTitle(uniqueTopStories[2], language)}
+                    </h3>
+                    {uniqueTopStories[2].isLive && (
+                      <span className="text-[11px] text-accent font-black hover:underline mt-0.5">
+                        • લાઈવ સ્કોર
+                      </span>
+                    )}
+                  </Link>
+                )}
+
+                {[uniqueTopStories[6], uniqueTopStories[7], uniqueTopStories[11], uniqueTopStories[12]]
+                  .filter(Boolean)
+                  .map((art, idx) => (
+                    <Link
+                      key={art.id}
+                      href={`/news/${art.slug}`}
+                      className="group flex flex-col py-2 px-2 border-t border-border/40 hover:bg-muted/10 transition-colors rounded-md"
+                    >
+                      <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-accent transition-colors line-clamp-3">
+                        {getArticleTitle(art, language)}
+                      </h3>
+                    </Link>
+                  ))}
+              </div>
+            </div>
+          </div> {/* Close Top Row grid */}
+
+          {/* Bottom Row: Three horizontal articles (spanning full width of Content Column) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-border/80 pt-4">
+
+            {/* Article 1 */}
+            <Link
+              href="/news/girnar-ropeway-tourist-rush-increases-tremendously-205"
+              className="group flex flex-col min-w-0"
+            >
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
                 <Image
-                  src={uniqueTopStories[0].image}
-                  alt={uniqueTopStories[0].title}
+                  src="/assets/demo/3.jpg"
+                  alt="Girnar Ropeway"
                   fill
-                  sizes="(max-width: 1024px) 100vw, 36vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                  priority
-                  loading="eager"
+                  sizes="(max-width: 768px) 100vw, 25vw"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
-              {/* Category tags */}
-              <div className="flex items-center gap-1.5 mt-2.5">
-                {uniqueTopStories[0].isLive ? (
-                  <span className="bg-accent text-white text-[10px] font-black px-2 py-0.5 rounded-sm uppercase tracking-wide flex items-center gap-1 animate-pulse">
-                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-white" />
-                    LIVE
-                  </span>
-                ) : (
-                  <span className="bg-accent text-white text-[10px] font-black px-2 py-0.5 rounded-sm uppercase tracking-wide">
-                    {language === 'gu' ? 'ટ્રેન્ડ' : 'Trending'}
-                  </span>
-                )}
-                <span className="text-muted-foreground text-[11px] font-semibold">
-                  {getCategoryLabel(uniqueTopStories[0], language)}
-                </span>
-              </div>
-              {/* Headline */}
-              <h1 className="text-foreground font-extrabold text-[22px] md:text-[24px] leading-[1.22] tracking-tight mt-1.5 group-hover:text-accent transition-colors line-clamp-4">
-                {getArticleTitle(uniqueTopStories[0], language)}
-              </h1>
-              {/* Excerpt */}
-              <p className="text-muted-foreground text-[13px] leading-relaxed mt-1.5 line-clamp-2 font-medium">
-                {getArticleExcerpt(uniqueTopStories[0], language)}
-              </p>
-              {/* Meta */}
-              <div className="flex items-center gap-3 mt-2 text-[11px] text-muted-foreground font-semibold border-t border-border/50 pt-2">
-                {uniqueTopStories[0].author && (
-                  <span className="font-black text-foreground">
-                    {getLocalized(language, {
-                      en: uniqueTopStories[0].author.name,
-                      gu: uniqueTopStories[0].author.nameGu,
-                      hi: uniqueTopStories[0].author.nameHi,
-                    })}
-                  </span>
-                )}
+              <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] mb-1 select-none uppercase tracking-wide">
+                {language === 'gu' ? 'રાજ્ય સમાચાર' : 'State News'}
+              </span>
+              <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-3">
+                {language === 'gu'
+                  ? 'ગિરનાર રોપ-વે પર ઉમટ્યા પ્રવાસીઓ! સંખ્યામાં જોરદાર વધારો, નાગરિક સંગઠનો દ્વારા સુરક્ષા અંગે ચિંતા વ્યક્ત કરી તાત્કાલિક પગલાંની માંગ'
+                  : 'Tourists flock to Girnar Ropeway! Tremendous increase in numbers, safety measures demanded'}
+              </h3>
+              <div className="flex items-center gap-1.5 mt-2.5 text-[10.5px] text-muted-foreground font-semibold">
+                <span>{language === 'gu' ? '૪ કલાક પહેલાં' : '4 hours ago'}</span>
+                <span>•</span>
                 <span className="flex items-center gap-1">
-                  <Clock className="h-3 w-3" />
-                  {formatTime(uniqueTopStories[0].publishedAt)}
+                  <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
+                  <span>10:30 AM</span>
                 </span>
               </div>
             </Link>
-          )}
 
-        </div>
+            {/* Article 2 */}
+            <Link
+              href="/news/europe-new-trade-treaty-india-benefit-206"
+              className="group flex flex-col min-w-0"
+            >
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
+                <Image
+                  src="/assets/demo/5.jpg"
+                  alt="Europe Trade Treaty"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 25vw"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] mb-1 select-none uppercase tracking-wide">
+                {language === 'gu' ? 'વિશ્વ' : 'World'}
+              </span>
+              <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-3">
+                {language === 'gu'
+                  ? 'યુરોપમાં નવી વ્યાપાર સંધિ પર હસ્તાક્ષર, ભારતને પણ ફાયદો, સ્થાનિક પ્રશાસન દ્વારા હાઈ એલર્ટ અને ઈમરજન્સી હેલ્પલાઈન જાહેર'
+                  : 'New trade agreement signed in Europe, India to benefit too, high alert issued'}
+              </h3>
+              <div className="flex items-center gap-1.5 mt-2.5 text-[10.5px] text-muted-foreground font-semibold">
+                <span>{language === 'gu' ? '૩ કલાક પહેલાં' : '3 hours ago'}</span>
+                <span>•</span>
+                <span className="flex items-center gap-1">
+                  <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
+                  <span>11:30 AM</span>
+                </span>
+              </div>
+            </Link>
 
-        {/* ═══ MIDDLE COLUMN — 2-Column Newspaper Grid ════════════════ */}
-        <div className="grid grid-cols-2 gap-x-4 border-l border-r border-border/40 px-4 min-w-0">
-          {/* Left Sub-Column */}
-          <div className="flex flex-col gap-3.5">
-            {uniqueTopStories[1] && (
-              <Link href={`/news/${uniqueTopStories[1].slug}`} className="group flex flex-col gap-2">
-                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted">
-                  <Image
-                    src={uniqueTopStories[1].image}
-                    alt={uniqueTopStories[1].title}
-                    fill
-                    sizes="(max-width: 1024px) 50vw, 15vw"
-                    className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                  />
-                </div>
-                {uniqueTopStories[1].isLive && (
-                  <div className="flex items-center gap-1">
-                    <span className="bg-accent text-white text-[9px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wide">
-                      LIVE
-                    </span>
-                  </div>
-                )}
-                <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-accent transition-colors line-clamp-3">
-                  {getArticleTitle(uniqueTopStories[1], language)}
-                </h3>
-              </Link>
-            )}
+            {/* Article 3 */}
+            <Link
+              href="/news/gold-silver-price-surge-latest-rates-today-402"
+              className="group flex flex-col min-w-0"
+            >
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
+                <Image
+                  src="/assets/demo/6.jpg"
+                  alt="Gold Rates"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 25vw"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] mb-1 select-none uppercase tracking-wide">
+                {language === 'gu' ? 'બિઝનેસ' : 'Business'}
+              </span>
+              <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-3">
+                {language === 'gu'
+                  ? 'સોના-ચાંદીના ભાવમાં જોરદાર ઉછાળો! જાણો આજના લેટેસ્ટ રેટ, નવી નાણાકીય નીતિના ફેરફારોથી ટેક સ્ટાર્ટઅપ્સમાં રોકાણ વધવાની અપેક્ષા'
+                  : 'Gold-silver prices surge! Know rates today, tech startups investments expected to rise'}
+              </h3>
+              <div className="flex items-center gap-1.5 mt-2.5 text-[10.5px] text-muted-foreground font-semibold">
+                <span>{language === 'gu' ? '૨ કલાક પહેલાં' : '2 hours ago'}</span>
+                <span>•</span>
+                <span className="flex items-center gap-1">
+                  <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
+                  <span>12:30 PM</span>
+                </span>
+              </div>
+            </Link>
 
-            {[uniqueTopStories[4], uniqueTopStories[5], uniqueTopStories[8]]
-              .filter(Boolean)
-              .map((art, idx) => (
-                <Link
-                  key={art.id}
-                  href={`/news/${art.slug}`}
-                  className="group flex flex-col py-3.5 px-2.5 border-t border-border/40 hover:bg-muted/10 transition-colors rounded-md"
-                >
-                  <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-accent transition-colors line-clamp-3">
-                    {getArticleTitle(art, language)}
-                  </h3>
-                </Link>
-              ))}
           </div>
 
-          {/* Right Sub-Column */}
-          <div className="flex flex-col gap-3.5">
-            {uniqueTopStories[2] && (
-              <Link href={`/news/${uniqueTopStories[2].slug}`} className="group flex flex-col gap-2">
-                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted">
-                  <Image
-                    src={uniqueTopStories[2].image}
-                    alt={uniqueTopStories[2].title}
-                    fill
-                    sizes="(max-width: 1024px) 50vw, 15vw"
-                    className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                  />
-                </div>
-                {uniqueTopStories[2].isLive && (
-                  <div className="flex items-center gap-1">
-                    <span className="bg-accent text-white text-[9px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wide">
-                      LIVE
-                    </span>
-                  </div>
-                )}
-                <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-accent transition-colors line-clamp-3">
-                  {getArticleTitle(uniqueTopStories[2], language)}
-                </h3>
-                {uniqueTopStories[2].isLive && (
-                  <span className="text-[11px] text-accent font-black hover:underline mt-0.5">
-                    • લાઈવ સ્કોર
-                  </span>
-                )}
-              </Link>
-            )}
+        </div> {/* Close Left Content Side */}
 
-            {[uniqueTopStories[6], uniqueTopStories[7], uniqueTopStories[11]]
-              .filter(Boolean)
-              .map((art, idx) => (
-                <Link
-                  key={art.id}
-                  href={`/news/${art.slug}`}
-                  className="group flex flex-col py-3.5 px-2.5 border-t border-border/40 hover:bg-muted/10 transition-colors rounded-md"
-                >
-                  <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-accent transition-colors line-clamp-3">
-                    {getArticleTitle(art, language)}
-                  </h3>
-                </Link>
-              ))}
-          </div>
-        </div>
-      </div> {/* Close Top Row grid */}
-
-      {/* Bottom Row: Three horizontal articles (spanning full width of Content Column) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-border/80 pt-4">
-        
-        {/* Article 1 */}
-        <Link
-          href="/news/girnar-ropeway-tourist-rush-increases-tremendously-205"
-          className="group flex flex-col min-w-0"
-        >
-          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
-            <Image
-              src="/assets/demo/3.jpg"
-              alt="Girnar Ropeway"
-              fill
-              sizes="(max-width: 768px) 100vw, 25vw"
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          </div>
-          <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] mb-1 select-none uppercase tracking-wide">
-            {language === 'gu' ? 'રાજ્ય સમાચાર' : 'State News'}
-          </span>
-          <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-3">
-            {language === 'gu'
-              ? 'ગિરનાર રોપ-વે પર ઉમટ્યા પ્રવાસીઓ! સંખ્યામાં જોરદાર વધારો, નાગરિક સંગઠનો દ્વારા સુરક્ષા અંગે ચિંતા વ્યક્ત કરી તાત્કાલિક પગલાંની માંગ'
-              : 'Tourists flock to Girnar Ropeway! Tremendous increase in numbers, safety measures demanded'}
-          </h3>
-          <div className="flex items-center gap-1.5 mt-2.5 text-[10.5px] text-muted-foreground font-semibold">
-            <span>{language === 'gu' ? '૪ કલાક પહેલાં' : '4 hours ago'}</span>
-            <span>•</span>
-            <span className="flex items-center gap-1">
-              <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
-              <span>10:30 AM</span>
-            </span>
-          </div>
-        </Link>
-
-        {/* Article 2 */}
-        <Link
-          href="/news/europe-new-trade-treaty-india-benefit-206"
-          className="group flex flex-col min-w-0"
-        >
-          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
-            <Image
-              src="/assets/demo/5.jpg"
-              alt="Europe Trade Treaty"
-              fill
-              sizes="(max-width: 768px) 100vw, 25vw"
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          </div>
-          <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] mb-1 select-none uppercase tracking-wide">
-            {language === 'gu' ? 'વિશ્વ' : 'World'}
-          </span>
-          <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-3">
-            {language === 'gu'
-              ? 'યુરોપમાં નવી વ્યાપાર સંધિ પર હસ્તાક્ષર, ભારતને પણ ફાયદો, સ્થાનિક પ્રશાસન દ્વારા હાઈ એલર્ટ અને ઈમરજન્સી હેલ્પલાઈન જાહેર'
-              : 'New trade agreement signed in Europe, India to benefit too, high alert issued'}
-          </h3>
-          <div className="flex items-center gap-1.5 mt-2.5 text-[10.5px] text-muted-foreground font-semibold">
-            <span>{language === 'gu' ? '૩ કલાક પહેલાં' : '3 hours ago'}</span>
-            <span>•</span>
-            <span className="flex items-center gap-1">
-              <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
-              <span>11:30 AM</span>
-            </span>
-          </div>
-        </Link>
-
-        {/* Article 3 */}
-        <Link
-          href="/news/gold-silver-price-surge-latest-rates-today-402"
-          className="group flex flex-col min-w-0"
-        >
-          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
-            <Image
-              src="/assets/demo/6.jpg"
-              alt="Gold Rates"
-              fill
-              sizes="(max-width: 768px) 100vw, 25vw"
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          </div>
-          <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] mb-1 select-none uppercase tracking-wide">
-            {language === 'gu' ? 'બિઝનેસ' : 'Business'}
-          </span>
-          <h3 className="text-[13.5px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-3">
-            {language === 'gu'
-              ? 'સોના-ચાંદીના ભાવમાં જોરદાર ઉછાળો! જાણો આજના લેટેસ્ટ રેટ, નવી નાણાકીય નીતિના ફેરફારોથી ટેક સ્ટાર્ટઅપ્સમાં રોકાણ વધવાની અપેક્ષા'
-              : 'Gold-silver prices surge! Know rates today, tech startups investments expected to rise'}
-          </h3>
-          <div className="flex items-center gap-1.5 mt-2.5 text-[10.5px] text-muted-foreground font-semibold">
-            <span>{language === 'gu' ? '૨ કલાક પહેલાં' : '2 hours ago'}</span>
-            <span>•</span>
-            <span className="flex items-center gap-1">
-              <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
-              <span>12:30 PM</span>
-            </span>
-          </div>
-        </Link>
-
-      </div>
-
-    </div> {/* Close Left Content Side */}
-
-    {/* ═══ RIGHT SIDEBAR — Ad + YouTube Latest + Popular ═══════════════ */}
-    <div className="flex flex-col gap-4">
+        {/* ═══ RIGHT SIDEBAR — Ad + YouTube Latest + Popular ═══════════════ */}
+        <div className="flex flex-col gap-4">
           {/* Advertisement banner */}
           <div className="ad-slot">
             <p className="text-[9px] font-semibold text-muted-foreground uppercase tracking-widest mb-1 text-center">
@@ -475,8 +477,8 @@ export default function HeroSection() {
                 })}
               </span>
             </div>
-            
-            <div 
+
+            <div
               className="relative w-full overflow-hidden rounded-sm border border-slate-200/60 bg-black shadow-inner"
               style={{ aspectRatio: '16/9' }}
             >
@@ -488,7 +490,7 @@ export default function HeroSection() {
                 allowFullScreen
               />
             </div>
-            
+
             <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground pt-1 border-t border-border/40 mt-1">
               <span>
                 {getLocalized(language, {
@@ -497,7 +499,7 @@ export default function HeroSection() {
                   hi: 'गुजरात पोस्ट नवीनतम वीडियो',
                 })}
               </span>
-              <a 
+              <a
                 href={`https://www.youtube.com/watch?v=${LATEST_VIDEO_ID}`}
                 target="_blank"
                 rel="noreferrer"
@@ -521,7 +523,7 @@ export default function HeroSection() {
                 {language === 'gu' ? 'વધુ જુઓ →' : 'View all →'}
               </Link>
             </div>
-            
+
             <div className="flex flex-col divide-y divide-border">
               {uniqueTrendingArt.slice(0, 4).map((art, idx) => (
                 <Link
@@ -548,41 +550,131 @@ export default function HeroSection() {
 
       <CityHyperlocalSection language={language} />
 
+      <NationalSection language={language} />
+
+      <TrendingSection />
+
+      {/* Remaining bottom content layout (Latest Updates & Popular Stories) */}
       <section className="mt-8 border-t border-border/60 pt-6">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_336px] gap-8 items-start">
           <div className="flex flex-col gap-10 min-w-0">
             <LatestUpdatesSection view="timeline" />
-            <CrimeSection language={language} view="content" />
             <PopularStoriesSection language={language} view="content" />
           </div>
           <div className="flex flex-col gap-6 sticky top-20 select-none">
             <LatestUpdatesSection view="sidebar" />
-            <CrimeSection language={language} view="sidebar" />
             <PopularStoriesSection language={language} view="sidebar" />
           </div>
         </div>
       </section>
 
-      <PoliticsSection language={language} />
-
-      <FactCheckSection language={language} />
-
-      <NationalSection language={language} />
+      <InstagramStories />
 
       <WorldSection language={language} />
 
-      <VideoDesk videos={videos.slice(0, 7)} language={language} />
+      <PoliticsSection language={language} />
 
-      <LiveCenterSection language={language} />
+      <WebStoriesSection />
+
+      {/* Main 2-Column Section: Crime (Left) + Sidebar (Right) */}
+      <section className="mx-auto max-w-screen-xl px-4 mt-10">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_336px] gap-8 items-start">
+          {/* Left Column */}
+          <div className="flex flex-col gap-10 min-w-0">
+            <CrimeSection language={language} view="content" />
+          </div>
+
+          {/* Right Column / Sidebar */}
+          <div className="flex flex-col gap-6 sticky top-20 select-none">
+            {/* Gold & Silver Rates Widget */}
+            <div>
+              <div className="flex items-end gap-1.5 h-[46px] border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-2.5 mb-6">
+                <span className="text-[#B3121B] text-[15px] font-extrabold leading-none pb-0.5">♦</span>
+                <h3 className="text-[15px] font-black text-foreground leading-none pb-0.5">
+                  {language === 'gu' ? 'સોના-ચાંદીના ભાવ' : 'Gold & Silver Rates'}
+                </h3>
+              </div>
+
+              <div className="border border-border/80 rounded-sm bg-card p-3.5 space-y-3.5 shadow-sm">
+                {/* Gold Rate Row */}
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 font-extrabold select-none shadow-sm">
+                      🏅
+                    </div>
+                    <div>
+                      <h4 className="text-[14px] text-foreground leading-tight" style={{ fontFamily: "'Hind Vadodara', 'Noto Sans Gujarati', sans-serif", fontWeight: 700 }}>
+                        {language === 'gu' ? 'સોનું (૧૦ ગ્રામ)' : 'Gold (10 Grams)'}
+                      </h4>
+                      <p className="text-[11px] font-medium text-muted-foreground mt-0.5">
+                        {language === 'gu' ? '૨૪ કેરેટ' : '24 Karat'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[16px] text-foreground leading-none" style={{ fontFamily: "'Hind Vadodara', 'Noto Sans Gujarati', sans-serif", fontWeight: 800 }}>
+                      ₹73,450
+                    </p>
+                    <p className="text-[11px] font-bold text-emerald-600 flex items-center justify-end gap-0.5 mt-1 select-none">
+                      ▲ ₹450
+                    </p>
+                  </div>
+                </div>
+
+                {/* Divider */}
+                <div className="border-t border-border/40" />
+
+                {/* Silver Rate Row */}
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800/40 text-slate-600 dark:text-slate-300 font-extrabold select-none shadow-sm">
+                      🥈
+                    </div>
+                    <div>
+                      <h4 className="text-[14px] text-foreground leading-tight" style={{ fontFamily: "'Hind Vadodara', 'Noto Sans Gujarati', sans-serif", fontWeight: 700 }}>
+                        {language === 'gu' ? 'ચાંદી (૧ કિલો)' : 'Silver (1 Kg)'}
+                      </h4>
+                      <p className="text-[11px] font-medium text-muted-foreground mt-0.5">
+                        {language === 'gu' ? 'પ્રતિ કિલો' : 'Per Kg'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[16px] text-foreground leading-none" style={{ fontFamily: "'Hind Vadodara', 'Noto Sans Gujarati', sans-serif", fontWeight: 800 }}>
+                      ₹82,800
+                    </p>
+                    <p className="text-[11px] font-bold text-muted-foreground flex items-center justify-end gap-0.5 mt-1 select-none">
+                      — {language === 'gu' ? 'સ્થિર' : 'Stable'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Weather, WhatsApp, and Astrology */}
+            <CrimeSection language={language} view="sidebar" />
+          </div>
+        </div>
+      </section>
 
       <EntertainTechLifeSection language={language} />
 
+      <FactCheckSection language={language} />
 
-      {/* Web Stories styled like Instagram Stories */}
-      <InstagramStories />
-
-      {/* Photo Gallery Section */}
       <PhotoGallerySection language={language} />
+
+
+
+      <VideoDesk videos={videos.slice(0, 7)} language={language} />
+
+      <WeatherDashboardSection language={language} />
+
+      <LiveCenterSection language={language} />
+
+
+
+
+
 
       {/* Banner Ad Section */}
       <div className="mx-auto max-w-screen-xl px-2 py-2 mt-4 select-none">
@@ -609,18 +701,18 @@ export default function HeroSection() {
         <div className="flex flex-col lg:flex-row items-center justify-between gap-6 p-6 md:p-8 bg-[#140e0c] text-white rounded-xl shadow-md border border-white/5">
           <div className="flex flex-col gap-2 max-w-xl text-center lg:text-left">
             <h3 className="text-lg sm:text-xl md:text-2xl font-black leading-tight">
-              {language === 'gu' 
-                ? 'દરરોજ સવારે ગુજરાતના મુખ્ય સમાચાર — તમારા ઈનબોક્સમાં' 
+              {language === 'gu'
+                ? 'દરરોજ સવારે ગુજરાતના મુખ્ય સમાચાર — તમારા ઈનબોક્સમાં'
                 : 'Every morning main news of Gujarat — in your inbox'}
             </h3>
             <p className="text-xs sm:text-sm text-[#a3a3a3] font-bold">
-              {language === 'gu' 
-                ? 'ન્યૂઝલેટર સબસ્ક્રાઇબ કરો અને દિવસની શરૂઆત માહિતી સાથે કરો.' 
+              {language === 'gu'
+                ? 'ન્યૂઝલેટર સબસ્ક્રાઇબ કરો અને દિવસની શરૂઆત માહિતી સાથે કરો.'
                 : 'Subscribe to our newsletter and start your day informed.'}
             </p>
           </div>
-          
-          <form 
+
+          <form
             onSubmit={(e) => e.preventDefault()}
             className="flex flex-col sm:flex-row items-stretch gap-2.5 w-full lg:w-auto min-w-0 sm:min-w-[400px]"
           >
@@ -655,7 +747,7 @@ function VideoDesk({ videos, language, showShorts = true }: { videos: typeof VID
 
   const featuredVideo = videos[0];
   const sidebarVideos = videos.slice(1, 9);
-  
+
   // Combine passed videos with all other videos and shorts to make a long list of reels
   const shortVideos = [
     ...videos, // 5 videos
@@ -697,7 +789,7 @@ function VideoDesk({ videos, language, showShorts = true }: { videos: typeof VID
       {/* ── Red Panel ─────────────────────────────────────────────────── */}
       <div className="w-full bg-[#B3121B] text-white rounded-sm px-5 md:px-8 pt-6 pb-8 border border-white/10 relative overflow-hidden shadow-lg">
 
-      {/* Header */}
+        {/* Header */}
         <div className="relative z-10 flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <span className="text-white font-black text-[18px] md:text-[20px] select-none tracking-tight">
@@ -757,14 +849,8 @@ function VideoDesk({ videos, language, showShorts = true }: { videos: typeof VID
 
           {/* Right: Sidebar container */}
           <div className="flex flex-col min-w-0">
-            {/* Must Watch Header */}
-            <div className="bg-white text-slate-800 rounded-t-sm px-4 py-2.5 flex items-center justify-between select-none shadow-sm">
-              <span className="font-black text-[#B3121B] text-[13px] uppercase tracking-wide">Must Watch</span>
-              <span className="text-slate-500 font-black text-[9.5px] uppercase tracking-wider">Scroll &rarr;</span>
-            </div>
-
             {/* Sidebar video list */}
-            <div className="flex flex-col divide-y divide-white/10 lg:max-h-[382px] lg:overflow-y-auto p-3 pr-2 scrollbar-thin bg-black/15 rounded-b-sm">
+            <div className="flex flex-col divide-y divide-white/10 lg:max-h-[382px] lg:overflow-y-auto p-3 pr-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent hover:scrollbar-thumb-white/35 bg-black/15 rounded-sm">
               {sidebarVideos.map((v) => (
                 <div
                   key={v.id}
@@ -947,6 +1033,19 @@ const toGuLocal = (num: number | string): string => {
   }).join("");
 };
 
+const getMockTime = (id: string): string => {
+  switch (id) {
+    case 'c1': return '10:30 AM';
+    case 'c2': return '11:30 AM';
+    case 'c3': return '12:30 PM';
+    case 'l1': return '10:45 AM';
+    case 'l2': return '11:15 AM';
+    case 'l3': return '12:15 PM';
+    case 'l4': return '01:05 PM';
+    default: return '02:00 PM';
+  }
+};
+
 /* --- City Hyperlocal Section ("ગુજરાત" Zone) ----------------------------- */
 function CityHyperlocalSection({
   language,
@@ -956,145 +1055,545 @@ function CityHyperlocalSection({
   const [slideIdx, setSlideIdx] = useState(0);
   const [activeTab, setActiveTab] = useState('અમદાવાદ');
 
-  const mockSlides = [
-    {
-      id: 'c1',
-      slug: 'rajkot-smart-city-roadworks-underway-344',
-      image: '/assets/demo/6.jpg',
-      titleGu: 'રાજકોટમાં મોટું કામ! સ્માર્ટ સિટી પ્રોજેક્ટ હેઠળ રસ્તાઓનું ધમધમાટ કામ શરૂ',
-      title: 'Major work in Rajkot! Roadworks start in full swing under Smart City project',
-      titleHi: 'राजकोट में बड़ा काम! स्मार्ट सिटी प्रोजेक्ट के तहत सड़कों का काम शुरू',
-      relativeTimeGu: '૧ કલાક પહેલાં',
-      relativeTime: '1 hour ago',
-      relativeTimeHi: '1 घंटा पहले',
-      categoryGu: 'અમદાવાદ',
-      category: 'Ahmedabad',
-      categoryHi: 'अहमदाबाद',
-      viewsGu: '૧૨K',
-      views: '12K',
-      excerptGu: 'શહેરના મુખ્ય વિસ્તારોમાં રસ્તા પહોળા કરવા અને નવી ડ્રેનેજ લાઈન નાખવાનું કામ યુદ્ધના ધોરણે શરૂ કરાયું છે. મ્યુનિસિપલ કોર્પોરેશનના જણાવ્યા મુજબ આગામી ત્રણ મહિનામાં કામ પૂર્ણ કરવાનો લક્ષ્યાંક રખાયો છે, જેથી ચોમાસા પહેલા નાગરિકોને રાહત મળી શકે. સ્થાનિક ધારા સભ્યોએ પ્રોજેક્ટની જાતે મુલાકાત લઈ કામની ગુણવત્તા અંગે અધિકારીઓને સૂચનાઓ આપી હતી.',
-      excerpt: 'Road widening and new drainage line installation have started on a war footing. The Municipal Corporation aims to complete the work in three months to provide relief before monsoon.',
-      excerptHi: 'शहर के मुख्य क्षेत्रों में सड़कों को चौड़ा करने और नई ड्रेनेज लाइन बिछाने का काम युद्ध स्तर पर शुरू हो गया है।',
-      tags: ['સિવિક', 'ટ્રાફિક', 'મેટ્રો', 'ક્રાઇમ', 'હવામાન']
-    },
-    {
-      id: 'c2',
-      slug: 'surat-diamond-trading-hall-inauguration-345',
-      image: '/assets/demo/1.jpg',
-      titleGu: 'સુરતમાં ડાયમંડ બુર્સમાં નવા ટ્રેડિંગ સેન્ટરનું ઉદ્ઘાટન, વેપારીઓ ખુશખુશાલ',
-      title: 'Inauguration of new trading center in Surat Diamond Bourse, merchants happy',
-      titleHi: 'सूरत डायमंड बुर्स में नए ट्रेडिंग सेंटर का उद्घाटन, व्यापारी खुश',
-      relativeTimeGu: '૨ કલાક પહેલાં',
-      relativeTime: '2 hours ago',
-      relativeTimeHi: '2 घंटे पहले',
-      categoryGu: 'સુરત',
-      category: 'Surat',
-      categoryHi: 'सूरत',
-      viewsGu: '૨૫K',
-      views: '25K',
-      excerptGu: 'સુરત ડાયમંડ બુર્સ વૈશ્વિક સ્તરે વેપાર માટે સજ્જ થઈ ગયું છે. આ નવા સેન્ટરથી વેપારમાં સરળતા રહેશે.',
-      excerpt: 'Surat Diamond Bourse is now ready for global trade. This new center will make trading easier.',
-      excerptHi: 'सूरत डायमंड बुर्स वैश्विक व्यापार के लिए तैयार है। इस नए केंद्र से व्यापार आसान होगा।',
-      tags: ['ડાયમંડ', 'બિઝનેસ', 'સુરત', 'વેપાર']
-    },
-    {
-      id: 'c3',
-      slug: 'ahmedabad-metro-phase-two-trial-run-346',
-      image: '/assets/demo/3.jpg',
-      titleGu: 'અમદાવાદમાં મેટ્રો ટ્રેનના ફેઝ-2નું સફળ ટ્રાયલ રન પૂર્ણ, ટૂંક સમયમાં શરૂ થશે સેવા',
-      title: 'Phase-2 trial run of Ahmedabad Metro completed successfully, services soon',
-      titleHi: 'अहमदाबाद मेट्रो फेज-2 का सफल ट्रायल रन पूरा, सेवाएं जल्द',
-      relativeTimeGu: '૩૦ મિનિટ પહેલાં',
-      relativeTime: '30 mins ago',
-      relativeTimeHi: '30 मिनट पहले',
-      categoryGu: 'અમદાવાદ',
-      category: 'Ahmedabad',
-      categoryHi: 'आशंका',
-      viewsGu: '૩૪K',
-      views: '34K',
-      excerptGu: 'મેટ્રો ટ્રેનના ફેઝ-2 ટ્રાયલ રનને ગ્રીન સિગ્નલ મળી ગયું છે. ખૂબ જ ટૂંક સમયમાં મુસાફરો આ સેવાનો લાભ લઈ શકશે.',
-      excerpt: 'The Phase-2 trial run of the metro train has received a green signal. Passengers will benefit soon.',
-      excerptHi: 'मेट्रो ट्रेन के फेज-2 ट्रायल रन को हरी झंडी मिल गई है। यात्री जल्द लाभ उठा सकेंगे।',
-      tags: ['મેટ્રો', 'વિકાસ', 'અમદાવાદ', 'ટ્રાફિક']
-    }
-  ];
+  // Handle tab change — reset slide index
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    setSlideIdx(0);
+  };
 
-  const mockList = [
-    {
-      id: 'l1',
-      slug: 'bhavnagar-new-industrial-units-approved-347',
-      image: '/assets/demo/5.jpg',
-      titleGu: 'ભાવનગરને મળી મોટી ભેટ! નવા ઔદ્યોગિક એકમને મંજૂરી, રોજગારી વધશે',
-      title: 'Bhavnagar gets big gift! New industrial unit approved, jobs to rise',
-      titleHi: 'भावनगर को मिला बड़ा तोहफा! नए औद्योगिक इकाई को मंजूरी',
-      relativeTimeGu: '૩ કલાક પહેલાં',
-      relativeTime: '3 hours ago',
-      relativeTimeHi: '3 घंटे पहले',
-      categoryGu: 'ભાવનગર',
-      category: 'Bhavnagar',
-      categoryHi: 'भावनगर',
-      viewsGu: '૪૬K',
-      views: '46K'
-    },
-    {
-      id: 'l2',
-      slug: 'girnar-ropeway-tourist-rush-increases-tremendously-205',
-      image: '/assets/demo/3.jpg',
-      titleGu: 'ગિરનાર રોપ-વે પર ઉમટ્યા પ્રવાસીઓ! સંખ્યામાં જોરદાર વધારો, સુરક્ષા ચિંતા',
-      title: 'Tourists flock to Girnar Ropeway! Tremendous increase in numbers',
-      titleHi: 'गिरनार रोपवे पर उमड़े पर्यटक! संख्या में भारी बढ़ोतरी',
-      relativeTimeGu: '૪ કલાક પહેલાં',
-      relativeTime: '4 hours ago',
-      relativeTimeHi: '4 घंटे पहले',
-      categoryGu: 'જૂનાગઢ',
-      category: 'Junagadh',
-      categoryHi: 'जूनागढ़',
-      viewsGu: '૫૨K',
-      views: '52K'
-    },
-    {
-      id: 'l3',
-      slug: 'state-cabinet-meeting-major-decisions-348',
-      image: '/assets/demo/4.jpg',
-      titleGu: 'રાજ્ય મંત્રીમંડળની બેઠકમાં મોટા નિર્ણય, જાણો શું-શું બદલાયું',
-      title: 'Major decisions in state cabinet meeting, know what changed',
-      titleHi: 'राज्य मंत्रिमंडल की बैठक में बड़े फैसले, जानें क्या बदला',
-      relativeTimeGu: '૫ કલાક પહેલાં',
-      relativeTime: '5 hours ago',
-      relativeTimeHi: '5 घंटे पहले',
-      categoryGu: 'ગાંધીનગર',
-      category: 'Gandhinagar',
-      categoryHi: 'गांधीनगर',
-      viewsGu: '૬૮K',
-      views: '68K'
-    },
-    {
-      id: 'l4',
-      slug: 'anand-dairy-expansion-project-inauguration-349',
-      image: '/assets/demo/1.jpg',
-      titleGu: 'આણંદ ડેરી સંઘનું નવું પ્લાન્ટ વિસ્તરણ! ખેડૂતોને સીધો ફાયદો થશે',
-      title: 'Anand Dairy Union new plant expansion! Farmers to benefit directly',
-      titleHi: 'आनंद डेयरी संघ का नया प्लांट विस्तार! किसानों को होगा सीधा फायदा',
-      relativeTimeGu: '૬ કલાક પહેલાં',
-      relativeTime: '6 hours ago',
-      relativeTimeHi: '6 घंटे पहले',
-      categoryGu: 'આણંદ',
-      category: 'Anand',
-      categoryHi: 'आनंद',
-      viewsGu: '૭૧K',
-      views: '71K'
-    }
-  ];
+  type SlideItem = {
+    id: string; slug: string; image: string;
+    titleGu: string; title: string; titleHi: string;
+    relativeTimeGu: string; relativeTime: string; relativeTimeHi: string;
+    categoryGu: string; category: string; categoryHi: string;
+    viewsGu: string; views: string;
+    excerptGu: string; excerpt: string; excerptHi: string;
+    tags: string[];
+  };
+  type ListItem = {
+    id: string; slug: string; image: string;
+    titleGu: string; title: string; titleHi: string;
+    relativeTimeGu: string; relativeTime: string; relativeTimeHi: string;
+    categoryGu: string; category: string; categoryHi: string;
+    viewsGu: string; views: string;
+  };
 
-  const currentSlide = mockSlides[slideIdx];
+  const cityData: Record<string, { slides: SlideItem[]; list: ListItem[] }> = {
+    'અમદાવાદ': {
+      slides: [
+        {
+          id: 'ahm-c1', slug: 'ahmedabad-metro-phase-two-trial-run-346', image: '/assets/demo/3.jpg',
+          titleGu: 'અમદાવાદમાં મેટ્રો ટ્રેનના ફેઝ-2નું સફળ ટ્રાયલ રન પૂર્ણ, ટૂંક સમયમાં શરૂ થશે સેવા',
+          title: 'Phase-2 trial run of Ahmedabad Metro completed successfully, services soon',
+          titleHi: 'अहमदाबाद मेट्रो फेज-2 का सफल ट्रायल रन पूरा, सेवाएं जल्द',
+          relativeTimeGu: '૩૦ મિનિટ પહેલાં', relativeTime: '30 mins ago', relativeTimeHi: '30 मिनट पहले',
+          categoryGu: 'અમદાવાદ', category: 'Ahmedabad', categoryHi: 'अहमदाबाद',
+          viewsGu: '૩૪K', views: '34K',
+          excerptGu: 'મેટ્રો ટ્રેનના ફેઝ-2 ટ્રાયલ રનને ગ્રીન સિગ્નલ મળી ગયું છે. ખૂબ જ ટૂંક સમયમાં મુસાફરો આ સેવાનો લાભ લઈ શકશે.',
+          excerpt: 'The Phase-2 trial run of the metro train has received a green signal. Passengers will benefit soon.',
+          excerptHi: 'मेट्रो ट्रेन के फेज-2 ट्रायल रन को हरी झंडी मिल गई है। यात्री जल्द लाभ उठा सकेंगे।',
+          tags: ['મેટ્રો', 'વિકાસ', 'અમદાવાદ', 'ટ્રાફિક']
+        },
+        {
+          id: 'ahm-c2', slug: 'ahmedabad-riverfront-beautification-350', image: '/assets/demo/6.jpg',
+          titleGu: 'સાબરમતી રિવરફ્રન્ટ પર નવા બ્યુટીફિકેશન પ્રોજેક્ટનો શુભારંભ',
+          title: 'New beautification project launched on Sabarmati Riverfront',
+          titleHi: 'साबरमती रिवरफ्रंट पर नए ब्यूटीफिकेशन प्रोजेक्ट की शुरुआत',
+          relativeTimeGu: '૧ કલાક પહેલાં', relativeTime: '1 hour ago', relativeTimeHi: '1 घंटा पहले',
+          categoryGu: 'અમદાવાદ', category: 'Ahmedabad', categoryHi: 'अहमदाबाद',
+          viewsGu: '૨૮K', views: '28K',
+          excerptGu: 'રિવરફ્રન્ટ પર ગાર્ડન, વોકિંગ ટ્રેક અને ફૂડ ઝોનનું ભવ્ય આયોજન. AMC કમિશનરે જણાવ્યું કે આ પ્રોજેક્ટ ૬ મહિનામાં પૂર્ણ થશે.',
+          excerpt: 'Grand plans for garden, walking track and food zone on the riverfront. AMC Commissioner said the project will complete in 6 months.',
+          excerptHi: 'रिवरफ्रंट पर गार्डन, वॉकिंग ट्रैक और फूड ज़ोन की भव्य योजना।',
+          tags: ['સિવિક', 'વિકાસ', 'પર્યટન', 'AMC']
+        },
+        {
+          id: 'ahm-c3', slug: 'ahmedabad-new-traffic-rules-351', image: '/assets/demo/1.jpg',
+          titleGu: 'અમદાવાદમાં આજથી નવા ટ્રાફિક નિયમ લાગુ! ભારે દંડની જોગવાઈ',
+          title: 'New traffic rules effective from today in Ahmedabad! Heavy penalty provisions',
+          titleHi: 'अहमदाबाद में आज से नए ट्रैफिक नियम लागू! भारी जुर्माने का प्रावधान',
+          relativeTimeGu: '૨ કલાક પહેલાં', relativeTime: '2 hours ago', relativeTimeHi: '2 घंटे पहले',
+          categoryGu: 'અમદાવાદ', category: 'Ahmedabad', categoryHi: 'अहमदाबाद',
+          viewsGu: '૪૧K', views: '41K',
+          excerptGu: 'ટ્રાફિક પોલીસે નવા નિયમોની જાહેરાત કરી. હેલ્મેટ વિના, સીટ બેલ્ટ વિના અને ઝડપી ડ્રાઇવિંગ પર ભારે દંડ.',
+          excerpt: 'Traffic police announced new rules. Heavy fines for riding without helmet, seatbelt, and overspeeding.',
+          excerptHi: 'ट्रैफिक पुलिस ने नए नियमों की घोषणा की। हेलमेट, सीटबेल्ट और ओवरस्पीडिंग पर भारी जुर्माना।',
+          tags: ['ટ્રાફિક', 'પોલીસ', 'દંડ', 'નિયમ']
+        }
+      ],
+      list: [
+        {
+          id: 'ahm-l1', slug: 'ahmedabad-cyber-crime-helpline-352', image: '/assets/demo/5.jpg',
+          titleGu: 'સાયબર ક્રાઇમ સામે મોટી ડ્રાઇવ: અમદાવાદ પોલીસે એડવાઈઝરી જાહેર કરી',
+          title: 'Major drive against cyber crime: Ahmedabad police issues advisory',
+          titleHi: 'साइबर अपराध के खिलाफ बड़ा अभियान: अहमदाबाद पुलिस ने एडवाइजरी जारी की',
+          relativeTimeGu: '૩ કલાક પહેલાં', relativeTime: '3 hours ago', relativeTimeHi: '3 घंटे पहले',
+          categoryGu: 'અમદાવાદ', category: 'Ahmedabad', categoryHi: 'अहमदाबाद',
+          viewsGu: '૪૬K', views: '46K'
+        },
+        {
+          id: 'ahm-l2', slug: 'ahmedabad-water-supply-improvement-353', image: '/assets/demo/4.jpg',
+          titleGu: 'અમદાવાદમાં પાણી વિતરણ વ્યવસ્થામાં મોટો સુધારો, નવી પાઈપલાઈન નંખાશે',
+          title: 'Major improvement in water distribution system in Ahmedabad, new pipeline to be laid',
+          titleHi: 'अहमदाबाद में पानी वितरण व्यवस्था में बड़ा सुधार, नई पाइपलाइन बिछेगी',
+          relativeTimeGu: '૪ કલાક પહેલાં', relativeTime: '4 hours ago', relativeTimeHi: '4 घंटे पहले',
+          categoryGu: 'અમદાવાદ', category: 'Ahmedabad', categoryHi: 'अहमदाबाद',
+          viewsGu: '૩૨K', views: '32K'
+        },
+        {
+          id: 'ahm-l3', slug: 'ahmedabad-heritage-walk-record-354', image: '/assets/demo/2.jpg',
+          titleGu: 'અમદાવાદ હેરિટેજ વોકમાં રેકોર્ડ ભાગીદારી, પ્રવાસીઓનો જબરદસ્ત ઉત્સાહ',
+          title: 'Record participation in Ahmedabad Heritage Walk, tremendous enthusiasm among tourists',
+          titleHi: 'अहमदाबाद हेरिटेज वॉक में रिकॉर्ड भागीदारी, पर्यटकों में जबरदस्त उत्साह',
+          relativeTimeGu: '૫ કલાક પહેલાં', relativeTime: '5 hours ago', relativeTimeHi: '5 घंटे पहले',
+          categoryGu: 'અમદાવાદ', category: 'Ahmedabad', categoryHi: 'अहमदाबाद',
+          viewsGu: '૨૫K', views: '25K'
+        },
+        {
+          id: 'ahm-l4', slug: 'ahmedabad-smart-city-cctv-355', image: '/assets/demo/8.jpg',
+          titleGu: 'સ્માર્ટ સિટી હેઠળ ૫૦૦ નવા CCTV કેમેરા લાગશે, સુરક્ષા વધશે',
+          title: '500 new CCTV cameras under Smart City, security to increase',
+          titleHi: 'स्मार्ट सिटी के तहत 500 नए CCTV कैमरे लगेंगे, सुरक्षा बढ़ेगी',
+          relativeTimeGu: '૬ કલાક પહેલાં', relativeTime: '6 hours ago', relativeTimeHi: '6 घंटे पहले',
+          categoryGu: 'અમદાવાદ', category: 'Ahmedabad', categoryHi: 'अहमदाबाद',
+          viewsGu: '૧૯K', views: '19K'
+        },
+        {
+          id: 'ahm-l5', slug: 'ahmedabad-metro-routes-expanded-356', image: '/assets/demo/3.jpg',
+          titleGu: 'અમદાવાદમાં ટ્રાફિક સમસ્યા નિવારવા નવા ફ્લાયઓવર પ્રોજેક્ટની જાહેરાત',
+          title: 'New flyover projects announced to resolve traffic issues in Ahmedabad',
+          titleHi: 'अहमदाबाद में ट्रैफिक समस्या से निपटने के लिए नए फ्लाईओवर प्रोजेक्ट्स की घोषणा',
+          relativeTimeGu: '૮ કલાક પહેલાં', relativeTime: '8 hours ago', relativeTimeHi: '8 घंटे पहले',
+          categoryGu: 'ટ્રાફિક', category: 'Traffic', categoryHi: 'ट्रैफिक',
+          viewsGu: '૧૫K', views: '15K'
+        }
+      ]
+    },
+    'સુરત': {
+      slides: [
+        {
+          id: 'sur-c1', slug: 'surat-diamond-trading-hall-inauguration-345', image: '/assets/demo/1.jpg',
+          titleGu: 'સુરતમાં ડાયમંડ બુર્સમાં નવા ટ્રેડિંગ સેન્ટરનું ઉદ્ઘાટન, વેપારીઓ ખુશખુશાલ',
+          title: 'Inauguration of new trading center in Surat Diamond Bourse, merchants happy',
+          titleHi: 'सूरत डायमंड बुर्स में नए ट्रेडिंग सेंटर का उद्घाटन, व्यापारी खुश',
+          relativeTimeGu: '૧ કલાક પહેલાં', relativeTime: '1 hour ago', relativeTimeHi: '1 घंटा पहले',
+          categoryGu: 'સુરત', category: 'Surat', categoryHi: 'सूरत',
+          viewsGu: '૫૬K', views: '56K',
+          excerptGu: 'સુરત ડાયમંડ બુર્સ વૈશ્વિક સ્તરે વેપાર માટે સજ્જ થઈ ગયું છે. આ નવા સેન્ટરથી વેપારમાં સરળતા રહેશે.',
+          excerpt: 'Surat Diamond Bourse is now ready for global trade. This new center will make trading easier.',
+          excerptHi: 'सूरत डायमंड बुर्स वैश्विक व्यापार के लिए तैयार है। इस नए केंद्र से व्यापार आसान होगा।',
+          tags: ['ડાયમંડ', 'બિઝનેસ', 'સુરત', 'વેપાર']
+        },
+        {
+          id: 'sur-c2', slug: 'surat-textile-market-boom-360', image: '/assets/demo/7.jpg',
+          titleGu: 'સુરત ટેક્સટાઇલ માર્કેટમાં જોરદાર તેજી, વેપારીઓમાં ખુશીની લહેર',
+          title: 'Strong boom in Surat textile market, wave of joy among traders',
+          titleHi: 'सूरत कपड़ा बाजार में जोरदार तेजी, व्यापारियों में खुशी की लहर',
+          relativeTimeGu: '૨ કલાક પહેલાં', relativeTime: '2 hours ago', relativeTimeHi: '2 घंटे पहले',
+          categoryGu: 'સુરત', category: 'Surat', categoryHi: 'सूरत',
+          viewsGu: '૪૩K', views: '43K',
+          excerptGu: 'ચોમાસા પહેલાં ટેક્સટાઇલ માર્કેટમાં ભારે ડિમાન્ડ. નવા ઓર્ડરોથી વેપારીઓ ખુશ. નિકાસમાં પણ વધારો.',
+          excerpt: 'Heavy demand in textile market before monsoon. Traders happy with new orders. Exports also increase.',
+          excerptHi: 'मानसून से पहले कपड़ा बाजार में भारी मांग। नए ऑर्डरों से व्यापारी खुश।',
+          tags: ['ટેક્સટાઇલ', 'બિઝનેસ', 'નિકાસ', 'સુરત']
+        },
+        {
+          id: 'sur-c3', slug: 'surat-flood-preparedness-361', image: '/assets/demo/4.jpg',
+          titleGu: 'સુરત મહાનગરપાલિકાએ ચોમાસા માટે તૈયારીઓ વધારી, ડ્રેનેજ સિસ્ટમ અપગ્રેડ',
+          title: 'Surat Municipal Corporation increases monsoon preparedness, drainage system upgraded',
+          titleHi: 'सूरत नगर निगम ने मानसून की तैयारियां बढ़ाई, ड्रेनेज सिस्टम अपग्रेड',
+          relativeTimeGu: '૩ કલાક પહેલાં', relativeTime: '3 hours ago', relativeTimeHi: '3 घंटे पहले',
+          categoryGu: 'સુરત', category: 'Surat', categoryHi: 'सूरत',
+          viewsGu: '૩૧K', views: '31K',
+          excerptGu: 'ચોમાસા પહેલાં SMC દ્વારા ડ્રેનેજ સફાઈ અને પમ્પિંગ સ્ટેશનોનું સમારકામ. પૂરની સ્થિતિ ટાળવા તૈયારીઓ.',
+          excerpt: 'SMC undertakes drainage cleaning and pumping station repairs before monsoon. Preparations to avoid flood situations.',
+          excerptHi: 'मानसून से पहले SMC ने ड्रेनेज सफाई और पंपिंग स्टेशनों की मरम्मत की।',
+          tags: ['ચોમાસું', 'સિવિક', 'ડ્રેનેજ', 'SMC']
+        }
+      ],
+      list: [
+        {
+          id: 'sur-l1', slug: 'surat-brts-expansion-362', image: '/assets/demo/2.jpg',
+          titleGu: 'સુરત BRTS રૂટમાં વિસ્તરણ, નવા ૩ રૂટ ઉમેરાશે',
+          title: 'Surat BRTS route expansion, 3 new routes to be added',
+          titleHi: 'सूरत BRTS रूट विस्तार, 3 नए रूट जोड़े जाएंगे',
+          relativeTimeGu: '૩ કલાક પહેલાં', relativeTime: '3 hours ago', relativeTimeHi: '3 घंटे पहले',
+          categoryGu: 'સુરત', category: 'Surat', categoryHi: 'सूरत',
+          viewsGu: '૨૮K', views: '28K'
+        },
+        {
+          id: 'sur-l2', slug: 'surat-it-hub-growth-363', image: '/assets/demo/5.jpg',
+          titleGu: 'સુરતનું IT હબ ઝડપથી વિકસી રહ્યું છે, નવી કંપનીઓ આવી રહી છે',
+          title: 'Surat IT hub growing rapidly, new companies arriving',
+          titleHi: 'सूरत का IT हब तेजी से बढ़ रहा है, नई कंपनियां आ रही हैं',
+          relativeTimeGu: '૪ કલાક પહેલાં', relativeTime: '4 hours ago', relativeTimeHi: '4 घंटे पहले',
+          categoryGu: 'સુરત', category: 'Surat', categoryHi: 'सूरत',
+          viewsGu: '૩૫K', views: '35K'
+        },
+        {
+          id: 'sur-l3', slug: 'surat-river-cleaning-364', image: '/assets/demo/8.jpg',
+          titleGu: 'તાપી નદી સફાઈ અભિયાનમાં હજારો જોડાયા, ઐતિહાસિક ભાગીદારી',
+          title: 'Thousands join Tapi river cleaning drive, historic participation',
+          titleHi: 'तापी नदी सफाई अभियान में हजारों शामिल, ऐतिहासिक भागीदारी',
+          relativeTimeGu: '૫ કલાક પહેલાં', relativeTime: '5 hours ago', relativeTimeHi: '5 घंटे पहले',
+          categoryGu: 'સુરત', category: 'Surat', categoryHi: 'सूरत',
+          viewsGu: '૪૨K', views: '42K'
+        },
+        {
+          id: 'sur-l4', slug: 'surat-education-hub-365', image: '/assets/demo/3.jpg',
+          titleGu: 'સુરતમાં નવી મેડિકલ કોલેજ મંજૂર, વિદ્યાર્થીઓમાં ઉત્સાહ',
+          title: 'New medical college approved in Surat, enthusiasm among students',
+          titleHi: 'सूरत में नया मेडिकल कॉलेज मंजूर, छात्रों में उत्साह',
+          relativeTimeGu: '૭ કલાક પહેલાં', relativeTime: '7 hours ago', relativeTimeHi: '7 घंटे पहले',
+          categoryGu: 'સુરત', category: 'Surat', categoryHi: 'सूरत',
+          viewsGu: '૨૧K', views: '21K'
+        },
+        {
+          id: 'sur-l5', slug: 'surat-cleanliness-drive-366', image: '/assets/demo/2.jpg',
+          titleGu: 'સુરત મહાનગરપાલિકા દ્વારા સ્વચ્છતા અભિયાન અંતર્ગત કડક કાર્યવાહી',
+          title: 'Strict action by Surat Municipality under cleanliness drive',
+          titleHi: 'सूरत नगर निगम द्वारा स्वच्छता अभियान के तहत सख्त कार्रवाई',
+          relativeTimeGu: '૯ કલાક પહેલાં', relativeTime: '9 hours ago', relativeTimeHi: '9 घंटे पहले',
+          categoryGu: 'સિવિક', category: 'Civic', categoryHi: 'सिविक',
+          viewsGu: '૨૨K', views: '22K'
+        }
+      ]
+    },
+    'વડોદરા': {
+      slides: [
+        {
+          id: 'vad-c1', slug: 'vadodara-municipality-budget-presented-370', image: '/assets/demo/4.jpg',
+          titleGu: 'વડોદરા મ્યુનિ.નું નવું બજેટ રજૂ! પાણી અને રસ્તા પર સૌથી વધુ ભાર',
+          title: 'Vadodara Municipal new budget presented! Highest emphasis on water and roads',
+          titleHi: 'वडोदरा नगर निगम का नया बजट पेश! पानी और सड़कों पर सबसे ज्यादा जोर',
+          relativeTimeGu: '૧ કલાક પહેલાં', relativeTime: '1 hour ago', relativeTimeHi: '1 घंटा पहले',
+          categoryGu: 'વડોદરા', category: 'Vadodara', categoryHi: 'वडोदरा',
+          viewsGu: '૬૧K', views: '61K',
+          excerptGu: 'VMC દ્વારા ₹૫,૦૦૦ કરોડનું બજેટ રજૂ. પીવાના પાણી, રસ્તા અને ડ્રેનેજ પર સૌથી વધુ ફાળવણી.',
+          excerpt: 'VMC presents Rs 5,000 crore budget. Maximum allocation for drinking water, roads and drainage.',
+          excerptHi: 'VMC ने ₹5,000 करोड़ का बजट पेश किया। पीने के पानी, सड़कों और ड्रेनेज पर सबसे ज्यादा आवंटन।',
+          tags: ['બજેટ', 'VMC', 'વિકાસ', 'પાણી']
+        },
+        {
+          id: 'vad-c2', slug: 'vadodara-msu-research-breakthrough-371', image: '/assets/demo/2.jpg',
+          titleGu: 'MSU ના વૈજ્ઞાનિકોની મોટી શોધ! કેન્સર સારવારમાં નવી આશા',
+          title: 'Major discovery by MSU scientists! New hope in cancer treatment',
+          titleHi: 'MSU वैज्ञानिकों की बड़ी खोज! कैंसर इलाज में नई उम्मीद',
+          relativeTimeGu: '૨ કલાક પહેલાં', relativeTime: '2 hours ago', relativeTimeHi: '2 घंटे पहले',
+          categoryGu: 'વડોદરા', category: 'Vadodara', categoryHi: 'वडोदरा',
+          viewsGu: '૪૮K', views: '48K',
+          excerptGu: 'MSU ના બાયોકેમિસ્ટ્રી વિભાગે એક નવી પદ્ધતિ વિકસાવી જે કેન્સરના સમયસર નિદાનમાં મદદ કરશે.',
+          excerpt: 'MSU Biochemistry department developed a new method to help in early diagnosis of cancer.',
+          excerptHi: 'MSU बायोकेमिस्ट्री विभाग ने एक नई विधि विकसित की जो कैंसर के समय पर निदान में मदद करेगी।',
+          tags: ['MSU', 'સંશોધન', 'આરોગ્ય', 'વિજ્ઞાન']
+        }
+      ],
+      list: [
+        {
+          id: 'vad-l1', slug: 'vadodara-flyover-inauguration-372', image: '/assets/demo/6.jpg',
+          titleGu: 'વડોદરામાં નવા ફ્લાયઓવરનું ઉદ્ઘાટન, ટ્રાફિક સમસ્યા હળવી થશે',
+          title: 'New flyover inaugurated in Vadodara, traffic problems to ease',
+          titleHi: 'वडोदरा में नए फ्लाईओवर का उद्घाटन, ट्रैफिक समस्या कम होगी',
+          relativeTimeGu: '૩ કલાક પહેલાં', relativeTime: '3 hours ago', relativeTimeHi: '3 घंटे पहले',
+          categoryGu: 'વડોદરા', category: 'Vadodara', categoryHi: 'वडोदरा',
+          viewsGu: '૩૯K', views: '39K'
+        },
+        {
+          id: 'vad-l2', slug: 'vadodara-navratri-preparation-373', image: '/assets/demo/1.jpg',
+          titleGu: 'વડોદરામાં નવરાત્રિની ભવ્ય તૈયારી શરૂ, આયોજકોમાં ઉત્સાહ',
+          title: 'Grand Navratri preparations begin in Vadodara, enthusiasm among organizers',
+          titleHi: 'वडोदरा में नवरात्रि की भव्य तैयारी शुरू, आयोजकों में उत्साह',
+          relativeTimeGu: '૫ કલાક પહેલાં', relativeTime: '5 hours ago', relativeTimeHi: '5 घंटे पहले',
+          categoryGu: 'વડોદરા', category: 'Vadodara', categoryHi: 'वडोदरा',
+          viewsGu: '૫૫K', views: '55K'
+        },
+        {
+          id: 'vad-l3', slug: 'vadodara-school-digital-initiative-374', image: '/assets/demo/7.jpg',
+          titleGu: 'વડોદરાની શાળાઓમાં ડિજિટલ ક્રાંતિ, ૧૦૦ શાળાઓમાં સ્માર્ટ ક્લાસ',
+          title: 'Digital revolution in Vadodara schools, smart classes in 100 schools',
+          titleHi: 'वडोदरा के स्कूलों में डिजिटल क्रांति, 100 स्कूलों में स्मार्ट क्लास',
+          relativeTimeGu: '૬ કલાક પહેલાં', relativeTime: '6 hours ago', relativeTimeHi: '6 घंटे पहले',
+          categoryGu: 'વડોદરા', category: 'Vadodara', categoryHi: 'वडोदरा',
+          viewsGu: '૨૭K', views: '27K'
+        },
+        {
+          id: 'vad-l4', slug: 'vadodara-lakshmi-vilas-palace-restoration-375', image: '/assets/demo/3.jpg',
+          titleGu: 'લક્ષ્મી વિલાસ પેલેસનું રિસ્ટોરેશન પૂર્ણ, પ્રવાસીઓ માટે ખુલ્લું',
+          title: 'Laxmi Vilas Palace restoration complete, open for tourists',
+          titleHi: 'लक्ष्मी विलास पैलेस का रिस्टोरेशन पूरा, पर्यटकों के लिए खुला',
+          relativeTimeGu: '૮ કલાક પહેલાં', relativeTime: '8 hours ago', relativeTimeHi: '8 घंटे पहले',
+          categoryGu: 'વડોદરા', category: 'Vadodara', categoryHi: 'वडोदरा',
+          viewsGu: '૪૪K', views: '44K'
+        },
+        {
+          id: 'vad-l5', slug: 'vadodara-sports-complex-376', image: '/assets/demo/6.jpg',
+          titleGu: 'વડોદરા સ્પોર્ટ્સ કોમ્પ્લેક્સનું કામ અંતિમ તબક્કામાં, ખેલાડીઓ ખુશ',
+          title: 'Vadodara sports complex work in final stage, players happy',
+          titleHi: 'वडोदरा स्पोर्ट्स कॉम्प्लेक्स का काम अंतिम चरण में, खिलाड़ी खुश',
+          relativeTimeGu: '૧૦ કલાક પહેલાં', relativeTime: '10 hours ago', relativeTimeHi: '10 घंटे पहले',
+          categoryGu: 'રમતગમત', category: 'Sports', categoryHi: 'खेल',
+          viewsGu: '૧૮K', views: '18K'
+        }
+      ]
+    },
+    'રાજકોટ': {
+      slides: [
+        {
+          id: 'raj-c1', slug: 'rajkot-smart-city-roadworks-underway-344', image: '/assets/demo/6.jpg',
+          titleGu: 'રાજકોટમાં મોટું કામ! સ્માર્ટ સિટી પ્રોજેક્ટ હેઠળ રસ્તાઓનું ધમધમાટ કામ શરૂ',
+          title: 'Major work in Rajkot! Roadworks start in full swing under Smart City project',
+          titleHi: 'राजकोट में बड़ा काम! स्मार्ट सिटी प्रोजेक्ट के तहत सड़कों का काम शुरू',
+          relativeTimeGu: '૧ કલાક પહેલાં', relativeTime: '1 hour ago', relativeTimeHi: '1 घंटा पहले',
+          categoryGu: 'રાજકોટ', category: 'Rajkot', categoryHi: 'राजकोट',
+          viewsGu: '૧૨K', views: '12K',
+          excerptGu: 'શહેરના મુખ્ય વિસ્તારોમાં રસ્તા પહોળા કરવા અને નવી ડ્રેનેજ લાઈન નાખવાનું કામ યુદ્ધના ધોરણે શરૂ કરાયું છે.',
+          excerpt: 'Road widening and new drainage line installation have started on a war footing in the main areas of the city.',
+          excerptHi: 'शहर के मुख्य क्षेत्रों में सड़कों को चौड़ा करने और ड्रेनेज लाइन बिछाने का काम शुरू।',
+          tags: ['સ્માર્ટ સિટી', 'રસ્તા', 'વિકાસ', 'રાજકોટ']
+        },
+        {
+          id: 'raj-c2', slug: 'rajkot-airport-new-terminal-380', image: '/assets/demo/2.jpg',
+          titleGu: 'રાજકોટ એરપોર્ટ પર નવા ટર્મિનલનું ટ્રાયલ રન સફળ, ટૂંક સમયમાં ફ્લાઇટ્સ શરૂ',
+          title: 'Trial run of new terminal at Rajkot airport successful, flights to start soon',
+          titleHi: 'राजकोट हवाई अड्डे पर नए टर्मिनल का ट्रायल रन सफल, उड़ानें जल्द शुरू',
+          relativeTimeGu: '૨ કલાક પહેલાં', relativeTime: '2 hours ago', relativeTimeHi: '2 घंटे पहले',
+          categoryGu: 'રાજકોટ', category: 'Rajkot', categoryHi: 'राजकोट',
+          viewsGu: '૫૧K', views: '51K',
+          excerptGu: 'રાજકોટ ગ્રીનફિલ્ડ એરપોર્ટ પર નવા ટર્મિનલનું ટ્રાયલ રન સફળતાપૂર્વક પૂર્ણ. દિલ્હી-મુંબઈ ફ્લાઇટ ટૂંક સમયમાં.',
+          excerpt: 'Trial run of new terminal at Rajkot Greenfield Airport successfully completed. Delhi-Mumbai flights soon.',
+          excerptHi: 'राजकोट ग्रीनफील्ड एयरपोर्ट के नए टर्मिनल का ट्रायल रन सफल। दिल्ली-मुंबई फ्लाइट जल्द।',
+          tags: ['એરપોર્ટ', 'ટર્મિનલ', 'ફ્લાઇટ', 'રાજકોટ']
+        }
+      ],
+      list: [
+        {
+          id: 'raj-l1', slug: 'rajkot-race-course-renovation-381', image: '/assets/demo/5.jpg',
+          titleGu: 'રેસ કોર્સ રિંગ રોડનું નવીનીકરણ પૂર્ણ, સાંજે હજારો ફરવા આવે છે',
+          title: 'Race Course Ring Road renovation complete, thousands visit in evening',
+          titleHi: 'रेस कोर्स रिंग रोड का नवीनीकरण पूरा, शाम को हजारों आते हैं',
+          relativeTimeGu: '૩ કલાક પહેલાં', relativeTime: '3 hours ago', relativeTimeHi: '3 घंटे पहले',
+          categoryGu: 'રાજકોટ', category: 'Rajkot', categoryHi: 'राजकोट',
+          viewsGu: '૩૮K', views: '38K'
+        },
+        {
+          id: 'raj-l2', slug: 'rajkot-cricket-stadium-events-382', image: '/assets/demo/8.jpg',
+          titleGu: 'રાજકોટ ક્રિકેટ સ્ટેડિયમમાં આંતરરાષ્ટ્રીય મેચની જાહેરાત, ચાહકોમાં ઉત્સાહ',
+          title: 'International match announced at Rajkot Cricket Stadium, excitement among fans',
+          titleHi: 'राजकोट क्रिकेट स्टेडियम में अंतरराष्ट्रीय मैच की घोषणा, प्रशंसकों में उत्साह',
+          relativeTimeGu: '૪ કલાક પહેલાં', relativeTime: '4 hours ago', relativeTimeHi: '4 घंटे पहले',
+          categoryGu: 'રાજકોટ', category: 'Rajkot', categoryHi: 'राजकोट',
+          viewsGu: '૬૨K', views: '62K'
+        },
+        {
+          id: 'raj-l3', slug: 'rajkot-industrial-zone-expansion-383', image: '/assets/demo/4.jpg',
+          titleGu: 'રાજકોટ ઔદ્યોગિક ઝોનમાં વિસ્તરણ, ૨૦૦+ નવા એકમો આવશે',
+          title: 'Rajkot industrial zone expansion, 200+ new units to come',
+          titleHi: 'राजकोट औद्योगिक ज़ोन में विस्तार, 200+ नई इकाइयां आएंगी',
+          relativeTimeGu: '૫ કલાક પહેલાં', relativeTime: '5 hours ago', relativeTimeHi: '5 घंटे पहले',
+          categoryGu: 'રાજકોટ', category: 'Rajkot', categoryHi: 'राजकोट',
+          viewsGu: '૪૫K', views: '45K'
+        },
+        {
+          id: 'raj-l4', slug: 'rajkot-new-hospital-384', image: '/assets/demo/1.jpg',
+          titleGu: 'રાજકોટમાં ૫૦૦ બેડની નવી સરકારી હૉસ્પિટલ મંજૂર',
+          title: 'New 500-bed government hospital approved in Rajkot',
+          titleHi: 'राजकोट में 500 बेड का नया सरकारी अस्पताल मंजूर',
+          relativeTimeGu: '૭ કલાક પહેલાં', relativeTime: '7 hours ago', relativeTimeHi: '7 घंटे पहले',
+          categoryGu: 'રાજકોટ', category: 'Rajkot', categoryHi: 'राजकोट',
+          viewsGu: '૩૩K', views: '33K'
+        },
+        {
+          id: 'raj-l5', slug: 'rajkot-water-supply-project-385', image: '/assets/demo/3.jpg',
+          titleGu: 'રાજકોટના સરહદી વિસ્તારો માટે નવી નર્મદા પાઈપલાઈન યોજના મંજૂર',
+          title: 'New Narmada pipeline project approved for Rajkot border areas',
+          titleHi: 'राजकोट के सीमावर्ती क्षेत्रों के लिए नई नर्मदा पाइपलाइन योजना मंजूर',
+          relativeTimeGu: '૧૧ કલાક પહેલાં', relativeTime: '11 hours ago', relativeTimeHi: '11 घंटे पहले',
+          categoryGu: 'વિકાસ', category: 'Development', categoryHi: 'विकास',
+          viewsGu: '૨૫K', views: '25K'
+        }
+      ]
+    },
+    'ગાંધીનગર': {
+      slides: [
+        {
+          id: 'gn-c1', slug: 'gandhinagar-gift-city-fintech-390', image: '/assets/demo/5.jpg',
+          titleGu: 'GIFT સિટીમાં ફિનટેક કંપનીઓનું મોટું રોકાણ, ૧૦,૦૦૦ નોકરીઓ સર્જાશે',
+          title: 'Major investment by fintech companies in GIFT City, 10,000 jobs to be created',
+          titleHi: 'GIFT सिटी में फिनटेक कंपनियों का बड़ा निवेश, 10,000 नौकरियां पैदा होंगी',
+          relativeTimeGu: '૧ કલાક પહેલાં', relativeTime: '1 hour ago', relativeTimeHi: '1 घंटा पहले',
+          categoryGu: 'ગાંધીનગર', category: 'Gandhinagar', categoryHi: 'गांधीनगर',
+          viewsGu: '૭૮K', views: '78K',
+          excerptGu: 'GIFT સિટીમાં ૧૫ નવી ફિનટેક અને ઇન્શ્યોરન્સ કંપનીઓ આવી. ગુજરાત સરકારે વિશેષ પેકેજ જાહેર કર્યું.',
+          excerpt: '15 new fintech and insurance companies came to GIFT City. Gujarat government announces special package.',
+          excerptHi: 'GIFT सिटी में 15 नई फिनटेक और बीमा कंपनियां आईं। गुजरात सरकार ने विशेष पैकेज की घोषणा की।',
+          tags: ['GIFT સિટી', 'ફિનટેક', 'રોકાણ', 'નોકરી']
+        },
+        {
+          id: 'gn-c2', slug: 'gandhinagar-assembly-session-391', image: '/assets/demo/3.jpg',
+          titleGu: 'ગાંધીનગર વિધાનસભામાં ચોમાસુ સત્ર શરૂ, અનેક મહત્વના વિધેયકો રજૂ',
+          title: 'Monsoon session begins in Gandhinagar Assembly, several important bills presented',
+          titleHi: 'गांधीनगर विधानसभा में मानसून सत्र शुरू, कई महत्वपूर्ण विधेयक पेश',
+          relativeTimeGu: '૨ કલાક પહેલાં', relativeTime: '2 hours ago', relativeTimeHi: '2 घंटे पहले',
+          categoryGu: 'ગાંધીનગર', category: 'Gandhinagar', categoryHi: 'गांधीनगर',
+          viewsGu: '૫૫K', views: '55K',
+          excerptGu: 'ચોમાસુ સત્રમાં ખેડૂત કલ્યાણ, શિક્ષણ અને આરોગ્ય સંબંધિત વિધેયકો રજૂ. વિપક્ષ દ્વારા મહત્વના પ્રશ્નો ઉઠાવાયા.',
+          excerpt: 'Bills related to farmer welfare, education and health presented in monsoon session. Opposition raised important questions.',
+          excerptHi: 'मानसून सत्र में किसान कल्याण, शिक्षा और स्वास्थ्य से जुड़े विधेयक पेश। विपक्ष ने महत्वपूर्ण सवाल उठाए।',
+          tags: ['વિધાનસભા', 'ચોમાસુ સત્ર', 'રાજકારણ', 'બિલ']
+        }
+      ],
+      list: [
+        {
+          id: 'gn-l1', slug: 'gandhinagar-new-it-policy-392', image: '/assets/demo/7.jpg',
+          titleGu: 'ગુજરાત સરકારે નવી IT પોલિસી જાહેર કરી, સ્ટાર્ટઅપ્સને પ્રોત્સાહન',
+          title: 'Gujarat government announces new IT policy, incentives for startups',
+          titleHi: 'गुजरात सरकार ने नई IT पॉलिसी जारी की, स्टार्टअप्स को प्रोत्साहन',
+          relativeTimeGu: '૩ કલાક પહેલાં', relativeTime: '3 hours ago', relativeTimeHi: '3 घंटे पहले',
+          categoryGu: 'ગાંધીનગર', category: 'Gandhinagar', categoryHi: 'गांधीनगर',
+          viewsGu: '૬૧K', views: '61K'
+        },
+        {
+          id: 'gn-l2', slug: 'gandhinagar-infotech-campus-393', image: '/assets/demo/8.jpg',
+          titleGu: 'ઇન્ફોસિટી પર નવું ટેક કેમ્પસ તૈયાર, ૫,૦૦૦ ઇજનેરોને રોજગાર મળશે',
+          title: 'New tech campus ready at Infocity, 5,000 engineers to get jobs',
+          titleHi: 'इन्फोसिटी पर नया टेक कैंपस तैयार, 5,000 इंजीनियरों को रोजगार',
+          relativeTimeGu: '૫ કલાક પહેલાં', relativeTime: '5 hours ago', relativeTimeHi: '5 घंटे पहले',
+          categoryGu: 'ગાંધીનગર', category: 'Gandhinagar', categoryHi: 'गांधीनगर',
+          viewsGu: '૪૯K', views: '49K'
+        },
+        {
+          id: 'gn-l3', slug: 'gandhinagar-cm-review-meeting-394', image: '/assets/demo/4.jpg',
+          titleGu: 'CM દ્વારા વિકાસ કામોની સમીક્ષા, ૧૦ પ્રોજેક્ટ ઝડપી કરવા સૂચના',
+          title: 'CM reviews development works, instructs to fast-track 10 projects',
+          titleHi: 'CM ने विकास कार्यों की समीक्षा की, 10 परियोजनाओं को तेज करने के निर्देश',
+          relativeTimeGu: '૬ કલાક પહેલાં', relativeTime: '6 hours ago', relativeTimeHi: '6 घंटे पहले',
+          categoryGu: 'ગાંધીનગર', category: 'Gandhinagar', categoryHi: 'गांधीनगर',
+          viewsGu: '૭૨K', views: '72K'
+        },
+        {
+          id: 'gn-l4', slug: 'gandhinagar-sector-green-initiative-395', image: '/assets/demo/6.jpg',
+          titleGu: 'ગાંધીનગરના સેક્ટરોમાં ગ્રીન ઇનિશિએટિવ શરૂ, ૧૦,૦૦૦ વૃક્ષો વવાશે',
+          title: 'Green initiative starts in Gandhinagar sectors, 10,000 trees to be planted',
+          titleHi: 'गांधीनगर के सेक्टरों में ग्रीन पहल शुरू, 10,000 पेड़ लगाए जाएंगे',
+          relativeTimeGu: '૮ કલાક પહેલાં', relativeTime: '8 hours ago', relativeTimeHi: '8 घंटे पहले',
+          categoryGu: 'ગાંધીનગર', category: 'Gandhinagar', categoryHi: 'गांधीनगर',
+          viewsGu: '૩૭K', views: '37K'
+        },
+        {
+          id: 'gn-l5', slug: 'gandhinagar-solar-roof-395', image: '/assets/demo/1.jpg',
+          titleGu: 'ગાંધીનગરમાં સરકારી ઇમારતો પર સોલાર રૂફટોપ સિસ્ટમ સ્થાપિત કરાશે',
+          title: 'Solar rooftop systems to be installed on government buildings in Gandhinagar',
+          titleHi: 'गांधीनगर में सरकारी इमारतों पर सोलर रूफटॉप सिस्टम लगाए जाएंगे',
+          relativeTimeGu: '૧૨ કલાક પહેલાં', relativeTime: '12 hours ago', relativeTimeHi: '12 घंटे पहले',
+          categoryGu: 'સૌર ઉર્જા', category: 'Solar', categoryHi: 'सौर ऊर्जा',
+          viewsGu: '૩૪K', views: '34K'
+        }
+      ]
+    },
+    'અન્ય': {
+      slides: [
+        {
+          id: 'oth-c1', slug: 'bhavnagar-new-industrial-units-approved-347', image: '/assets/demo/5.jpg',
+          titleGu: 'ભાવનગરને મળી મોટી ભેટ! નવા ઔદ્યોગિક એકમને મંજૂરી, રોજગારી વધશે',
+          title: 'Bhavnagar gets big gift! New industrial unit approved, jobs to rise',
+          titleHi: 'भावनगर को मिला बड़ा तोहफा! नए औद्योगिक इकाई को मंजूरी',
+          relativeTimeGu: '૧ કલાક પહેલાં', relativeTime: '1 hour ago', relativeTimeHi: '1 घंटा पहले',
+          categoryGu: 'ભાવનગર', category: 'Bhavnagar', categoryHi: 'भावनगर',
+          viewsGu: '૪૬K', views: '46K',
+          excerptGu: 'ભાવનગરમાં નવા ઔદ્યોગિક એકમની સ્થાપના માટે રાજ્ય સરકારે મંજૂરી આપી. આ એકમથી ૩,૦૦૦+ નવી નોકરીઓ સર્જાશે.',
+          excerpt: 'State government approves new industrial unit in Bhavnagar. 3,000+ new jobs to be created.',
+          excerptHi: 'भावनगर में नई औद्योगिक इकाई के लिए राज्य सरकार ने मंजूरी दी। 3,000+ नई नौकरियां।',
+          tags: ['ઉદ્યોગ', 'રોજગાર', 'ભાવનગર', 'વિકાસ']
+        },
+        {
+          id: 'oth-c2', slug: 'girnar-ropeway-tourist-rush-increases-tremendously-205', image: '/assets/demo/3.jpg',
+          titleGu: 'ગિરનાર રોપ-વે પર ઉમટ્યા પ્રવાસીઓ! સંખ્યામાં જોરદાર વધારો, સુરક્ષા ચિંતા',
+          title: 'Tourists flock to Girnar Ropeway! Tremendous increase in numbers',
+          titleHi: 'गिरनार रोपवे पर उमड़े पर्यटक! संख्या में भारी बढ़ोतरी',
+          relativeTimeGu: '૨ કલાક પહેલાં', relativeTime: '2 hours ago', relativeTimeHi: '2 घंटे पहले',
+          categoryGu: 'જૂનાગઢ', category: 'Junagadh', categoryHi: 'जूनागढ़',
+          viewsGu: '૫૨K', views: '52K',
+          excerptGu: 'ગિરનાર રોપ-વે પર પ્રવાસીઓની સંખ્યામાં રેકોર્ડબ્રેક વધારો. સુરક્ષા વ્યવસ્થા વધારવા માંગ.',
+          excerpt: 'Record-breaking increase in tourists at Girnar Ropeway. Demand to enhance safety arrangements.',
+          excerptHi: 'गिरनार रोपवे पर पर्यटकों की संख्या में रिकॉर्डतोड़ बढ़ोतरी।',
+          tags: ['પ્રવાસન', 'જૂનાગઢ', 'ગિરનાર', 'સુરક્ષા']
+        },
+        {
+          id: 'oth-c3', slug: 'anand-dairy-expansion-project-inauguration-349', image: '/assets/demo/1.jpg',
+          titleGu: 'આણંદ ડેરી સંઘનું નવું પ્લાન્ટ વિસ્તરણ! ખેડૂતોને સીધો ફાયદો થશે',
+          title: 'Anand Dairy Union new plant expansion! Farmers to benefit directly',
+          titleHi: 'आनंद डेयरी संघ का नया प्लांट विस्तार! किसानों को होगा सीधा फायदा',
+          relativeTimeGu: '૩ કલાક પહેલાં', relativeTime: '3 hours ago', relativeTimeHi: '3 घंटे पहले',
+          categoryGu: 'આણંદ', category: 'Anand', categoryHi: 'आनंद',
+          viewsGu: '૭૧K', views: '71K',
+          excerptGu: 'આણંદ ડેરી સંઘ દ્વારા ₹૨૦૦ કરોડના ખર્ચે નવું પ્લાન્ટ. દૂધ ઉત્પાદન ક્ષમતા બમણી થશે.',
+          excerpt: 'New plant by Anand Dairy Union at Rs 200 crore cost. Milk production capacity to double.',
+          excerptHi: 'आनंद डेयरी संघ ने ₹200 करोड़ की लागत से नया प्लांट। दूध उत्पादन क्षमता दोगुनी होगी।',
+          tags: ['ડેરી', 'ખેડૂત', 'આણંદ', 'વિકાસ']
+        }
+      ],
+      list: [
+        {
+          id: 'oth-l1', slug: 'jamnagar-refinery-expansion-396', image: '/assets/demo/7.jpg',
+          titleGu: 'જામનગર રિફાઈનરીમાં વિસ્તરણ, ૫,૦૦૦ નવી નોકરીઓ સર્જાશે',
+          title: 'Jamnagar refinery expansion, 5,000 new jobs to be created',
+          titleHi: 'जामनगर रिफाइनरी में विस्तार, 5,000 नई नौकरियां पैदा होंगी',
+          relativeTimeGu: '૪ કલાક પહેલાં', relativeTime: '4 hours ago', relativeTimeHi: '4 घंटे पहले',
+          categoryGu: 'જામનગર', category: 'Jamnagar', categoryHi: 'जामनगर',
+          viewsGu: '૫૮K', views: '58K'
+        },
+        {
+          id: 'oth-l2', slug: 'kutch-rann-utsav-preparation-397', image: '/assets/demo/2.jpg',
+          titleGu: 'કચ્છમાં રણોત્સવની તૈયારી શરૂ, આ વર્ષે નવા આકર્ષણો ઉમેરાશે',
+          title: 'Rann Utsav preparations begin in Kutch, new attractions to be added this year',
+          titleHi: 'कच्छ में रण उत्सव की तैयारी शुरू, इस साल नए आकर्षण जोड़े जाएंगे',
+          relativeTimeGu: '૫ કલાક પહેલાં', relativeTime: '5 hours ago', relativeTimeHi: '5 घंटे पहले',
+          categoryGu: 'કચ્છ', category: 'Kutch', categoryHi: 'कच्छ',
+          viewsGu: '૬૫K', views: '65K'
+        },
+        {
+          id: 'oth-l3', slug: 'mehsana-milk-production-record-398', image: '/assets/demo/4.jpg',
+          titleGu: 'મહેસાણા જિલ્લામાં દૂધ ઉત્પાદનમાં રેકોર્ડ, ખેડૂતોની આવક વધી',
+          title: 'Record milk production in Mehsana district, farmers income increased',
+          titleHi: 'मेहसाणा जिले में दूध उत्पादन में रिकॉर्ड, किसानों की आय बढ़ी',
+          relativeTimeGu: '૬ કલાક પહેલાં', relativeTime: '6 hours ago', relativeTimeHi: '6 घंटे पहले',
+          categoryGu: 'મહેસાણા', category: 'Mehsana', categoryHi: 'मेहसाणा',
+          viewsGu: '૪૩K', views: '43K'
+        },
+        {
+          id: 'oth-l4', slug: 'morbi-ceramic-export-boom-399', image: '/assets/demo/8.jpg',
+          titleGu: 'મોરબી સિરામિક ઉદ્યોગમાં જોરદાર તેજી, નિકાસમાં ૩૦% વધારો',
+          title: 'Strong boom in Morbi ceramic industry, 30% increase in exports',
+          titleHi: 'मोरबी सिरेमिक उद्योग में जोरदार तेजी, निर्यात में 30% बढ़ोतरी',
+          relativeTimeGu: '૮ કલાક પહેલાં', relativeTime: '8 hours ago', relativeTimeHi: '8 घंटे पहले',
+          categoryGu: 'મોરબી', category: 'Morbi', categoryHi: 'मोरबी',
+          viewsGu: '૫૧K', views: '51K'
+        },
+        {
+          id: 'oth-l5', slug: 'morbi-industry-green-energy-388', image: '/assets/demo/5.jpg',
+          titleGu: 'મોરબી સિરામિક ઉદ્યોગમાં હવે ગ્રીન એનર્જીનો ઉપયોગ વધારવા નિર્ણય',
+          title: 'Morbi ceramic industry decides to increase use of green energy',
+          titleHi: 'मोरबी सिरेमिक उद्योग में अब ग्रीन बनर्जी का उपयोग बढ़ाने का फैसला',
+          relativeTimeGu: '૯ કલાક પહેલાં', relativeTime: '9 hours ago', relativeTimeHi: '9 घंटे पहले',
+          categoryGu: 'મોરબી', category: 'Morbi', categoryHi: 'मोरबी',
+          viewsGu: '૩૭K', views: '37K'
+        }
+      ]
+    }
+  };
+
+  const activeCityData = cityData[activeTab] || cityData['અમદાવાદ'];
+  const mockSlides = activeCityData.slides;
+  const mockList = activeCityData.list;
+  const currentSlide = mockSlides[slideIdx % mockSlides.length];
 
   return (
     <section className="mt-6 border-t border-border pt-5">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 items-start">
-        
+
         {/* Left Column: Tab list + Carousel & Side list */}
         <div className="flex flex-col min-w-0">
-          
+
           {/* Section Header with Underline */}
           <div className="relative border-b-2 border-slate-900 pb-2 mb-4 flex items-center justify-between">
             <span className="bg-[#B3121B] text-white px-5 py-1.5 text-[14px] md:text-[15px] font-black rounded-sm select-none uppercase tracking-wide">
@@ -1109,12 +1608,11 @@ function CityHyperlocalSection({
               return (
                 <button
                   key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`text-[13.5px] md:text-[14.5px] font-black pb-1.5 border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-                    isActive 
-                      ? 'border-[#B3121B] text-[#B3121B]' 
-                      : 'border-transparent text-slate-500 hover:text-slate-800'
-                  }`}
+                  onClick={() => handleTabChange(tab)}
+                  className={`text-[13.5px] md:text-[14.5px] font-black pb-1.5 border-b-2 transition-all cursor-pointer whitespace-nowrap ${isActive
+                    ? 'border-[#B3121B] text-[#B3121B]'
+                    : 'border-transparent text-slate-500 hover:text-slate-800'
+                    }`}
                 >
                   {tab}
                 </button>
@@ -1124,7 +1622,7 @@ function CityHyperlocalSection({
 
           {/* Main 2-Column Content Section */}
           <div className="grid grid-cols-1 md:grid-cols-[1.15fr_1fr] gap-8 items-start">
-            
+
             {/* Carousel Slide */}
             {currentSlide && (
               <div className="group relative flex flex-col min-w-0">
@@ -1163,51 +1661,49 @@ function CityHyperlocalSection({
                   <span className="text-[#B3121B] font-black text-[12.5px] uppercase tracking-wide mb-1 select-none">
                     {getLocalized(language, { en: currentSlide.category, gu: currentSlide.categoryGu, hi: currentSlide.categoryHi })}
                   </span>
-                  
+
                   <Link href={`/news/${currentSlide.slug}`} className="group/link">
-                    <h3 className="font-extrabold text-[15.5px] md:text-[17px] leading-snug tracking-tight text-foreground group-hover/link:text-[#B3121B] transition-colors line-clamp-3">
-                      {getLocalized(language, { en: currentSlide.title, gu: currentSlide.titleGu, hi: currentSlide.titleHi })}
-                    </h3>
+                    <div className="h-[48px] md:h-[50px] overflow-hidden">
+                      <h3 className="font-extrabold text-[15.5px] md:text-[17px] leading-snug tracking-tight text-foreground group-hover/link:text-[#B3121B] transition-colors line-clamp-2">
+                        {getLocalized(language, { en: currentSlide.title, gu: currentSlide.titleGu, hi: currentSlide.titleHi })}
+                      </h3>
+                    </div>
                   </Link>
 
-                  <p className="text-muted-foreground text-[12.5px] leading-relaxed mt-2 line-clamp-3 font-medium">
-                    {getLocalized(language, { en: currentSlide.excerpt, gu: currentSlide.excerptGu, hi: currentSlide.excerptHi })}
-                  </p>
+                  <div className="h-[38px] overflow-hidden mt-2">
+                    <p className="text-muted-foreground text-[12.5px] leading-relaxed line-clamp-2 font-medium">
+                      {getLocalized(language, { en: currentSlide.excerpt, gu: currentSlide.excerptGu, hi: currentSlide.excerptHi })}
+                    </p>
+                  </div>
 
-                  {/* Meta Details */}
-                  <div className="flex items-center gap-2 mt-3.5 text-[11px] text-muted-foreground font-semibold border-b border-border/40 pb-3 mb-3.5">
+                  {/* Meta Details with Inline Tags */}
+                  <div className="h-[38px] flex items-center gap-2.5 mt-3.5 text-[11px] text-muted-foreground font-semibold border-b border-border/40 pb-3 mb-3.5 overflow-hidden">
                     <span>
                       {getLocalized(language, { en: currentSlide.relativeTime, gu: currentSlide.relativeTimeGu, hi: currentSlide.relativeTimeHi })}
                     </span>
                     <span>•</span>
-                    <span className="flex items-center gap-1">
-                      <Eye className="h-3.5 w-3.5 text-muted-foreground/70" />
-                      {language === 'gu' ? toGuLocal(currentSlide.viewsGu) : currentSlide.views}
-                    </span>
-                  </div>
-
-                  {/* Keyword Tags bar */}
-                  <div className="flex flex-wrap gap-1.5">
-                    {currentSlide.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="bg-muted text-muted-foreground text-[10.5px] font-bold px-2.5 py-1 rounded-sm border border-border select-none"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                    <div className="flex flex-wrap gap-1.5">
+                      {currentSlide.tags.slice(0, 3).map((tag) => (
+                        <span
+                          key={tag}
+                          className="bg-muted text-muted-foreground text-[10.5px] font-bold px-2 py-0.5 rounded-sm border border-border select-none animate-fade-in"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
             )}
 
             {/* List updates columns */}
-            <div className="flex flex-col min-w-0 md:border-l md:border-border/60 md:pl-6 gap-4">
+            <div className="flex flex-col min-w-0 md:border-l md:border-border/60 md:pl-6 gap-2.5">
               {mockList.map((item) => (
                 <Link
                   key={item.id}
                   href={`/news/${item.slug}`}
-                  className="group flex gap-3.5 items-start py-2 border-b border-border/40 last:border-b-0 pb-3 last:pb-0"
+                  className="group flex gap-3.5 items-start py-1.5 border-b border-border/40 last:border-b-0 pb-2 last:pb-0"
                 >
                   {/* Small thumbnail on the left */}
                   <div className="relative h-[68px] w-[108px] shrink-0 overflow-hidden rounded-sm bg-muted border border-border/10">
@@ -1222,20 +1718,22 @@ function CityHyperlocalSection({
 
                   {/* Details on the right */}
                   <div className="flex flex-col justify-center min-w-0 flex-1">
-                    <span className="text-[#B3121B] font-extrabold text-[11px] uppercase tracking-wide mb-0.5">
+                    <span className="text-[#B3121B] font-extrabold text-[11px] uppercase tracking-wide mb-0.5 select-none leading-none">
                       {getLocalized(language, { en: item.category, gu: item.categoryGu, hi: item.categoryHi })}
                     </span>
-                    <h4 className="text-[13px] md:text-[13.5px] font-extrabold leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2">
-                      {getLocalized(language, { en: item.title, gu: item.titleGu, hi: item.titleHi })}
-                    </h4>
-                    <div className="flex items-center gap-1.5 mt-1.5 text-[10.5px] text-muted-foreground font-semibold">
+                    <div className="h-[36px] overflow-hidden">
+                      <h4 className="text-[13px] md:text-[13.5px] font-extrabold leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2">
+                        {getLocalized(language, { en: item.title, gu: item.titleGu, hi: item.titleHi })}
+                      </h4>
+                    </div>
+                    <div className="flex items-center gap-1.5 mt-1.5 text-[10.5px] text-muted-foreground font-semibold select-none leading-none">
                       <span>
                         {getLocalized(language, { en: item.relativeTime, gu: item.relativeTimeGu, hi: item.relativeTimeHi })}
                       </span>
                       <span>•</span>
                       <span className="flex items-center gap-1">
-                        <Eye className="h-3 w-3 text-muted-foreground/60" />
-                        {language === 'gu' ? toGuLocal(item.viewsGu) : item.views}
+                        <Clock className="h-3 w-3 text-muted-foreground/60" />
+                        <span>{getMockTime(item.id)}</span>
                       </span>
                     </div>
                   </div>
@@ -1249,7 +1747,7 @@ function CityHyperlocalSection({
 
         {/* Right Column: Sidebar Ads and widgets */}
         <div className="flex flex-col gap-6 sticky top-20 select-none">
-          
+
           {/* Ad widget banner */}
           <div className="flex flex-col gap-1">
             <span className="text-[9px] text-muted-foreground font-black uppercase tracking-widest text-center">
@@ -1453,6 +1951,11 @@ function CrimeSection({
           id: 'ps1_3',
           slug: 'aap-claims-ground-level-network-expansion-gujarat-304',
           titleGu: 'AAPનો મોટો દાવો! ગ્રામ્ય ગુજરાતમાં ભૂ-સ્તરીય નેટવર્ક વિસ્તાર્યું'
+        },
+        {
+          id: 'ps1_4',
+          slug: 'congress-voter-awareness-campaign-312',
+          titleGu: 'કોંગ્રેસનું જનસંપર્ક અભિયાન: પાયાના સ્તરે સંગઠન મજબૂત કરવા કવાયત'
         }
       ]
     },
@@ -1481,6 +1984,11 @@ function CrimeSection({
           id: 'ps2_3',
           slug: 'assembly-monsoon-session-hung-opposition-adjournment-motion-308',
           titleGu: 'વિધાનસભા ચોમાસુ સત્રમાં હોબાળો! વિપક્ષે બેરોજગારી મુદ્દે સ્થગન પ્રસ્તાવ આપ્યો'
+        },
+        {
+          id: 'ps2_4',
+          slug: 'smart-city-project-review-313',
+          titleGu: 'સ્માર્ટ સિટી પ્રોજેક્ટ: આગામી સમયમાં નવા વિકાસ કાર્યો ઝડપી કરાશે'
         }
       ]
     },
@@ -1510,6 +2018,11 @@ function CrimeSection({
           id: 'ps3_3',
           slug: 'dwarka-temple-flag-ceremony-devotees-excited-404',
           titleGu: 'યુવાનો માટે મોટી તક! પોલીસ ભરતીમાં ૧૦,૦૦૦ જગ્યાઓ ટૂંક સમયમાં ભરાશે'
+        },
+        {
+          id: 'ps3_4',
+          slug: 'board-exam-preparations-students-guideline-314',
+          titleGu: 'બોર્ડ પરીક્ષાની તારીખો જાહેર: વિદ્યાર્થીઓ માટે વિશેષ માર્ગદર્શિકા બહાર પડાઈ'
         }
       ]
     }
@@ -1555,17 +2068,17 @@ function CrimeSection({
 
   const leftContent = (
     <div className="flex flex-col min-w-0">
-      
+
       {/* Crime Header */}
-      <div className="flex items-center justify-between border-b-[3px] border-slate-950 pb-2.5 mb-6">
-        <span className="bg-[#B3121B] text-white px-4.5 py-1.5 font-extrabold text-[14px] md:text-[15px] rounded-sm tracking-tight leading-none uppercase">
-          {language === 'gu' ? 'ક્રાઇમ' : 'Crime'}
+      <div className="flex items-end justify-between h-[46px] border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-2.5 mb-6">
+        <span className="bg-[#B3121B] text-white px-5 py-2 text-[13.5px] md:text-[14.5px] font-black rounded-lg select-none leading-none tracking-tight">
+          {language === 'gu' ? 'કાઇમ' : 'Crime'}
         </span>
         <Link
           href="/category/crime"
-          className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline"
+          className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline pb-0.5"
         >
-          {language === 'gu' ? 'બધા ક્રાઇમ સમાચાર →' : 'All Crime News →'}
+          {language === 'gu' ? 'બધા કાઇમ સમાચાર →' : 'All Crime News →'}
         </Link>
       </div>
 
@@ -1615,8 +2128,8 @@ function CrimeSection({
                 </span>
                 <span>•</span>
                 <span className="flex items-center gap-1">
-                  <Eye className="h-3.5 w-3.5 text-muted-foreground/70" />
-                  {language === 'gu' ? toGuLocal(currentSlide.viewsGu) : currentSlide.views}
+                  <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
+                  <span>{getMockTime(currentSlide.id)}</span>
                 </span>
               </div>
             </div>
@@ -1625,12 +2138,6 @@ function CrimeSection({
 
         {/* List side updates (Text lists only, no images, matching the screen!) */}
         <div className="flex flex-col min-w-0 md:border-l md:border-border/60 md:pl-6 gap-2">
-          <div className="flex flex-col mb-1 select-none">
-            <span className="text-[14px] md:text-[15px] font-black text-slate-700 dark:text-slate-300 pb-1">
-              {language === 'gu' ? 'જિલ્લા અપડેટ' : 'District Updates'}
-            </span>
-            <div className="border-b border-slate-900" />
-          </div>
 
           {mockList.map((item) => (
             <Link
@@ -1650,8 +2157,8 @@ function CrimeSection({
                 </span>
                 <span>•</span>
                 <span className="flex items-center gap-1">
-                  <Eye className="h-3 w-3 text-muted-foreground/60" />
-                  {language === 'gu' ? toGuLocal(item.viewsGu) : item.views}
+                  <Clock className="h-3 w-3 text-muted-foreground/60" />
+                  <span>{getMockTime(item.id)}</span>
                 </span>
               </div>
             </Link>
@@ -1686,7 +2193,7 @@ function CrimeSection({
                 <Link
                   key={sub.id}
                   href={`/news/${sub.slug}`}
-                  className="group py-2 block"
+                  className="group py-2.5 block"
                 >
                   <h4 className="text-[12px] md:text-[12.5px] font-bold leading-snug line-clamp-2 text-foreground group-hover:text-[#B3121B] transition-colors">
                     {sub.titleGu}
@@ -1703,7 +2210,7 @@ function CrimeSection({
 
   const sidebarContent = (
     <div className="flex flex-col gap-6 select-none">
-      
+
       {/* Weather Widget */}
       <div className="rounded-sm bg-[#1A1A1A] text-white p-5 border border-border/10 shadow-md">
         <div className="flex items-center gap-1.5 mb-4 select-none">
@@ -1712,7 +2219,7 @@ function CrimeSection({
             {language === 'gu' ? 'હવામાન - અમદાવાદ' : 'Weather - Ahmedabad'}
           </span>
         </div>
-        
+
         <div className="flex justify-between items-center">
           <div>
             <span className="text-4xl font-extrabold tracking-tight select-none">
@@ -1722,7 +2229,7 @@ function CrimeSection({
               {language === 'gu' ? 'આંશિક વાદળછાયું' : 'Partly cloudy'}
             </p>
           </div>
-          
+
           <div className="relative h-12 w-12 text-yellow-400 select-none">
             <svg viewBox="0 0 24 24" className="h-full w-full fill-current">
               <path d="M19 12a7 7 0 1 0-7 7 7 7 0 0 0 7-7zm-7 5a5 5 0 1 1 5-5 5 5 0 0 1-5 5z" />
@@ -1730,7 +2237,7 @@ function CrimeSection({
             </svg>
           </div>
         </div>
-        
+
         <div className="mt-5 pt-4 border-t border-white/10 flex items-center gap-6 text-[12px] font-bold text-white/80">
           <span className="flex items-center gap-1.5 select-none">
             <svg viewBox="0 0 24 24" className="h-4.5 w-4.5 fill-none stroke-current stroke-2">
@@ -1781,8 +2288,8 @@ function CrimeSection({
                 <div className="flex h-7 w-7 items-center justify-center rounded-[4px] bg-[#5038A6] text-white text-[13px] font-extrabold shadow-sm mb-1.5 transition duration-200 group-hover:scale-105 select-none leading-none">
                   {getZodiacSymbol(sign.id)}
                 </div>
-                <span className="text-[11px] font-extrabold text-foreground group-hover:text-[#B3121B] transition-colors select-none leading-none">
-                  {language === 'gu' ? sign.nameGu : sign.name}
+                <span className="text-[11px] font-extrabold text-foreground group-hover:text-[#B3121B] transition-colors select-none leading-normal">
+                  {language === 'gu' ? `${sign.nameGu} (${sign.name})` : sign.name}
                 </span>
               </div>
             ))}
@@ -1796,7 +2303,7 @@ function CrimeSection({
   const zodiacModal = selectedZodiac && (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="absolute inset-0" onClick={() => setSelectedZodiac(null)} />
-      
+
       <div className="relative w-full max-w-md rounded-3xl overflow-hidden bg-card border border-border/10 p-6 shadow-2xl z-10 animate-in zoom-in-95 duration-200 text-center">
         <button
           type="button"
@@ -1814,7 +2321,7 @@ function CrimeSection({
           />
         </div>
         <h3 className="mt-4 text-xl font-black text-foreground">
-          {language === 'gu' ? selectedZodiac.nameGu : selectedZodiac.name}
+          {language === 'gu' ? `${selectedZodiac.nameGu} (${selectedZodiac.name})` : selectedZodiac.name}
         </h3>
         <p className="text-xs font-semibold text-accent uppercase tracking-wider mt-1">
           {getLocalized(language, { en: 'Daily Horoscope', gu: 'આજનું રાશિફળ', hi: 'आज का राशिफल' })}
@@ -2024,7 +2531,7 @@ function PopularStoriesSection({
 
   const leftContent = (
     <div className="flex flex-col min-w-0">
-      
+
       {/* Header */}
       <div className="flex items-center justify-between border-b-[3px] border-slate-950 pb-2.5 mb-6">
         <span className="bg-[#B3121B] text-white px-5 py-1.5 font-extrabold text-[14px] md:text-[15px] rounded-sm tracking-tight leading-none uppercase">
@@ -2034,7 +2541,7 @@ function PopularStoriesSection({
           href="/category/trending"
           className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline"
         >
-          {language === 'gu' ? 'વધુ →' : 'More →'}
+          {language === 'gu' ? 'વધુ સમાચાર →' : 'More →'}
         </Link>
       </div>
 
@@ -2054,7 +2561,7 @@ function PopularStoriesSection({
                   <span className="absolute top-2 left-2 z-10 bg-black/75 text-white text-[12px] font-black h-6 w-6 flex items-center justify-center rounded-sm select-none">
                     {language === 'gu' ? getGoldNumberGu(idx) : getGoldNumber(idx)}
                   </span>
-                  
+
                   <Image
                     src={art.image}
                     alt={art.title}
@@ -2082,9 +2589,8 @@ function PopularStoriesSection({
             <button
               key={idx}
               onClick={() => setGroupIndex(idx)}
-              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                groupIndex === idx ? 'w-5 bg-[#B3121B]' : 'w-2 bg-slate-300 hover:bg-slate-400'
-              }`}
+              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${groupIndex === idx ? 'w-5 bg-[#B3121B]' : 'w-2 bg-slate-300 hover:bg-slate-400'
+                }`}
               aria-label={`Go to slide group ${idx + 1}`}
             />
           ))}
@@ -2096,7 +2602,7 @@ function PopularStoriesSection({
 
   const sidebarContent = (
     <div className="flex flex-col gap-6 select-none">
-      
+
       {/* E-Paper Widget */}
       <div className="w-full rounded-sm border border-slate-200 bg-card p-4.5 shadow-sm flex items-center justify-between hover:border-red-300 transition-colors cursor-pointer select-none">
         <div className="flex items-center gap-3">
@@ -2255,7 +2761,7 @@ function LeftListItem({ article, language }: { article: Article; language: Langu
         </div>
         <div className="flex items-center justify-between gap-2 text-[10px] font-semibold text-muted-foreground">
           <span className="flex items-center gap-1"><Clock className="h-2.5 w-2.5" />{formatTime(article.publishedAt)}</span>
-          <span className="flex items-center gap-1"><Eye className="h-2.5 w-2.5" />{formatViews(article.views)}</span>
+          <span>{formatDate(article.publishedAt)}</span>
         </div>
       </div>
     </Link>
@@ -2525,8 +3031,8 @@ function SportsFeatureCard({
             {formatDate(article.publishedAt)}
           </span>
           <span className="flex items-center gap-1">
-            <Eye className="h-3 w-3" />
-            {formatViews(article.views)}
+            <Clock className="h-3 w-3" />
+            {formatTime(article.publishedAt)}
           </span>
         </div>
       </div>
@@ -2556,8 +3062,8 @@ function SportsListItem({ article, language }: { article: Article; language: Lan
             {formatDate(article.publishedAt)}
           </span>
           <span className="flex items-center gap-1">
-            <Eye className="h-2.5 w-2.5" />
-            {formatViews(article.views)}
+            <Clock className="h-2.5 w-2.5" />
+            {formatTime(article.publishedAt)}
           </span>
         </div>
       </div>
@@ -2910,44 +3416,44 @@ function HeroSectionSkeleton({ language }: { language: Language }) {
       {/* ROW 1: 3-column main section */}
       <div className="grid grid-cols-1 gap-1 lg:grid-cols-[minmax(0,1fr)_280px] items-start">
         <div className="min-w-0">
-            {/* ── REDESIGNED HERO NEWS SECTION SKELETON ── */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start animate-pulse">
-              
-              {/* LEFT COLUMN (Featured News + 3 Horizontal Cards Skeleton) */}
-              <div className="w-full flex flex-col gap-6">
-                <div className="w-full">
-                  <div className="relative aspect-[16/9] w-full rounded-lg bg-muted" />
-                  <div className="h-3.5 w-16 bg-muted rounded mt-3" />
-                  <div className="h-8 w-full bg-muted rounded mt-2" />
-                  <div className="h-8 w-3/4 bg-muted rounded mt-2" />
-                </div>
-                <div className="flex flex-col gap-5 border-t border-border/80 pt-5">
-                  {Array.from({ length: 3 }).map((_, i) => (
-                    <div key={i} className="flex gap-4 items-start">
-                      <div className="flex-1 space-y-1.5 py-1">
-                        <div className="h-3 w-16 bg-muted rounded" />
-                        <div className="h-4.5 w-full bg-muted rounded" />
-                        <div className="h-4.5 w-5/6 bg-muted rounded" />
-                      </div>
-                      <div className="relative w-[88px] h-[58px] rounded-lg bg-muted shrink-0" />
-                    </div>
-                  ))}
-                </div>
-              </div>
+          {/* ── REDESIGNED HERO NEWS SECTION SKELETON ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start animate-pulse">
 
-              {/* RIGHT SIDE (2-Column Grid of 6 Small Cards Skeleton) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-6">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="flex flex-col w-full">
-                    <div className="relative aspect-[2/1] w-full rounded-lg bg-muted" />
-                    <div className="h-3 w-16 bg-muted rounded mt-2" />
-                    <div className="h-4.5 w-full bg-muted rounded mt-2" />
-                    <div className="h-4.5 w-5/6 bg-muted rounded mt-1.5" />
+            {/* LEFT COLUMN (Featured News + 3 Horizontal Cards Skeleton) */}
+            <div className="w-full flex flex-col gap-6">
+              <div className="w-full">
+                <div className="relative aspect-[16/9] w-full rounded-lg bg-muted" />
+                <div className="h-3.5 w-16 bg-muted rounded mt-3" />
+                <div className="h-8 w-full bg-muted rounded mt-2" />
+                <div className="h-8 w-3/4 bg-muted rounded mt-2" />
+              </div>
+              <div className="flex flex-col gap-5 border-t border-border/80 pt-5">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex gap-4 items-start">
+                    <div className="flex-1 space-y-1.5 py-1">
+                      <div className="h-3 w-16 bg-muted rounded" />
+                      <div className="h-4.5 w-full bg-muted rounded" />
+                      <div className="h-4.5 w-5/6 bg-muted rounded" />
+                    </div>
+                    <div className="relative w-[88px] h-[58px] rounded-lg bg-muted shrink-0" />
                   </div>
                 ))}
               </div>
-
             </div>
+
+            {/* RIGHT SIDE (2-Column Grid of 6 Small Cards Skeleton) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-6">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="flex flex-col w-full">
+                  <div className="relative aspect-[2/1] w-full rounded-lg bg-muted" />
+                  <div className="h-3 w-16 bg-muted rounded mt-2" />
+                  <div className="h-4.5 w-full bg-muted rounded mt-2" />
+                  <div className="h-4.5 w-5/6 bg-muted rounded mt-1.5" />
+                </div>
+              ))}
+            </div>
+
+          </div>
 
           {/* Trending Bar skeleton */}
           <div className="min-w-0 mt-2">
@@ -3064,10 +3570,26 @@ const mockPoliticsColumns = [
       image: '/assets/demo/4.jpg',
       categoryGu: 'ચૂંટણી',
       titleGu: 'ગુજરાત ચૂંટણી ૨૦૨૭ નજીક! જિલ્લાઓમાં તૈયારીઓ તેજ, સત્તાધારી પક્ષ સક્રિય',
-      excerptGu: 'આગામી વિધાનસભા ચૂંટણીને ધ્યાનમાં રાખી તમામ મુખ્ય પક્ષોએ સંગઠનાત્મક ફેરફારો શરૂ કર્યા છે.',
       relativeTimeGu: '૧ કલાક પહેલાં',
       views: 71000
-    }
+    },
+    subs: [
+      {
+        id: 'pol-sub-1-1',
+        slug: 'delhi-politics-seat-sharing-talks-500',
+        titleGu: 'સીટ શેરીંગ ફોર્મ્યુલા નક્કી: ગઠબંધન પક્ષો વચ્ચે બેઠકોની વહેંચણી ફાઈનલ'
+      },
+      {
+        id: 'pol-sub-1-2',
+        slug: 'state-assembly-speaker-rules-501',
+        titleGu: 'વિધાનસભા સ્પીકરની ચેતવણી: તમામ સભ્યોને ગૃહની ગરિમા જાળવવા આદેશ'
+      },
+      {
+        id: 'pol-sub-1-3',
+        slug: 'government-policy-infrastructure-development-502',
+        titleGu: 'નવા ઇન્ફ્રાસ્ટ્રક્ચર પ્રોજેક્ટ્સને મંજૂરી: રાજ્ય સરકારનો મોટો નિર્ણય'
+      }
+    ]
   },
   {
     colId: 'pol-col-2',
@@ -3076,7 +3598,8 @@ const mockPoliticsColumns = [
       slug: 'aap-ground-network-expansion-gujarat-502',
       image: '/assets/demo/1.jpg',
       categoryGu: 'AAP',
-      titleGu: 'AAPનો મોટો દાવો! ગ્રામ્ય ગુજરાતમાં ભૂ-સ્તરીય નેટવર્ક વિસ્તાર્યું'
+      titleGu: 'AAPનો મોટો દાવો! ગ્રામ્ય ગુજરાતમાં ભૂ-સ્તરીય નેટવર્ક વિસ્તાર્યું',
+      relativeTimeGu: '૨ કલાક પહેલાં'
     },
     subs: [
       {
@@ -3103,7 +3626,8 @@ const mockPoliticsColumns = [
       slug: 'assembly-monsoon-session-commotion-unemployment-506',
       image: '/assets/demo/3.jpg',
       categoryGu: 'વિધાનસભા',
-      titleGu: 'વિધાનસભા ચોમાસુ સત્રમાં હોબાળો! વિપક્ષે બેરોજગારી મુદ્દે સ્થગન પ્રસ્તાવ આપ્યો'
+      titleGu: 'વિધાનસભા ચોમાસુ સત્રમાં હોબાળો! વિપક્ષે બેરોજગારી મુદ્દે સ્થગન પ્રસ્તાવ આપ્યો',
+      relativeTimeGu: '૩ કલાક પહેલાં'
     },
     subs: [
       {
@@ -3178,7 +3702,7 @@ export function PoliticsSection({ language }: { language: Language }) {
   return (
     <div className="mx-auto max-w-screen-xl px-4 mt-10">
       {/* Section Header */}
-      <div className="flex items-center justify-between border-t-[3.5px] border-slate-950 dark:border-slate-800 pt-5 mb-6">
+      <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
         <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[13.5px] md:text-[14.5px] font-black rounded-lg select-none leading-none tracking-tight">
           {language === 'gu' ? 'રાજકારણ' : language === 'hi' ? 'राजनीति' : 'Politics'}
         </span>
@@ -3186,89 +3710,57 @@ export function PoliticsSection({ language }: { language: Language }) {
           href="/category/politics"
           className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline"
         >
-          {language === 'gu' ? 'વધુ →' : 'More →'}
+          {language === 'gu' ? 'વધુ રાજકારણ સમાચાર →' : 'More →'}
         </Link>
       </div>
 
       {/* 3-Column Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-        {mockPoliticsColumns.map((col, idx) => (
+        {mockPoliticsColumns.map((col) => (
           <div key={col.colId} className="flex flex-col min-w-0">
-            {/* Column 1: Custom structure with excerpt description */}
-            {idx === 0 ? (
-              <div className="flex flex-col min-w-0">
-                <Link
-                  href={`/news/${col.featured.slug}`}
-                  className="group flex flex-col"
-                >
-                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
-                    <Image
-                      src={col.featured.image || ''}
-                      alt={col.featured.titleGu}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 25vw"
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  </div>
-                  <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] mb-1.5 select-none uppercase">
-                    {col.featured.categoryGu}
-                  </span>
-                  <h3 className="text-[14px] md:text-[15.5px] font-extrabold leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-3">
-                    {col.featured.titleGu}
-                  </h3>
-                  <p className="text-muted-foreground text-[12.5px] leading-relaxed mt-2.5 line-clamp-3 select-none">
-                    {col.featured.excerptGu}
-                  </p>
-                </Link>
-                <div className="flex items-center gap-1.5 mt-3 text-[11px] text-muted-foreground font-semibold">
-                  <span>{col.featured.relativeTimeGu}</span>
-                  <span>•</span>
-                  <span className="flex items-center gap-1">
-                    <Eye className="h-3.5 w-3.5 text-muted-foreground/70" />
-                    {language === 'gu' ? toGuLocal(formatViews(col.featured.views || 0)) : formatViews(col.featured.views || 0)}
-                  </span>
+            <div className="flex flex-col min-w-0">
+              <Link
+                href={`/news/${col.featured.slug}`}
+                className="group flex flex-col mb-2.5"
+              >
+                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
+                  <Image
+                    src={col.featured.image || ''}
+                    alt={col.featured.titleGu}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 25vw"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
                 </div>
-              </div>
-            ) : (
-              // Columns 2 & 3: Standard structure with list items
-              <div className="flex flex-col min-w-0">
-                <Link
-                  href={`/news/${col.featured.slug}`}
-                  className="group flex flex-col mb-2.5"
-                >
-                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
-                    <Image
-                      src={col.featured.image || ''}
-                      alt={col.featured.titleGu}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 25vw"
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  </div>
-                  <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] mb-1.5 select-none uppercase">
-                    {col.featured.categoryGu}
-                  </span>
-                  <h3 className="text-[14px] md:text-[15.5px] font-extrabold leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-3">
-                    {col.featured.titleGu}
-                  </h3>
-                </Link>
+                <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] mb-1.5 select-none uppercase">
+                  {col.featured.categoryGu}
+                </span>
+                <h3 className="text-[14px] md:text-[15.5px] font-extrabold leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2 min-h-[40px] md:min-h-[46px]">
+                  {col.featured.titleGu}
+                </h3>
+              </Link>
 
-                {/* Sub-articles list (Text only) with separating top border */}
-                <div className="flex flex-col divide-y divide-border/40 border-t border-border/40 mt-0">
-                  {col.subs?.map((sub) => (
-                    <Link
-                      key={sub.id}
-                      href={`/news/${sub.slug}`}
-                      className="group py-3.5 px-2.5 hover:bg-muted/10 transition-colors rounded-md block"
-                    >
-                      <h4 className="text-[12px] md:text-[12.5px] font-extrabold leading-snug line-clamp-3 text-foreground group-hover:text-[#B3121B] transition-colors">
-                        {sub.titleGu}
-                      </h4>
-                    </Link>
-                  ))}
-                </div>
+              {/* Clock Meta Row */}
+              <div className="flex items-center gap-1.5 mb-4 pb-2 border-b border-border/40 text-[10.5px] text-muted-foreground font-semibold">
+                <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
+                <span>{col.featured.relativeTimeGu || '૧ કલાક પહેલાં'}</span>
               </div>
-            )}
+
+              {/* Sub-articles list (Text only) */}
+              <div className="flex flex-col divide-y divide-border/40">
+                {col.subs?.map((sub) => (
+                  <Link
+                    key={sub.id}
+                    href={`/news/${sub.slug}`}
+                    className="group py-3.5 px-2.5 hover:bg-muted/10 transition-colors rounded-md block"
+                  >
+                    <h4 className="text-[12px] md:text-[12.5px] font-extrabold leading-snug line-clamp-1 text-foreground group-hover:text-[#B3121B] transition-colors">
+                      {sub.titleGu}
+                    </h4>
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
         ))}
       </div>
@@ -3298,12 +3790,8 @@ export function PoliticsSection({ language }: { language: Language }) {
               </h4>
             </Link>
             <div className="flex items-center gap-1.5 mt-2.5 text-[10.5px] text-muted-foreground font-semibold">
+              <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
               <span>{card.relativeTimeGu}</span>
-              <span>•</span>
-              <span className="flex items-center gap-1">
-                <Eye className="h-3.5 w-3.5 text-muted-foreground/70" />
-                {language === 'gu' ? toGuLocal(formatViews(card.views)) : formatViews(card.views)}
-              </span>
             </div>
           </div>
         ))}
@@ -3384,7 +3872,7 @@ export function FactCheckSection({ language }: { language: Language }) {
   return (
     <div className="mx-auto max-w-screen-xl px-4 mt-10">
       {/* Section Header */}
-      <div className="flex items-center justify-between border-t-[3.5px] border-slate-950 dark:border-slate-800 pt-5 mb-6">
+      <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
         <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[13.5px] md:text-[14.5px] font-black rounded-lg select-none leading-none tracking-tight">
           {language === 'gu' ? 'ફેક્ટ ચેક' : language === 'hi' ? 'तथ्य जांच' : 'Fact Check'}
         </span>
@@ -3392,13 +3880,13 @@ export function FactCheckSection({ language }: { language: Language }) {
           href="/category/fact-check"
           className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline"
         >
-          {language === 'gu' ? 'વધુ →' : 'More →'}
+          {language === 'gu' ? 'વધુ ફેક્ટ ચેક સમાચાર →' : 'More →'}
         </Link>
       </div>
 
       {/* Grid: 3 columns layout (1 column for featured, 2 columns for list grid) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        
+
         {/* Left Column: Big Featured Fact Check Card (Spans 1 column on desktop) */}
         <div className="lg:col-span-1 flex flex-col min-w-0">
           <Link
@@ -3430,12 +3918,8 @@ export function FactCheckSection({ language }: { language: Language }) {
             </p>
           </Link>
           <div className="flex items-center gap-1.5 mt-3 text-[11px] text-muted-foreground font-semibold">
+            <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
             <span>{language === 'gu' ? '૧ કલાક પહેલાં' : '1 hour ago'}</span>
-            <span>•</span>
-            <span className="flex items-center gap-1">
-              <Eye className="h-3.5 w-3.5 text-muted-foreground/70" />
-              {language === 'gu' ? toGuLocal(formatViews(12000)) : formatViews(12000)}
-            </span>
           </div>
         </div>
 
@@ -3462,13 +3946,12 @@ export function FactCheckSection({ language }: { language: Language }) {
               <div className="flex flex-col justify-center min-w-0 flex-1">
                 {/* Status Dot + Category Label */}
                 <div className="flex mb-1">
-                  <span className={`flex items-center gap-1 text-[11px] font-black select-none leading-none uppercase ${
-                    item.status === 'true'
-                      ? 'text-green-600'
-                      : item.status === 'fake'
+                  <span className={`flex items-center gap-1 text-[11px] font-black select-none leading-none uppercase ${item.status === 'true'
+                    ? 'text-green-600'
+                    : item.status === 'fake'
                       ? 'text-red-600'
                       : 'text-yellow-600'
-                  }`}>
+                    }`}>
                     <span className="text-[10px]">●</span>
                     {language === 'gu' ? item.statusLabelGu : item.status.toUpperCase()}
                   </span>
@@ -3604,9 +4087,9 @@ const mockNationalColumns = [
 /* --- National Section ("દેશ" Zone) ----------------------------- */
 export function NationalSection({ language }: { language: Language }) {
   return (
-    <div className="mx-auto max-w-screen-xl px-4 mt-10">
+    <div className="mx-auto max-w-screen-xl px-4 mt-4">
       {/* Section Header */}
-      <div className="flex items-center justify-between border-t-[3.5px] border-slate-950 dark:border-slate-800 pt-5 mb-6">
+      <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
         <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[13.5px] md:text-[14.5px] font-black rounded-lg select-none leading-none tracking-tight">
           {language === 'gu' ? 'દેશ' : language === 'hi' ? 'देश' : 'National'}
         </span>
@@ -3614,7 +4097,7 @@ export function NationalSection({ language }: { language: Language }) {
           href="/category/national"
           className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline"
         >
-          {language === 'gu' ? 'વધુ →' : 'More →'}
+          {language === 'gu' ? 'વધુ દેશ સમાચાર →' : 'More →'}
         </Link>
       </div>
 
@@ -3641,12 +4124,8 @@ export function NationalSection({ language }: { language: Language }) {
               </h3>
             </Link>
             <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground font-semibold mb-4 pb-2 border-b border-border/40">
+              <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
               <span>{col.featured.relativeTimeGu}</span>
-              <span>•</span>
-              <span className="flex items-center gap-1">
-                <Eye className="h-3.5 w-3.5 text-muted-foreground/70" />
-                {language === 'gu' ? toGuLocal(formatViews(col.featured.views)) : formatViews(col.featured.views)}
-              </span>
             </div>
 
             {/* List of 3 sub items with left image and right title */}
@@ -3667,20 +4146,15 @@ export function NationalSection({ language }: { language: Language }) {
                     />
                   </div>
                   <div className="flex flex-col justify-center min-w-0 flex-1">
-                    <h4 className={`text-[12.5px] font-extrabold leading-snug line-clamp-2 transition-colors ${
-                      sub.isHighlighted
-                        ? 'text-red-600'
-                        : 'text-foreground group-hover:text-[#B3121B]'
-                    }`}>
+                    <h4 className={`text-[12.5px] font-extrabold leading-snug line-clamp-2 transition-colors ${sub.isHighlighted
+                      ? 'text-red-600'
+                      : 'text-foreground group-hover:text-[#B3121B]'
+                      }`}>
                       {sub.titleGu}
                     </h4>
                     <div className="flex items-center gap-1.5 mt-1 text-[10px] text-muted-foreground font-semibold">
+                      <Clock className="h-3 w-3 text-muted-foreground/60" />
                       <span>{sub.relativeTimeGu}</span>
-                      <span>•</span>
-                      <span className="flex items-center gap-1">
-                        <Eye className="h-3 w-3 text-muted-foreground/60" />
-                        {language === 'gu' ? toGuLocal(formatViews(sub.views)) : formatViews(sub.views)}
-                      </span>
                     </div>
                   </div>
                 </Link>
@@ -3747,7 +4221,7 @@ export function WorldSection({ language }: { language: Language }) {
   return (
     <div className="mx-auto max-w-screen-xl px-4 mt-10">
       {/* Section Header */}
-      <div className="flex items-center justify-between border-t-[3.5px] border-slate-950 dark:border-slate-800 pt-5 mb-6">
+      <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
         <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[13.5px] md:text-[14.5px] font-black rounded-lg select-none leading-none tracking-tight">
           {language === 'gu' ? 'વિશ્વ' : language === 'hi' ? 'विश्व' : 'World'}
         </span>
@@ -3755,16 +4229,16 @@ export function WorldSection({ language }: { language: Language }) {
           href="/category/world"
           className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline"
         >
-          {language === 'gu' ? 'વધુ →' : 'More →'}
+          {language === 'gu' ? 'વધુ વિશ્વ સમાચાર →' : 'More →'}
         </Link>
       </div>
 
       {/* Grid: Left column (main news) vs Right column (sidebar/widgets) */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_336px] gap-8 items-start">
-        
+
         {/* Left Column: Big horizontal featured card + 4-column horizontal card list */}
         <div className="flex flex-col min-w-0">
-          
+
           {/* Big Horizontal Featured Card */}
           <Link
             href={`/news/${mockWorldFeatured.slug}`}
@@ -3782,7 +4256,7 @@ export function WorldSection({ language }: { language: Language }) {
                 {mockWorldFeatured.excerptGu}
               </p>
             </div>
-            
+
             {/* Image Right with Watermark */}
             <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm bg-muted order-1 md:order-2">
               <Image
@@ -3823,12 +4297,8 @@ export function WorldSection({ language }: { language: Language }) {
                   </h4>
                 </Link>
                 <div className="flex items-center gap-1.5 mt-2.5 text-[11px] text-muted-foreground font-semibold">
+                  <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
                   <span>{card.relativeTimeGu}</span>
-                  <span>•</span>
-                  <span className="flex items-center gap-1">
-                    <Eye className="h-3.5 w-3.5 text-muted-foreground/70" />
-                    {language === 'gu' ? toGuLocal(formatViews(card.views)) : formatViews(card.views)}
-                  </span>
                 </div>
               </div>
             ))}
@@ -3838,7 +4308,7 @@ export function WorldSection({ language }: { language: Language }) {
 
         {/* Right Column: Widgets */}
         <div className="flex flex-col gap-6">
-          
+
           {/* Green Dream Home Ad */}
           <div className="w-full rounded-sm bg-[#0E8044] text-white p-8 flex flex-col items-center justify-center relative overflow-hidden border border-border/10 shadow-md text-center" style={{ minHeight: 210 }}>
             {/* Small Ad Label at top */}
@@ -3972,8 +4442,8 @@ export function LiveCenterSection({ language }: { language: Language }) {
               {/* City rows */}
               {[
                 { city: 'અમદાવાદ', state: 'Gujarat', desc: 'વાદળછાઈ', temp: '32', feels: '36', humidity: '68%', wind: '19 km/h', icon: 'cloud' },
-                { city: 'વડોદરા',  state: 'Gujarat', desc: 'ગરમ અને ખુલ્લું', temp: '39', feels: '31', humidity: '78%', wind: '19 km/h', icon: 'sun' },
-                { city: 'મુંબઈ',  state: 'Maharashtra', desc: 'ઝરમર વરસાદ', temp: '26', feels: '31', humidity: '88%', wind: '16 km/h', icon: 'rain' },
+                { city: 'વડોદરા', state: 'Gujarat', desc: 'ગરમ અને ખુલ્લું', temp: '39', feels: '31', humidity: '78%', wind: '19 km/h', icon: 'sun' },
+                { city: 'મુંબઈ', state: 'Maharashtra', desc: 'ઝરમર વરસાદ', temp: '26', feels: '31', humidity: '88%', wind: '16 km/h', icon: 'rain' },
               ].map((w) => (
                 <div key={w.city} className="flex items-center justify-between py-3 border-t border-border/10 first:border-t-0 hover:bg-muted/20 px-1.5 rounded-lg transition-colors">
                   <div className="flex items-center gap-3 min-w-0">
@@ -4015,7 +4485,7 @@ export function LiveCenterSection({ language }: { language: Language }) {
 
               <div className="flex flex-col gap-2">
                 {[
-                  { name: 'Nifty 50',   exchange: 'NSE', price: '₹૨૩,૪૫૬.૨', change: '+૧૮૮.૪ (+0.93%)', up: true },
+                  { name: 'Nifty 50', exchange: 'NSE', price: '₹૨૩,૪૫૬.૨', change: '+૧૮૮.૪ (+0.93%)', up: true },
                   { name: 'BSE Sensex', exchange: 'BSE', price: '₹૮૦,૩૦૯.૧', change: '+૪૨૫.૬ (+0.55%)', up: true },
                   { name: 'Nifty Bank', exchange: 'NSE', price: '₹૪૯,૬૪૦.૮', change: '-૧૨૪.૧ (-0.23%)', up: false },
                 ].map((s) => (
@@ -4159,30 +4629,258 @@ export function LiveCenterSection({ language }: { language: Language }) {
   );
 }
 
+/* --- Weather Dashboard Section --------------------------------------------- */
+function WeatherDashboardSection({ language }: { language: Language }) {
+  const [activeTab, setActiveTab] = useState<'weather' | 'aqi'>('weather');
+  const [selectedCity, setSelectedCity] = useState('Ahmedabad');
+
+  const isGu = language === 'gu';
+
+  // Weather data maps
+  const weatherData: Record<string, { temp: string; desc: string; descGu: string; icon: string; humidity: string; wind: string }> = {
+    Ahmedabad: { temp: '29', desc: 'Mist', descGu: 'ધુમ્મસ', icon: 'cloud', humidity: '68%', wind: '19 km/h' },
+    Vadodara: { temp: '31.7', desc: 'Partly Cloudy', descGu: 'વાદળછાઈ', icon: 'cloud', humidity: '52%', wind: '12 km/h' },
+    Surat: { temp: '29.8', desc: 'Heavy Rain', descGu: 'ભારે વરસાદ', icon: 'rain', humidity: '68%', wind: '15 km/h' },
+    Rajkot: { temp: '31.9', desc: 'Sunny', descGu: 'તડકો', icon: 'sun', humidity: '52%', wind: '10 km/h' }
+  };
+
+  const aqiData: Record<string, { value: number; label: string; labelGu: string; color: string }> = {
+    Ahmedabad: { value: 72, label: 'Satisfactory', labelGu: 'સંતોષકારક', color: 'bg-emerald-500' },
+    Vadodara: { value: 65, label: 'Satisfactory', labelGu: 'સંતોષકારક', color: 'bg-emerald-500' },
+    Surat: { value: 85, label: 'Moderate', labelGu: 'સાધારણ', color: 'bg-amber-500' },
+    Rajkot: { value: 58, label: 'Good', labelGu: 'સારું', color: 'bg-green-500' }
+  };
+
+  const mainWeather = weatherData[selectedCity] || weatherData.Ahmedabad;
+  const otherCities = ['Ahmedabad', 'Vadodara', 'Surat', 'Rajkot'].filter(c => c !== selectedCity);
+
+  return (
+    <section className="mx-auto max-w-screen-xl px-4 py-4 mt-8 select-none">
+      {/* Tab headers */}
+      <div className="flex items-end">
+        <div className="bg-slate-950/90 backdrop-blur-md p-1 rounded-t-xl inline-flex gap-1 border-t border-x border-slate-800/60">
+          <button
+            onClick={() => setActiveTab('weather')}
+            className={`flex items-center gap-2 px-5 py-2 text-xs md:text-sm font-black transition-all rounded-lg tracking-wider select-none ${
+              activeTab === 'weather'
+                ? 'bg-[#e9ebea]/85 dark:bg-slate-950/70 text-slate-950 dark:text-white shadow-sm border-t border-x border-white/20 dark:border-slate-800/30'
+                : 'text-white/80 hover:text-white bg-transparent'
+            }`}
+          >
+            <Sun className={`h-4 w-4 ${activeTab === 'weather' ? 'text-amber-500' : 'text-white/60'}`} />
+            {isGu ? 'હવામાન' : 'WEATHER'}
+          </button>
+          <button
+            onClick={() => setActiveTab('aqi')}
+            className={`flex items-center gap-2 px-5 py-2 text-xs md:text-sm font-black transition-all rounded-lg tracking-wider select-none ${
+              activeTab === 'aqi'
+                ? 'bg-[#e9ebea]/85 dark:bg-slate-950/70 text-slate-950 dark:text-white shadow-sm border-t border-x border-white/20 dark:border-slate-800/30'
+                : 'text-white/80 hover:text-white bg-transparent'
+            }`}
+          >
+            <Wind className={`h-4 w-4 ${activeTab === 'aqi' ? 'text-emerald-400' : 'text-white/60'}`} />
+            {isGu ? 'હવા ગુણવત્તા (AQI)' : 'AQI'}
+          </button>
+        </div>
+      </div>
+
+      {/* Main Box with Glassmorphism */}
+      <div className="bg-[#e9ebea]/75 dark:bg-slate-950/40 backdrop-blur-xl p-6 rounded-b-2xl rounded-r-2xl border border-white/20 dark:border-slate-800/35 shadow-lg relative">
+        {activeTab === 'weather' ? (
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 items-center">
+            {/* Left Area - Selected City weather info */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b lg:border-b-0 lg:border-r border-slate-300 dark:border-slate-800/70 pb-6 lg:pb-0 lg:pr-10">
+              <div className="flex flex-col">
+                <h3 className="text-lg md:text-xl font-black text-slate-950 dark:text-white flex items-center gap-2">
+                  {selectedCity} {isGu ? 'હવામાનની સ્થિતિ' : 'Weather Status'}
+                </h3>
+                <p className="text-xs md:text-sm font-semibold text-slate-500 dark:text-slate-400 mt-1 select-none">
+                  {isGu ? 'વર્તમાન તાપમાનનું સ્તર' : 'Current temperature level'}
+                </p>
+                <div className="flex items-center gap-5 mt-4">
+                  <div className="relative">
+                    {mainWeather.icon === 'cloud' && <Cloud className="h-16 w-16 text-blue-400/80 fill-blue-400/10 animate-pulse" />}
+                    {mainWeather.icon === 'rain' && <CloudRain className="h-16 w-16 text-blue-500 fill-blue-500/10" />}
+                    {mainWeather.icon === 'sun' && <Sun className="h-16 w-16 text-amber-500 fill-amber-500/10 animate-spin-slow" />}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-4xl md:text-5xl font-black text-slate-950 dark:text-white select-none">
+                      {mainWeather.temp}°C
+                    </span>
+                    <span className="mt-1.5 self-start bg-red-600 text-white text-[11px] font-black px-3 py-1 rounded-full uppercase leading-none select-none">
+                      {isGu ? mainWeather.descGu : mainWeather.desc}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Area - Other Cities */}
+            <div className="flex flex-col gap-4">
+              {/* City selector dropdown on top right */}
+              <div className="self-end flex items-center gap-2">
+                <div className="relative">
+                  <select
+                    value={selectedCity}
+                    onChange={(e) => setSelectedCity(e.target.value)}
+                    className="appearance-none bg-white/70 dark:bg-slate-800/60 backdrop-blur-md text-slate-950 dark:text-slate-200 text-xs font-black px-4 py-2 pr-8 rounded-full border border-white/35 dark:border-slate-700/40 focus:outline-none focus:ring-1 focus:ring-red-600/35 cursor-pointer shadow-sm"
+                  >
+                    <option value="Ahmedabad">Ahmedabad</option>
+                    <option value="Vadodara">Vadodara</option>
+                    <option value="Surat">Surat</option>
+                    <option value="Rajkot">Rajkot</option>
+                  </select>
+                  <ChevronDown className="h-3.5 w-3.5 text-slate-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* City cards with Glassmorphism */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {otherCities.map((city) => {
+                  const item = weatherData[city];
+                  return (
+                    <div
+                      key={city}
+                      className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-md border border-white/30 dark:border-slate-800/30 rounded-xl p-4 shadow-sm flex flex-col justify-between gap-3 min-w-[190px] relative hover:shadow-md hover:bg-white/95 dark:hover:bg-slate-900/60 transition-all duration-300"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-[13px] font-black text-slate-950 dark:text-slate-100">{city}</span>
+                        <button 
+                          onClick={() => setSelectedCity(city)}
+                          className="h-5 w-5 bg-slate-950 text-white rounded-full flex items-center justify-center hover:bg-[#B3121B] transition-colors"
+                        >
+                          <ArrowUpRight className="h-3 w-3" />
+                        </button>
+                      </div>
+                      <div className="flex items-center justify-between gap-3 mt-1">
+                        {item.icon === 'cloud' && <Cloud className="h-9 w-9 text-slate-400 shrink-0" />}
+                        {item.icon === 'rain' && <CloudRain className="h-9 w-9 text-blue-400 shrink-0" />}
+                        {item.icon === 'sun' && <Sun className="h-9 w-9 text-amber-500 shrink-0 animate-spin-slow" />}
+                        
+                        <div className="text-right flex flex-col items-end gap-1">
+                          <span className="text-[12px] font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1 select-none">
+                            <Thermometer className="h-3.5 w-3.5 text-slate-400" />
+                            {item.temp}°C
+                          </span>
+                          <span className="text-[12px] font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1 select-none">
+                            <Droplet className="h-3.5 w-3.5 text-slate-400" />
+                            {item.humidity}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Bottom update timestamp */}
+              <div className="text-[10px] text-slate-500/80 font-semibold text-right select-none mt-2">
+                Last Update: 2026-07-16 18:31 (local time)
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 items-center">
+            {/* Left Area - Selected City AQI info */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b lg:border-b-0 lg:border-r border-slate-300 dark:border-slate-800/70 pb-6 lg:pb-0 lg:pr-10">
+              <div className="flex flex-col">
+                <h3 className="text-lg md:text-xl font-black text-slate-950 dark:text-white">
+                  {selectedCity} {isGu ? 'હવાની ગુણવત્તા સૂચકાંક (AQI)' : 'Air Quality Index'}
+                </h3>
+                <p className="text-xs md:text-sm font-semibold text-slate-500 dark:text-slate-400 mt-1">
+                  {isGu ? 'વર્તમાન વાયુ પ્રદૂષણ સ્તર' : 'Current air pollution levels'}
+                </p>
+                <div className="flex items-center gap-5 mt-4">
+                  <div className={`h-14 w-14 rounded-xl text-white flex items-center justify-center text-xl font-black shadow-md select-none ${aqiData[selectedCity]?.color || 'bg-emerald-500'}`}>
+                    {aqiData[selectedCity]?.value}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[16px] font-black text-slate-950 dark:text-slate-200">
+                      {isGu ? aqiData[selectedCity]?.labelGu : aqiData[selectedCity]?.label}
+                    </span>
+                    <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 mt-0.5">
+                      PM2.5: 22 µg/m³ · PM10: 45 µg/m³
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Area - Other Cities AQI */}
+            <div className="flex flex-col gap-4">
+              {/* City selector dropdown on top right */}
+              <div className="self-end flex items-center gap-2">
+                <div className="relative">
+                  <select
+                    value={selectedCity}
+                    onChange={(e) => setSelectedCity(e.target.value)}
+                    className="appearance-none bg-white/70 dark:bg-slate-800/60 backdrop-blur-md text-slate-950 dark:text-slate-200 text-xs font-black px-4 py-2 pr-8 rounded-full border border-white/35 dark:border-slate-700/40 focus:outline-none focus:ring-1 focus:ring-red-600/35 cursor-pointer shadow-sm"
+                  >
+                    <option value="Ahmedabad">Ahmedabad</option>
+                    <option value="Vadodara">Vadodara</option>
+                    <option value="Surat">Surat</option>
+                    <option value="Rajkot">Rajkot</option>
+                  </select>
+                  <ChevronDown className="h-3.5 w-3.5 text-slate-500 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {otherCities.map((city) => {
+                  const item = aqiData[city];
+                  return (
+                    <div
+                      key={city}
+                      className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-md border border-white/30 dark:border-slate-800/30 rounded-xl p-4 shadow-sm flex flex-col justify-between gap-3 min-w-[190px] hover:shadow-md hover:bg-white/95 dark:hover:bg-slate-900/60 transition-all duration-300"
+                    >
+                      <span className="text-[13px] font-black text-slate-950 dark:text-slate-100">{city}</span>
+                      <div className="flex items-center justify-between mt-1">
+                        <span className={`text-[12px] font-black text-white px-2.5 py-1 rounded ${item.color} shadow-sm select-none`}>
+                          {item.value} AQI
+                        </span>
+                        <span className="text-[11px] font-black text-slate-800 dark:text-slate-300">
+                          {isGu ? item.labelGu : item.label}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="text-[10px] text-slate-500/80 font-semibold text-right select-none mt-2">
+                Last Update: 2026-07-16 18:31 (local time)
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
 /* ─── Entertainment · Tech · Lifestyle 3-Column Section ─────────────────── */
 export function EntertainTechLifeSection({ language }: { language: Language }) {
 
   type ArticleItem = { img: string; title: string; titleGu: string; age: string; views: string };
 
+  const health: ArticleItem[] = [
+    { img: '/assets/demo/2.jpg', titleGu: 'ચોમાસામાં આરોગ્ય જાળવવા આટલું જરૂર ધ્યાન રાખો', title: 'Keep this much in mind to maintain health in monsoon', age: '૨', views: '૩૩K' },
+    { img: '/assets/demo/6.jpg', titleGu: 'યોગ કરવાથી શરીર અને મનને મળશે નવી ઉર્જા, જાણો તેના ફાયદા', title: 'Yoga benefits for body and mind, know its benefits', age: '૪', views: '૪૬K' },
+    { img: '/assets/demo/8.jpg', titleGu: 'ખીલની સમસ્યાથી મુક્તિ મેળવવા માટે આયુર્વેદિક ઉપચાર', title: 'Ayurvedic home remedies for acne issues', age: '૫', views: '૫૨K' },
+    { img: '/assets/demo/3.jpg', titleGu: 'તંદુરસ્ત હૃદય માટે આહારમાં સામેલ કરો આ સુપરફૂડ્સ', title: 'Superfoods to include in your diet for a healthy heart', age: '૭', views: '૬૮K' },
+  ];
+
   const manoranjan: ArticleItem[] = [
-    { img: '/assets/demo/6.jpg',  titleGu: 'નવી ગુજરાતી ફિલ્મે બોક્સ ઓફિસ પર રેકોર્ડ તોડ્યો! જૂઓ કમાણીના આંકડા', title: 'New Gujarati film breaks box-office record! See earnings figures',  age: '૧', views: '૮૧K' },
-    { img: '/assets/demo/4.jpg',  titleGu: 'લોકપ્રિય ધારાવાહિકનો નવો સીઝન ટૂંક સમયમાં, ચાહકોમાં ઉત્સુકતા',            title: 'New season of popular serial coming soon, excitement among fans',        age: '૩', views: '૯૦K' },
-    { img: '/assets/demo/1.jpg',  titleGu: 'જાણીતા ગાયકનો નવો આલ્બમ રિલીઝ! ચાહકોમાં જબરદસ્ત ઉત્સાહ',             title: 'Famous singer releases new album! Huge excitement among fans',           age: '૪', views: '૧.૧L' },
-    { img: '/assets/demo/5.jpg',  titleGu: 'આ વીકેન્ડ OTT પર ધમાકો! રિલીઝ થશે આ પાંચ મોટી ફિલ્મો અને શો', title: 'Weekend OTT blast! These five big movies and shows to release',       age: '૬', views: '૧.૨L' },
+    { img: '/assets/demo/6.jpg', titleGu: 'નવી ગુજરાતી ફિલ્મે બોક્સ ઓફિસ પર રેકોર્ડ તોડ્યો! જૂઓ કમાણીના આંકડા', title: 'New Gujarati film breaks box-office record! See earnings figures', age: '૧', views: '૮૧K' },
+    { img: '/assets/demo/4.jpg', titleGu: 'લોકપ્રિય ધારાવાહિકનો નવો સીઝન ટૂંક સમયમાં, ચાહકોમાં ઉત્સુકતા', title: 'New season of popular serial coming soon, excitement among fans', age: '૩', views: '૯૦K' },
+    { img: '/assets/demo/1.jpg', titleGu: 'જાણીતા ગાયકનો નવો આલ્બમ રિલીઝ! ચાહકોમાં જબરદસ્ત ઉત્સાહ', title: 'Famous singer releases new album! Huge excitement among fans', age: '૪', views: '૧.૧L' },
+    { img: '/assets/demo/5.jpg', titleGu: 'આ વીકેન્ડ OTT પર ધમાકો! રિલીઝ થશે આ પાંચ મોટી ફિલ્મો અને શો', title: 'Weekend OTT blast! These five big movies and shows to release', age: '૬', views: '૧.૨L' },
   ];
 
   const technology: ArticleItem[] = [
-    { img: '/assets/demo/3.jpg',  titleGu: 'નવો સ્માર્ટફોન ભારતમાં લોન્ચ! કિંમત જાણી ચોંકી જશો',          title: 'New smartphone launched in India! You will be shocked to know the price',         age: '૨', views: '૧.૪L' },
-    { img: '/assets/demo/7.jpg',  titleGu: 'ગુજરાતની કંપનીની કમાલ! વિકસાવ્યું નવું AI ટૂલ',           title: 'Gujarat company’s miracle! Developed new AI tool',           age: '૩', views: '૧.૬L' },
-    { img: '/assets/demo/5.jpg',  titleGu: 'રાજ્યમાં 5G નેટવર્કનો વ્યાપ ઝડપથી વધ્યો, જુઓ કયા શહેરો કવર', title: '5G network footprint grew rapidly in state, see which cities covered',       age: '૫', views: '૧૨K' },
-    { img: '/assets/demo/8.jpg',  titleGu: 'લોકપ્રિય ગેમનું નવું અપડેટ લોન્ચ! ખેલાડીઓમાં જબરદસ્ત ઉત્સાહ',               title: 'Popular game new update launched! Tremendous excitement among players',         age: '૭', views: '૨૭K' },
-  ];
-
-  const lifestyle: ArticleItem[] = [
-    { img: '/assets/demo/2.jpg',  titleGu: 'ચોમાસામાં આરોગ્ય જાળવવા આટલું જરૂર ધ્યાન રાખો',     title: 'Keep this much in mind to maintain health in monsoon',      age: '૨', views: '૩૩K' },
-    { img: '/assets/demo/6.jpg', titleGu: 'ગુજરાતી થાળીની આ ખાસ વાનગીઓ જરૂર અજમાવો', title: 'Must try these special dishes of Gujarati thali',         age: '૪', views: '૪૬K' },
-    { img: '/assets/demo/8.jpg', titleGu: 'ચોમાસામાં ફરવા માટે ગુજરાતના આ શ્રેષ્ઠ સ્થળો બેસ્ટ છે',      title: 'These best places in Gujarat are perfect to visit in monsoon',         age: '૫', views: '૫૨K' },
-    { img: '/assets/demo/3.jpg', titleGu: 'આ ચોમાસામાં ટ્રેન્ડમાં છે આ ખાસ સ્ટાઈલ! જાણો ટિપ્સ',   title: 'This special style is trending this monsoon! Know tips',          age: '૭', views: '૬૮K' },
+    { img: '/assets/demo/3.jpg', titleGu: 'નવો સ્માાર્ટફોન ભારતમાં લોન્ચ! કિંમત જાણી ચોંકી જશો', title: 'New smartphone launched in India! You will be shocked to know the price', age: '૨', views: '૧.૪L' },
+    { img: '/assets/demo/7.jpg', titleGu: 'ગુજરાતની કંપનીની કમાલ! વિકસાવ્યું નવું AI ટૂલ', title: 'Gujarat company’s miracle! Developed new AI tool', age: '૩', views: '૧.૬L' },
+    { img: '/assets/demo/5.jpg', titleGu: 'રાજ્યમાં 5G નેટવર્કનો વ્યાપ ઝડપથી વધ્યો, જુઓ કયા શહેરો કવર', title: '5G network footprint grew rapidly in state, see which cities covered', age: '૫', views: '૧૨K' },
+    { img: '/assets/demo/8.jpg', titleGu: 'લોકપ્રિય ગેમનું નવું અપડેટ લોન્ચ! ખેલાડીઓમાં જબરદસ્ત ઉત્સાહ', title: 'Popular game new update launched! Tremendous excitement among players', age: '૭', views: '૨૭K' },
   ];
 
   const col = (
@@ -4228,13 +4926,13 @@ export function EntertainTechLifeSection({ language }: { language: Language }) {
                 <span>{a.age} કલાક પહેલાં</span>
                 <span className="text-muted-foreground/60">•</span>
                 <span className="flex items-center gap-1">
-                  <svg 
-                    className="h-3.5 w-3.5 text-muted-foreground/60 shrink-0" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    strokeWidth="2.5" 
-                    strokeLinecap="round" 
+                  <svg
+                    className="h-3.5 w-3.5 text-muted-foreground/60 shrink-0"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
                     strokeLinejoin="round"
                   >
                     <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" />
@@ -4251,26 +4949,23 @@ export function EntertainTechLifeSection({ language }: { language: Language }) {
   );
 
   return (
-    <div className="mt-12 pt-6 border-t border-border">
-      {/* ── Red pill header ─────────────────────────────────────── */}
-      <div className="flex items-center gap-0 mb-0">
-        <span className="bg-[#B3121B] text-white text-[12.5px] font-black px-4 py-1.5 rounded select-none leading-tight">
+    <div className="mx-auto max-w-screen-xl px-4 mt-10">
+      {/* Section Header */}
+      <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
+        <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[13.5px] md:text-[14.5px] font-black rounded-lg select-none leading-none tracking-tight">
           {language === 'gu'
-            ? 'મનોરંજન · ટેક · લાઇફસ્ટાઇલ'
+            ? 'હેલ્થ   •   મનોરંજન   •   ટેક્નોલોજી'
             : language === 'hi'
-            ? 'मनोरंजन · टेक · लाइफस्टाइल'
-            : 'Entertainment · Tech · Lifestyle'}
+              ? 'हेल्थ   •   मनोरंजन   •   टेक्नोलॉजी'
+              : 'Health   •   Entertainment   •   Technology'}
         </span>
       </div>
 
-      {/* Black underline bar */}
-      <div className="h-[3px] w-full bg-foreground/80 mb-6" />
-
       {/* 3-Column Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-y-8 md:gap-y-0 md:divide-x md:divide-border">
-        {col('મનોરંજન',    'Entertainment', '/category/entertainment', manoranjan, 'md:pr-6')}
-        {col('ટેકનોલોજી', 'Technology',    '/category/technology',    technology, 'md:px-6')}
-        {col('લાઇફસ્ટાઇલ',  'Lifestyle',     '/category/lifestyle',     lifestyle, 'md:pl-6')}
+        {col('હેલ્થ', 'Health', '/category/health', health, 'md:pr-10')}
+        {col('મનોરંજન', 'Entertainment', '/category/entertainment', manoranjan, 'md:px-10')}
+        {col('ટેકનોલોજી', 'Technology', '/category/technology', technology, 'md:pl-10')}
       </div>
     </div>
   );
@@ -4320,54 +5015,80 @@ const GALLERY_DATA = [
     title: 'Flag ceremony at Dwarka temple, devotees full of enthusiasm',
     count: 10,
   },
+  {
+    id: 'gal7',
+    src: '/assets/demo/3.jpg',
+    titleGu: 'સાપુતારા હિલ સ્ટેશન: ચોમાસાની મનોહર કળા ખીલી ઉઠી',
+    title: 'Saputara Hill Station: Beautiful monsoon scenes bloom',
+    count: 18,
+  },
+  {
+    id: 'gal8',
+    src: '/assets/demo/5.jpg',
+    titleGu: 'ઐતિહાસિક રાણકી વાવની અદભુત કોતરણી અને શિલ્પકળા',
+    title: 'Historic Rani ki Vav: Wonderful carvings and sculptures',
+    count: 24,
+  },
+  {
+    id: 'gal9',
+    src: '/assets/demo/8.jpg',
+    titleGu: 'સોમનાથ મંદિરનું ભવ્ય શણગાર: તસવીરોમાં શ્રદ્ધાનો મેળો',
+    title: 'Grand Somnath Temple decorations: Glimpse of divine faith',
+    count: 30,
+  },
 ];
 
 function PhotoGallerySection({ language }: { language: Language }) {
+  const getGridClasses = (index: number) => {
+    switch (index) {
+      case 0:
+        return 'md:col-span-2 md:h-[240px]';
+      case 4:
+        return 'md:col-span-2 md:h-[240px]';
+      case 8:
+        return 'md:col-span-2 md:h-[240px]';
+      default:
+        return 'md:col-span-1 md:h-[240px]';
+    }
+  };
+
   return (
-    <section className="py-4 bg-background">
+    <section className="py-6 bg-background">
       <div className="mx-auto max-w-screen-xl px-4">
         {/* Header */}
-        <div className="flex items-center justify-between mb-1">
-          <span className="bg-[#e02020] text-white text-[13px] font-extrabold px-3 py-1 rounded-sm select-none">
-            {language === 'gu' ? 'ફોટો ગેલેરી' : 'Photo Gallery'}
+        <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
+          <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[13.5px] md:text-[14.5px] font-black rounded-lg select-none leading-none tracking-tight">
+            {language === 'gu' ? 'ફોટો ગેલેરી' : language === 'hi' ? 'फोटो गैलरी' : 'Photo Gallery'}
           </span>
           <Link
             href="/photos"
-            className="text-[#e02020] text-sm font-bold hover:underline flex items-center gap-1"
+            className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline"
           >
-            {language === 'gu' ? 'બધી ગેલેરી' : 'All Gallery'} →
+            {language === 'gu' ? 'બધી ફોટો ગેલેરી →' : 'All Photo Gallery →'}
           </Link>
         </div>
-        {/* Underline */}
-        <div className="h-[2.5px] w-full bg-foreground/80 mb-5" />
 
-        {/* 3-column × 2-row grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {GALLERY_DATA.map((item) => (
+        {/* Bento Asymmetrical Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+          {GALLERY_DATA.map((item, index) => (
             <Link
               key={item.id}
               href="/photos"
-              className="group relative block w-full overflow-hidden rounded-xl shadow-sm"
-              style={{ aspectRatio: '16/10' }}
+              className={`group relative block w-full overflow-hidden rounded-2xl shadow-md border border-border/10 bg-card aspect-[16/10.5] md:aspect-auto transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[#B3121B]/12 hover:border-[#B3121B]/35 ${getGridClasses(index)}`}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={item.src}
-                alt={item.title}
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                alt={item.titleGu}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                className="object-cover transition-all duration-700 ease-out group-hover:scale-[1.08] group-hover:rotate-1"
               />
-              {/* Dark gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-              {/* Camera badge + count – top left */}
-              <div className="absolute top-3 left-3 flex items-center gap-1 bg-black/55 text-white text-[11px] font-bold px-2 py-0.5 rounded-sm backdrop-blur-sm">
-                <Camera className="h-3 w-3" />
-                <span>{item.count} ફોટો</span>
-              </div>
+              {/* Soft dark gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/5" />
 
               {/* Title at bottom */}
-              <div className="absolute bottom-0 inset-x-0 p-3">
-                <p className="text-white text-[13px] font-bold leading-snug line-clamp-2 drop-shadow">
+              <div className="absolute bottom-0 inset-x-0 p-4 pt-8 bg-gradient-to-t from-black/95 via-black/50 to-transparent">
+                <p className="text-white text-[14px] md:text-[15px] font-black leading-snug line-clamp-2 drop-shadow select-none transition-transform duration-300 ease-out group-hover:-translate-y-0.5">
                   {language === 'gu' ? item.titleGu : item.title}
                 </p>
               </div>
@@ -4416,9 +5137,8 @@ function TrendingNewsSection({ articles, language }: { articles: Article[]; lang
 
               {/* Trending Rank Number Circle */}
               <div
-                className={`absolute top-3 left-3 flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-black text-white shadow-sm ${
-                  index < 3 ? 'bg-[#e02020]' : 'bg-black/60'
-                }`}
+                className={`absolute top-3 left-3 flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-black text-white shadow-sm ${index < 3 ? 'bg-[#e02020]' : 'bg-black/60'
+                  }`}
               >
                 {index + 1}
               </div>
@@ -4434,8 +5154,8 @@ function TrendingNewsSection({ articles, language }: { articles: Article[]; lang
                     {language === 'gu'
                       ? (article.relativeTimeGu || formatDate(article.publishedAt))
                       : language === 'hi'
-                      ? (article.relativeTimeHi || formatDate(article.publishedAt))
-                      : (article.relativeTime || formatDate(article.publishedAt))}
+                        ? (article.relativeTimeHi || formatDate(article.publishedAt))
+                        : (article.relativeTime || formatDate(article.publishedAt))}
                   </span>
                 </div>
               </div>

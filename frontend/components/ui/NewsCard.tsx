@@ -52,7 +52,6 @@ export default function NewsCard({ article, variant = 'default' }: NewsCardProps
             <div className="mt-3 flex flex-wrap items-center gap-4 text-sm font-semibold text-white/85">
               <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{formatTime(article.publishedAt)}</span>
               <span>{formatDate(article.publishedAt)}</span>
-              <span className="flex items-center gap-1"><Eye className="h-3 w-3" />{formatViews(article.views)}</span>
             </div>
           </div>
         </div>
@@ -148,7 +147,7 @@ export default function NewsCard({ article, variant = 'default' }: NewsCardProps
           <div className="mt-1.5 flex items-center gap-2 text-[10px] font-semibold text-muted-foreground">
             <span>{relativeTime}</span>
             <span>·</span>
-            <span className="flex items-center gap-0.5"><Eye className="h-2.5 w-2.5 text-muted-foreground/75" />{viewsLabel}</span>
+            <span className="flex items-center gap-0.5"><Clock className="h-2.5 w-2.5 text-muted-foreground/75" />{formatTime(article.publishedAt)}</span>
           </div>
         </div>
       </Link>
@@ -166,7 +165,7 @@ export default function NewsCard({ article, variant = 'default' }: NewsCardProps
         <h3 className="line-clamp-2 text-[12px] font-black leading-snug text-foreground mt-0.5">{title}</h3>
         <div className="mt-1 flex items-center justify-between text-[10px] font-semibold text-muted-foreground">
           <span className="flex items-center gap-0.5"><Clock className="h-2.5 w-2.5" />{formatDate(article.publishedAt)}</span>
-          <span className="flex items-center gap-0.5"><Eye className="h-2.5 w-2.5" />{formatViews(article.views)}</span>
+          <span>{formatTime(article.publishedAt)}</span>
         </div>
       </div>
     </Link>
