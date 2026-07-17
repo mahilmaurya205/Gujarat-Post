@@ -362,8 +362,8 @@ export default function HeroSection() {
             <span>{language === 'gu' ? '૪ કલાક પહેલાં' : '4 hours ago'}</span>
             <span>•</span>
             <span className="flex items-center gap-1">
-              <Eye className="h-3.5 w-3.5 text-muted-foreground/70" />
-              {language === 'gu' ? '૫૨K' : '52K'}
+              <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
+              <span>10:30 AM</span>
             </span>
           </div>
         </Link>
@@ -394,8 +394,8 @@ export default function HeroSection() {
             <span>{language === 'gu' ? '૩ કલાક પહેલાં' : '3 hours ago'}</span>
             <span>•</span>
             <span className="flex items-center gap-1">
-              <Eye className="h-3.5 w-3.5 text-muted-foreground/70" />
-              {language === 'gu' ? '૭૪K' : '74K'}
+              <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
+              <span>11:30 AM</span>
             </span>
           </div>
         </Link>
@@ -426,8 +426,8 @@ export default function HeroSection() {
             <span>{language === 'gu' ? '૨ કલાક પહેલાં' : '2 hours ago'}</span>
             <span>•</span>
             <span className="flex items-center gap-1">
-              <Eye className="h-3.5 w-3.5 text-muted-foreground/70" />
-              {language === 'gu' ? '૧.૫L' : '1.5L'}
+              <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
+              <span>12:30 PM</span>
             </span>
           </div>
         </Link>
@@ -456,18 +456,23 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* YouTube Live TV */}
+          {/* YouTube Video Section */}
           <div className="w-full rounded-md border border-slate-200 bg-card p-4 shadow-sm flex flex-col gap-2.5">
             <div className="flex items-center justify-between border-b border-border pb-2">
               <span className="text-[#B3121B] font-black text-[13.5px] md:text-[14px] flex items-center gap-1.5 select-none">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#B3121B] opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[#B3121B]" />
-                </span>
-                {language === 'gu' ? 'યુટ્યુબ લાઈવ ટીવી' : 'YouTube Live TV'}
+                <Play className="h-3.5 w-3.5 fill-current" />
+                {getLocalized(language, {
+                  en: 'Gujarat Post Video',
+                  gu: 'ગુજરાત પોસ્ટ વીડિયો',
+                  hi: 'गुजरात पोस्ट वीडियो',
+                })}
               </span>
-              <span className="bg-accent text-white text-[9px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wider animate-pulse">
-                LIVE
+              <span className="bg-accent text-white text-[9px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wider">
+                {getLocalized(language, {
+                  en: 'VIDEO',
+                  gu: 'વીડિયો',
+                  hi: 'वीडियो',
+                })}
               </span>
             </div>
             
@@ -477,7 +482,7 @@ export default function HeroSection() {
             >
               <iframe
                 src={`https://www.youtube.com/embed/${LATEST_VIDEO_ID}?autoplay=0&mute=1&rel=0&modestbranding=1&controls=1`}
-                title="YouTube Live Stream"
+                title="Gujarat Post Video"
                 className="absolute inset-0 h-full w-full border-0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -485,7 +490,13 @@ export default function HeroSection() {
             </div>
             
             <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground pt-1 border-t border-border/40 mt-1">
-              <span>{language === 'gu' ? 'ગુજરાત પોસ્ટ લાઈવ પ્રસારણ' : 'Gujarat Post Live Broadcast'}</span>
+              <span>
+                {getLocalized(language, {
+                  en: 'Gujarat Post Latest Video',
+                  gu: 'ગુજરાત પોસ્ટ તાજેતરનો વીડિયો',
+                  hi: 'गुजरात पोस्ट नवीनतम वीडियो',
+                })}
+              </span>
               <a 
                 href={`https://www.youtube.com/watch?v=${LATEST_VIDEO_ID}`}
                 target="_blank"
@@ -519,7 +530,7 @@ export default function HeroSection() {
                   className="group flex items-start gap-3 py-3.5 hover:bg-muted/10 rounded-md transition-all px-2.5 first:pt-1 last:pb-1"
                 >
                   <span className="text-[18px] font-black text-[#B3121B]/85 group-hover:text-[#B3121B] font-serif w-5 shrink-0 mt-0.5 transition-colors select-none text-center">
-                    {language === 'gu' ? toGuLocal(idx + 1) : idx + 1}
+                    {idx + 1}
                   </span>
                   <h4 className="text-[12.5px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors flex-1 line-clamp-3">
                     {getArticleTitle(art, language)}
@@ -737,7 +748,7 @@ function VideoDesk({ videos, language, showShorts = true }: { videos: typeof VID
             <div className="flex items-center gap-1.5 mt-2.5 text-[11.5px] text-white/70 font-semibold select-none">
               <Eye className="h-3.5 w-3.5" />
               <span>
-                {language === 'gu' ? toGuLocal(formatViews(featuredVideo.views)) : formatViews(featuredVideo.views)} વ્યુઝ
+                {formatViews(featuredVideo.views)} {language === 'gu' ? 'વ્યુઝ' : 'views'}
               </span>
               <span>·</span>
               <span>{featuredVideo.duration}</span>
@@ -785,7 +796,7 @@ function VideoDesk({ videos, language, showShorts = true }: { videos: typeof VID
                       {getLocalized(language, { en: v.title, gu: v.titleGu, hi: v.titleHi })}
                     </h4>
                     <div className="flex items-center gap-1.5 mt-1.5 text-[11px] text-white/65 font-semibold">
-                      <span>{language === 'gu' ? toGuLocal(formatViews(v.views)) : formatViews(v.views)}</span>
+                      <span>{formatViews(v.views)}</span>
                       <span>·</span>
                       <span>{v.duration}</span>
                     </div>
