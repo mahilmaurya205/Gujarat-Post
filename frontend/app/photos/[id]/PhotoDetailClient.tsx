@@ -149,14 +149,16 @@ export default function PhotoDetailClient({ activeId, photo: dbPhoto, allPhotos:
         <article className="lg:col-span-2">
           
           {/* Breadcrumbs */}
-          <nav className="mb-4 flex items-center gap-1.5 text-xs text-muted-foreground">
-            <Link href="/" className="hover:text-accent">Home</Link>
-            <ChevronRightIcon className="h-3 w-3" />
-            <Link href="/photos" className="hover:text-accent">
+          <nav className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-neutral-500 font-medium select-none">
+            <Link href="/" className="hover:text-[var(--red)] transition-colors">
+              {language === 'gu' ? 'હોમ' : language === 'hi' ? 'होम' : 'Home'}
+            </Link>
+            <span>/</span>
+            <Link href="/photos" className="hover:text-[var(--red)] transition-colors">
               {getLocalized(language, { en: 'Photo Gallery', gu: 'ફોટો ગેલેરી', hi: 'फोटो गैलरी' })}
             </Link>
-            <ChevronRightIcon className="h-3 w-3" />
-            <span className="line-clamp-1">{caption}</span>
+            <span>:</span>
+            <span className="text-red-700 dark:text-red-400 font-bold line-clamp-1">{caption}</span>
           </nav>
 
           {/* Category Tag */}

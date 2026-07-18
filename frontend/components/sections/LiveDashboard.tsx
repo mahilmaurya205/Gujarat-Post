@@ -1,7 +1,9 @@
 'use client';
 
 import { FormEvent, useCallback, useEffect, useState } from 'react';
-import { AlertCircle, CloudSun, Droplets, RefreshCw, Search, Wind } from 'lucide-react';
+import { AlertCircle, CloudSun, Droplets, RefreshCw, Search, Wind, Cloud, Sun, CloudRain, TrendingUp, TrendingDown, Trophy, ChevronDown } from 'lucide-react';
+import Link from 'next/link';
+import Image from 'next/image';
 import { useApp } from '@/components/AppProvider';
 import { getLocalized } from '@/data';
 
@@ -13,34 +15,40 @@ interface FootballMatch { id: string; league: string; date: string; state: strin
 function Panel({
   title,
   subtitle,
-  status,
-  isLive,
+  icon,
   children
 }: {
   title: string;
   subtitle: string;
-  status?: string;
-  isLive?: boolean;
-  children: React.ReactNode
+  icon?: React.ReactNode;
+  children: React.ReactNode;
 }) {
   const { language } = useApp();
-  const defaultStatus = getLocalized(language, { en: 'Live', gu: 'લાઇવ', hi: 'लाइव' });
-  const displayStatus = status !== undefined ? status : defaultStatus;
-  const displayIsLive = isLive !== undefined ? isLive : (status === undefined || status.toLowerCase() === 'live');
 
   return (
-    <section className="flex flex-col rounded-xl border border-border bg-card p-3 shadow-sm">
-      <div className="mb-2.5 flex items-start justify-between gap-3">
-        <div>
-          <h3 className="text-sm font-black text-foreground">{title}</h3>
-          <p className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">{subtitle}</p>
+    <section className="flex flex-col rounded-2xl border border-neutral-200/50 dark:border-neutral-800 bg-white dark:bg-slate-950 p-4 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 min-h-[380px]">
+      <div className="mb-4 flex items-center justify-between pb-2 border-b border-neutral-100 dark:border-neutral-800/60 select-none">
+        <div className="flex items-center gap-2">
+          {icon}
+          <h3 className="text-[14px] font-black text-neutral-900 dark:text-white leading-none">{title}</h3>
         </div>
-        <span className={`rounded-full px-2 py-0.5 text-[10px] font-black uppercase text-white transition-colors duration-200 ${displayIsLive ? 'bg-accent' : 'bg-slate-500'}`}>
-          {displayIsLive && <span className="mr-1 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-white" />}
-          {displayStatus}
-        </span>
+        <div className="flex items-center gap-2">
+          {subtitle && (
+            <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 leading-none whitespace-nowrap">
+              {subtitle}
+            </span>
+          )}
+          <Link
+            href="/category/gujarat"
+            className="text-[12px] font-black text-[#B3121B] hover:text-[#B3121B]/80 transition-colors select-none whitespace-nowrap"
+          >
+            {language === 'gu' ? '+ વધુ' : language === 'hi' ? '+ और' : '+ More'}
+          </Link>
+        </div>
       </div>
-      {children}
+      <div className="flex-1 flex flex-col justify-between">
+        {children}
+      </div>
     </section>
   );
 }
@@ -57,9 +65,9 @@ const FALLBACK_WEATHER: WeatherItem[] = [
 ];
 
 const FALLBACK_MARKETS: MarketItem[] = [
-  { symbol: 'NIFTY 50', name: 'Nifty 50', exchange: 'NSE', value: 23568.20, change: 142.50, changePercent: 0.61, marketState: 'OPEN', observedAt: new Date().toISOString() },
-  { symbol: 'SENSEX', name: 'BSE Sensex', exchange: 'BSE', value: 77301.10, change: 456.80, changePercent: 0.59, marketState: 'OPEN', observedAt: new Date().toISOString() },
-  { symbol: 'NIFTY BANK', name: 'Nifty Bank', exchange: 'NSE', value: 51650.40, change: -120.30, changePercent: -0.23, marketState: 'OPEN', observedAt: new Date().toISOString() }
+  { symbol: 'NIFTY 50', name: 'Nifty 50', exchange: 'NSE', value: 23845.20, change: 216.40, changePercent: 0.93, marketState: 'OPEN', observedAt: new Date().toISOString() },
+  { symbol: 'SENSEX', name: 'BSE Sensex', exchange: 'BSE', value: 80306.90, change: 437.50, changePercent: 0.55, marketState: 'OPEN', observedAt: new Date().toISOString() },
+  { symbol: 'NIFTY BANK', name: 'Nifty Bank', exchange: 'NSE', value: 56580.60, change: -128.90, changePercent: -0.23, marketState: 'OPEN', observedAt: new Date().toISOString() }
 ];
 
 const FALLBACK_CRICKET: CricketMatch = {
@@ -68,18 +76,24 @@ const FALLBACK_CRICKET: CricketMatch = {
   date: 'Live Match',
   status: 'In Progress',
   state: 'in',
-  summary: 'India: 182/4 (20 overs) | England: 145/6 (18.2 overs)',
+  summary: 'India: 186/6 (20) | England: 185/6 (19.4)',
   venue: 'Lord\'s Cricket Ground, London',
   teams: [
-    { name: 'India', score: '182/4' },
-    { name: 'England', score: '145/6' }
+    { name: 'India', score: '186/6 (20)' },
+    { name: 'England', score: '185/6 (19.4)' }
   ]
 };
 
 const FALLBACK_FOOTBALL: FootballMatch[] = [
-  { id: 'fb-mock-1', league: 'ISL', date: 'Today', state: 'in', status: '75\'', home: 'Mumbai City FC', away: 'Mohun Bagan SG', homeScore: '2', awayScore: '1' },
+  { id: 'fb-mock-1', league: 'ISL', date: 'Today', state: 'in', status: '75\'', home: 'Mumbai City FC', away: 'Mohun Bagan', homeScore: '2', awayScore: '1' },
   { id: 'fb-mock-2', league: 'EPL', date: 'Today', state: 'pre', status: '22:00', home: 'Man City', away: 'Arsenal', homeScore: '—', awayScore: '—' }
 ];
+
+// Helper to convert English numbers to Gujarati numbers
+function toGuDigits(n: number | string): string {
+  const guDigits = ['૦', '૧', '૨', '૩', '૪', '૫', '૬', '૭', '૮', '૯'];
+  return String(n).replace(/\d/g, (d) => guDigits[+d]);
+}
 
 export default function LiveDashboard() {
   const { language } = useApp();
@@ -151,189 +165,332 @@ export default function LiveDashboard() {
   const liveFootball = football.some((match) => match.state === 'in');
 
   return (
-    <section id="live-dashboard" className="py-1.5">
-      <div className="mx-auto max-w-screen-xl px-3">
-        <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-accent">Live Center</p>
-            <h2 className="text-lg font-black text-foreground md:text-xl">{getLocalized(language, { en: 'Weather, Markets & Scores', gu: 'હવામાન, બજાર અને સ્કોર', hi: 'मौसम, बाज़ार और स्कोर' })}</h2>
-            <p className="mt-0.5 text-[10px] font-semibold text-muted-foreground">
-              {getLocalized(language, {
-                en: 'Live provider data · Auto-refreshes every 5 minutes',
-                gu: 'લાઇવ ડેટા · દર ૫ મિનિટે ઓટો-રિફ્રેશ થાય છે',
-                hi: 'लाइव डेटा · हर 5 मिनट में ऑटो-रिफ्रेश होता है'
-              })}
-              {updatedAt ? ` · ${getLocalized(language, { en: 'Updated', gu: 'અપડેટ કરેલ', hi: 'अपडेट किया गया' })} ${new Date(updatedAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}` : ''}
-            </p>
+    <section id="live-dashboard" className="py-6 bg-background">
+      <div className="mx-auto max-w-screen-xl px-4">
+        {/* Main Card Container */}
+        <div className="bg-[#f8f9fa] dark:bg-slate-900/40 border border-neutral-200/85 dark:border-neutral-800/65 rounded-2xl p-6 shadow-sm shadow-neutral-100/20">
+
+          {/* Header Row (Replicated from reference image) */}
+          <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-neutral-200/40 dark:border-neutral-800/60 select-none">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2">
+                {/* Red speed arrow logo */}
+                <div className="relative w-8 h-4 shrink-0">
+                  <Image
+                    src="/rightSide.png"
+                    alt="NEWS BRIEF"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                {/* Skewed Red Banner */}
+                <div className="bg-[#B3121B] text-white px-5 py-1 transform -skew-x-[20deg] font-black rounded-sm shadow-sm select-none">
+                  <span className="block transform skew-x-[20deg] text-[13px] md:text-[14px] tracking-wider uppercase leading-none">
+                    {getLocalized(language, { en: 'Live Center', gu: 'લાઇવ સેન્ટર', hi: 'लाइव सेंटर' })}
+                  </span>
+                </div>
+                {/* Skewed red lines */}
+                <div className="flex gap-1 transform -skew-x-[20deg] select-none ml-0.5">
+                  <span className="w-1 bg-[#B3121B] h-4.5 block" />
+                  <span className="w-1 bg-[#B3121B] h-4.5 block" />
+                </div>
+              </div>
+
+              {/* Header categories with dots */}
+              <div className="flex items-center gap-1.5 flex-wrap text-[11px] font-black text-neutral-500 uppercase tracking-wide mt-1">
+                <span>{getLocalized(language, { en: 'Weather', gu: 'હવામાન', hi: 'मौसम' })}</span>
+                <span className="text-[#B3121B] font-extrabold">•</span>
+                <span>{getLocalized(language, { en: 'Stock Market', gu: 'શેરબજાર', hi: 'शेयर बाजार' })}</span>
+                <span className="text-[#B3121B] font-extrabold">•</span>
+                <span>{getLocalized(language, { en: 'Sports', gu: 'રમતગમત', hi: 'खेल' })}</span>
+                <span className="text-[#B3121B] font-extrabold">•</span>
+                <span>{getLocalized(language, { en: 'Sports Updates', gu: 'સ્પોર્ટ્સ અપડેટ', hi: 'स्पोर्ट्स अपडेट' })}</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              {/* Refresh Button */}
+              <button
+                type="button"
+                onClick={() => void loadDashboard(true)}
+                disabled={refreshing}
+                className="inline-flex h-8 items-center justify-center gap-1.5 rounded-full border border-neutral-300 dark:border-neutral-800 bg-white hover:bg-[#B3121B] text-neutral-700 hover:text-white dark:bg-slate-900/50 px-4 text-xs font-black transition-all hover:scale-105 active:scale-95 disabled:opacity-50 shadow-sm"
+              >
+                <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? 'animate-spin' : ''}`} />
+                <span>{getLocalized(language, { en: 'Refresh Data', gu: 'તાજું કરો', hi: 'रिफ्रेश करें' })}</span>
+              </button>
+
+              {/* Live Badge Capsule */}
+              <div className="flex items-center gap-1.5 bg-white border border-[#B3121B] text-[#B3121B] rounded-full px-3 py-1 text-xs font-black select-none w-fit leading-none shadow-sm">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#B3121B] animate-pulse" />
+                <span>{getLocalized(language, { en: 'Live', gu: 'લાઇવ', hi: 'लाइव' })}</span>
+              </div>
+            </div>
           </div>
-          <button type="button" onClick={() => void loadDashboard(true)} disabled={refreshing} className="inline-flex h-7 items-center justify-center gap-1.5 self-start rounded-full border border-border bg-card px-3 text-[10px] font-black text-foreground transition hover:border-accent hover:text-accent disabled:opacity-50 sm:self-auto">
-            <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? 'animate-spin' : ''}`} /> {getLocalized(language, { en: 'Refresh live data', gu: 'લાઇવ ડેટા રિફ્રેશ કરો', hi: 'लाइव डेटा रीफ्रेश करें' })}
-          </button>
-        </div>
 
-        <div className="grid grid-cols-1 gap-1.5 md:grid-cols-2 xl:grid-cols-4">
-          <Panel title={getLocalized(language, { en: 'Weather', gu: 'હવામાન', hi: 'मौसम' })} subtitle={getLocalized(language, { en: 'Search any Indian city', gu: 'કોઈપણ ભારતીય શહેર શોધો', hi: 'कोई भी भारतीय शहर खोजें' })}>
-            <form onSubmit={searchCity} className="mb-3 flex gap-2">
-              <label className="relative min-w-0 flex-1"><span className="sr-only">{getLocalized(language, { en: 'Indian city', gu: 'ભારતીય શહેર', hi: 'भारतीय शहर' })}</span><Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" /><input value={city} onChange={(event) => setCity(event.target.value)} placeholder={getLocalized(language, { en: 'Mumbai, Jaipur...', gu: 'મુંબઈ, જયપુર...', hi: 'मुंबई, जयपुर...' })} className="h-9 w-full rounded-lg border border-border bg-muted pl-9 pr-3 text-xs font-semibold text-foreground outline-none focus:border-accent" /></label>
-              <button className="h-9 rounded-lg bg-accent px-3 text-xs font-black text-white">{getLocalized(language, { en: 'Search', gu: 'શોધો', hi: 'खोजें' })}</button>
-            </form>
-            {weatherError && !weather.length ? <ErrorState message={weatherError} /> : (
-              <div className="scrollbar-hide max-h-[24rem] space-y-3 overflow-y-auto">
-                {loading && !weather.length ? (
-                  <div className="space-y-3 animate-pulse">
-                    {Array.from({ length: 2 }).map((_, i) => (
-                      <div key={i} className="rounded-xl bg-muted p-3 space-y-3">
-                        <div className="flex justify-between items-center">
-                          <div className="space-y-1.5 flex-1">
-                            <div className="h-4 w-24 rounded bg-slate-300/60" />
-                            <div className="h-3 w-16 rounded bg-slate-300/60" />
-                          </div>
-                          <div className="h-6 w-10 rounded bg-slate-300/60" />
-                        </div>
-                        <div className="grid grid-cols-3 gap-2 mt-2">
-                          <div className="h-7 rounded bg-slate-200/50" />
-                          <div className="h-7 rounded bg-slate-200/50" />
-                          <div className="h-7 rounded bg-slate-200/50" />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : weather.map((item) => (
-                  <div key={`${item.city}-${item.state}`} className="rounded-xl bg-muted p-3">
-                    <div className="flex items-center justify-between gap-3"><div className="min-w-0"><p className="truncate font-black text-foreground">{item.city}</p><p className="truncate text-[10px] font-bold text-muted-foreground">{item.state}</p></div><span className="text-2xl font-black text-accent">{item.temperature}°</span></div>
-                    <div className="mt-2 flex items-center justify-between text-xs font-bold text-muted-foreground"><span className="inline-flex items-center gap-1"><CloudSun className="h-3.5 w-3.5" />{item.condition}</span><span>Feels {item.feelsLike}°</span></div>
-                    <div className="mt-2 flex gap-3 text-[10px] font-bold text-muted-foreground"><span className="inline-flex items-center gap-1"><Droplets className="h-3 w-3 text-blue-500" />Rain {item.rainChance}%</span><span>Humidity {item.humidity}%</span><span className="inline-flex items-center gap-1"><Wind className="h-3 w-3" />{item.windSpeed} km/h</span></div>
-                  </div>
-                ))}
-              </div>
-            )}
-            <p className="mt-auto pt-3 text-[9px] font-bold text-muted-foreground">Weather source: Open-Meteo</p>
-          </Panel>
+          {/* Cards Grid */}
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
 
-          <Panel
-            title={getLocalized(language, { en: 'Indian Stock Market', gu: 'ભારતીય શેરબજાર', hi: 'भारतीय शेयर बाज़ार' })}
-            subtitle="NSE · BSE · Currency"
-            status={markets.some((item) => item.marketState === 'REGULAR')
-              ? getLocalized(language, { en: 'Live', gu: 'લાઇવ', hi: 'लाइव' })
-              : getLocalized(language, { en: 'Market closed', gu: 'બજાર બંધ', hi: 'बाजार बंद' })
-            }
-            isLive={markets.some((item) => item.marketState === 'REGULAR')}
-          >
-            {marketError && !markets.length ? <ErrorState message={marketError} /> : <div className="space-y-3">
-              {loading && !markets.length ? (
-                <div className="space-y-3 animate-pulse">
-                  {Array.from({ length: 3 }).map((_, i) => (
-                    <div key={i} className="flex justify-between items-center rounded-xl bg-muted p-3">
-                      <div className="space-y-1.5 flex-1">
-                        <div className="h-4 w-20 rounded bg-slate-300/60" />
-                        <div className="h-3 w-12 rounded bg-slate-300/60" />
-                      </div>
-                      <div className="space-y-1 text-right">
-                        <div className="h-4 w-16 rounded bg-slate-300/60 ml-auto" />
-                        <div className="h-3 w-14 rounded bg-slate-300/60 ml-auto" />
-                      </div>
+            {/* Panel 1: Weather */}
+            <Panel
+              title={getLocalized(language, { en: 'Weather', gu: 'હવામાન', hi: 'मौसम' })}
+              subtitle=""
+              icon={<CloudSun className="h-5 w-5 text-[#B3121B]" />}
+            >
+              <div className="space-y-3 flex-1 flex flex-col justify-start">
+                {/* Ahmedabad Card */}
+                <div className="flex items-center justify-between rounded-xl bg-white dark:bg-black/20 p-3 border border-neutral-100 dark:border-neutral-850 shadow-sm hover:shadow transition-shadow">
+                  <div className="flex items-center gap-3">
+                    <Cloud className="h-9 w-9 text-neutral-400 shrink-0" />
+                    <div className="min-w-0">
+                      <p className="font-extrabold text-[13.5px] text-neutral-900 dark:text-neutral-100 leading-none">
+                        {language === 'gu' ? 'અમદાવાદ' : language === 'hi' ? 'अहमदाबाद' : 'Ahmedabad'}
+                      </p>
+                      <p className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 mt-2 leading-none">
+                        {language === 'gu' ? 'વાદળછાયું' : language === 'hi' ? 'बादल छाए रहेंगे' : 'Cloudy'}
+                      </p>
                     </div>
-                  ))}
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[16px] font-black text-neutral-900 dark:text-neutral-100 leading-none">32°</p>
+                    <p className="text-[9px] font-bold text-neutral-400 dark:text-neutral-500 mt-1.5 leading-none">Feels 36°</p>
+                  </div>
                 </div>
-              ) : markets.map((item) => {
-                const positive = item.change >= 0;
-                return <div key={item.symbol} className="flex items-center justify-between rounded-xl bg-muted p-3"><div><p className="font-black text-foreground">{item.name}</p><p className="text-xs font-semibold text-muted-foreground">{item.exchange}</p></div><div className="text-right"><p className="font-black tabular-nums text-foreground">{item.value.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</p><p className={`text-xs font-black tabular-nums ${positive ? 'text-emerald-500' : 'text-red-500'}`}>{positive ? '+' : ''}{item.change.toFixed(2)} ({positive ? '+' : ''}{item.changePercent.toFixed(2)}%)</p></div></div>;
-              })}
-            </div>}
-            <p className="mt-auto pt-3 text-[9px] font-bold text-muted-foreground">Indicative quotes · Source: Yahoo Finance</p>
-          </Panel>
 
-          <Panel
-            title={getLocalized(language, { en: 'Cricket Scorecard', gu: 'ક્રિકેટ સ્કોરકાર્ડ', hi: 'क्रिकेट स्कोरकार्ड' })}
-            subtitle={getLocalized(language, { en: 'IPL score feed', gu: 'IPL સ્કોર અપડેટ', hi: 'आईपीएल स्कोर फीड' })}
-            status={liveCricket
-              ? getLocalized(language, { en: 'Live', gu: 'લાઇવ', hi: 'लाइव' })
-              : getLocalized(language, { en: 'Latest', gu: 'તાજેતરના', hi: 'नवीनतम' })
-            }
-            isLive={liveCricket}
-          >
-            {sportsError && !cricket ? (
-              <ErrorState message={sportsError} />
-            ) : loading && !cricket ? (
-              <div className="rounded-xl bg-muted p-4 animate-pulse space-y-4">
-                <div className="flex justify-between items-start">
-                  <div className="space-y-2 flex-1">
-                    <div className="h-4 w-28 rounded bg-slate-300/60" />
-                    <div className="h-3 w-20 rounded bg-slate-300/60" />
+                {/* Vadodara Card */}
+                <div className="flex items-center justify-between rounded-xl bg-white dark:bg-black/20 p-3 border border-neutral-100 dark:border-neutral-850 shadow-sm hover:shadow transition-shadow">
+                  <div className="flex items-center gap-3">
+                    <Sun className="h-9 w-9 text-[#B3121B] shrink-0" />
+                    <div className="min-w-0">
+                      <p className="font-extrabold text-[13.5px] text-neutral-900 dark:text-neutral-100 leading-none">
+                        {language === 'gu' ? 'વડોદરા' : language === 'hi' ? 'वडोदरा' : 'Vadodara'}
+                      </p>
+                      <p className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 mt-2 leading-none">
+                        {language === 'gu' ? 'ગરમ અને ખુલ્લું' : language === 'hi' ? 'गर्म और साफ' : 'Sunny'}
+                      </p>
+                    </div>
                   </div>
-                  <div className="h-4 w-12 rounded bg-slate-300/60" />
+                  <div className="text-right">
+                    <p className="text-[16px] font-black text-neutral-900 dark:text-neutral-100 leading-none">39°</p>
+                    <p className="text-[9px] font-bold text-neutral-400 dark:text-neutral-500 mt-1.5 leading-none">Feels 31°</p>
+                  </div>
                 </div>
-                <div className="space-y-3 pt-3">
-                  <div className="h-6 w-full rounded bg-slate-200/50" />
-                  <div className="h-6 w-full rounded bg-slate-200/50" />
-                </div>
-                <div className="h-5 w-3/4 rounded bg-slate-200/50 mt-4" />
-                <div className="h-3 w-24 rounded bg-slate-200/50" />
-              </div>
-            ) : cricket ? (
-              <div className="rounded-xl bg-muted p-4">
-                <div className="flex items-start justify-between gap-2"><div><p className="text-sm font-black text-foreground">{cricket.title}</p><p className="mt-1 text-[10px] font-semibold text-muted-foreground">{cricket.venue}</p></div><span className="shrink-0 text-[10px] font-black uppercase text-accent">{cricket.status}</span></div>
-                <div className="mt-5 space-y-3">{cricket.teams.map((team) => <div key={team.name} className="flex items-center justify-between border-b border-border pb-3 last:border-0"><span className="pr-3 text-sm font-black text-foreground">{team.name}</span><span className="text-right text-sm font-black text-accent">{team.score}</span></div>)}</div>
-                {cricket.summary && <p className="mt-4 rounded-lg bg-card px-3 py-2 text-xs font-bold text-muted-foreground">{cricket.summary}</p>}
-                <p className="mt-3 text-[10px] font-semibold text-muted-foreground">{new Date(cricket.date).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}</p>
-              </div>
-            ) : (
-              <ErrorState message="No cricket score is currently available." />
-            )}
-            <p className="mt-auto pt-3 text-[9px] font-bold text-muted-foreground">Latest available IPL score · ESPN score feed</p>
-          </Panel>
 
-          <Panel
-            title={getLocalized(language, { en: 'Football Scorecard', gu: 'ફૂટબોલ સ્કોરકાર્ડ', hi: 'फ़ुटबॉल स्कोरकार्ड' })}
-            subtitle="ISL · EPL · La Liga"
-            status={liveFootball
-              ? getLocalized(language, { en: 'Live', gu: 'લાઇવ', hi: 'लाइव' })
-              : getLocalized(language, { en: 'Fixtures / results', gu: 'સમયપત્રક / પરિણામો', hi: 'फिक्स्चर / परिणाम' })
-            }
-            isLive={liveFootball}
-          >
-            {sportsError && !football.length ? (
-              <ErrorState message={sportsError} />
-            ) : loading && !football.length ? (
-              <div className="space-y-3 animate-pulse">
-                {Array.from({ length: 2 }).map((_, i) => (
-                  <div key={i} className="rounded-xl bg-muted p-3 space-y-2">
-                    <div className="flex justify-between">
-                      <div className="h-3.5 w-16 rounded bg-slate-300/60" />
-                      <div className="h-3.5 w-12 rounded bg-slate-300/60" />
+                {/* Mumbai Card */}
+                <div className="flex items-center justify-between rounded-xl bg-white dark:bg-black/20 p-3 border border-neutral-100 dark:border-neutral-850 shadow-sm hover:shadow transition-shadow">
+                  <div className="flex items-center gap-3">
+                    <CloudRain className="h-9 w-9 text-blue-400 shrink-0" />
+                    <div className="min-w-0">
+                      <p className="font-extrabold text-[13.5px] text-neutral-900 dark:text-neutral-100 leading-none">
+                        {language === 'gu' ? 'મુંબઈ' : language === 'hi' ? 'मुंबई' : 'Mumbai'}
+                      </p>
+                      <p className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 mt-2 leading-none">
+                        {language === 'gu' ? 'જોરદાર વરસાદ' : language === 'hi' ? 'भारी बारिश' : 'Heavy Rain'}
+                      </p>
                     </div>
-                    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 pt-1">
-                      <div className="h-4 w-full rounded bg-slate-200/50" />
-                      <div className="h-6 w-12 rounded bg-slate-200/50 mx-auto" />
-                      <div className="h-4 w-full rounded bg-slate-200/50" />
-                    </div>
-                    <div className="h-3 w-20 rounded bg-slate-200/50 mt-1" />
                   </div>
-                ))}
+                  <div className="text-right">
+                    <p className="text-[16px] font-black text-neutral-900 dark:text-neutral-100 leading-none">26°</p>
+                    <p className="text-[9px] font-bold text-neutral-400 dark:text-neutral-500 mt-1.5 leading-none">Feels 31°</p>
+                  </div>
+                </div>
               </div>
-            ) : (
-              <div className="scrollbar-hide max-h-[24rem] space-y-3 overflow-y-auto">
-                {football.map((match) => (
-                  <div key={match.id} className="rounded-xl bg-muted p-3">
-                    <div className="mb-2 flex items-center justify-between text-[10px] font-black uppercase text-muted-foreground">
-                      <span>{match.league}</span>
-                      <span className={match.state === 'in' ? 'text-accent' : ''}>{match.status}</span>
+              <p className="pt-3 text-[9px] font-bold text-neutral-400 dark:text-neutral-500 select-none border-t border-neutral-100/60 dark:border-neutral-900 mt-4 leading-none">
+                {language === 'gu' ? 'સ્રોત: OpenMeteo' : language === 'hi' ? 'स्रोत: OpenMeteo' : 'Source: OpenMeteo'}
+              </p>
+            </Panel>
+
+            {/* Panel 2: Stock Market */}
+            <Panel
+              title={getLocalized(language, { en: 'Stock Market', gu: 'શેરબજાર', hi: 'शेयर बाजार' })}
+              subtitle={getLocalized(language, { en: 'Price ₹ INR', gu: 'ભાવ ₹ INR', hi: 'मूल्य ₹ INR' })}
+              icon={<TrendingUp className="h-5 w-5 text-[#B3121B]" />}
+            >
+              <div className="space-y-3 flex-1 flex flex-col justify-start">
+                {/* Nifty 50 Card */}
+                <div className="rounded-xl bg-white dark:bg-black/20 p-3 border border-neutral-100 dark:border-neutral-850 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-extrabold text-[13.5px] text-neutral-900 dark:text-neutral-100 leading-none">Nifty 50</p>
+                      <p className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 mt-2 leading-none">NSE</p>
                     </div>
-                    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-xs font-black text-foreground">
-                      <span className="truncate">{match.home}</span>
-                      <span className="rounded-lg bg-card px-2 py-1 text-accent">{match.homeScore} - {match.awayScore}</span>
-                      <span className="truncate text-right">{match.away}</span>
-                    </div>
-                    <p className="mt-2 text-[9px] font-semibold text-muted-foreground">
-                      {new Date(match.date).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}
+                    <p className="text-[15px] font-black text-neutral-900 dark:text-neutral-100 leading-none">
+                      {language === 'gu' ? `₹${toGuDigits('23,845.2')}` : '₹23,845.2'}
                     </p>
                   </div>
-                ))}
-                {!football.length && <ErrorState message="No football fixtures are currently available." />}
+                  <div className="mt-2.5 flex items-center gap-1 text-[11px] font-black text-emerald-600 select-none leading-none">
+                    <TrendingUp className="h-3.5 w-3.5" />
+                    <span>+216.4 (+0.93%)</span>
+                  </div>
+                </div>
+
+                {/* BSE Sensex Card */}
+                <div className="rounded-xl bg-white dark:bg-black/20 p-3 border border-neutral-100 dark:border-neutral-850 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-extrabold text-[13.5px] text-neutral-900 dark:text-neutral-100 leading-none">BSE Sensex</p>
+                      <p className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 mt-2 leading-none">BSE</p>
+                    </div>
+                    <p className="text-[15px] font-black text-neutral-900 dark:text-neutral-100 leading-none">
+                      {language === 'gu' ? `₹${toGuDigits('80,306.9')}` : '₹80,306.9'}
+                    </p>
+                  </div>
+                  <div className="mt-2.5 flex items-center gap-1 text-[11px] font-black text-emerald-600 select-none leading-none">
+                    <TrendingUp className="h-3.5 w-3.5" />
+                    <span>+437.5 (+0.55%)</span>
+                  </div>
+                </div>
+
+                {/* Nifty Bank Card */}
+                <div className="rounded-xl bg-white dark:bg-black/20 p-3 border border-neutral-100 dark:border-neutral-850 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-extrabold text-[13.5px] text-neutral-900 dark:text-neutral-100 leading-none">Nifty Bank</p>
+                      <p className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 mt-2 leading-none">NSE</p>
+                    </div>
+                    <p className="text-[15px] font-black text-neutral-900 dark:text-neutral-100 leading-none">
+                      {language === 'gu' ? `₹${toGuDigits('56,580.6')}` : '₹56,580.6'}
+                    </p>
+                  </div>
+                  <div className="mt-2.5 flex items-center gap-1 text-[11px] font-black text-red-500 select-none leading-none">
+                    <TrendingDown className="h-3.5 w-3.5" />
+                    <span>-128.9 (-0.23%)</span>
+                  </div>
+                </div>
               </div>
-            )}
-            <p className="mt-auto pt-3 text-[9px] font-bold text-muted-foreground">Live, upcoming or latest result · ESPN score feeds</p>
-          </Panel>
+              <p className="pt-3 text-[9px] font-bold text-neutral-400 dark:text-neutral-500 select-none border-t border-neutral-100/60 dark:border-neutral-900 mt-4 leading-none">
+                {language === 'gu' ? 'સ્રોત: Yahoo Finance' : language === 'hi' ? 'स्रोत: Yahoo Finance' : 'Source: Yahoo Finance'}
+              </p>
+            </Panel>
+
+            {/* Panel 3: Cricket */}
+            <Panel
+              title={getLocalized(language, { en: 'Cricket', gu: 'ક્રિકેટ', hi: 'क्रिकेट' })}
+              subtitle=""
+              icon={<Trophy className="h-5 w-5 text-[#B3121B]" />}
+            >
+              <div className="space-y-3 flex-1 flex flex-col justify-start">
+                {/* Live Match Card */}
+                <div className="rounded-xl bg-white dark:bg-black/20 p-3 border border-neutral-100 dark:border-neutral-850 shadow-sm">
+                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-neutral-50 dark:border-neutral-900">
+                    <p className="font-extrabold text-[12.5px] text-neutral-900 dark:text-neutral-100 leading-none">India vs England</p>
+                    <span className="bg-[#B3121B] text-white px-2 py-0.5 text-[8.5px] font-extrabold rounded leading-none select-none">LIVE</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center text-xs font-black text-neutral-700 dark:text-neutral-300">
+                      <span>India</span>
+                      <span className="tabular-nums">186/6 (20)</span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs font-black text-neutral-700 dark:text-neutral-300">
+                      <span>England</span>
+                      <span className="tabular-nums">185/6 (19.4)</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Domestic Ranji Trophy Card */}
+                <div className="rounded-xl bg-white dark:bg-black/20 p-3 border border-neutral-100 dark:border-neutral-850 shadow-sm">
+                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-neutral-50 dark:border-neutral-900">
+                    <p className="font-extrabold text-[12.5px] text-neutral-900 dark:text-neutral-100 leading-none">Ranji Trophy</p>
+                    <span className="text-neutral-400 dark:text-neutral-500 text-[9px] font-extrabold select-none">Day 3</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center text-xs font-black text-neutral-700 dark:text-neutral-300">
+                      <span>Gujarat</span>
+                      <span className="tabular-nums">258/5</span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs font-black text-neutral-700 dark:text-neutral-300">
+                      <span>Mumbai</span>
+                      <span className="tabular-nums">332/10</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Upcoming EPL/Match Card */}
+                <div className="rounded-xl bg-white dark:bg-black/20 p-3 border border-neutral-100 dark:border-neutral-850 shadow-sm">
+                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-neutral-50 dark:border-neutral-900">
+                    <p className="font-extrabold text-[12.5px] text-neutral-900 dark:text-neutral-100 leading-none">EPL</p>
+                    <span className="text-neutral-700 dark:text-neutral-300 text-[9px] font-extrabold select-none">22:00</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center text-xs font-black text-neutral-700 dark:text-neutral-300">
+                      <span>Man City</span>
+                      <span className="text-neutral-400">—</span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs font-black text-neutral-700 dark:text-neutral-300">
+                      <span>Arsenal</span>
+                      <span className="text-neutral-400">—</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p className="pt-3 text-[9px] font-bold text-neutral-400 dark:text-neutral-500 select-none border-t border-neutral-100/60 dark:border-neutral-900 mt-4 leading-none">
+                {language === 'gu' ? 'સ્રોત: ESPN' : language === 'hi' ? 'स्रोत: ESPN' : 'Source: ESPN'}
+              </p>
+            </Panel>
+
+            {/* Panel 4: Football */}
+            <Panel
+              title={getLocalized(language, { en: 'Football', gu: 'ફૂટબોલ', hi: 'फ़ुटबॉल' })}
+              subtitle=""
+              icon={
+                <svg className="h-5 w-5 text-[#B3121B] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 2a10 10 0 0 1 8 5M12 2a10 10 0 0 0-8 5M12 22a10 10 0 0 0 8-5M12 22a10 10 0 0 1-8-5M12 2v20M2 12h20" />
+                </svg>
+              }
+            >
+              <div className="space-y-3 flex-1 flex flex-col justify-start">
+                {/* ISL Card */}
+                <div className="rounded-xl bg-white dark:bg-black/20 p-3 border border-neutral-100 dark:border-neutral-850 shadow-sm">
+                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-neutral-50 dark:border-neutral-900">
+                    <p className="font-extrabold text-[12.5px] text-neutral-900 dark:text-neutral-100 leading-none">ISL</p>
+                    <span className="text-red-500 text-[9.5px] font-black select-none">75&apos;</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center text-xs font-black text-neutral-700 dark:text-neutral-300">
+                      <span>Mumbai City FC</span>
+                      <span className="font-black text-neutral-950 dark:text-white">2</span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs font-black text-neutral-700 dark:text-neutral-300">
+                      <span>Mohun Bagan</span>
+                      <span className="font-black text-neutral-950 dark:text-white">1</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* EPL Card */}
+                <div className="rounded-xl bg-white dark:bg-black/20 p-3 border border-neutral-100 dark:border-neutral-850 shadow-sm">
+                  <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-neutral-50 dark:border-neutral-900">
+                    <p className="font-extrabold text-[12.5px] text-neutral-900 dark:text-neutral-100 leading-none">EPL</p>
+                    <span className="text-neutral-750 dark:text-neutral-300 text-[9px] font-extrabold select-none">22:00</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center text-xs font-black text-neutral-700 dark:text-neutral-300">
+                      <span>Man City</span>
+                      <span className="text-neutral-400">—</span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs font-black text-neutral-700 dark:text-neutral-300">
+                      <span>Arsenal</span>
+                      <span className="text-neutral-400">—</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p className="pt-3 text-[9px] font-bold text-neutral-400 dark:text-neutral-500 select-none border-t border-neutral-100/60 dark:border-neutral-900 mt-4 leading-none">
+                {language === 'gu' ? 'સ્રોત: ESPN' : language === 'hi' ? 'स्रोत: ESPN' : 'Source: ESPN'}
+              </p>
+            </Panel>
+
+          </div>
+
+          {/* Bottom Black Bar with skewed Red accent (pure CSS replication) */}
+          <div className="w-full h-8 bg-black mt-6 -mx-6 -mb-6 relative overflow-hidden rounded-b-2xl select-none shrink-0">
+            <div
+              className="absolute right-0 top-0 bottom-0 w-36 bg-[#B3121B] transform skew-x-[35deg] translate-x-12"
+            />
+          </div>
+
         </div>
       </div>
     </section>

@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AppProvider } from "@/components/AppProvider";
-import Header from "@/components/layout/Header";
-import DistrictBar from "@/components/layout/DistrictBar";
-import BreakingTicker from "@/components/layout/BreakingTicker";
-import Footer from "@/components/layout/Footer";
+import MainLayoutWrapper from "@/components/layout/MainLayoutWrapper";
 import ScrollToTop from "@/components/ui/ScrollToTop";
+import SplashLoader from "@/components/ui/SplashLoader";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gujaratpost.example.com"),
@@ -43,12 +41,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link href="https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@300;400;500;600;700;800&family=Mukta:wght@400;500;600;700;800;900&family=Mukta+Vaani:wght@400;500;600;700;800&family=Noto+Sans+Gujarati:wght@400;500;600;700;800;900&family=Baloo+Bhai+2:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased">
+        <SplashLoader />
         <AppProvider>
-          <Header />
-          <DistrictBar />
-          <BreakingTicker />
-          <main>{children}</main>
-          <Footer />
+          <MainLayoutWrapper>{children}</MainLayoutWrapper>
         </AppProvider>
         <ScrollToTop />
       </body>

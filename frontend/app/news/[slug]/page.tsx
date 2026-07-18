@@ -45,7 +45,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
   if (!article) notFound();
 
   const related = getRelatedArticles(article);
-  const trending = ARTICLES.filter((item) => item.isTrending && item.id !== article.id).slice(0, 6);
+  const trending = ARTICLES.filter((item) => item.isTrending && item.id !== article.id).slice(0, 11);
   const articleUrl = `${SITE_URL}/news/${article.slug}`;
   const structuredData = {
     "@context": "https://schema.org",

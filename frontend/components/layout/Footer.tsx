@@ -1,18 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import {
-    ArrowRight,
-    Mail,
-    MapPin,
-    Radio,
-    ChevronRight,
-    Users,
-    BookOpen,
-} from 'lucide-react';
-import { NAV_ITEMS } from '@/data';
-import { SocialLinks } from '@/components/ui/SocialLinks';
+import gpLogoStatic from '../../public/assets/gujarat-post-logo-static.png';
+import { SOCIAL_LINKS, SocialIcon } from '@/components/ui/SocialLinks';
 
 /* ─── Inline SVG icons ──────────────────────────────────────────────────── */
 function AppleIcon({ className = 'h-4 w-4' }: { className?: string }) {
@@ -34,89 +26,55 @@ function PlayStoreIcon({ className = 'h-4 w-4' }: { className?: string }) {
     );
 }
 
-function YouTubeIcon({ className = 'h-4 w-4' }: { className?: string }) {
-    return (
-        <svg viewBox="0 0 24 24" className={className} fill="currentColor">
-            <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.518 3.545 12 3.545 12 3.545s-7.518 0-9.388.507a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.87.507 9.388.507 9.388.507s7.518 0 9.388-.507a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837z" />
-            <polygon points="9.545 15.568 15.818 12 9.545 8.432 9.545 15.568" fill="#040810" />
-        </svg>
-    );
-}
-
-/* ─── Link data ─────────────────────────────────────────────────────────── */
-const companyLinks = [
-    ['About Us', '/about'],
-    ['Contact Us', '/contact'],
-    ['Advertise', '/advertise'],
-    ['Careers', '/careers'],
-    ['Complaint', '/complaint-redressal'],
+/* ─── Links data matching actual categories on the website ──────────────── */
+const gujaratLinks = [
+    { label: 'World', href: '/category/world' },
+    { label: 'Crime', href: '/category/crime' },
+    { label: 'Entertainment', href: '/category/entertainment' },
+    { label: 'Fact Check', href: '/category/fact-check' },
+    { label: 'Election 2027', href: '/category/election-2027' },
+    { label: 'Sports', href: '/category/sports' },
+    { label: 'Weather', href: '/category/weather' },
 ];
 
-const informationLinks = [
-    ['Privacy Policy', '/privacy-policy'],
-    ['Terms & Conditions', '/terms'],
-    ['Cookie Policy', '/cookie-policy'],
-    ['Disclaimer', '/disclaimer'],
+const indiaLinks = [
+    { label: 'Politics', href: '/category/politics' },
+    { label: 'Health', href: '/category/health' },
+    { label: 'Technology', href: '/category/technology' },
+    { label: 'Trending', href: '/category/trending' },
+    { label: 'Business', href: '/category/business' },
+    { label: 'Education', href: '/category/education' },
+    { label: 'Gold-Silver', href: '/category/gold-silver' },
 ];
 
-const mediaLinks = [
-    { label: 'Watch Never Ends', href: '/watch', isLive: true },
+const showLinks = [
+    { label: 'GP Live TV', href: '/watch' },
+    { label: 'Gujarat Post Specials', href: '/category/trending' },
+    { label: 'Good Morning Gujarat', href: '/category/gujarat' },
+    { label: 'Ground Reports', href: '/category/state' },
+    { label: 'Podcast Series', href: '/videos?tab=podcast' },
+    { label: 'E-Paper', href: '/epaper' },
     { label: 'Latest Videos', href: '/videos' },
     { label: 'Shorts', href: '/shorts' },
     { label: 'Photo Stories', href: '/photos' },
-    { label: 'E-Paper', href: '/epaper', isNew: true },
 ];
 
-// const stats = [
-//     { icon: Users, value: '5.2M+', label: 'Monthly Readers', color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20' },
-//     { icon: YouTubeIcon, value: '1.5M+', label: 'Subscribers', color: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/20' },
-//     { icon: Mail, value: '250K+', label: 'Newsletter', color: 'text-red-300', bg: 'bg-red-400/10', border: 'border-red-400/20' },
-//     { icon: Radio, value: '24 × 7', label: 'Live Updates', color: 'text-red-500', bg: 'bg-red-500/10', border: 'border-red-500/20' },
-// ];
+const companyLinks = [
+    { label: 'About Us', href: '/about' },
+    { label: 'Contact Us', href: '/contact' },
+    { label: 'Advertise with Us', href: '/advertise' },
+    { label: 'Careers', href: '/careers' },
+    { label: 'Complaint Redressal', href: '/complaint-redressal' },
+    { label: 'Share Tips with GP', href: '/contact' },
+    { label: 'Gujarat Post App', href: '/app' },
+    { label: 'Authors List', href: '/authors' },
+];
 
-/* ─── FooterLink ────────────────────────────────────────────────────────── */
-const FooterLink = ({
-    href,
-    children,
-    isLive,
-    isNew,
-}: {
-    href: string;
-    children: React.ReactNode;
-    isLive?: boolean;
-    isNew?: boolean;
-}) => (
-    <Link
-        href={href}
-        className="group flex items-center justify-between text-[12.5px] font-medium text-white/45 transition-all duration-200 hover:text-red-400 py-0.5"
-    >
-        <div className="flex items-center gap-1.5 overflow-hidden">
-            <ChevronRight className="h-3 w-3 text-red-500 opacity-0 -ml-3 transition-all duration-200 group-hover:opacity-100 group-hover:ml-0 shrink-0" />
-            <span className="transition-transform duration-200 group-hover:translate-x-0.5 truncate">{children}</span>
-        </div>
-        {isLive && (
-            <span className="ml-2 shrink-0 inline-flex items-center gap-0.5 rounded-full bg-red-500/10 border border-red-500/25 px-1.5 py-px text-[7.5px] font-black text-red-400 shadow-[0_0_6px_rgba(239,68,68,0.2)] animate-pulse">
-                <span className="h-1 w-1 rounded-full bg-red-500" />
-                LIVE
-            </span>
-        )}
-        {isNew && (
-            <span className="ml-2 shrink-0 inline-flex items-center rounded-full bg-blue-500/10 border border-blue-500/25 px-1.5 py-px text-[7.5px] font-black text-blue-400">
-                NEW
-            </span>
-        )}
-    </Link>
-);
-
-/* ─── Column heading ────────────────────────────────────────────────────── */
+/* ─── ColHead Component ─────────────────────────────────────────────────── */
 const ColHead = ({ children }: { children: React.ReactNode }) => (
-    <div className="flex flex-col gap-1.5 mb-4">
-        <h3 className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-white/75 select-none">
-            <span className="h-[5px] w-[5px] rounded-full bg-red-500 shrink-0 shadow-[0_0_6px_#ef4444]" />
-            {children}
-        </h3>
-        <div className="h-0.5 w-7 bg-red-500/40 rounded-full" />
-    </div>
+    <h3 className="text-white font-bold text-[14px] leading-tight mb-4 select-none">
+        {children}
+    </h3>
 );
 
 /* ─── Footer ────────────────────────────────────────────────────────────── */
@@ -131,204 +89,163 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
     const isFeedPage = pathname === '/watch' || pathname === '/shorts';
     if (isFeedPage && !isInline) return null;
 
-    const wrap = isInline ? 'pt-4 pb-2' : 'pt-8 pb-0';
+    const wrap = isInline ? 'pt-4 pb-3' : 'pt-7 pb-4';
 
     return (
-        <footer data-theme="dark" className="relative overflow-hidden bg-black text-white" style={{ background: 'linear-gradient(180deg, #18181b 0%, #09090b 100%)' }}>
-            {/* Top accent line */}
-            <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-red-500/80 to-transparent shadow-[0_1px_8px_rgba(239,68,68,0.4)]" />
-
-            {/* Subtle glow orbs */}
-            <div className="pointer-events-none absolute -right-32 -top-32 h-72 w-72 rounded-full bg-red-600/8 blur-[80px]" />
-            <div className="pointer-events-none absolute bottom-0 left-1/4 h-48 w-96 rounded-full bg-red-600/5 blur-[60px]" />
-
-            <div className={`relative mx-auto max-w-screen-xl max-w-header-layout px-4 ${wrap}`}>
-
-                {/* ── ROW 1: Brand  +  Newsletter ── */}
-                <div className="flex flex-col gap-5 border-b border-white/[0.07] pb-5 lg:flex-row lg:items-center lg:justify-between">
-
-                    {/* Brand block */}
-                    <div className="flex items-center gap-3 shrink-0">
-                        <Link href="/" className="group/logo flex items-center gap-2.5">
-                            <span className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-tr from-red-600 to-rose-500 text-sm font-black shadow-lg ring-1 ring-red-500/30 transition-transform duration-300 group-hover/logo:scale-105">
-                                GP
-                            </span>
-                            <span>
-                                <span className="block text-base font-black tracking-tight text-white group-hover/logo:text-red-400 transition-colors duration-300">Gujarat Post</span>
-                                <span className="block text-[9px] font-semibold text-white/40">ગુજરાતનું વિશ્વસનીય ન્યૂઝ નેટવર્ક</span>
-                            </span>
-                        </Link>
-                        <div className="hidden sm:flex items-center gap-3.5 pl-3.5 border-l border-white/10">
-                            <p className="flex items-center gap-1.5 text-[11px] text-white/45">
-                                <MapPin className="h-3 w-3 text-red-500 shrink-0" />
-                                Ahmedabad, Gujarat
-                            </p>
-                            <p className="flex items-center gap-1.5 text-[11px] text-white/45">
-                                <Radio className="h-3 w-3 text-red-500 animate-pulse shrink-0" />
-                                24 × 7 Newsroom
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Newsletter form */}
-                    <form
-                        className="flex w-full max-w-md items-center gap-3"
-                        onSubmit={(e) => e.preventDefault()}
-                    >
-                        <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-red-400 shrink-0 select-none">
-                            <Mail className="h-3.5 w-3.5 text-red-500" />
-                            <span className="hidden sm:inline">Daily Brief</span>
-                        </div>
-                        <label className="sr-only" htmlFor="footer-email">Email address</label>
-                        <div className="flex flex-1 items-stretch rounded-xl border border-white/10 bg-white/[0.02] focus-within:border-red-500/50 focus-within:ring-1 focus-within:ring-red-500/25 transition-all overflow-hidden">
-                            <input
-                                id="footer-email"
-                                type="email"
-                                required
-                                placeholder="Your email address"
-                                className="h-9 min-w-0 flex-1 bg-transparent px-3.5 text-xs text-white outline-none placeholder:text-white/20"
+        <footer data-theme="dark" className="bg-black text-white relative border-t border-neutral-900">
+            <div className={`mx-auto max-w-screen-xl max-w-header-layout px-4 ${wrap}`}>
+                
+                {/* ── Main columns grid ── */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-[1.2fr_1fr_1fr_1fr_1fr] gap-6 lg:gap-6 pb-6">
+                    
+                    {/* Column 1: Logo and Brand info */}
+                    <div className="flex flex-col gap-4">
+                        <Link href="/" className="inline-block relative h-14 w-44 sm:w-48 overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-black/10 transition-transform duration-200 hover:scale-[1.02]">
+                            <Image
+                                src={gpLogoStatic}
+                                alt="Gujarat Post Logo"
+                                fill
+                                priority
+                                className="object-cover"
                             />
-                            <button
-                                type="submit"
-                                className="inline-flex items-center gap-1.5 bg-gradient-to-r from-red-600 to-rose-500 px-4 text-xs font-black text-white hover:from-red-500 hover:to-rose-400 transition-colors cursor-pointer select-none active:scale-95 duration-155 shrink-0"
-                            >
-                                <span>Subscribe</span>
-                                <ArrowRight className="h-3.5 w-3.5" />
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                {/* ── ROW 2: Links grid ── */}
-                <div className="grid grid-cols-2 gap-x-6 gap-y-8 py-8 sm:grid-cols-3 lg:grid-cols-[1.8fr_1fr_1fr_1fr_1fr]">
-
-                    {/* Col 1: Brand description + socials + app */}
-                    <div className="col-span-2 sm:col-span-3 lg:col-span-1 flex flex-col gap-4 bg-white/[0.01] border border-white/[0.04] rounded-2xl p-5 shadow-inner backdrop-blur-xs">
-                        <p className="text-[11.5px] leading-relaxed text-white/45">
-                            Independent reporting &amp; breaking news from every corner of Gujarat—in Gujarati, Hindi &amp; English.
-                        </p>
-                        <SocialLinks size="sm" className="mt-0.5" />
-                        {/* App buttons */}
-                        <div className="flex flex-wrap gap-3 mt-2">
-                            <a
-                                href="https://apps.apple.com"
-                                target="_blank"
-                                rel="noreferrer"
-                                className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-5 py-2.5 text-white hover:border-red-500/30 hover:bg-red-500/[0.04] transition-all duration-300 active:scale-95 shadow-sm"
-                            >
-                                <AppleIcon className="h-6.5 w-6.5 text-white/95" />
-                                <div className="leading-none text-left">
-                                    <span className="block text-[8px] text-white/40 uppercase tracking-widest font-bold">Download on</span>
-                                    <span className="block text-[13.5px] font-black mt-0.5">App Store</span>
-                                </div>
-                            </a>
-                            <a
-                                href="https://play.google.com"
-                                target="_blank"
-                                rel="noreferrer"
-                                className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-5 py-2.5 text-white hover:border-red-500/30 hover:bg-red-500/[0.04] transition-all duration-300 active:scale-95 shadow-sm"
-                            >
-                                <PlayStoreIcon className="h-6.5 w-6.5 text-white/95" />
-                                <div className="leading-none text-left">
-                                    <span className="block text-[8px] text-white/40 uppercase tracking-widest font-bold">Get it on</span>
-                                    <span className="block text-[13.5px] font-black mt-0.5">Google Play</span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                    {/* Col 2: Explore */}
-                    <div className="lg:border-r border-white/[0.05] lg:pr-6">
-                        <ColHead>Explore</ColHead>
-                        <ul className="space-y-2">
-                            {NAV_ITEMS.slice(1, 9).map((item) => (
-                                <li key={item.href}>
-                                    <FooterLink href={item.href}>{item.label}</FooterLink>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Col 3: Watch & Read */}
-                    <div className="lg:border-r border-white/[0.05] lg:pr-6">
-                        <ColHead>Watch &amp; Read</ColHead>
-                        <ul className="space-y-2 mb-3.5">
-                            {mediaLinks.map((item) => (
-                                <li key={item.href}>
-                                    <FooterLink href={item.href} isLive={item.isLive} isNew={item.isNew}>
-                                        {item.label}
-                                    </FooterLink>
-                                </li>
-                            ))}
-                        </ul>
-                        <Link
-                            href="/epaper"
-                            className="inline-flex items-center gap-1.5 rounded-md border border-red-500/20 bg-red-500/[0.03] px-2.5 py-1 text-[9px] font-black text-red-400 transition-all duration-200 hover:border-red-500/40 hover:bg-red-500/8 hover:text-white"
-                        >
-                            <BookOpen className="h-3 w-3 text-red-500 shrink-0" /> E-Paper
                         </Link>
+                        <div className="mt-1.5">
+                            <p className="text-[18px] font-black text-white tracking-wide">
+                                Real Stories. <span className="text-red-500">Real Gujarat.</span>
+                            </p>
+                            <p className="text-[12px] leading-relaxed text-neutral-400 max-w-xs mt-1.5">
+                                ગુજરાતનું વિશ્વસનીય ન્યૂઝ નેટવર્ક. Independent reporting &amp; breaking news from every corner of Gujarat.
+                            </p>
+                        </div>
                     </div>
 
-                    {/* Col 4: Company */}
-                    <div className="lg:border-r border-white/[0.05] lg:pr-6">
-                        <ColHead>Company</ColHead>
-                        <ul className="space-y-2">
-                            {companyLinks.map(([label, href]) => (
-                                <li key={href}>
-                                    <FooterLink href={href}>{label}</FooterLink>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Col 5: Information */}
+                    {/* Column 2: Gujarat */}
                     <div>
-                        <ColHead>Information</ColHead>
-                        <ul className="space-y-2">
-                            {informationLinks.map(([label, href]) => (
-                                <li key={href}>
-                                    <FooterLink href={href}>{label}</FooterLink>
+                        <Link href="/category/gujarat" className="text-white hover:text-red-500 transition-colors font-bold text-[14px] leading-tight mb-4 block select-none">
+                            Gujarat
+                        </Link>
+                        <ul className="space-y-1.5">
+                            {gujaratLinks.map((item) => (
+                                <li key={item.label}>
+                                    <Link href={item.href} className="text-[13px] text-neutral-400 hover:text-white transition-colors duration-200 py-0.5 block">
+                                        {item.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Column 3: India */}
+                    <div>
+                        <Link href="/category/national" className="text-white hover:text-red-500 transition-colors font-bold text-[14px] leading-tight mb-4 block select-none">
+                            India
+                        </Link>
+                        <ul className="space-y-1.5">
+                            {indiaLinks.map((item) => (
+                                <li key={item.label}>
+                                    <Link href={item.href} className="text-[13px] text-neutral-400 hover:text-white transition-colors duration-200 py-0.5 block">
+                                        {item.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Column 4: Shows */}
+                    <div>
+                        <ColHead>Shows</ColHead>
+                        <ul className="space-y-1.5">
+                            {showLinks.map((item) => (
+                                <li key={item.label}>
+                                    <Link href={item.href} className="text-[13px] text-neutral-400 hover:text-white transition-colors duration-200 py-0.5 block">
+                                        {item.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Column 5: Company */}
+                    <div>
+                        <ColHead>Company</ColHead>
+                        <ul className="space-y-1.5">
+                            {companyLinks.map((item) => (
+                                <li key={item.label}>
+                                    <Link href={item.href} className="text-[13px] text-neutral-400 hover:text-white transition-colors duration-200 py-0.5 block">
+                                        {item.label}
+                                    </Link>
                                 </li>
                             ))}
                         </ul>
                     </div>
                 </div>
 
-                {/* ── ROW 3: Stats strip ── */}
-                {/* <div className="border-t border-white/[0.07] py-4">
-                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                        {stats.map(({ icon: Icon, value, label, color, bg, border }) => (
-                            <div
-                                key={label}
-                                className={`group flex items-center gap-3.5 rounded-xl border border-white/[0.04] bg-white/[0.015] hover:bg-white/[0.035] hover:border-red-500/20 px-4 py-3 transition-all duration-300 shadow-sm hover:shadow-[0_4px_15px_rgba(239,68,68,0.03)] hover:-translate-y-0.5`}
+                {/* ── Bottom row: Socials + App downloads ── */}
+                <div className="border-t border-neutral-900 pt-4 pb-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    
+                    {/* Bottom Left: Social links matching reference image */}
+                    <div className="flex items-center gap-2.5 flex-wrap">
+                        {SOCIAL_LINKS.map((item) => (
+                            <a
+                                key={item.label}
+                                href={item.href}
+                                target={item.platform === 'youtube' ? '_blank' : undefined}
+                                rel={item.platform === 'youtube' ? 'noreferrer' : undefined}
+                                aria-label={item.label}
+                                title={item.label}
+                                className={`h-8 w-8 rounded-full border border-white/10 bg-white/5 text-white flex items-center justify-center transition-all duration-200 hover:-translate-y-0.5 hover:text-white hover:border-transparent hover:shadow-lg ${item.hover}`}
                             >
-                                <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-white/[0.04] to-white/[0.01] group-hover:from-red-600/10 group-hover:to-rose-500/5 ${color} border border-white/10 group-hover:border-red-500/30 transition-all duration-300`}>
-                                    <Icon className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
-                                </div>
-                                <div>
-                                    <span className="block text-base font-black leading-none bg-gradient-to-r from-white via-white to-red-100 bg-clip-text text-transparent tracking-tight">{value}</span>
-                                    <span className="block text-[8.5px] font-black uppercase tracking-widest text-white/30 group-hover:text-red-400 transition-colors mt-1.5">{label}</span>
-                                </div>
+                                <SocialIcon platform={item.platform} className="h-4 w-4" />
+                            </a>
+                        ))}
+                    </div>
+
+                    {/* Bottom Right: App download buttons */}
+                    <div className="flex items-center gap-2.5 select-none">
+                        {/* App Store button */}
+                        <a
+                            href="https://apps.apple.com"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="group flex items-center gap-2.5 rounded-md border border-neutral-800 bg-black px-3.5 py-1 text-white hover:border-red-600 hover:shadow-[0_0_12px_rgba(179,18,27,0.3)] transition-all duration-300 hover:scale-[1.03] active:scale-95"
+                        >
+                            <AppleIcon className="h-4.5 w-4.5 text-white transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-105" />
+                            <div className="leading-none text-left">
+                                <span className="block text-[8px] text-neutral-400 uppercase tracking-tight">Download on the</span>
+                                <span className="block text-[11.5px] font-bold tracking-tight">App Store</span>
                             </div>
-                        ))}
-                    </div>
-                </div> */}
+                        </a>
 
-            </div>
-
-            {/* ── Copyright bar ── */}
-            <div className="border-t border-white/[0.06]" style={{ background: 'rgba(0,0,0,0.4)' }}>
-                <div className="mx-auto flex max-w-screen-xl max-w-header-layout flex-wrap items-center justify-between gap-2 px-4 py-3.5 text-[10px]" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                    <p>© {new Date().getFullYear()} Gujarat Post Media. All rights reserved.</p>
-                    <div className="flex flex-wrap gap-x-3 gap-y-1">
-                        {[['DNPA Code', '/dnpa-code'], ['CSR Policy', '/csr-policy'], ['RSS', '/rss.xml']].map(([label, href]) => (
-                            <Link key={href} href={href} className="transition duration-200 hover:text-red-400 font-medium">{label}</Link>
-                        ))}
+                        {/* Google Play button */}
+                        <a
+                            href="https://play.google.com"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="group flex items-center gap-2.5 rounded-md border border-neutral-800 bg-black px-3.5 py-1 text-white hover:border-red-600 hover:shadow-[0_0_12px_rgba(179,18,27,0.3)] transition-all duration-300 hover:scale-[1.03] active:scale-95"
+                        >
+                            <PlayStoreIcon className="h-4.5 w-4.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:scale-105" />
+                            <div className="leading-none text-left">
+                                <span className="block text-[8px] text-neutral-400 uppercase tracking-tight">GET IT ON</span>
+                                <span className="block text-[11.5px] font-bold tracking-tight">Google Play</span>
+                            </div>
+                        </a>
                     </div>
-                    <p className="font-semibold text-white/20 tracking-wider">RNI/GJ-DEMO/2026</p>
                 </div>
+
+                {/* ── Footer Copyright bar ── */}
+                <div className="border-t border-neutral-900 mt-3 pt-3 text-[10px] text-neutral-500">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                        <p>© {new Date().getFullYear()} Gujarat Post Media. All rights reserved.</p>
+                        <div className="flex flex-wrap gap-x-4 gap-y-1">
+                            {[['DNPA Code', '/dnpa-code'], ['CSR Policy', '/csr-policy'], ['RSS', '/rss.xml']].map(([label, href]) => (
+                                <Link key={href} href={href} className="transition duration-200 hover:text-white">{label}</Link>
+                            ))}
+                        </div>
+                        <p className="font-semibold text-neutral-600 tracking-wider">RNI/GJ-DEMO/2026</p>
+                    </div>
+                </div>
+
             </div>
         </footer>
     );
 }
-

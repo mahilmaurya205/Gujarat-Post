@@ -665,15 +665,11 @@ export default function HeroSection() {
 
 
 
-      <VideoDesk videos={videos.slice(0, 7)} language={language} />
+      <VideoDesk videos={videos.slice(0, 7)} language={language} onlyShorts={true} />
 
       <WeatherDashboardSection language={language} />
 
       <LiveCenterSection language={language} />
-
-
-
-
 
 
       {/* Banner Ad Section */}
@@ -737,7 +733,7 @@ export default function HeroSection() {
 }
 
 /* --- Video Desk Section ---------------------------------------------------- */
-function VideoDesk({ videos, language, showShorts = true }: { videos: typeof VIDEOS; language: Language; showShorts?: boolean }) {
+function VideoDesk({ videos, language, showShorts = true, onlyShorts = false }: { videos: typeof VIDEOS; language: Language; showShorts?: boolean; onlyShorts?: boolean }) {
   const [playId, setPlayId] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
@@ -748,12 +744,8 @@ function VideoDesk({ videos, language, showShorts = true }: { videos: typeof VID
   const featuredVideo = videos[0];
   const sidebarVideos = videos.slice(1, 9);
 
-  // Combine passed videos with all other videos and shorts to make a long list of reels
-  const shortVideos = [
-    ...videos, // 5 videos
-    ...VIDEOS.filter(v => v.type === 'short'), // 4 shorts
-    ...VIDEOS.filter(v => v.type === 'video').slice(5, 7) // 1 extra video
-  ].slice(0, 10);
+  // Filter for actual short videos (vertical reels) only
+  const shortVideos = VIDEOS.filter(v => v.type === 'short');
 
   const updateArrows = () => {
     const el = scrollContainerRef.current;
@@ -784,16 +776,140 @@ function VideoDesk({ videos, language, showShorts = true }: { videos: typeof VID
     });
   };
 
+  if (onlyShorts) {
+    return (
+      <section className="mt-6">
+        {/* ── Red Panel containing only Shorts ── */}
+        <div className="w-full bg-[#B3121B] text-white rounded-sm px-5 md:px-8 py-6 border border-white/10 relative overflow-hidden shadow-lg">
+
+          {/* Header */}
+          <div className="relative z-10 flex items-center justify-between mb-5 select-none">
+            <span className="bg-white/20 text-white font-black text-[12.5px] px-3.5 py-1.5 rounded-sm tracking-wide border border-white/25">
+              {language === 'gu' ? 'શોર્ટ વીડિયો' : language === 'hi' ? 'शॉर्ट वीडियो' : 'Short Videos'}
+            </span>
+            <Link
+              href="/shorts"
+              className="text-white/95 font-extrabold text-[13px] md:text-[14px] hover:text-white hover:underline flex items-center gap-1"
+            >
+              {language === 'gu' ? 'બધા શોર્ટ્સ →' : 'All Shorts →'}
+            </Link>
+          </div>
+
+          {/* ── Shorts Strip ───────────────────────────────────────────────── */}
+          <div className="relative z-10">
+            {/* Horizontal scroll container */}
+            <div className="relative">
+              {/* Left arrow */}
+              {showLeftArrow && (
+                <button
+                  type="button"
+                  onClick={() => handleScroll('left')}
+                  className="absolute left-[-12px] top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/20 hover:bg-white/35 flex items-center justify-center backdrop-blur transition-all shadow border border-white/30"
+                  aria-label="Scroll left"
+                >
+                  <ChevronLeft className="h-4 w-4 text-white stroke-[2.5]" />
+                </button>
+              )}
+
+              {/* Scrollable list */}
+              <div
+                ref={scrollContainerRef}
+                onScroll={updateArrows}
+                className="flex gap-4 overflow-x-auto pb-1 mx-4 scrollbar-hide snap-x snap-mandatory"
+              >
+                {shortVideos.map((v) => (
+                  <div
+                    key={v.id}
+                    className="group relative flex-shrink-0 w-[140px] md:w-[155px] cursor-pointer snap-start"
+                    onClick={() => setPlayId(v.youtubeId)}
+                  >
+                    {/* Vertical aspect card (9/16) */}
+                    <div className="relative aspect-[9/16] w-full overflow-hidden rounded-sm bg-black/30 border border-white/15">
+                      <Image
+                        src={v.thumbnail}
+                        alt={v.titleGu}
+                        fill
+                        sizes="155px"
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                      {/* Dark gradient bottom */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+
+                      {/* Play button */}
+                      <span className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/90 text-[#B3121B] flex items-center justify-center shadow transition-transform duration-300 group-hover:scale-110">
+                        <Play className="h-3 w-3 fill-current ml-0.5" />
+                      </span>
+
+                      {/* Title at bottom */}
+                      <div className="absolute bottom-0 left-0 right-0 p-2.5">
+                        <p className="text-white text-[11px] font-black leading-snug line-clamp-2">
+                          {getLocalized(language, { en: v.title, gu: v.titleGu, hi: v.titleHi })}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Right arrow */}
+              {showRightArrow && (
+                <button
+                  type="button"
+                  onClick={() => handleScroll('right')}
+                  className="absolute right-[-12px] top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/20 hover:bg-white/35 flex items-center justify-center backdrop-blur transition-all shadow border border-white/30"
+                  aria-label="Scroll right"
+                >
+                  <ChevronRight className="h-4 w-4 text-white stroke-[2.5]" />
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Video Player Modal */}
+        {playId && (
+          <div
+            className="fixed inset-0 z-[120] flex items-center justify-center bg-black/90 backdrop-blur-sm px-4 py-6"
+            onClick={() => setPlayId(null)}
+          >
+            <div
+              className="relative w-full max-w-4xl overflow-hidden rounded-2xl border border-white/10 bg-black shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="absolute right-4 top-4 z-20">
+                <button
+                  type="button"
+                  onClick={() => setPlayId(null)}
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/80 transition"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              <div className="relative aspect-video bg-black">
+                <iframe
+                  src={`https://www.youtube.com/embed/${playId}?autoplay=1&rel=0`}
+                  className="absolute inset-0 h-full w-full"
+                  allow="autoplay; encrypted-media"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+    );
+  }
+
   return (
     <section className="mt-6">
-      {/* ── Red Panel ─────────────────────────────────────────────────── */}
+      {/* ── Red Panel containing Videos ── */}
       <div className="w-full bg-[#B3121B] text-white rounded-sm px-5 md:px-8 pt-6 pb-8 border border-white/10 relative overflow-hidden shadow-lg">
 
         {/* Header */}
         <div className="relative z-10 flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <span className="text-white font-black text-[18px] md:text-[20px] select-none tracking-tight">
-              {language === 'gu' ? 'ગુજરાત પોસ્ટ વીડિયો' : 'Gujarat Post Videos'}
+              {language === 'gu' ? 'વીડિયો' : 'Videos'}
             </span>
           </div>
           <Link
@@ -892,85 +1008,6 @@ function VideoDesk({ videos, language, showShorts = true }: { videos: typeof VID
             </div>
           </div>
         </div>
-
-        {/* ── Shorts Strip ───────────────────────────────────────────────── */}
-        {showShorts && (
-          <div className="relative z-10 mt-8 pt-6 border-t border-white/20">
-            {/* Shorts header */}
-            <div className="flex items-center gap-2 mb-5">
-              <span className="bg-white/20 text-white font-black text-[12.5px] px-3 py-1 rounded-sm select-none tracking-wide border border-white/25">
-                {language === 'gu' ? 'શોર્ટ વીડિયો' : language === 'hi' ? 'शॉर्ट वीडियो' : 'Short Videos'}
-              </span>
-            </div>
-
-            {/* Horizontal scroll container */}
-            <div className="relative">
-              {/* Left arrow */}
-              {showLeftArrow && (
-                <button
-                  type="button"
-                  onClick={() => handleScroll('left')}
-                  className="absolute left-[-12px] top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/20 hover:bg-white/35 flex items-center justify-center backdrop-blur transition-all shadow border border-white/30"
-                  aria-label="Scroll left"
-                >
-                  <ChevronLeft className="h-4 w-4 text-white stroke-[2.5]" />
-                </button>
-              )}
-
-              {/* Scrollable list */}
-              <div
-                ref={scrollContainerRef}
-                onScroll={updateArrows}
-                className="flex gap-3 overflow-x-auto pb-1 mx-4 scrollbar-hide snap-x snap-mandatory"
-              >
-                {shortVideos.map((v) => (
-                  <div
-                    key={v.id}
-                    className="group relative flex-shrink-0 w-[140px] md:w-[155px] cursor-pointer snap-start"
-                    onClick={() => setPlayId(v.youtubeId)}
-                  >
-                    {/* Vertical aspect card (9/16) */}
-                    <div className="relative aspect-[9/16] w-full overflow-hidden rounded-sm bg-black/30 border border-white/15">
-                      <Image
-                        src={v.thumbnail}
-                        alt={v.titleGu}
-                        fill
-                        sizes="155px"
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                      {/* Dark gradient bottom */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-
-                      {/* Play button */}
-                      <span className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/90 text-[#B3121B] flex items-center justify-center shadow transition-transform duration-300 group-hover:scale-110">
-                        <Play className="h-3 w-3 fill-current ml-0.5" />
-                      </span>
-
-                      {/* Title at bottom */}
-                      <div className="absolute bottom-0 left-0 right-0 p-2.5">
-                        <p className="text-white text-[11px] font-black leading-snug line-clamp-2">
-                          {getLocalized(language, { en: v.title, gu: v.titleGu, hi: v.titleHi })}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Right arrow */}
-              {showRightArrow && (
-                <button
-                  type="button"
-                  onClick={() => handleScroll('right')}
-                  className="absolute right-[-12px] top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/20 hover:bg-white/35 flex items-center justify-center backdrop-blur transition-all shadow border border-white/30"
-                  aria-label="Scroll right"
-                >
-                  <ChevronRight className="h-4 w-4 text-white stroke-[2.5]" />
-                </button>
-              )}
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Video Player Modal */}
@@ -1599,6 +1636,12 @@ function CityHyperlocalSection({
             <span className="bg-[#B3121B] text-white px-5 py-1.5 text-[14px] md:text-[15px] font-black rounded-sm select-none uppercase tracking-wide">
               {language === 'gu' ? 'ગુજરાત' : language === 'hi' ? 'गुजरात' : 'Gujarat'}
             </span>
+            <Link
+              href="/category/gujarat"
+              className="text-[13px] md:text-[14px] font-black pb-1.5 text-[#B3121B] hover:text-[#B3121B]/80 transition-colors whitespace-nowrap cursor-pointer ml-auto flex items-center gap-1 select-none"
+            >
+              {language === 'gu' ? 'વધુ જુઓ →' : language === 'hi' ? 'और देखें →' : 'View All →'}
+            </Link>
           </div>
 
           {/* Tab Navigation List */}
@@ -1618,6 +1661,7 @@ function CityHyperlocalSection({
                 </button>
               );
             })}
+
           </div>
 
           {/* Main 2-Column Content Section */}
@@ -2078,7 +2122,7 @@ function CrimeSection({
           href="/category/crime"
           className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline pb-0.5"
         >
-          {language === 'gu' ? 'બધા કાઇમ સમાચાર →' : 'All Crime News →'}
+          {language === 'gu' ? 'વધુ કાઇમ સમાચાર →' : 'All Crime News →'}
         </Link>
       </div>
 
@@ -4661,22 +4705,20 @@ function WeatherDashboardSection({ language }: { language: Language }) {
         <div className="bg-slate-950/90 backdrop-blur-md p-1 rounded-t-xl inline-flex gap-1 border-t border-x border-slate-800/60">
           <button
             onClick={() => setActiveTab('weather')}
-            className={`flex items-center gap-2 px-5 py-2 text-xs md:text-sm font-black transition-all rounded-lg tracking-wider select-none ${
-              activeTab === 'weather'
-                ? 'bg-[#e9ebea]/85 dark:bg-slate-950/70 text-slate-950 dark:text-white shadow-sm border-t border-x border-white/20 dark:border-slate-800/30'
-                : 'text-white/80 hover:text-white bg-transparent'
-            }`}
+            className={`flex items-center gap-2 px-5 py-2 text-xs md:text-sm font-black transition-all rounded-lg tracking-wider select-none ${activeTab === 'weather'
+              ? 'bg-[#e9ebea]/85 dark:bg-slate-950/70 text-slate-950 dark:text-white shadow-sm border-t border-x border-white/20 dark:border-slate-800/30'
+              : 'text-white/80 hover:text-white bg-transparent'
+              }`}
           >
             <Sun className={`h-4 w-4 ${activeTab === 'weather' ? 'text-amber-500' : 'text-white/60'}`} />
             {isGu ? 'હવામાન' : 'WEATHER'}
           </button>
           <button
             onClick={() => setActiveTab('aqi')}
-            className={`flex items-center gap-2 px-5 py-2 text-xs md:text-sm font-black transition-all rounded-lg tracking-wider select-none ${
-              activeTab === 'aqi'
-                ? 'bg-[#e9ebea]/85 dark:bg-slate-950/70 text-slate-950 dark:text-white shadow-sm border-t border-x border-white/20 dark:border-slate-800/30'
-                : 'text-white/80 hover:text-white bg-transparent'
-            }`}
+            className={`flex items-center gap-2 px-5 py-2 text-xs md:text-sm font-black transition-all rounded-lg tracking-wider select-none ${activeTab === 'aqi'
+              ? 'bg-[#e9ebea]/85 dark:bg-slate-950/70 text-slate-950 dark:text-white shadow-sm border-t border-x border-white/20 dark:border-slate-800/30'
+              : 'text-white/80 hover:text-white bg-transparent'
+              }`}
           >
             <Wind className={`h-4 w-4 ${activeTab === 'aqi' ? 'text-emerald-400' : 'text-white/60'}`} />
             {isGu ? 'હવા ગુણવત્તા (AQI)' : 'AQI'}
@@ -4745,7 +4787,7 @@ function WeatherDashboardSection({ language }: { language: Language }) {
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-[13px] font-black text-slate-950 dark:text-slate-100">{city}</span>
-                        <button 
+                        <button
                           onClick={() => setSelectedCity(city)}
                           className="h-5 w-5 bg-slate-950 text-white rounded-full flex items-center justify-center hover:bg-[#B3121B] transition-colors"
                         >
@@ -4756,7 +4798,7 @@ function WeatherDashboardSection({ language }: { language: Language }) {
                         {item.icon === 'cloud' && <Cloud className="h-9 w-9 text-slate-400 shrink-0" />}
                         {item.icon === 'rain' && <CloudRain className="h-9 w-9 text-blue-400 shrink-0" />}
                         {item.icon === 'sun' && <Sun className="h-9 w-9 text-amber-500 shrink-0 animate-spin-slow" />}
-                        
+
                         <div className="text-right flex flex-col items-end gap-1">
                           <span className="text-[12px] font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1 select-none">
                             <Thermometer className="h-3.5 w-3.5 text-slate-400" />

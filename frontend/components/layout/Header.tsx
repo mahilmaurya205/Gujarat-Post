@@ -279,10 +279,36 @@ export default function Header() {
           </span>
         </a>
 
-        {/* Right-side compact search (desktop only, click opens /search page) */}
-        <div className="flex-1 min-w-0 max-w-[220px] lg:max-w-[280px] ml-auto mr-3 hidden md:block">
+        {/* Slogan — hidden on mobile */}
+        <div className="hidden sm:flex flex-col justify-center leading-tight ml-3 select-none">
+          <p className="text-[13px] md:text-[14px] font-black text-foreground tracking-wide whitespace-nowrap">
+            Real Stories. <span className="text-red-600">Real Gujarat.</span>
+          </p>
+        </div>
+
+
+        {/* Right-side compact Search + News Brief Container (desktop only) */}
+        <div className="ml-auto mr-3 hidden md:flex items-center gap-6 select-none shrink-0">
+          {/* NEWS BRIEF Button */}
+          <Link 
+            href="/news-brief" 
+            className="group flex items-center gap-1 hover:opacity-90 transition-all select-none active:scale-[0.98]"
+          >
+            <Image 
+              src="/rightSide.png" 
+              alt="NEWS BRIEF" 
+              width={22} 
+              height={12} 
+              className="h-3 w-auto shrink-0 object-contain transition-transform duration-200 group-hover:translate-x-0.5" 
+            />
+            <span className="font-black font-sans text-[15px] tracking-wider text-black dark:text-white uppercase leading-none select-none group-hover:text-[#B3121B] transition-colors duration-200">
+              NEWS BRIEF
+            </span>
+          </Link>
+
+          {/* Compact Search Trigger */}
           <div
-            className="relative w-full flex items-center cursor-pointer group"
+            className="relative w-[180px] lg:w-[240px] flex items-center cursor-pointer group shrink-0"
             onClick={() => router.push('/search')}
           >
             <div className="h-10 w-full rounded-full border border-border bg-muted py-2 pl-12 pr-4 text-sm text-muted-foreground transition-all duration-200 group-hover:border-accent group-hover:bg-card select-none flex items-center">
