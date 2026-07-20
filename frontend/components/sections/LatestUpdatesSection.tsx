@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -33,7 +33,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
         titleGu: 'સુરત ડાયમંડ બુર્સમાં ખુશીની લહેર! નવા યુનિટોની ફાળવણી શરૂ',
         title: 'Wave of joy in Surat Diamond Bourse! Allocation of new units starts',
         titleHi: 'सूरत डायमंड बुर्स में खुशी की लहर! नए इकाइयों का आवंटन शुरू',
-        relativeTimeGu: '૨ કલાક પહેલાં',
+        relativeTimeGu: '2 કલાક પહેલાં',
         relativeTime: '2 hours ago',
         relativeTimeHi: '2 घंटे पहले',
         categoryGu: 'સુરત',
@@ -49,7 +49,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
         titleGu: 'વડોદરા મ્યુનિ.નું નવું બજેટ રજૂ! પાણી અને રસ્તા પર સૌથી વધુ ભાર',
         title: 'Vadodara Muni new budget presented! Highest emphasis on water and roads',
         titleHi: 'वडोदरा नगर निगम का नया बजट पेश! पानी और सड़कों पर सबसे ज्यादा जोर',
-        relativeTimeGu: '૨ કલાક પહેલાં',
+        relativeTimeGu: '2 કલાક પહેલાં',
         relativeTime: '2 hours ago',
         relativeTimeHi: '2 घंटे पहले',
         categoryGu: 'વડોદરા',
@@ -65,7 +65,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
         titleGu: 'સંસદનું ચોમાસુ સત્ર આજથી! અનેક મોટા ખરડા પર થશે ધમાસાણ',
         title: 'Monsoon session of Parliament starts today! Storm expected over many major bills',
         titleHi: 'संसद का मानसून सत्र आज से! कई बड़े विधेयकों पर होगा घमासान',
-        relativeTimeGu: '૧ કલાક પહેલાં',
+        relativeTimeGu: '1 કલાક પહેલાં',
         relativeTime: '1 hour ago',
         relativeTimeHi: '1 घंटा पहले',
         categoryGu: 'સંસદ',
@@ -81,7 +81,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
         titleGu: 'ખુશખબર! GDP વૃદ્ધિ દર અંદાજ કરતાં વધુ નોંધાયો',
         title: 'Good news! GDP growth rate recorded higher than estimate',
         titleHi: 'खुशखबरी! जीडीपी विकास दर अनुमान से अधिक दर्ज की गई',
-        relativeTimeGu: '૨ કલાક પહેલાં',
+        relativeTimeGu: '2 કલાક પહેલાં',
         relativeTime: '2 hours ago',
         relativeTimeHi: '2 घंटे पहले',
         categoryGu: 'અર્થતંત્ર',
@@ -97,7 +97,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
         titleGu: 'અમદાવાદ મેટ્રો ફેઝ-2નું કાઉન્ટડાઉન શરૂ! સંપૂર્ણ રૂટ મેપ, ભાડા અને તારીખ જાણો',
         title: 'Ahmedabad Metro Phase 2 countdown starts! Know full route map, fares and dates',
         titleHi: 'अहमदाबाद मेट्रो फेज-2 का काउंटडाउन शुरू! पूरा रूट मैप, किराया और तारीख जानें',
-        relativeTimeGu: '૩૦ મિનિટ પહેલાં',
+        relativeTimeGu: '30 મિનિટ પહેલાં',
         relativeTime: '30 mins ago',
         relativeTimeHi: '30 मिनट पहले',
         categoryGu: 'લોકપ્રિય',
@@ -110,10 +110,10 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
         id: 'ml6',
         slug: 'monsoon-2025-when-will-rain-strike-gujarat-met-department-forecast-106',
         image: '/assets/demo/2.jpg',
-        titleGu: 'ચોમાસુ ૨૦૨૫: ગુજરાતમાં ક્યારે ત્રાટકશે વરસાદ? હવામાન વિભાગની મોટી આગાહી',
+        titleGu: 'ચોમાસુ 2025: ગુજરાતમાં ક્યારે ત્રાટકશે વરસાદ? હવામાન વિભાગની મોટી આગાહી',
         title: 'Monsoon 2025: When will rain strike Gujarat? Big forecast from met department',
         titleHi: 'मानसून 2025: गुजरात में कब बरसेगा पानी? मौसम विभाग की बड़ी भविष्यवाणी',
-        relativeTimeGu: '૧ કલાક પહેલાં',
+        relativeTimeGu: '1 કલાક પહેલાં',
         relativeTime: '1 hour ago',
         relativeTimeHi: '1 घंटा पहले',
         categoryGu: 'લોકપ્રિય',
@@ -129,7 +129,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
         titleGu: 'અમદાવાદમાં કરોડોનું કૌભાંડ! ફેક ઇન્વેસ્ટમેન્ટ એપ નેટવર્કનો પર્દાફાશ, અનેક ધરપકડ',
         title: 'Crores scam in Ahmedabad! Fake investment app network busted, many arrested',
         titleHi: 'अहमदाबाद में करोड़ों का घोटाला! फेक निवेश ऐप नेटवर्क का भंडाफोड़, कई गिरफ्तार',
-        relativeTimeGu: '૧ કલાક પહેલાં',
+        relativeTimeGu: '1 કલાક પહેલાં',
         relativeTime: '1 hour ago',
         relativeTimeHi: '1 घंटा पहले',
         categoryGu: 'અમદાવાદ',
@@ -145,7 +145,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
         titleGu: 'સુરત પોલીસની સંયુક્ત રેડ! કરોડોની મુદ્દામાલ જપ્ત',
         title: 'Joint raid by Surat police! Contraband worth crores seized',
         titleHi: 'सूरत पुलिस की संयुक्त छापेमारी! करोड़ों का माल जब्त',
-        relativeTimeGu: '૨ કલાક પહેલાં',
+        relativeTimeGu: '2 કલાક પહેલાં',
         relativeTime: '2 hours ago',
         relativeTimeHi: '2 घंटे पहले',
         categoryGu: 'સુરત',
@@ -161,7 +161,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
         titleGu: 'ચોમાસામાં આરોગ્ય જાળવવા આટલું જરૂર ધ્યાન રાખો',
         title: 'Keep this in mind to maintain health during monsoon',
         titleHi: 'मानसून में स्वास्थ्य बनाए रखने के लिए इन बातों का जरूर ध्यान रखें',
-        relativeTimeGu: '૨ કલાક પહેલાં',
+        relativeTimeGu: '2 કલાક પહેલાં',
         relativeTime: '2 hours ago',
         relativeTimeHi: '2 घंटे पहले',
         categoryGu: 'આરોગ્ય',
@@ -177,7 +177,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
         titleGu: 'ગુજરાતી થાળીની આ ખાસ વાનગીઓ જરૂર અજમાવો',
         title: 'Must try these special dishes of Gujarati Thali',
         titleHi: 'गुजराती थाली के इन खास व्यंजनों को जरूर आजमाएं',
-        relativeTimeGu: '૪ કલાક પહેલાં',
+        relativeTimeGu: '4 કલાક પહેલાં',
         relativeTime: '4 hours ago',
         relativeTimeHi: '4 घंटे पहले',
         categoryGu: 'ફૂડ',
@@ -193,7 +193,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
         titleGu: 'સાયબર ક્રાઇમ સામે મોટી ડ્રાઇવ: અમદાવાદ પોલીસે નાગરિકો માટે એડવાઈઝરી જાહેર કરી',
         title: 'Major drive against cyber crime: Ahmedabad police issues advisory for citizens',
         titleHi: 'साइबर अपराध के खिलाफ बड़ा अभियान: अहमदाबाद पुलिस ने नागरिकों के लिए एडवाइजरी जारी की',
-        relativeTimeGu: '૫ કલાક પહેલાં',
+        relativeTimeGu: '5 કલાક પહેલાં',
         relativeTime: '5 hours ago',
         relativeTimeHi: '5 घंटे पहले',
         categoryGu: 'અમદાવાદ',
@@ -209,7 +209,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
         titleGu: 'રાજકોટ એરપોર્ટ પર નવા ટર્મિનલનું ટ્રાયલ રન સફળ, ટૂંક સમયમાં શરૂ થશે ફ્લાઇટ્સ',
         title: 'Trial run of new terminal at Rajkot airport successful, flights to start soon',
         titleHi: 'राजकोट हवाई अड्डे पर नए टर्मिनल का ट्रायल रन सफल, जल्द ही शुरू होंगी उड़ानें',
-        relativeTimeGu: '૬ કલાક પહેલાં',
+        relativeTimeGu: '6 કલાક પહેલાં',
         relativeTime: '6 hours ago',
         relativeTimeHi: '6 घंटे पहले',
         categoryGu: 'રાજકોટ',
@@ -225,7 +225,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
         titleGu: 'ગુજરાતમાં સેમિકન્ડક્ટર પ્લાન્ટ માટે જમીન ફાળવણી મંજૂર, હજારો નોકરીઓ સર્જાશે',
         title: 'Land allocation approved for semiconductor plant in Gujarat, thousands of jobs to be created',
         titleHi: 'गुजरात में सेमीकंडक्टर plant के लिए भूमि आवंटन को मंजूरी, हजारों नौकरियां पैदा होंगी',
-        relativeTimeGu: '૭ કલાક પહેલાં',
+        relativeTimeGu: '7 કલાક પહેલાં',
         relativeTime: '7 hours ago',
         relativeTimeHi: '7 घंटे पहले',
         categoryGu: 'ઉદ્યોગ',
@@ -241,7 +241,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
         titleGu: 'વાહકજન્ય રોગો અટકાવવા આરોગ્ય વિભાગ સક્રિય: ઘરે-ઘરે સર્વેક્ષણ શરૂ',
         title: 'Health department active to prevent vector-borne diseases: door-to-door survey starts',
         titleHi: 'मच्छर जनित बीमारियों को रोकने के लिए स्वास्थ्य विभाग सक्रिय: डोर-टू-डोर सर्वेक्षण शुरू',
-        relativeTimeGu: '૮ કલાક પહેલાં',
+        relativeTimeGu: '8 કલાક પહેલાં',
         relativeTime: '8 hours ago',
         relativeTimeHi: '8 घंटे पहले',
         categoryGu: 'આરોગ્ય',
@@ -330,9 +330,9 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
 
   // Localized string selectors
   const labelLatest = getLocalized(language, {
-    en: "Latest News",
-    gu: "તાજા સમાચાર",
-    hi: "ताजा समाचार"
+    en: "Latest  News",
+    gu: "Latest  સમાચાર",
+    hi: "ताजा  समाचार"
   });
 
   const labelContinuous = getLocalized(language, {
@@ -407,19 +407,19 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
 
       {/* 2-Column Grid with vertical timeline lines */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-2">
-        
+
         {/* Column 1 */}
         <div className="relative pl-5 flex flex-col">
-          
+
           {latestNews.slice(0, 5).map((art, idx) => {
             const isHighlighted = idx === 1; // Vadodara budget is index 1
-            const relativeTimeStr = language === 'gu' 
-              ? art.relativeTimeGu 
-              : language === 'hi' 
-              ? art.relativeTimeHi 
-              : art.relativeTime;
+            const relativeTimeStr = language === 'gu'
+              ? art.relativeTimeGu
+              : language === 'hi'
+                ? art.relativeTimeHi
+                : art.relativeTime;
             const locationTag = getCategoryLabel(art, language);
-            
+
             // Bullet styling pattern: alternating red and white nodes
             const isRedBullet = idx % 2 === 0;
 
@@ -441,12 +441,11 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
                 )}
 
                 {/* Timeline circle node */}
-                <div 
-                  className={`absolute left-[-19.5px] top-[18px] z-10 w-[12px] h-[12px] rounded-full transition-transform duration-200 group-hover:scale-110 ${
-                    isRedBullet 
-                      ? 'bg-[#B3121B]' 
-                      : 'bg-white border-2 border-[#d6c7b5]'
-                  }`}
+                <div
+                  className={`absolute left-[-19.5px] top-[18px] z-10 w-[12px] h-[12px] rounded-full transition-transform duration-200 group-hover:scale-110 ${isRedBullet
+                    ? 'bg-[#B3121B]'
+                    : 'bg-white border-2 border-[#d6c7b5]'
+                    }`}
                 />
 
                 <div className="flex-1 min-w-0">
@@ -460,11 +459,10 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
                     </span>
                   </div>
                   {/* Headline */}
-                  <h3 className={`text-[14.5px] md:text-[15.5px] font-extrabold leading-snug line-clamp-2 transition-colors duration-150 ${
-                    isHighlighted 
-                      ? 'text-[#B3121B]' 
-                      : 'text-foreground group-hover:text-[#B3121B]'
-                  }`}>
+                  <h3 className={`text-[14.5px] md:text-[15.5px] font-extrabold leading-snug line-clamp-2 transition-colors duration-150 ${isHighlighted
+                    ? 'text-[#B3121B]'
+                    : 'text-foreground group-hover:text-[#B3121B]'
+                    }`}>
                     {getArticleTitle(art, language)}
                   </h3>
                 </div>
@@ -485,16 +483,16 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
 
         {/* Column 2 */}
         <div className="relative pl-5 flex flex-col">
-          
+
           {latestNews.slice(5, 10).map((art, idx) => {
             const isHighlighted = false;
-            const relativeTimeStr = language === 'gu' 
-              ? art.relativeTimeGu 
-              : language === 'hi' 
-              ? art.relativeTimeHi 
-              : art.relativeTime;
+            const relativeTimeStr = language === 'gu'
+              ? art.relativeTimeGu
+              : language === 'hi'
+                ? art.relativeTimeHi
+                : art.relativeTime;
             const locationTag = getCategoryLabel(art, language);
-            
+
             // Bullet styling pattern: alternating red and white nodes
             const isRedBullet = idx % 2 === 0;
 
@@ -516,12 +514,11 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
                 )}
 
                 {/* Timeline circle node */}
-                <div 
-                  className={`absolute left-[-19.5px] top-[18px] z-10 w-[12px] h-[12px] rounded-full transition-transform duration-200 group-hover:scale-110 ${
-                    isRedBullet 
-                      ? 'bg-[#B3121B]' 
-                      : 'bg-white border-2 border-[#d6c7b5]'
-                  }`}
+                <div
+                  className={`absolute left-[-19.5px] top-[18px] z-10 w-[12px] h-[12px] rounded-full transition-transform duration-200 group-hover:scale-110 ${isRedBullet
+                    ? 'bg-[#B3121B]'
+                    : 'bg-white border-2 border-[#d6c7b5]'
+                    }`}
                 />
 
                 <div className="flex-1 min-w-0">
@@ -535,11 +532,10 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
                     </span>
                   </div>
                   {/* Headline */}
-                  <h3 className={`text-[14.5px] md:text-[15.5px] font-extrabold leading-snug line-clamp-2 transition-colors duration-150 ${
-                    isHighlighted 
-                      ? 'text-[#B3121B]' 
-                      : 'text-foreground group-hover:text-[#B3121B]'
-                  }`}>
+                  <h3 className={`text-[14.5px] md:text-[15.5px] font-extrabold leading-snug line-clamp-2 transition-colors duration-150 ${isHighlighted
+                    ? 'text-[#B3121B]'
+                    : 'text-foreground group-hover:text-[#B3121B]'
+                    }`}>
                     {getArticleTitle(art, language)}
                   </h3>
                 </div>
@@ -572,7 +568,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
             {labelMostRead}
           </h3>
         </div>
-        
+
         <div className="flex flex-col divide-y divide-border/40">
           {mostRead.map((art, idx) => (
             <Link
@@ -584,7 +580,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
               <span className="text-[24px] font-serif font-black text-slate-300 dark:text-slate-700 group-hover:text-[#B3121B] transition-colors duration-150 leading-none w-6 text-center select-none">
                 {language === 'gu' ? toGuDigits(idx + 1) : idx + 1}
               </span>
-              
+
               {/* Headline */}
               <h4 className="text-[14.5px] md:text-[15px] leading-snug text-foreground group-hover:text-[#B3121B] transition-colors duration-150 line-clamp-3 flex-1 mt-0.5" style={{ fontFamily: "'Hind Vadodara', 'Noto Sans Gujarati', sans-serif", fontWeight: 700 }}>
                 {getArticleTitle(art, language)}

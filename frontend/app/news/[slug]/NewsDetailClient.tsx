@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import Image from 'next/image';
@@ -26,7 +26,7 @@ interface Props {
 }
 
 function toGu(n: number | string) {
-  const guDigits = ["૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯"];
+  const guDigits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   return String(n).replace(/\d/g, (d) => guDigits[+d]);
 }
 
@@ -156,7 +156,7 @@ export default function NewsDetailClient({ article, related, trending, articleUr
 
   const trendingTopics = useMemo(() => {
     if (language === 'gu') {
-      return ['ચૂંટણી ૨૦૨૭', 'વરસાદ', 'સોના-ચાંદી', 'ક્રિકેટ', 'મેટ્રો', 'સેમિકન્ડક્ટર', 'ડાયમંડ ઉદ્યોગ', 'ટ્રાફિક'];
+      return ['ચૂંટણી 2027', 'વરસાદ', 'સોના-ચાંદી', 'ક્રિકેટ', 'મેટ્રો', 'સેમિકન્ડક્ટર', 'ડાયમંડ ઉદ્યોગ', 'ટ્રાફિક'];
     } else if (language === 'hi') {
       return ['चुनाव २०२७', 'बारिश', 'सोना-चांदी', 'क्रिकेट', 'मेट्रो', 'सेमीकंडक्टर', 'हीरा उद्योग', 'यातायात'];
     } else {
@@ -330,7 +330,7 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                   </div>
                   <div className="text-[12px] text-[var(--ink-3)] mt-[2px]">
                     {language === 'gu' ? (
-                      <span>પ્રકાશિત: {formatDate(article.publishedAt)}, {formatTime(article.publishedAt)} · <span className="text-[var(--red)] font-bold">અપડેટ: ૨૫ મિનિટ પહેલાં</span></span>
+                      <span>પ્રકાશિત: {formatDate(article.publishedAt)}, {formatTime(article.publishedAt)} · <span className="text-[var(--red)] font-bold">અપડેટ: 25 મિનિટ પહેલાં</span></span>
                     ) : language === 'hi' ? (
                       <span>प्रकाशित: {formatDate(article.publishedAt)}, {formatTime(article.publishedAt)} · <span className="text-[var(--red)] font-bold">अपडेट: २५ मिनट पहले</span></span>
                     ) : (
@@ -511,7 +511,7 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                       <blockquote>
                         <p>
                           {language === 'gu'
-                            ? '"પ્રથમ ૧૫ દિવસ અમે નાગરિકોને જાગૃત કરીશું, ત્યારબાદ નિયમોનો કડક અમલ થશે."'
+                            ? '"પ્રથમ 15 દિવસ અમે નાગરિકોને જાગૃત કરીશું, ત્યારબાદ નિયમોનો કડક અમલ થશે."'
                             : language === 'hi'
                               ? '"पहले १५ दिन हम नागरिकों को जागरूक करेंगे, उसके बाद नियमों का कड़ा पालन होगा।"'
                               : '"For the first 15 days we will raise awareness among citizens, after which the rules will be strictly enforced."'}
@@ -595,7 +595,7 @@ export default function NewsDetailClient({ article, related, trending, articleUr
 
 
 
-          </article>
+          </article>  
 
           <aside className="side select-none" style={{ alignSelf: 'stretch' }}>
             <div className="side-sticky">
@@ -669,17 +669,24 @@ export default function NewsDetailClient({ article, related, trending, articleUr
               </div>
 
               {/* Trending Topics Tags */}
-              {/* <div>
-                <div className="wtitle">
-                  <span className="d"></span>
-                  <span>{language === 'gu' ? 'ટ્રેન્ડિંગ વિષયો' : language === 'hi' ? 'ट्रेंडिंग विषय' : 'Trending Topics'}</span>
+              <div className="mt-6">
+                <div className="flex items-center gap-2 border-b-2 border-[#B3121B] pb-2.5 mb-3.5">
+                  <span className="bg-[#B3121B] text-white font-black text-[12px] px-2.5 py-0.5 rounded-sm select-none tracking-wide uppercase">
+                    Trending Topics
+                  </span>
                 </div>
-                <div className="sidetags">
+                <div className="flex flex-wrap gap-2">
                   {trendingTopics.slice(0, 8).map((tag, index) => (
-                    <span key={index}>#{tag}</span>
+                    <Link
+                      key={index}
+                      href={`/search?q=${encodeURIComponent(tag)}`}
+                      className="group inline-flex items-center gap-0.5 border-2 border-[#B3121B]/30 text-[12px] font-black px-3 py-1.5 rounded-full text-foreground hover:border-[#B3121B] hover:bg-[#B3121B] hover:text-white transition-all bg-card cursor-pointer select-none shadow-sm hover:shadow-md"
+                    >
+                      <span className="text-[#B3121B] font-black group-hover:text-white transition-colors">#</span>{tag}
+                    </Link>
                   ))}
                 </div>
-              </div> */}
+              </div>
             </div>
           </aside>
         </div>

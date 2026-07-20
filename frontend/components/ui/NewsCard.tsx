@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -21,7 +21,7 @@ interface NewsCardProps {
 }
 
 function toGu(n: number | string) {
-  const guDigits = ["૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯"];
+  const guDigits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   return String(n).replace(/\d/g, (d) => guDigits[+d]);
 }
 

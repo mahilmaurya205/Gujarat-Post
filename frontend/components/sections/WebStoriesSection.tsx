@@ -79,6 +79,69 @@ const STORY_ITEMS: StoryItem[] = [
     image: '/assets/demo/8.jpg',
     description: 'Verifying trending claims and statements to reveal the truth.',
     descriptionGu: 'સત્ય જાહેર કરવા માટે ટ્રેન્ડિંગ દાવાઓ અને નિવેદનોની ચકાસણી કરવી.',
+  },
+  {
+    id: 'webstory8',
+    title: 'Gujarat Tourism',
+    titleGu: 'ગુજરાત પ્રવાસન',
+    avatar: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=150&h=150&fit=crop&q=80',
+    image: '/assets/demo/5.jpg',
+    description: 'Explore the scenic beauty, heritage sites, and hidden gems of Gujarat.',
+    descriptionGu: 'ગુજરાતના દર્શનીય સ્થળો, હેરિટેજ અને ગુપ્ત સુંદર સ્થળોની મુલાકાત લો.',
+  },
+  {
+    id: 'webstory9',
+    title: 'Smart Gadgets',
+    titleGu: 'સ્માર્ટ ગેજેટ્સ',
+    avatar: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=150&h=150&fit=crop&q=80',
+    image: '/assets/demo/2.jpg',
+    description: 'Top innovative smart gadgets transforming your everyday home life.',
+    descriptionGu: 'તમારા દૈનિક હોમ લાઈફને બદલતા ટોપ સ્માર્ટ આધુનિક ગેજેટ્સ.',
+  },
+  {
+    id: 'webstory10',
+    title: 'Fitness & Yoga',
+    titleGu: 'ફિટનેસ અને યોગ',
+    avatar: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=150&h=150&fit=crop&q=80',
+    image: '/assets/demo/1.jpg',
+    description: 'Daily yoga routines and workouts for mental peace and physical strength.',
+    descriptionGu: 'માનસિક શાંતિ અને શારીરિક શક્તિ માટે દૈનિક યોગાભ્યાસ અને વર્કઆઉટ.',
+  },
+  {
+    id: 'webstory11',
+    title: 'Cricket Special',
+    titleGu: 'ક્રિકેટ સ્પેશિયલ',
+    avatar: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=150&h=150&fit=crop&q=80',
+    image: '/assets/demo/4.jpg',
+    description: 'Historic cricket moments, player updates, and match analysis.',
+    descriptionGu: 'ઐતિહાસિક ક્રિકેટ ક્ષણો, ખેલાડી અપડેટ્સ અને મેચ વિશ્લેષણ.',
+  },
+  {
+    id: 'webstory12',
+    title: 'Nature & Wildlife',
+    titleGu: 'પ્રકૃતિ અને વન્યજીવન',
+    avatar: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=150&h=150&fit=crop&q=80',
+    image: '/assets/demo/3.jpg',
+    description: 'Breathtaking wildlife photography and nature conservation stories.',
+    descriptionGu: 'રોમાંચક વન્યજીવન ફોટોગ્રાફી અને પ્રકૃતિ સંરક્ષણ વાર્તાઓ.',
+  },
+  {
+    id: 'webstory13',
+    title: 'Automobile Hub',
+    titleGu: 'ઓટોમોબાઈલ હબ',
+    avatar: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=150&h=150&fit=crop&q=80',
+    image: '/assets/demo/6.jpg',
+    description: 'Next-gen electric vehicles and luxury supercar launches in 2025.',
+    descriptionGu: '2025માં નેક્સ્ટ-જેન ઇલેક્ટ્રિક વાહનો અને લક્ઝરી કાર લોન્ચ.',
+  },
+  {
+    id: 'webstory14',
+    title: 'Space & Astronomy',
+    titleGu: 'અંતરિક્ષ અને વિજ્ઞાન',
+    avatar: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=150&h=150&fit=crop&q=80',
+    image: '/assets/demo/7.jpg',
+    description: 'Discover the latest space exploration missions and galaxy discoveries.',
+    descriptionGu: 'અદ્યતન અંતરિક્ષ સંશોધન મિશન અને ગેલેક્સીની નવી શોધ જુઓ.',
   }
 ];
 
@@ -96,12 +159,27 @@ export default function WebStoriesSection() {
   const animationFrameRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(0);
 
+  const isPaused = useRef(false);
+
   const updateArrows = useCallback(() => {
     const el = scrollContainerRef.current;
     if (!el) return;
     setShowLeftArrow(el.scrollLeft > 10);
     setShowRightArrow(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
   }, []);
+
+  // Smooth Auto-scroll effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const el = scrollContainerRef.current;
+      if (!el || isPaused.current || activeStoryIndex !== null) return;
+      el.scrollLeft += 1;
+      if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 2) {
+        el.scrollLeft = 0;
+      }
+    }, 25);
+    return () => clearInterval(interval);
+  }, [activeStoryIndex]);
 
   useEffect(() => {
     const el = scrollContainerRef.current;
@@ -143,11 +221,11 @@ export default function WebStoriesSection() {
     }
 
     startTimeRef.current = Date.now();
-    
+
     const animate = () => {
       const elapsed = Date.now() - startTimeRef.current;
       const calculatedProgress = Math.min((elapsed / AUTO_PLAY_DURATION) * 100, 100);
-      
+
       setProgress(calculatedProgress);
 
       if (calculatedProgress < 100) {
@@ -187,7 +265,7 @@ export default function WebStoriesSection() {
   };
 
   return (
-    <section className="mx-auto max-w-screen-xl px-4 mt-10 relative overflow-hidden select-none">
+    <section className="mx-auto max-w-screen-xl px-4 mt-8 relative overflow-hidden select-none">
       <div className="relative">
         {/* Section Header */}
         <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
@@ -203,7 +281,11 @@ export default function WebStoriesSection() {
         </div>
 
         {/* Stories Horizontal Grid Scroll */}
-        <div className="relative group/slider-wrap">
+        <div
+          className="relative group/slider-wrap"
+          onMouseEnter={() => { isPaused.current = true; }}
+          onMouseLeave={() => { isPaused.current = false; }}
+        >
           {showLeftArrow && (
             <button
               type="button"
@@ -234,7 +316,7 @@ export default function WebStoriesSection() {
 
           <div
             ref={scrollContainerRef}
-            className="scrollbar-none flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2"
+            className="scrollbar-none flex gap-4 overflow-x-auto pb-2"
           >
             {STORY_ITEMS.map((story, index) => {
               const displayTitle = language === 'gu' ? story.titleGu : story.title;
@@ -297,7 +379,7 @@ export default function WebStoriesSection() {
       {activeStoryIndex !== null && (
         <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center">
           <div className="relative w-full max-w-[420px] aspect-[9/16] bg-slate-900 rounded-lg overflow-hidden shadow-2xl mx-4">
-            
+
             {/* Background Layer with opacity blur */}
             <div className="absolute inset-0">
               <Image
@@ -346,7 +428,7 @@ export default function WebStoriesSection() {
                     </span>
                   </div>
                 </div>
-                
+
                 {/* Close Button */}
                 <button
                   type="button"

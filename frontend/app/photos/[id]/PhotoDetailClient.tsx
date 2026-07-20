@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import Image from 'next/image';
@@ -37,7 +37,7 @@ const MOCK_DESCRIPTIONS: Record<string, { en: string; gu: string; hi: string; ca
   ph3: {
     category: { en: "Politics", gu: "રાજકારણ", hi: "राजनीति" },
     en: "A massive crowd gathered at the district election rally showing high enthusiasm and support. Political leaders addressed key developmental schemes, civic infrastructure plans, and employment initiatives targeted for the upcoming 2027 state assembly elections. Strict police deployment ensured smooth crowd management and traffic movement.\n\nSpeakers highlighted achievements in industry growth, agricultural subsidies, and smart-city implementations. Opposition leaders simultaneously scheduled parallel town halls, marking an early start to campaign trails.",
-    gu: "જિલ્લા ચૂંટણી રેલીમાં ભારે ઉત્સાહ અને સમર્થન દર્શાવતી વિશાળ જનમેદની એકઠી થઈ હતી. રાજકીય નેતાઓએ આગામી ૨૦૨૭ની વિધાનસભા ચૂંટણી માટે નિર્ધારિત કલ્યાણકારી યોજનાઓ, ઈન્ફ્રાસ્ટ્રક્ચર વિકાસ અને રોજગાર પહેલ અંગે સંબોધન કર્યું હતું. પોલીસ બંદોબસ્તને કારણે જનમેદની વ્યવસ્થા સુચારૂ રહી હતી.\n\nનેતાઓએ ઉદ્યોગ વિકાસ, કૃષિ સબસિડી અને સ્માર્ટ સિટી પ્રોજેક્ટ્સની સિદ્ધિઓ રજૂ કરી હતી. બીજી તરફ, વિપક્ષી પક્ષોએ પણ સમાંતર જનસભાઓનું આયોજન કરીને ચૂંટણી પ્રચારના શ્રીગણેશ કરી દીધા છે.",
+    gu: "જિલ્લા ચૂંટણી રેલીમાં ભારે ઉત્સાહ અને સમર્થન દર્શાવતી વિશાળ જનમેદની એકઠી થઈ હતી. રાજકીય નેતાઓએ આગામી 2027ની વિધાનસભા ચૂંટણી માટે નિર્ધારિત કલ્યાણકારી યોજનાઓ, ઈન્ફ્રાસ્ટ્રક્ચર વિકાસ અને રોજગાર પહેલ અંગે સંબોધન કર્યું હતું. પોલીસ બંદોબસ્તને કારણે જનમેદની વ્યવસ્થા સુચારૂ રહી હતી.\n\nનેતાઓએ ઉદ્યોગ વિકાસ, કૃષિ સબસિડી અને સ્માર્ટ સિટી પ્રોજેક્ટ્સની સિદ્ધિઓ રજૂ કરી હતી. બીજી તરફ, વિપક્ષી પક્ષોએ પણ સમાંતર જનસભાઓનું આયોજન કરીને ચૂંટણી પ્રચારના શ્રીગણેશ કરી દીધા છે.",
     hi: "जिला चुनाव रैली में भारी उत्साह और समर्थन दिखाते हुए विशाल जनसमुदाय एकत्रित हुआ। राजनीतिक नेताओं ने आगामी 2027 के राज्य विधानसभा चुनावों के लिए लक्षित प्रमुख विकास योजनाओं, बुनियादी ढांचे और रोजगार पहलों पर चर्चा की। पुलिस की मुस्तैदी से भीड़ प्रबंधन सुचारू रहा।\n\nनेताओं ने औद्योगिक प्रगति, कृषि सब्सिडी और स्मार्ट सिटी परियोजनाओं की उपलब्धियों पर ध्यान केंद्रित किया। इस बीच विपक्षी दलों ने भी समानांतर रैलियों के जरिए चुनाव अभियान तेज कर दिया है।"
   },
   ph4: {

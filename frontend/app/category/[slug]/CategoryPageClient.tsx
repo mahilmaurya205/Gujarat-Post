@@ -32,7 +32,7 @@ type FilterTab = 'all' | 'latest' | 'analysis' | 'video' | 'photo';
 
 /* ── Gujarati numerals ─────────────────────────────────────── */
 function toGu(n: number | string) {
-  const guDigits = ["૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯"];
+  const guDigits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   return String(n).replace(/\d/g, (d) => guDigits[+d]);
 }
 
@@ -59,10 +59,10 @@ const GUJARAT_MOCK_ARTICLES = [
     readingTime: 2,
     isTrending: true, isBreaking: false, isFeatured: true,
     views: 71000,
-    relativeTimeGu: '૬ કલાક પહેલાં',
+    relativeTimeGu: '6 કલાક પહેલાં',
     relativeTime: '6 hours ago',
     relativeTimeHi: '6 घंटे पहले',
-    viewsGu: '૭૧K'
+    viewsGu: '71K'
   },
   {
     id: 'g-top1',
@@ -83,10 +83,10 @@ const GUJARAT_MOCK_ARTICLES = [
     readingTime: 2,
     isTrending: true, isBreaking: false, isFeatured: true,
     views: 68000,
-    relativeTimeGu: '૫ કલાક પહેલાં',
+    relativeTimeGu: '5 કલાક પહેલાં',
     relativeTime: '5 hours ago',
     relativeTimeHi: '5 घंटे पहले',
-    viewsGu: '૬૮K'
+    viewsGu: '68K'
   },
   {
     id: 'g-top2',
@@ -107,10 +107,10 @@ const GUJARAT_MOCK_ARTICLES = [
     readingTime: 2,
     isTrending: true, isBreaking: false, isFeatured: true,
     views: 52000,
-    relativeTimeGu: '૪ કલાક પહેલાં',
+    relativeTimeGu: '4 કલાક પહેલાં',
     relativeTime: '4 hours ago',
     relativeTimeHi: '4 घंटे पहले',
-    viewsGu: '૫૨K'
+    viewsGu: '52K'
   },
   {
     id: 'g-top3',
@@ -131,10 +131,10 @@ const GUJARAT_MOCK_ARTICLES = [
     readingTime: 2,
     isTrending: true, isBreaking: false, isFeatured: true,
     views: 46000,
-    relativeTimeGu: '૩ કલાક પહેલાં',
+    relativeTimeGu: '3 કલાક પહેલાં',
     relativeTime: '3 hours ago',
     relativeTimeHi: '3 घंटे पहले',
-    viewsGu: '૪૬K'
+    viewsGu: '46K'
   },
   {
     id: 'g-top4',
@@ -155,10 +155,10 @@ const GUJARAT_MOCK_ARTICLES = [
     readingTime: 2,
     isTrending: true, isBreaking: false, isFeatured: true,
     views: 33000,
-    relativeTimeGu: '૨ કલાક પહેલાં',
+    relativeTimeGu: '2 કલાક પહેલાં',
     relativeTime: '2 hours ago',
     relativeTimeHi: '2 घंटे पहले',
-    viewsGu: '૩૩K'
+    viewsGu: '33K'
   }
 ];
 
@@ -226,7 +226,7 @@ const GUJARAT_MOCK_MOST_READ = [
 ];
 
 const GUJARAT_MOCK_TAGS = {
-  gu: ['ચૂંટણી ૨૦૨૭', 'વરસાદ', 'સોના-ચાંદી', 'ક્રિકેટ', 'મેટ્રો', 'સેમિકન્ડક્ટર', 'ડાયમંડ ઉદ્યોગ', 'ટ્રાફિક'],
+  gu: ['ચૂંટણી 2027', 'વરસાદ', 'સોના-ચાંદી', 'ક્રિકેટ', 'મેટ્રો', 'સેમિકન્ડક્ટર', 'ડાયમંડ ઉદ્યોગ', 'ટ્રાફિક'],
   hi: ['चुनाव 2027', 'बारिश', 'सोना-चांदी', 'क्रिकेट', 'मेट्रो', 'सेमीकंडक्टर', 'डायमंड उद्योग', 'ट्रैफिक'],
   en: ['Election 2027', 'Rain', 'Gold-Silver', 'Cricket', 'Metro', 'Semiconductor', 'Diamond Industry', 'Traffic']
 };

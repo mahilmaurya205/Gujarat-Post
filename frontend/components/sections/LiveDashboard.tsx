@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { AlertCircle, CloudSun, Droplets, RefreshCw, Search, Wind, Cloud, Sun, CloudRain, TrendingUp, TrendingDown, Trophy, ChevronDown } from 'lucide-react';
@@ -91,7 +91,7 @@ const FALLBACK_FOOTBALL: FootballMatch[] = [
 
 // Helper to convert English numbers to Gujarati numbers
 function toGuDigits(n: number | string): string {
-  const guDigits = ['૦', '૧', '૨', '૩', '૪', '૫', '૬', '૭', '૮', '૯'];
+  const guDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
   return String(n).replace(/\d/g, (d) => guDigits[+d]);
 }
 

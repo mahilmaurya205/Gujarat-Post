@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useMemo } from 'react';
 import Image from 'next/image';
@@ -118,7 +118,7 @@ export default function NewsBriefPageClient() {
               </span>
               <span className="text-neutral-300 font-bold">|</span>
               <span className="text-neutral-400 font-bold">
-                {language === 'gu' ? '૪૫ મિનિટ પહેલા' : language === 'hi' ? '४५ मिनट पहले' : '45 mins ago'}
+                {language === 'gu' ? '45 મિનિટ પહેલા' : language === 'hi' ? '४५ मिनट पहले' : '45 mins ago'}
               </span>
             </div>
 

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useMemo } from 'react';
 import Image from 'next/image';
@@ -9,7 +9,7 @@ import { useApp } from '@/components/AppProvider';
 type TabType = 'video' | 'short' | 'exclusive' | 'bulletin';
 
 function toGu(n: number | string) {
-  const guDigits = ["૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯"];
+  const guDigits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   return String(n).replace(/\d/g, (d) => guDigits[+d]);
 }
 
@@ -59,8 +59,8 @@ export default function VideosPageClient() {
       titleGu: 'ધી સાબરકાંઠા જિલ્લા સહકારી સંઘ ભ્રષ્ટાચારનો અડ્ડો',
       titleHi: 'साबरकांठा जिला सहकारी संघ भ्रष्टाचार का अड्डा',
       thumbnail: 'https://i.ytimg.com/vi/sA6BrUmBXiA/hqdefault.jpg',
-      duration: '૪:૩૮',
-      views: '૪૬K',
+      duration: '4:38',
+      views: '46K',
       type: 'video',
     };
   }, []);
@@ -86,20 +86,20 @@ export default function VideosPageClient() {
 
   const bulletinVideos = useMemo(() => {
     return [
-      { id: 'b1', youtubeId: 'sA6BrUmBXiA', titleGu: 'સવારના મુખ્ય સમાચાર — એક મિનિટમાં જાણો બધું', viewsGu: '૧૫K views', duration: '૧:૦૦', thumbnail: '/assets/demo/4.jpg' },
-      { id: 'b2', youtubeId: 'rQHoqCTiQvI', titleGu: 'હવામાન અપડેટ: આજે કયા ત્રાટકશે વરસાદ?', viewsGu: '૨૨K views', duration: '૦:૪૫', thumbnail: '/assets/demo/2.jpg' },
-      { id: 'b3', youtubeId: 'WF2Kuec5HV0', titleGu: 'બજાર બુલેટિન: સોના-ચાંદી-શેરના લેટેસ્ટ ભાવ', viewsGu: '૮K views', duration: '૧:૧૫', thumbnail: '/assets/demo/1.jpg' },
-      { id: 'b4', youtubeId: 'LDDtOMwdJ_0', titleGu: 'ફેક્ટ ચેક રાઉન્ડઅપ: આજના મુખ્ય દાવા અને હકીકત', viewsGu: '૩૪K views', duration: '૧:૨૦', thumbnail: '/assets/demo/3.jpg' },
+      { id: 'b1', youtubeId: 'sA6BrUmBXiA', titleGu: 'સવારના મુખ્ય સમાચાર — એક મિનિટમાં જાણો બધું', viewsGu: '15K views', duration: '1:00', thumbnail: '/assets/demo/4.jpg' },
+      { id: 'b2', youtubeId: 'rQHoqCTiQvI', titleGu: 'હવામાન અપડેટ: આજે કયા ત્રાટકશે વરસાદ?', viewsGu: '22K views', duration: '0:45', thumbnail: '/assets/demo/2.jpg' },
+      { id: 'b3', youtubeId: 'WF2Kuec5HV0', titleGu: 'બજાર બુલેટિન: સોના-ચાંદી-શેરના લેટેસ્ટ ભાવ', viewsGu: '8K views', duration: '1:15', thumbnail: '/assets/demo/1.jpg' },
+      { id: 'b4', youtubeId: 'LDDtOMwdJ_0', titleGu: 'ફેક્ટ ચેક રાઉન્ડઅપ: આજના મુખ્ય દાવા અને હકીકત', viewsGu: '34K views', duration: '1:20', thumbnail: '/assets/demo/3.jpg' },
     ];
   }, []);
 
   const popularSidebarVideos = useMemo(() => {
     return [
-      { id: 'p1', titleGu: 'ધી સાબરકાંઠા જિલ્લા સહકારી સંઘ ભ્રષ્ટાચારનો અડ્ડો', views: '૪૬K views' },
-      { id: 'p2', titleGu: 'કપડવંજ TDO કચેરીમાં ભ્રષ્ટાચારનો સડો, વિસ્તરણ અધિકારીએ ગરીબોને લૂંટ્યા', views: '૧.૩M views' },
-      { id: 'p3', titleGu: 'વડોદરાના AAP નેતાનું પાપ, ચાર વર્ષ સુધી મહિલા સાથે દુષ્કર્મ', views: '૩૧૪K views' },
-      { id: 'p4', titleGu: 'રાજકોટોમાં IPS એ પત્રકારની ગુદામાં પ્રવેશ કર્યો?', views: '૪૬૪K views' },
-      { id: 'p5', titleGu: 'સંમેલન SPG નું કે ભાજપનું? નીતિન પટેલની વાહવાહી', views: '૩૩K views' },
+      { id: 'p1', titleGu: 'ધી સાબરકાંઠા જિલ્લા સહકારી સંઘ ભ્રષ્ટાચારનો અડ્ડો', views: '46K views' },
+      { id: 'p2', titleGu: 'કપડવંજ TDO કચેરીમાં ભ્રષ્ટાચારનો સડો, વિસ્તરણ અધિકારીએ ગરીબોને લૂંટ્યા', views: '1.3M views' },
+      { id: 'p3', titleGu: 'વડોદરાના AAP નેતાનું પાપ, ચાર વર્ષ સુધી મહિલા સાથે દુષ્કર્મ', views: '314K views' },
+      { id: 'p4', titleGu: 'રાજકોટોમાં IPS એ પત્રકારની ગુદામાં પ્રવેશ કર્યો?', views: '464K views' },
+      { id: 'p5', titleGu: 'સંમેલન SPG નું કે ભાજપનું? નીતિન પટેલની વાહવાહી', views: '33K views' },
     ];
   }, []);
 
@@ -142,7 +142,7 @@ export default function VideosPageClient() {
                   </span>
                 </div>
                 <p className="mt-2 text-xs md:text-[13px] font-semibold opacity-90 leading-none">
-                  @GujaratPost · ૪.૨M સબસ્ક્રાઇબર્સ · ૩,૨૪૦ વિડિયો
+                  @GujaratPost · 4.2M સબસ્ક્રાઇબર્સ · 3,240 વિડિયો
                 </p>
                 <p className="mt-3 text-xs leading-relaxed max-w-xl opacity-80 font-semibold line-clamp-2 md:line-clamp-none">
                   ગુજરાતના તાજા સમાચાર, બ્રેકિંગ ન્યૂઝ, એક્સક્લુઝિવ તપાસ અહેવાલ અને ખાસ કાર્યક્રમો — સૌથી પહેલા, સૌથી ઝડપી. અમારી યુટ્યુબ ચેનલ સબસ્ક્રાઇબ કરો.

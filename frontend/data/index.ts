@@ -1,4 +1,4 @@
-import { Article, Author, NavItem, Photo, Video, Language } from "@/types";
+﻿import { Article, Author, NavItem, Photo, Video, Language } from "@/types";
 
 export const SITE_URL = "https://gujaratpost.example.com";
 
@@ -291,7 +291,7 @@ const baseStories = [
   // Business
   ["business", "Strong boom in Surat textile market, wave of joy among traders", "સુરત ટેક્સટાઇલ માર્કેટમાં જોરદાર તેજી, વેપારીઓમાં ખુશીની લહેર", "सूरत कपड़ा बाजार में जोरदार तेजी, व्यापारियों में खुशी की लहर"],
 
-  ["sports", "Team India blast! Spectacular win to clinch series 2-0", "ટીમ ઈન્ડિયાનો ધમાકો! શાનદાર જીત સાથે શ્રેણી ૨-૦થી કબજે", "टीम इंडिया का धमाका! शानदार जीत के साथ सीरीज 2-0 से कब्जा"],
+  ["sports", "Team India blast! Spectacular win to clinch series 2-0", "ટીમ ઈન્ડિયાનો ધમાકો! શાનદાર જીત સાથે શ્રેણી 2-0થી કબજે", "टीम इंडिया का धमाका! शानदार जीत के साथ सीरीज 2-0 से कब्जा"],
   ["gujarat", "Tourists flock to Girnar Ropeway: Huge increase in numbers", "ગિરનાર રોપ-વે પર ઉમટ્યા પ્રવાસીઓ! સંખ્યામાં જોરદાર વધારો", "गिरनार रोपवे पर उमड़े पर्यटक: संख्या में भारी बढ़ोतरी"],
   ["world", "New trade agreement signed in Europe, India to benefit too", "યુરોપમાં નવી વ્યાપાર સંધિ પર હસ્તાક્ષર, ભારતને પણ ફાયદો", "यूरोप में नए व्यापार समझौते पर हस्ताक्षर, भारत को भी फायदा"],
   ["business", "Sharp rise in gold and silver prices! Know today's latest rates", "સોના-ચાંદીના ભાવમાં જોરદાર ઉછાળો! જાણો આજના લેટેસ્ટ રેટ", "सोने-चांदी की कीमतों में भारी उछाल! जानें आज के ताजा भाव"],
@@ -489,7 +489,7 @@ const getLongTitleExtension = (category: string, i: number) => {
 };
 
 const toGu = (num: number | string): string => {
-  const guDigits = ["૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯"];
+  const guDigits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   return String(num).split("").map(char => {
     const digit = parseInt(char, 10);
     return isNaN(digit) ? char : guDigits[digit];
@@ -584,18 +584,18 @@ export const ARTICLES: Article[] = Array.from({ length: 120 }, (_, i) => {
       return `${1 + (i % 12)} hours ago`;
     })(),
     relativeTimeGu: (() => {
-      if (i === 0) return "૨૫ મિનિટ પહેલાં";
-      if (i === 1) return "૫૦ મિનિટ પહેલાં";
-      if (i === 2) return "૧ કલાક પહેલાં";
-      if (i === 3) return "૨ કલાક પહેલાં";
-      if (i === 4) return "૧ કલાક પહેલાં";
-      if (i === 5) return "૨ કલાક પહેલાં";
-      if (i === 6) return "૩ કલાક પહેલાં";
-      if (i === 7) return "૪ કલાક પહેલાં";
-      if (i === 8) return "૪ કલાક પહેલાં";
-      if (i === 9) return "૩ કલાક પહેલાં";
-      if (i === 10) return "૨ કલાક પહેલાં";
-      return `${toGu(1 + (i % 12))} કલાક પહેલાં`;
+      if (i === 0) return "25 મિનિટ પહેલાં";
+      if (i === 1) return "50 મિનિટ પહેલાં";
+      if (i === 2) return "1 કલાક પહેલાં";
+      if (i === 3) return "2 કલાક પહેલાં";
+      if (i === 4) return "1 કલાક પહેલાં";
+      if (i === 5) return "2 કલાક પહેલાં";
+      if (i === 6) return "3 કલાક પહેલાં";
+      if (i === 7) return "4 કલાક પહેલાં";
+      if (i === 8) return "4 કલાક પહેલાં";
+      if (i === 9) return "3 કલાક પહેલાં";
+      if (i === 10) return "2 કલાક પહેલાં";
+      return `${1 + (i % 12)} કલાક પહેલાં`;
     })(),
     relativeTimeHi: (() => {
       if (i === 0) return "25 मिनट पहले";
@@ -826,7 +826,7 @@ export const searchArticles = (query: string) => {
 
 export const formatDate = (dateStr: string): string => {
   try {
-    return new Date(dateStr).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+    return new Date(dateStr).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" });
   } catch {
     return dateStr;
   }
@@ -834,7 +834,7 @@ export const formatDate = (dateStr: string): string => {
 
 export const formatTime = (dateStr: string): string => {
   try {
-    return new Date(dateStr).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+    return new Date(dateStr).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
   } catch {
     return "";
   }

@@ -9,7 +9,8 @@ const DISTRICTS = [
   { gu: 'ગાંધીનગર', hi: 'गांधीनगर', en: 'Gandhinagar', slug: 'gandhinagar' },
   { gu: 'સુરત', hi: 'सूरत', en: 'Surat', slug: 'surat' },
   { gu: 'વડોદરા', hi: 'वडोदरा', en: 'Vadodara', slug: 'vadodara' },
-  { gu: 'રાજકોટ', hi: 'राजकोट', en: 'Rajkot', slug: 'rajkot' }
+  { gu: 'રાજકોટ', hi: 'राजकोट', en: 'Rajkot', slug: 'rajkot' },
+  { gu: 'અન્ય શહેરો', hi: 'अन्य शहर', en: 'Other Cities', slug: 'otherCities' }
 ];
 
 const MORE_DISTRICTS = [
@@ -65,7 +66,7 @@ export default function DistrictBar() {
       <div className="mx-auto flex max-w-screen-xl max-w-header-layout items-center gap-3.5 px-4">
         {/* Gujarat Map Logo and vertical separator */}
         <div className="flex items-center gap-3 shrink-0 pr-3 border-r border-border/50">
-          <img 
+          <img
             src="/assets/GujaratLogo.png"
             alt="Gujarat Logo"
             style={{ height: '38px', width: 'auto', display: 'block' }}
@@ -90,41 +91,15 @@ export default function DistrictBar() {
             })}
 
             {/* More / અન્ય Dropdown Trigger (Placed inside the scroll list right after Dang) */}
-            <button
-              type="button"
-              onClick={() => setIsOpen(!isOpen)}
-              className={`text-[14.5px] md:text-[15.5px] font-semibold transition-colors duration-150 whitespace-nowrap flex items-center gap-0.5 cursor-pointer select-none bg-transparent border-none outline-none ${
-                isOpen ? 'text-[#B3121B]' : 'text-muted-foreground hover:text-[#B3121B]'
-              }`}
+            {/* <span
+              className="text-[14.5px] md:text-[15.5px] font-semibold text-foreground whitespace-nowrap flex items-center gap-0.5 select-none"
             >
               <span>{language === 'gu' ? 'અન્ય શહેરો' : language === 'hi' ? 'अन्य शहर' : 'Other Cities'}</span>
-              <span className={`text-[10px] opacity-60 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
-                {isOpen ? '▲' : '▼'}
-              </span>
-            </button>
+            </span> */}
           </div>
         </div>
 
-        {/* Dropdown Menu (Outside scrollable container to prevent overflow clipping, absolute positioned to the right side of the bar) */}
-        {isOpen && (
-          <div className="absolute right-4 mt-3 top-full z-50 w-[290px] md:w-[340px] rounded-2xl border border-border/80 bg-card p-5 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200 max-h-[380px] overflow-y-auto scrollbar-thin">
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-              {MORE_DISTRICTS.map((dist) => {
-                const label = language === 'hi' ? dist.hi : language === 'gu' ? dist.gu : dist.en;
-                return (
-                  <Link
-                    key={dist.slug}
-                    href={`/category/${dist.slug}`}
-                    onClick={() => setIsOpen(false)}
-                    className="text-[14px] md:text-[14.5px] font-semibold text-foreground hover:text-[#B3121B] transition-colors duration-150 whitespace-nowrap"
-                  >
-                    {label}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        )}
+        {/* Dropdown Menu - Disabled */}
       </div>
     </div>
   );

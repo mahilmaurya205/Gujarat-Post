@@ -1,10 +1,39 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import gpLogoStatic from '../../public/assets/gujarat-post-logo-static.png';
 import { SOCIAL_LINKS, SocialIcon } from '@/components/ui/SocialLinks';
+
+/* ─── Social Icon Button with brand hover color ─────────────────────────── */
+const INSTAGRAM_GRADIENT = 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)';
+
+function SocialIconButton({ item }: { item: typeof SOCIAL_LINKS[number] }) {
+    const [hovered, setHovered] = useState(false);
+
+    const hoverStyle = hovered
+        ? item.platform === 'instagram'
+            ? { background: INSTAGRAM_GRADIENT, borderColor: 'transparent' }
+            : { backgroundColor: item.hoverBg, borderColor: item.hoverBg }
+        : {};
+
+    return (
+        <a
+            href={item.href}
+            target={item.platform === 'youtube' ? '_blank' : undefined}
+            rel={item.platform === 'youtube' ? 'noreferrer' : undefined}
+            aria-label={item.label}
+            title={item.label}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            style={hoverStyle}
+            className="h-9 w-9 rounded-full border border-white/20 bg-white/10 text-white flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-md"
+        >
+            <SocialIcon platform={item.platform} className="h-4 w-4" />
+        </a>
+    );
+}
 
 /* ─── Inline SVG icons ──────────────────────────────────────────────────── */
 function AppleIcon({ className = 'h-4 w-4' }: { className?: string }) {
@@ -18,33 +47,25 @@ function AppleIcon({ className = 'h-4 w-4' }: { className?: string }) {
 function PlayStoreIcon({ className = 'h-4 w-4' }: { className?: string }) {
     return (
         <svg viewBox="0 0 466 511.98" className={className}>
-            <path fill="#EA4335" d="M199.9 237.8 1.4 470.17c7.22 24.57 30.16 41.81 55.8 41.81 11.16 0 20.93-2.79 29.3-8.37l244.16-139.46L199.9 237.8z"/>
-            <path fill="#FBBC04" d="m433.91 205.1-104.65-60-111.61 110.22 113.01 108.83 104.64-58.6c18.14-9.77 30.7-29.3 30.7-50.23-1.4-20.93-13.95-40.46-32.09-50.22z"/>
-            <path fill="#34A853" d="M199.42 273.45 329.27 145.1 87.9 8.37C79.53 2.79 68.36 0 57.2 0 30.7 0 6.98 18.14 1.4 41.86l198.02 231.59z"/>
-            <path fill="#4285F4" d="M1.39 41.86C0 46.04 0 51.63 0 57.2v397.64c0 5.57 0 9.76 1.4 15.34l216.27-214.86L1.39 41.86z"/>
+            <path fill="#EA4335" d="M199.9 237.8 1.4 470.17c7.22 24.57 30.16 41.81 55.8 41.81 11.16 0 20.93-2.79 29.3-8.37l244.16-139.46L199.9 237.8z" />
+            <path fill="#FBBC04" d="m433.91 205.1-104.65-60-111.61 110.22 113.01 108.83 104.64-58.6c18.14-9.77 30.7-29.3 30.7-50.23-1.4-20.93-13.95-40.46-32.09-50.22z" />
+            <path fill="#34A853" d="M199.42 273.45 329.27 145.1 87.9 8.37C79.53 2.79 68.36 0 57.2 0 30.7 0 6.98 18.14 1.4 41.86l198.02 231.59z" />
+            <path fill="#4285F4" d="M1.39 41.86C0 46.04 0 51.63 0 57.2v397.64c0 5.57 0 9.76 1.4 15.34l216.27-214.86L1.39 41.86z" />
         </svg>
     );
 }
 
-/* ─── Links data matching actual categories on the website ──────────────── */
-const gujaratLinks = [
-    { label: 'World', href: '/category/world' },
-    { label: 'Crime', href: '/category/crime' },
-    { label: 'Entertainment', href: '/category/entertainment' },
-    { label: 'Fact Check', href: '/category/fact-check' },
-    { label: 'Election 2027', href: '/category/election-2027' },
-    { label: 'Sports', href: '/category/sports' },
-    { label: 'Weather', href: '/category/weather' },
-];
-
-const indiaLinks = [
+/* ─── Links data ─────────────────────────────────────────────────────────── */
+const topicsLinks = [
+    { label: 'Gujarat', href: '/category/gujarat' },
     { label: 'Politics', href: '/category/politics' },
-    { label: 'Health', href: '/category/health' },
-    { label: 'Technology', href: '/category/technology' },
-    { label: 'Trending', href: '/category/trending' },
     { label: 'Business', href: '/category/business' },
-    { label: 'Education', href: '/category/education' },
-    { label: 'Gold-Silver', href: '/category/gold-silver' },
+    { label: 'Entertainment', href: '/category/entertainment' },
+    { label: 'Health', href: '/category/health' },
+    { label: 'Sports', href: '/category/sports' },
+    { label: 'Technology', href: '/category/technology' },
+    { label: 'World', href: '/category/world' },
+    { label: 'Trending', href: '/category/trending' },
 ];
 
 const showLinks = [
@@ -68,16 +89,39 @@ const companyLinks = [
     { label: 'Share Tips with GP', href: '/contact' },
     { label: 'Gujarat Post App', href: '/app' },
     { label: 'Authors List', href: '/authors' },
+    { label: 'Sitemap', href: '/sitemap' },
 ];
 
-/* ─── ColHead Component ─────────────────────────────────────────────────── */
-const ColHead = ({ children }: { children: React.ReactNode }) => (
-    <h3 className="text-white font-bold text-[14px] leading-tight mb-4 select-none">
-        {children}
-    </h3>
-);
+/* ─── NavColumn Component ─────────────────────────────────────────────────── */
+function NavColumn({ title, links, titleHref }: { title: string; links: { label: string; href: string }[]; titleHref?: string }) {
+    return (
+        <div>
+            <div className="mb-5">
+                {titleHref ? (
+                    <Link href={titleHref} className="text-white font-extrabold text-[16px] leading-tight tracking-tight hover:text-slate-300 transition-colors uppercase">
+                        {title}
+                    </Link>
+                ) : (
+                    <h3 className="text-white font-extrabold text-[16px] leading-tight tracking-tight uppercase">{title}</h3>
+                )}
+            </div>
+            <ul className="space-y-3.5">
+                {links.map((item) => (
+                    <li key={item.label}>
+                        <Link
+                            href={item.href}
+                            className="text-[14px] font-semibold text-slate-300 hover:text-white transition-colors duration-150 block leading-snug"
+                        >
+                            {item.label}
+                        </Link>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
 
-/* ─── Footer ────────────────────────────────────────────────────────────── */
+/* ─── Footer Component ─────────────────────────────────────────────────── */
 export default function Footer({ isInline = false }: { isInline?: boolean }) {
     const pathname = usePathname();
 
@@ -89,159 +133,122 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
     const isFeedPage = pathname === '/watch' || pathname === '/shorts';
     if (isFeedPage && !isInline) return null;
 
-    const wrap = isInline ? 'pt-4 pb-3' : 'pt-7 pb-4';
+    const wrap = isInline ? 'pt-6 pb-4' : 'pt-10 pb-6';
 
     return (
-        <footer data-theme="dark" className="bg-black text-white relative border-t border-neutral-900">
-            <div className={`mx-auto max-w-screen-xl max-w-header-layout px-4 ${wrap}`}>
-                
-                {/* ── Main columns grid ── */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-[1.2fr_1fr_1fr_1fr_1fr] gap-6 lg:gap-6 pb-6">
-                    
-                    {/* Column 1: Logo and Brand info */}
-                    <div className="flex flex-col gap-4">
-                        <Link href="/" className="inline-block relative h-14 w-44 sm:w-48 overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-black/10 transition-transform duration-200 hover:scale-[1.02]">
+        <footer data-theme="dark" className="bg-[#050B14] text-white relative border-t border-slate-900 select-none w-full">
+            <div className={`w-full px-4 sm:px-6 md:px-8 lg:px-10 ${wrap}`}>
+
+                {/* ── Main Layout: Logo left, Nav columns pushed right ── */}
+                <div className="flex flex-col lg:flex-row gap-10 lg:gap-0 pb-10 border-b border-slate-800/80">
+
+                    {/* Logo & Brand */}
+                    <div className="flex flex-col gap-5 lg:w-72 flex-shrink-0">
+                        <Link
+                            href="/"
+                            className="inline-block relative h-16 w-56 overflow-hidden rounded-lg transition-transform duration-200 hover:scale-[1.02]"
+                        >
                             <Image
-                                src={gpLogoStatic}
+                                src="/assets/logoblack.png"
                                 alt="Gujarat Post Logo"
                                 fill
                                 priority
-                                className="object-cover"
+                                className="object-contain"
                             />
                         </Link>
-                        <div className="mt-1.5">
-                            <p className="text-[18px] font-black text-white tracking-wide">
-                                Real Stories. <span className="text-red-500">Real Gujarat.</span>
+                        <div>
+                            <p className="text-[16px] font-bold text-white tracking-tight leading-snug">
+                                Real Stories. <span className="text-[#B3121B]">Real Gujarat.</span>
                             </p>
-                            <p className="text-[12px] leading-relaxed text-neutral-400 max-w-xs mt-1.5">
-                                ગુજરાતનું વિશ્વસનીય ન્યૂઝ નેટવર્ક. Independent reporting &amp; breaking news from every corner of Gujarat.
-                            </p>
+                            {/* <p className="text-[13px] font-normal leading-relaxed text-slate-400 mt-2 max-w-xs">
+                                Gujarat's leading digital news network — accurate, unbiased, and fast breaking news.
+                            </p> */}
                         </div>
                     </div>
 
-                    {/* Column 2: Gujarat */}
-                    <div>
-                        <Link href="/category/gujarat" className="text-white hover:text-red-500 transition-colors font-bold text-[14px] leading-tight mb-4 block select-none">
-                            Gujarat
-                        </Link>
-                        <ul className="space-y-1.5">
-                            {gujaratLinks.map((item) => (
-                                <li key={item.label}>
-                                    <Link href={item.href} className="text-[13px] text-neutral-400 hover:text-white transition-colors duration-200 py-0.5 block">
-                                        {item.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
+                    {/* Nav columns — pushed to the right */}
+                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-10 lg:pl-28">
+
+                        {/* Topics */}
+                        <NavColumn title="Topics" links={topicsLinks} />
+
+                        {/* Shows */}
+                        <NavColumn title="Shows" links={showLinks} />
+
+                        {/* Company */}
+                        <NavColumn title="Company" links={companyLinks} />
+
                     </div>
 
-                    {/* Column 3: India */}
-                    <div>
-                        <Link href="/category/national" className="text-white hover:text-red-500 transition-colors font-bold text-[14px] leading-tight mb-4 block select-none">
-                            India
-                        </Link>
-                        <ul className="space-y-1.5">
-                            {indiaLinks.map((item) => (
-                                <li key={item.label}>
-                                    <Link href={item.href} className="text-[13px] text-neutral-400 hover:text-white transition-colors duration-200 py-0.5 block">
-                                        {item.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Column 4: Shows */}
-                    <div>
-                        <ColHead>Shows</ColHead>
-                        <ul className="space-y-1.5">
-                            {showLinks.map((item) => (
-                                <li key={item.label}>
-                                    <Link href={item.href} className="text-[13px] text-neutral-400 hover:text-white transition-colors duration-200 py-0.5 block">
-                                        {item.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Column 5: Company */}
-                    <div>
-                        <ColHead>Company</ColHead>
-                        <ul className="space-y-1.5">
-                            {companyLinks.map((item) => (
-                                <li key={item.label}>
-                                    <Link href={item.href} className="text-[13px] text-neutral-400 hover:text-white transition-colors duration-200 py-0.5 block">
-                                        {item.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
                 </div>
 
-                {/* ── Bottom row: Socials + App downloads ── */}
-                <div className="border-t border-neutral-900 pt-4 pb-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    
-                    {/* Bottom Left: Social links matching reference image */}
-                    <div className="flex items-center gap-2.5 flex-wrap">
+                {/* ── Middle Row: Socials & App Store Downloads ── */}
+                <div className="pt-6 pb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6 border-b border-slate-800/80">
+
+                    {/* Social Icons Row (Left) */}
+                    <div className="flex items-center gap-3 flex-wrap">
                         {SOCIAL_LINKS.map((item) => (
-                            <a
-                                key={item.label}
-                                href={item.href}
-                                target={item.platform === 'youtube' ? '_blank' : undefined}
-                                rel={item.platform === 'youtube' ? 'noreferrer' : undefined}
-                                aria-label={item.label}
-                                title={item.label}
-                                className={`h-8 w-8 rounded-full border border-white/10 bg-white/5 text-white flex items-center justify-center transition-all duration-200 hover:-translate-y-0.5 hover:text-white hover:border-transparent hover:shadow-lg ${item.hover}`}
-                            >
-                                <SocialIcon platform={item.platform} className="h-4 w-4" />
-                            </a>
+                            <SocialIconButton key={item.label} item={item} />
                         ))}
                     </div>
 
-                    {/* Bottom Right: App download buttons */}
-                    <div className="flex items-center gap-2.5 select-none">
-                        {/* App Store button */}
+                    {/* App Store & Play Store Badges (Right - Matching Image 1 White Style) */}
+                    <div className="flex items-center gap-3 select-none">
+                        {/* App Store Badge */}
                         <a
                             href="https://apps.apple.com"
                             target="_blank"
                             rel="noreferrer"
-                            className="group flex items-center gap-2.5 rounded-md border border-neutral-800 bg-black px-3.5 py-1 text-white hover:border-red-600 hover:shadow-[0_0_12px_rgba(179,18,27,0.3)] transition-all duration-300 hover:scale-[1.03] active:scale-95"
+                            className="group flex items-center gap-3 rounded-xl bg-white px-4 py-2 text-black border border-white hover:bg-slate-100 transition-all duration-300 hover:scale-105 shadow-md"
                         >
-                            <AppleIcon className="h-4.5 w-4.5 text-white transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-105" />
-                            <div className="leading-none text-left">
-                                <span className="block text-[8px] text-neutral-400 uppercase tracking-tight">Download on the</span>
-                                <span className="block text-[11.5px] font-bold tracking-tight">App Store</span>
+                            <AppleIcon className="h-6 w-6 text-black transition-transform duration-300 group-hover:scale-110" />
+                            <div className="leading-tight text-left">
+                                <span className="block text-[9px] text-black font-extrabold uppercase tracking-tight">Download on the</span>
+                                <span className="block text-[14px] font-black text-black tracking-tight">App Store</span>
                             </div>
                         </a>
 
-                        {/* Google Play button */}
+                        {/* Google Play Badge */}
                         <a
                             href="https://play.google.com"
                             target="_blank"
                             rel="noreferrer"
-                            className="group flex items-center gap-2.5 rounded-md border border-neutral-800 bg-black px-3.5 py-1 text-white hover:border-red-600 hover:shadow-[0_0_12px_rgba(179,18,27,0.3)] transition-all duration-300 hover:scale-[1.03] active:scale-95"
+                            className="group flex items-center gap-3 rounded-xl bg-white px-4 py-2 text-black border border-white hover:bg-slate-100 transition-all duration-300 hover:scale-105 shadow-md"
                         >
-                            <PlayStoreIcon className="h-4.5 w-4.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:scale-105" />
-                            <div className="leading-none text-left">
-                                <span className="block text-[8px] text-neutral-400 uppercase tracking-tight">GET IT ON</span>
-                                <span className="block text-[11.5px] font-bold tracking-tight">Google Play</span>
+                            <PlayStoreIcon className="h-6 w-6 transition-transform duration-300 group-hover:scale-110" />
+                            <div className="leading-tight text-left">
+                                <span className="block text-[9px] text-black font-extrabold uppercase tracking-tight">GET IT ON</span>
+                                <span className="block text-[14px] font-black text-black tracking-tight">Google Play</span>
                             </div>
                         </a>
                     </div>
+
                 </div>
 
-                {/* ── Footer Copyright bar ── */}
-                <div className="border-t border-neutral-900 mt-3 pt-3 text-[10px] text-neutral-500">
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <p>© {new Date().getFullYear()} Gujarat Post Media. All rights reserved.</p>
-                        <div className="flex flex-wrap gap-x-4 gap-y-1">
-                            {[['DNPA Code', '/dnpa-code'], ['CSR Policy', '/csr-policy'], ['RSS', '/rss.xml']].map(([label, href]) => (
-                                <Link key={href} href={href} className="transition duration-200 hover:text-white">{label}</Link>
-                            ))}
-                        </div>
-                        <p className="font-semibold text-neutral-600 tracking-wider">RNI/GJ-DEMO/2026</p>
+                {/* ── Bottom Bar: Legal Policies & Copyright ── */}
+                <div className="pt-6 text-[11.5px] font-extrabold text-slate-400 leading-relaxed text-center">
+                    {/* Policy Links Row */}
+                    <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mb-3">
+                        {[
+                            ['Privacy Policy', '/privacy-policy'],
+                            ['Terms of Use', '/terms'],
+                            ['Your Privacy Choices', '/privacy-choices'],
+                            ["Children's Privacy Policy", '/children-privacy'],
+                            ['Ad Policy', '/ad-policy'],
+                            ['Complaint Redressal', '/complaint-redressal'],
+                            ['About Us', '/about'],
+                            ['Sitemap', '/sitemap']
+                        ].map(([label, href]) => (
+                            <Link key={href} href={href} className="hover:text-white transition-colors duration-200">
+                                {label}
+                            </Link>
+                        ))}
+                    </div>
+
+                    {/* Copyright Line */}
+                    <div className="flex flex-col items-center justify-center gap-2 border-t border-slate-900 pt-4 text-slate-500 font-extrabold text-[11px]">
+                        <p>External links are provided for reference purposes. © {new Date().getFullYear()} GUJARAT POST MEDIA. ALL RIGHTS RESERVED.</p>
+                        <p className="tracking-wider text-slate-400 font-black">RNI/GJ-DEMO/2026</p>
                     </div>
                 </div>
 

@@ -19,6 +19,22 @@ export default function TrendingSection() {
     setTrending(ARTICLES.filter((a) => a.isTrending).slice(0, 10));
   }, []);
 
+  const isPaused = useRef(false);
+
+  // Auto-scroll effect
+  useEffect(() => {
+    if (!trending.length) return;
+    const interval = setInterval(() => {
+      const el = scrollContainerRef.current;
+      if (!el || isPaused.current) return;
+      el.scrollLeft += 1;
+      if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 2) {
+        el.scrollLeft = 0;
+      }
+    }, 25);
+    return () => clearInterval(interval);
+  }, [trending]);
+
   const updateArrows = () => {
     const el = scrollContainerRef.current;
     if (!el) return;
@@ -70,22 +86,26 @@ export default function TrendingSection() {
   }
 
   return (
-    <div className="mx-auto max-w-screen-xl px-4 mt-10 select-none">
+    <div className="mx-auto max-w-screen-xl px-4 mt-8 select-none">
       {/* Section Header */}
       <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
         <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[13.5px] md:text-[14.5px] font-black rounded-lg select-none leading-none tracking-tight">
-          {language === 'gu' ? 'ટ્રેન્ડિંગ ન્યૂઝ' : language === 'hi' ? 'ट्रेंडिंग न्यूज' : 'Trending News'}
+          {language === 'gu' ? 'ટ્રેન્ડિંગ  ન્યૂઝ' : language === 'hi' ? 'ट्रेंडिंग  न्यूज' : 'Trending News'}
         </span>
         <Link
           href="/category/trending"
           className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline"
         >
-          {language === 'gu' ? 'વધુ ટ્રેન્ડિંગ સમાચાર →' : 'More →'}
+          {language === 'gu' ? 'વધુ જુઓ →' : 'More News →'}
         </Link>
       </div>
 
       {/* Carousel Container */}
-      <div className="relative group/carousel">
+      <div
+        className="relative group/carousel"
+        onMouseEnter={() => { isPaused.current = true; }}
+        onMouseLeave={() => { isPaused.current = false; }}
+      >
         {/* Left Arrow */}
         {showLeftArrow && (
           <button
@@ -100,7 +120,7 @@ export default function TrendingSection() {
         {/* Scroll Container */}
         <div
           ref={scrollContainerRef}
-          className="flex gap-4 overflow-x-auto scrollbar-none snap-x snap-mandatory scroll-smooth pb-1"
+          className="flex gap-4 overflow-x-auto scrollbar-none pb-1"
         >
           {trending.slice(0, 10).map((article, index) => (
             <Link
