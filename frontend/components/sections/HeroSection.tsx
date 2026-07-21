@@ -514,7 +514,7 @@ export default function HeroSection() {
           <div className="w-full rounded-sm border border-border bg-card p-4 shadow-sm flex flex-col gap-3">
             <div className="flex items-center justify-between border-b border-border pb-2">
               <span className="text-[#B3121B] font-black text-[13.5px] md:text-[14px] select-none">
-                {language === 'gu' ? 'લોકપ્રિય Stories' : 'Popular Stories'}
+                {language === 'gu' ? 'લોકપ્રિય News' : 'Popular News'}
               </span>
               <Link
                 href="/category/trending"
@@ -746,6 +746,18 @@ function VideoDesk({ videos, language, showShorts = true, onlyShorts = false }: 
   const sidebarPaused = useRef(false);
   const isShortsPaused = useRef(false);
 
+  const [featuredIndex, setFeaturedIndex] = useState(0);
+  const [featuredHovered, setFeaturedHovered] = useState(false);
+
+  // Auto-change the featured video every 6 seconds if no video is playing and not hovered
+  useEffect(() => {
+    if (playId || featuredHovered) return;
+    const interval = setInterval(() => {
+      setFeaturedIndex((prev) => (prev + 1) % Math.min(videos.length, 6));
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [playId, featuredHovered, videos.length]);
+
   // Auto-scroll the right sidebar using setInterval (checks ref each tick)
   useEffect(() => {
     const interval = setInterval(() => {
@@ -779,8 +791,17 @@ function VideoDesk({ videos, language, showShorts = true, onlyShorts = false }: 
 
   if (!videos.length) return null;
 
-  const featuredVideo = videos[0];
-  const sidebarVideos = videos.slice(1, 9);
+  const featuredVideo = videos[featuredIndex % videos.length];
+  // Filter out current featured video from sidebar list to avoid duplication
+  const sidebarVideos = videos.filter((_, idx) => idx !== (featuredIndex % videos.length)).slice(0, 8);
+
+  const handleSidebarClick = (youtubeId: string, id: string) => {
+    setPlayId(youtubeId);
+    const originalIndex = videos.findIndex(vid => vid.id === id);
+    if (originalIndex !== -1) {
+      setFeaturedIndex(originalIndex);
+    }
+  };
 
   const updateArrows = () => {
     const el = scrollContainerRef.current;
@@ -949,7 +970,7 @@ function VideoDesk({ videos, language, showShorts = true, onlyShorts = false }: 
               href="/shorts"
               className="text-white/95 font-extrabold text-[13px] md:text-[14px] hover:text-white hover:underline flex items-center gap-1"
             >
-              {language === 'gu' ? 'બધા શોર્ટ્સ →' : 'All Shorts →'}
+              {language === 'gu' ? 'વધુ શોર્ટ્સ →' : 'More Shorts →'}
             </Link>
           </div>
 
@@ -1144,15 +1165,18 @@ function VideoDesk({ videos, language, showShorts = true, onlyShorts = false }: 
           <div
             className="group flex flex-col cursor-pointer"
             onClick={() => setPlayId(featuredVideo.youtubeId)}
+            onMouseEnter={() => setFeaturedHovered(true)}
+            onMouseLeave={() => setFeaturedHovered(false)}
           >
             {/* Large thumbnail */}
             <div className="relative aspect-[16/9] w-full overflow-hidden rounded-sm bg-black/30 mb-3.5 shadow-inner border border-white/10">
               <Image
+                key={featuredIndex}
                 src={featuredVideo.thumbnail}
                 alt={featuredVideo.titleGu}
                 fill
                 sizes="(max-width: 1024px) 100vw, 60vw"
-                className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                className="object-cover transition-transform duration-300 group-hover:scale-[1.02] animate-in fade-in duration-500"
               />
               {/* Large play button */}
               <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[54px] h-[54px] rounded-full bg-white/95 text-[#B3121B] flex items-center justify-center shadow-2xl transition-transform duration-300 group-hover:scale-110">
@@ -1165,12 +1189,12 @@ function VideoDesk({ videos, language, showShorts = true, onlyShorts = false }: 
             </div>
 
             {/* Title */}
-            <h3 className="font-extrabold text-[16px] md:text-[19px] leading-snug text-white group-hover:underline transition-all line-clamp-2">
+            <h3 key={`title-${featuredIndex}`} className="font-extrabold text-[16px] md:text-[19px] leading-snug text-white group-hover:underline transition-all line-clamp-2 animate-in fade-in duration-500">
               {getLocalized(language, { en: featuredVideo.title, gu: featuredVideo.titleGu, hi: featuredVideo.titleHi })}
             </h3>
 
             {/* Meta */}
-            <div className="flex items-center gap-1.5 mt-2.5 text-[11.5px] text-white/70 font-semibold select-none">
+            <div key={`meta-${featuredIndex}`} className="flex items-center gap-1.5 mt-2.5 text-[11.5px] text-white/70 font-semibold select-none animate-in fade-in duration-500">
               <Eye className="h-3.5 w-3.5" />
               <span>
                 {formatViews(featuredVideo.views)} {language === 'gu' ? 'વ્યુઝ' : 'views'}
@@ -1193,7 +1217,7 @@ function VideoDesk({ videos, language, showShorts = true, onlyShorts = false }: 
                 <div
                   key={v.id}
                   className="group flex gap-3 py-3.5 cursor-pointer first:pt-0"
-                  onClick={() => setPlayId(v.youtubeId)}
+                  onClick={() => handleSidebarClick(v.youtubeId, v.id)}
                 >
                   {/* Thumbnail */}
                   <div className="relative h-[68px] w-[108px] shrink-0 overflow-hidden rounded-sm bg-black/30 border border-white/10">
@@ -1855,7 +1879,7 @@ function CityHyperlocalSection({
 
           {/* Section Header with Underline */}
           <div className="relative border-b-2 border-slate-900 pb-2 mb-4 flex items-center justify-between">
-            <span className="bg-[#B3121B] text-white px-5 py-1.5 text-[14px] md:text-[15px] font-black rounded-sm select-none uppercase tracking-wide">
+            <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[17px] md:text-[19px] font-black rounded-sm select-none uppercase tracking-wide">
               {language === 'gu' ? 'ગુજરાત' : language === 'hi' ? 'गुजरात' : 'Gujarat'}
             </span>
             <Link
@@ -2192,6 +2216,21 @@ function CrimeSection({
       categoryHi: 'जूनागढ़',
       viewsGu: '90K',
       views: '90K'
+    },
+    {
+      id: 'l4',
+      slug: 'land-fraud-case-senior-official-arrested-in-vadodara-97',
+      titleGu: 'જૂનાગઢમાં ઓનલાઇન લોન એપના નામે બ્લેકમેલિંગ! ફરિયાદ નોંધાઈ',
+      title: 'Blackmailing in Junagadh in the name of online loan apps! FIR registered',
+      titleHi: 'जूनागढ़ में ऑनलाइन लोन ऐप के नाम पर ब्लैकमेलिंग! शिकायत दर्ज',
+      relativeTimeGu: '6 કલાક પહેલાં',
+      relativeTime: '6 hours ago',
+      relativeTimeHi: '6 घंटे पहले',
+      categoryGu: 'જૂનાગઢ',
+      category: 'Junagadh',
+      categoryHi: 'जूनागढ़',
+      viewsGu: '90K',
+      views: '90K'
     }
   ];
 
@@ -2352,21 +2391,21 @@ function CrimeSection({
 
       {/* Crime Header */}
       <div className="flex items-end justify-between h-[46px] border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-2.5 mb-6">
-        <span className="bg-[#B3121B] text-white px-5 py-2 text-[13.5px] md:text-[14.5px] font-black rounded-lg select-none leading-none tracking-tight">
+        <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[17px] md:text-[19px] font-black rounded-lg select-none leading-none tracking-tight">
           {language === 'gu' ? 'કાઇમ' : 'Crime'}
         </span>
         <Link
           href="/category/crime"
           className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline pb-0.5"
         >
-          {language === 'gu' ? 'વધુ કાઇમ સમાચાર →' : 'All Crime News →'}
+          {language === 'gu' ? 'વધુ જુઓ →' : 'More See →'}
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-[1.15fr_1fr] gap-8 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-[1.15fr_1fr] gap-8 items-stretch">
         {/* Slide Carousel */}
         {currentSlide && (
-          <div className="group relative flex flex-col min-w-0">
+          <div className="group relative flex flex-col min-w-0 h-full">
             <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted">
               <Image
                 src={currentSlide.image}
@@ -2398,16 +2437,18 @@ function CrimeSection({
               </span>
             </div>
 
-            <div className="mt-3.5 flex flex-col">
-              <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] mb-1 select-none uppercase tracking-wide">
-                {getLocalized(language, { en: currentSlide.category, gu: currentSlide.categoryGu, hi: currentSlide.categoryHi })}
-              </span>
-              <Link href={`/news/${currentSlide.slug}`} className="group/link min-h-[76px] flex flex-col justify-start">
-                <h3 className="font-extrabold text-[15.5px] md:text-[17px] leading-snug tracking-tight text-foreground hover:text-[#B3121B] transition-colors line-clamp-3">
-                  {getLocalized(language, { en: currentSlide.title, gu: currentSlide.titleGu, hi: currentSlide.titleHi })}
-                </h3>
-              </Link>
-              <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground font-semibold mt-2 select-none">
+            <div className="mt-3.5 flex flex-col flex-1 justify-between">
+              <div>
+                <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] mb-1 select-none uppercase tracking-wide">
+                  {getLocalized(language, { en: currentSlide.category, gu: currentSlide.categoryGu, hi: currentSlide.categoryHi })}
+                </span>
+                <Link href={`/news/${currentSlide.slug}`} className="group/link flex flex-col justify-start">
+                  <h3 className="font-extrabold text-[15.5px] md:text-[17px] leading-snug tracking-tight text-foreground hover:text-[#B3121B] transition-colors line-clamp-3">
+                    {getLocalized(language, { en: currentSlide.title, gu: currentSlide.titleGu, hi: currentSlide.titleHi })}
+                  </h3>
+                </Link>
+              </div>
+              <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground font-semibold mt-auto pt-2 select-none">
                 <span>
                   {getLocalized(language, { en: currentSlide.relativeTime, gu: currentSlide.relativeTimeGu, hi: currentSlide.relativeTimeHi })}
                 </span>
@@ -2422,21 +2463,21 @@ function CrimeSection({
         )}
 
         {/* List side updates (Text lists only, no images, matching the screen!) */}
-        <div className="flex flex-col min-w-0 md:border-l md:border-border/60 md:pl-6 gap-2">
+        <div className="flex flex-col min-w-0 md:border-l md:border-border/60 md:pl-6 gap-0">
 
           {mockList.map((item) => (
             <Link
               key={item.id}
               href={`/news/${item.slug}`}
-              className="group flex flex-col py-3.5 border-b border-border/40 last:border-b-0"
+              className="group flex flex-col py-2 border-b border-border/40 last:border-b-0"
             >
-              <span className="text-red-600 font-extrabold text-[11px] uppercase tracking-wide mb-1">
+              <span className="text-red-600 font-extrabold text-[11px] uppercase tracking-wide mb-0.5">
                 {getLocalized(language, { en: item.category, gu: item.categoryGu, hi: item.categoryHi })}
               </span>
               <h4 className="text-[14px] md:text-[14.5px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2">
                 {getLocalized(language, { en: item.title, gu: item.titleGu, hi: item.titleHi })}
               </h4>
-              <div className="flex items-center gap-1.5 mt-2.5 text-[10.5px] text-muted-foreground font-semibold">
+              <div className="flex items-center gap-1.5 mt-1.5 text-[10.5px] text-muted-foreground font-semibold">
                 <span>
                   {getLocalized(language, { en: item.relativeTime, gu: item.relativeTimeGu, hi: item.relativeTimeHi })}
                 </span>
@@ -2836,14 +2877,14 @@ function PopularStoriesSection({
 
       {/* Header */}
       <div className="flex items-center justify-between border-b-[3px] border-slate-950 pb-2.5 mb-6">
-        <span className="bg-[#B3121B] text-white px-5 py-1.5 font-extrabold text-[14px] md:text-[15px] rounded-sm tracking-tight leading-none uppercase">
-          {language === 'gu' ? 'લોકપ્રિય  સ્ટોરીઝ' : 'Popular  Stories'}
+        <span className="bg-[#B3121B] text-white px-5 py-2.5 font-extrabold text-[17px] md:text-[19px] rounded-sm tracking-tight leading-none uppercase">
+          {language === 'gu' ? 'લોકપ્રિય  સમાચાર' : 'Popular  News'}
         </span>
         <Link
           href="/category/trending"
           className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline"
         >
-          {language === 'gu' ? 'વધુ સમાચાર →' : 'More News →'}
+          {language === 'gu' ? 'વધુ જુઓ →' : 'More See →'}
         </Link>
       </div>
 
@@ -4005,7 +4046,7 @@ export function PoliticsSection({ language }: { language: Language }) {
     <div className="mx-auto max-w-screen-xl px-4 mt-8">
       {/* Section Header */}
       <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
-        <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[13.5px] md:text-[14.5px] font-black rounded-lg select-none leading-none tracking-tight">
+        <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[17px] md:text-[19px] font-black rounded-lg select-none leading-none tracking-tight">
           {language === 'gu' ? 'રાજકારણ' : language === 'hi' ? 'राजनीति' : 'Politics'}
         </span>
         <Link
@@ -4043,13 +4084,13 @@ export function PoliticsSection({ language }: { language: Language }) {
               </Link>
 
               {/* Clock Meta Row */}
-              <div className="flex items-center gap-1.5 mb-4 pb-2 border-b border-border/40 text-[10.5px] text-muted-foreground font-semibold">
+              <div className="flex items-center gap-1.5 mb-1 pb-2 border-b border-border/40 text-[10.5px] text-muted-foreground font-semibold">
                 <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
                 <span>{col.featured.relativeTimeGu || '1 કલાક પહેલાં'}</span>
               </div>
 
               {/* Sub-articles list (Text only) */}
-              <div className="flex flex-col divide-y divide-border/40">
+              {/* <div className="flex flex-col divide-y divide-border/40">
                 {col.subs?.map((sub) => (
                   <Link
                     key={sub.id}
@@ -4061,14 +4102,14 @@ export function PoliticsSection({ language }: { language: Language }) {
                     </h4>
                   </Link>
                 ))}
-              </div>
+              </div> */}
             </div>
           </div>
         ))}
       </div>
 
       {/* 5-Card Politics Bottom Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 border-t border-border/40 pt-6 mt-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 border-t border-border/40 pt-6 ">
         {mockPoliticsBottomCards.map((card) => (
           <div key={card.id} className="flex flex-col min-w-0">
             <Link
@@ -4175,12 +4216,12 @@ export function FactCheckSection({ language }: { language: Language }) {
     <div className="mx-auto max-w-screen-xl px-4 mt-10">
       {/* Section Header */}
       <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
-        <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[13.5px] md:text-[14.5px] font-black rounded-lg select-none leading-none tracking-tight">
+        <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[19px] md:text-[21px] font-black rounded-lg select-none leading-none tracking-tight">
           {language === 'gu' ? 'ફેક્ટ  ચેક' : language === 'hi' ? 'तथ्य  जांच' : 'Fact  Check'}
         </span>
         <Link
           href="/category/fact-check"
-          className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline"
+          className="text-[#B3121B] hover:text-red-700 font-extrabold text-[15px] md:text-[16px] hover:underline"
         >
           {language === 'gu' ? 'વધુ જુઓ →' : 'More →'}
         </Link>
@@ -4392,7 +4433,7 @@ export function NationalSection({ language }: { language: Language }) {
     <div className="mx-auto max-w-screen-xl px-4 mt-1">
       {/* Section Header */}
       <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-2 mb-3.5">
-        <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[13.5px] md:text-[14.5px] font-black rounded-lg select-none leading-none tracking-tight">
+        <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[17px] md:text-[19px] font-black rounded-lg select-none leading-none tracking-tight">
           {language === 'gu' ? 'દેશ' : language === 'hi' ? 'देश' : 'National'}
         </span>
         <Link
@@ -4532,7 +4573,7 @@ export function WorldSection({ language }: { language: Language }) {
     <div className="mx-auto max-w-screen-xl px-4 mt-8">
       {/* Section Header */}
       <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
-        <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[13.5px] md:text-[14.5px] font-black rounded-lg select-none leading-none tracking-tight">
+        <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[17px] md:text-[19px] font-black rounded-lg select-none leading-none tracking-tight">
           {language === 'gu' ? 'વિશ્વ' : language === 'hi' ? 'विश्व' : 'World'}
         </span>
         <Link
@@ -4807,9 +4848,9 @@ export function LiveCenterSection({ language }: { language: Language }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-5">
 
           {/* ── Column 1: Fuel Prices (ઈંધણ ભાવ) ──────────────────── */}
-          <div className="flex flex-col justify-between p-4 rounded-xl border border-red-100/70 bg-gradient-to-b from-red-50/20 to-slate-50/40 backdrop-blur-xs hover:border-red-200 transition-colors shadow-xs">
+          <div className="flex flex-col justify-between p-3.5 rounded-xl border border-red-100/70 bg-gradient-to-b from-red-50/20 to-slate-50/40 backdrop-blur-xs hover:border-red-200 transition-colors shadow-xs">
             <div>
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-3">
                 <span className="text-[14px] font-black text-foreground flex items-center gap-2">
                   <Fuel className="h-4 w-4 text-[#B3121B]" />
                   {language === 'gu' ? 'ઈંધણ ભાવ' : 'Fuel Prices'}
@@ -4820,78 +4861,72 @@ export function LiveCenterSection({ language }: { language: Language }) {
               </div>
 
               {/* Items */}
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {/* Petrol */}
-                <div className="flex items-center justify-between p-2.5 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-full bg-red-100 text-[#B3121B] font-black flex items-center justify-center text-[13px]">
+                <div className="flex items-center justify-between p-2 rounded-lg bg-white border border-border/10 shadow-xs">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-7 h-7 rounded-full bg-red-100 text-[#B3121B] font-black flex items-center justify-center text-[12px]">
                       P
                     </span>
                     <div className="flex flex-col">
-                      <span className="text-[12.5px] font-black text-foreground">પેટ્રોલ (Petrol)</span>
-                      <span className="text-[10px] text-muted-foreground font-semibold">પ્રતિ લીટર</span>
+                      <span className="text-[12px] font-black text-foreground">પેટ્રોલ (Petrol)</span>
+                      <span className="text-[9.5px] text-muted-foreground font-semibold">પ્રતિ લીટર</span>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-[15px] font-black text-foreground">₹96.42</span>
-                    <span className="text-[9.5px] text-muted-foreground block font-semibold">/ લીટર</span>
+                    <span className="text-[14.5px] font-black text-foreground">₹96.42</span>
+                    <span className="text-[9px] text-muted-foreground block font-semibold">/ લીટર</span>
                   </div>
                 </div>
 
                 {/* Diesel */}
-                <div className="flex items-center justify-between p-2.5 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 font-black flex items-center justify-center text-[13px]">
+                <div className="flex items-center justify-between p-2 rounded-lg bg-white border border-border/10 shadow-xs">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-7 h-7 rounded-full bg-blue-100 text-blue-600 font-black flex items-center justify-center text-[12px]">
                       D
                     </span>
                     <div className="flex flex-col">
-                      <span className="text-[12.5px] font-black text-foreground">ડીઝલ (Diesel)</span>
-                      <span className="text-[10px] text-muted-foreground font-semibold">પ્રતિ લીટર</span>
+                      <span className="text-[12px] font-black text-foreground">ડીઝલ (Diesel)</span>
+                      <span className="text-[9.5px] text-muted-foreground font-semibold">પ્રતિ લીટર</span>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-[15px] font-black text-foreground">₹92.17</span>
-                    <span className="text-[9.5px] text-muted-foreground block font-semibold">/ લીટર</span>
+                    <span className="text-[14.5px] font-black text-foreground">₹92.17</span>
+                    <span className="text-[9px] text-muted-foreground block font-semibold">/ લીટર</span>
                   </div>
                 </div>
 
                 {/* CNG */}
-                <div className="flex items-center justify-between p-2.5 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 font-black flex items-center justify-center text-[13px]">
+                <div className="flex items-center justify-between p-2 rounded-lg bg-white border border-border/10 shadow-xs">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 font-black flex items-center justify-center text-[12px]">
                       C
                     </span>
                     <div className="flex flex-col">
-                      <span className="text-[12.5px] font-black text-foreground">CNG (CNG)</span>
-                      <span className="text-[10px] text-muted-foreground font-semibold">પ્રતિ કિગ્રા</span>
+                      <span className="text-[12px] font-black text-foreground">CNG (CNG)</span>
+                      <span className="text-[9.5px] text-muted-foreground font-semibold">પ્રતિ કિગ્રા</span>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-[15px] font-black text-foreground">₹76.00</span>
-                    <span className="text-[9.5px] text-muted-foreground block font-semibold">/ કિલો</span>
+                    <span className="text-[14.5px] font-black text-foreground">₹76.00</span>
+                    <span className="text-[9px] text-muted-foreground block font-semibold">/ કિલો</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Bottom Button & Source */}
-            <div className="mt-4">
-              {/* <Link
-                href="/fuel-prices"
-                className="w-full border border-red-200 text-[#B3121B] font-black text-[12px] rounded-lg py-2 flex items-center justify-center gap-1 hover:bg-red-50 transition-colors"
-              >
-                {language === 'gu' ? 'વધુ ઈંધણ ભાવ જુઓ' : 'View More Fuel Prices'}
-              </Link> */}
-              <p className="text-[9.5px] text-muted-foreground/70 font-semibold mt-2 text-left select-none">
+            <div className="mt-3">
+              <p className="text-[9.5px] text-muted-foreground/70 font-semibold text-left select-none">
                 સ્રોત: IOC / HPCL
               </p>
             </div>
           </div>
 
           {/* ── Column 2: Stock Market (શેરબજાર) ────────────────── */}
-          <div className="flex flex-col justify-between p-4 rounded-xl border border-red-100/70 bg-gradient-to-b from-red-50/20 to-slate-50/40 backdrop-blur-xs hover:border-red-200 transition-colors shadow-xs">
+          <div className="flex flex-col justify-between p-3.5 rounded-xl border border-red-100/70 bg-gradient-to-b from-red-50/20 to-slate-50/40 backdrop-blur-xs hover:border-red-200 transition-colors shadow-xs">
             <div>
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-3">
                 <span className="text-[14px] font-black text-foreground flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-[#B3121B]" />
                   {language === 'gu' ? 'શેરબજાર' : 'Stock Market'}
@@ -4901,45 +4936,45 @@ export function LiveCenterSection({ language }: { language: Language }) {
                 </span>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {/* Nifty 50 */}
-                <div className="p-2.5 rounded-lg bg-white border border-border/10 shadow-xs">
+                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col">
-                      <span className="text-[12.5px] font-black text-foreground">Nifty 50</span>
-                      <span className="text-[9.5px] text-muted-foreground font-bold uppercase">NSE</span>
+                      <span className="text-[12px] font-black text-foreground">Nifty 50</span>
+                      <span className="text-[9px] text-muted-foreground font-bold uppercase">NSE</span>
                     </div>
-                    <span className="text-[14px] font-black text-foreground">₹23,456.2</span>
+                    <span className="text-[14.5px] font-black text-foreground">₹23,456.2</span>
                   </div>
-                  <div className="mt-1.5 flex items-center gap-1 text-[11px] font-extrabold text-emerald-600">
+                  <div className="mt-1 flex items-center gap-1 text-[10.5px] font-extrabold text-emerald-600">
                     <span>↗ +188.4 (+0.93%)</span>
                   </div>
                 </div>
 
                 {/* Sensex */}
-                <div className="p-2.5 rounded-lg bg-white border border-border/10 shadow-xs">
+                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col">
-                      <span className="text-[12.5px] font-black text-foreground">BSE Sensex</span>
-                      <span className="text-[9.5px] text-muted-foreground font-bold uppercase">BSE</span>
+                      <span className="text-[12px] font-black text-foreground">BSE Sensex</span>
+                      <span className="text-[9px] text-muted-foreground font-bold uppercase">BSE</span>
                     </div>
-                    <span className="text-[14px] font-black text-foreground">₹80,309.1</span>
+                    <span className="text-[14.5px] font-black text-foreground">₹80,309.1</span>
                   </div>
-                  <div className="mt-1.5 flex items-center gap-1 text-[11px] font-extrabold text-emerald-600">
+                  <div className="mt-1 flex items-center gap-1 text-[10.5px] font-extrabold text-emerald-600">
                     <span>↗ +425.6 (+0.55%)</span>
                   </div>
                 </div>
 
                 {/* Nifty Bank */}
-                <div className="p-2.5 rounded-lg bg-white border border-border/10 shadow-xs">
+                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col">
-                      <span className="text-[12.5px] font-black text-foreground">Nifty Bank</span>
-                      <span className="text-[9.5px] text-muted-foreground font-bold uppercase">NSE</span>
+                      <span className="text-[12px] font-black text-foreground">Nifty Bank</span>
+                      <span className="text-[9px] text-muted-foreground font-bold uppercase">NSE</span>
                     </div>
-                    <span className="text-[14px] font-black text-foreground">₹49,640.8</span>
+                    <span className="text-[14.5px] font-black text-foreground">₹49,640.8</span>
                   </div>
-                  <div className="mt-1.5 flex items-center gap-1 text-[11px] font-extrabold text-red-600">
+                  <div className="mt-1 flex items-center gap-1 text-[10.5px] font-extrabold text-red-600">
                     <span>↘ -124.1 (-0.23%)</span>
                   </div>
                 </div>
@@ -4947,23 +4982,17 @@ export function LiveCenterSection({ language }: { language: Language }) {
             </div>
 
             {/* Bottom Button & Source */}
-            <div className="mt-4">
-              {/* <Link
-                href="/market"
-                className="w-full border border-red-200 text-[#B3121B] font-black text-[12px] rounded-lg py-2 flex items-center justify-center gap-1 hover:bg-red-50 transition-colors"
-              >
-                {language === 'gu' ? 'વધુ શેરબજાર જુઓ' : 'View More Market'}
-              </Link> */}
-              <p className="text-[9.5px] text-muted-foreground/70 font-semibold mt-2 text-left select-none">
+            <div className="mt-3">
+              <p className="text-[9.5px] text-muted-foreground/70 font-semibold text-left select-none">
                 સ્રોત: Yahoo Finance
               </p>
             </div>
           </div>
 
           {/* ── Column 3: Cricket (ક્રિકેટ) ────────────────────────── */}
-          <div className="flex flex-col justify-between p-4 rounded-xl border border-red-100/70 bg-gradient-to-b from-red-50/20 to-slate-50/40 backdrop-blur-xs hover:border-red-200 transition-colors shadow-xs">
+          <div className="flex flex-col justify-between p-3.5 rounded-xl border border-red-100/70 bg-gradient-to-b from-red-50/20 to-slate-50/40 backdrop-blur-xs hover:border-red-200 transition-colors shadow-xs">
             <div>
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-3">
                 <span className="text-[14px] font-black text-foreground flex items-center gap-2">
                   <Trophy className="h-4 w-4 text-[#B3121B]" />
                   {language === 'gu' ? 'ક્રિકેટ' : 'Cricket'}
@@ -4973,79 +5002,75 @@ export function LiveCenterSection({ language }: { language: Language }) {
                 </Link>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {/* Match 1 */}
-                <div className="p-2.5 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center justify-between mb-1.5">
+                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
+                  <div className="flex items-center justify-between mb-1">
                     <span className="text-[12px] font-black text-foreground">India vs England</span>
-                    <span className="text-[9px] font-black text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-sm">LIVE</span>
+                    <span className="text-[8.5px] font-black text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-sm">LIVE</span>
                   </div>
-                  <div className="flex flex-col gap-1 mt-1 text-[11.5px]">
+                  <div className="flex flex-col gap-0.5 mt-0.5 text-[11px]">
                     <div className="flex items-center justify-between font-bold text-foreground">
                       <span>India</span>
-                      <span className="font-black">168/8 (20)</span>
+                      <span className="font-black text-[12.5px]">168/8 (20)</span>
                     </div>
                     <div className="flex items-center justify-between font-bold text-foreground">
                       <span>England</span>
-                      <span className="font-black">185/9 (19.2)</span>
+                      <span className="font-black text-[12.5px]">185/9 (19.2)</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Match 2 */}
-                <div className="p-2.5 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center justify-between mb-1.5">
+                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
+                  <div className="flex items-center justify-between mb-1">
                     <span className="text-[12px] font-black text-foreground">Ranji Trophy</span>
-                    <span className="text-[9px] font-bold text-muted-foreground">Day 3</span>
+                    <span className="text-[8.5px] font-bold text-muted-foreground">Day 3</span>
                   </div>
-                  <div className="flex flex-col gap-1 mt-1 text-[11.5px]">
+                  <div className="flex flex-col gap-0.5 mt-0.5 text-[11px]">
                     <div className="flex items-center justify-between font-bold text-foreground">
                       <span>Gujarat</span>
-                      <span className="font-black">284/6</span>
+                      <span className="font-black text-[12.5px]">284/6</span>
                     </div>
                     <div className="flex items-center justify-between font-bold text-foreground">
                       <span>Mumbai</span>
-                      <span className="font-black">322/10</span>
+                      <span className="font-black text-[12.5px]">322/10</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Match 3 */}
-                <div className="p-2.5 rounded-lg bg-white border border-border/10 shadow-xs">
+                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-[12px] font-black text-foreground">IPL</span>
-                    <span className="text-[9px] font-bold text-muted-foreground">22:00</span>
+                    <span className="text-[8.5px] font-bold text-muted-foreground">22:00</span>
                   </div>
-                  <div className="flex items-center justify-between text-[11.5px] font-bold text-foreground">
-                    <span>Man City</span>
-                    <span className="text-muted-foreground">—</span>
-                  </div>
-                  <div className="flex items-center justify-between text-[11.5px] font-bold text-foreground">
-                    <span>Arsenal</span>
-                    <span className="text-muted-foreground">—</span>
+                  <div className="flex flex-col gap-0.5 mt-0.5 text-[11px]">
+                    <div className="flex items-center justify-between font-bold text-foreground">
+                      <span>CSK</span>
+                      <span className="text-muted-foreground">—</span>
+                    </div>
+                    <div className="flex items-center justify-between font-bold text-foreground">
+                      <span>MI</span>
+                      <span className="text-muted-foreground">—</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Bottom Button & Source */}
-            <div className="mt-4">
-              {/* <Link
-                href="/sports"
-                className="w-full border border-red-200 text-[#B3121B] font-black text-[12px] rounded-lg py-2 flex items-center justify-center gap-1 hover:bg-red-50 transition-colors"
-              >
-                {language === 'gu' ? 'વધુ ક્રિકેટ જુઓ' : 'View More Cricket'}
-              </Link> */}
-              <p className="text-[9.5px] text-muted-foreground/70 font-semibold mt-2 text-left select-none">
+            <div className="mt-3">
+              <p className="text-[9.5px] text-muted-foreground/70 font-semibold text-left select-none">
                 સ્રોત: ESPN
               </p>
             </div>
           </div>
 
           {/* ── Column 4: Football (ફૂટબોલ) ───────────────────────── */}
-          <div className="flex flex-col justify-between p-4 rounded-xl border border-red-100/70 bg-gradient-to-b from-red-50/20 to-slate-50/40 backdrop-blur-xs hover:border-red-200 transition-colors shadow-xs">
+          <div className="flex flex-col justify-between p-3.5 rounded-xl border border-red-100/70 bg-gradient-to-b from-red-50/20 to-slate-50/40 backdrop-blur-xs hover:border-red-200 transition-colors shadow-xs">
             <div>
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-3">
                 <span className="text-[14px] font-black text-foreground flex items-center gap-2">
                   <Shield className="h-4 w-4 text-[#B3121B]" />
                   {language === 'gu' ? 'ફૂટબોલ' : 'Football'}
@@ -5055,32 +5080,32 @@ export function LiveCenterSection({ language }: { language: Language }) {
                 </Link>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {/* Match 1 */}
-                <div className="p-2.5 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center justify-between mb-1.5">
+                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
+                  <div className="flex items-center justify-between mb-1">
                     <span className="text-[12px] font-black text-foreground">ISL</span>
-                    <span className="text-[9px] font-black text-red-600 bg-red-50 px-1.5 py-0.5 rounded-sm">75'</span>
+                    <span className="text-[8.5px] font-black text-red-600 bg-red-50 px-1.5 py-0.5 rounded-sm">75'</span>
                   </div>
-                  <div className="flex flex-col gap-1 mt-1 text-[11.5px]">
+                  <div className="flex flex-col gap-0.5 mt-0.5 text-[11px]">
                     <div className="flex items-center justify-between font-bold text-foreground">
                       <span>Mumbai City FC</span>
-                      <span className="font-black text-[13px]">2</span>
+                      <span className="font-black text-[12.5px]">2</span>
                     </div>
                     <div className="flex items-center justify-between font-bold text-foreground">
                       <span>Mohun Bagan</span>
-                      <span className="font-black text-[13px]">1</span>
+                      <span className="font-black text-[12.5px]">1</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Match 2 */}
-                <div className="p-2.5 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center justify-between mb-1.5">
+                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
+                  <div className="flex items-center justify-between mb-1">
                     <span className="text-[12px] font-black text-foreground">EPL</span>
-                    <span className="text-[9px] font-bold text-muted-foreground">22:00</span>
+                    <span className="text-[8.5px] font-bold text-muted-foreground">22:00</span>
                   </div>
-                  <div className="flex flex-col gap-1 mt-1 text-[11.5px]">
+                  <div className="flex flex-col gap-0.5 mt-0.5 text-[11px]">
                     <div className="flex items-center justify-between font-bold text-foreground">
                       <span>Man City</span>
                       <span className="text-muted-foreground">—</span>
@@ -5091,18 +5116,30 @@ export function LiveCenterSection({ language }: { language: Language }) {
                     </div>
                   </div>
                 </div>
+
+                {/* Match 3 */}
+                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[12px] font-black text-foreground">La Liga</span>
+                    <span className="text-[8.5px] font-bold text-muted-foreground">23:00</span>
+                  </div>
+                  <div className="flex flex-col gap-0.5 mt-0.5 text-[11px]">
+                    <div className="flex items-center justify-between font-bold text-foreground">
+                      <span>Real Madrid</span>
+                      <span className="text-muted-foreground">—</span>
+                    </div>
+                    <div className="flex items-center justify-between font-bold text-foreground">
+                      <span>Barcelona</span>
+                      <span className="text-muted-foreground">—</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Bottom Button & Source */}
-            <div className="mt-4">
-              {/* <Link
-                href="/sports"
-                className="w-full border border-red-200 text-[#B3121B] font-black text-[12px] rounded-lg py-2 flex items-center justify-center gap-1 hover:bg-red-50 transition-colors"
-              >
-                {language === 'gu' ? 'વધુ ફૂટબોલ જુઓ' : 'View More Football'}
-              </Link> */}
-              <p className="text-[9.5px] text-muted-foreground/70 font-semibold mt-2 text-left select-none">
+            <div className="mt-3">
+              <p className="text-[9.5px] text-muted-foreground/70 font-semibold text-left select-none">
                 સ્રોત: ESPN
               </p>
             </div>
@@ -5260,7 +5297,7 @@ function WeatherDashboardSection({ language }: { language: Language }) {
                         <span className="text-[13px] font-black text-slate-950 dark:text-white">{city}</span>
                         <button
                           onClick={() => setSelectedCity(city)}
-                          className="h-5.5 w-5.5 bg-slate-950 text-white rounded-full flex items-center justify-center hover:bg-[#B3121B] transition-colors"
+                          className="h-5.5 w-5.5 bg-[#B3121B] text-white rounded-full flex items-center justify-center hover:bg-slate-950 transition-colors"
                         >
                           <ArrowUpRight className="h-3 w-3" />
                         </button>
@@ -5472,7 +5509,7 @@ export function EntertainTechLifeSection({ language }: { language: Language }) {
     <div className="mx-auto max-w-screen-xl px-4 mt-8">
       {/* Section Header */}
       <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
-        <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[13.5px] md:text-[14.5px] font-black rounded-lg select-none leading-none tracking-tight">
+        <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[17px] md:text-[19px] font-black rounded-lg select-none leading-none tracking-tight">
           {language === 'gu'
             ? 'હેલ્થ   •   મનોરંજન   •   ટેક્નોલોજી'
             : language === 'hi'
@@ -5590,6 +5627,13 @@ const GALLERY_DATA = [
     title: 'Grand Somnath Temple decorations: Glimpse of divine faith',
     count: 30,
   },
+  {
+    id: 'gal10',
+    src: '/assets/demo/2.jpg',
+    titleGu: 'અંબાજી ભાદરવી પૂનમ મેળો: ભક્તોનું ઘોડાપૂર ઉમટ્યું',
+    title: 'Ambaji Bhadarvi Poonam Fair: Huge crowd of devotees gathered',
+    count: 42,
+  },
 ];
 
 function PhotoGallerySection({ language }: { language: Language }) {
@@ -5597,22 +5641,27 @@ function PhotoGallerySection({ language }: { language: Language }) {
   const CATS_EN = ['Gujarat', 'Culture', 'Religion', 'Travel', 'Sports', 'Festival', 'City', 'Nature', 'Heritage'];
 
   const SPANS = [
-    // Hero Card
-    { col: 'md:col-span-2', row: 'row-span-2', hero: true, wide: false }, // 0
+    // Column 1 (spans 2 rows)
+    { col: 'md:col-span-1', row: 'row-span-1 md:row-span-2', hero: true, wide: false }, // 0 (labeled 1)
 
-    // Right side of Hero
-    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 1
-    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 2
+    // Column 2 Top (row 1)
+    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 1 (labeled 2)
 
-    // Second Row
-    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 3
-    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 4
-    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 5
+    // Column 3 (spans 2 rows)
+    { col: 'md:col-span-1', row: 'row-span-1 md:row-span-2', hero: true, wide: false }, // 2 (labeled 3)
 
-    // Third Row
-    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 6
-    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 7
-    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 8
+    // Column 2 Bottom (row 2)
+    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 3 (labeled 4)
+
+    // Row 3
+    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 4 (labeled 5)
+    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 5 (labeled 6)
+    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 6 (labeled 7)
+
+    // Row 4
+    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 7 (labeled 8)
+    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 8 (labeled 9)
+    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 9 (labeled 10)
   ];
 
   return (
@@ -5620,14 +5669,14 @@ function PhotoGallerySection({ language }: { language: Language }) {
       <div className="mx-auto max-w-screen-xl px-4">
         {/* Header */}
         <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
-          <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[13.5px] md:text-[14.5px] font-black rounded-lg select-none leading-none tracking-tight">
+          <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[17px] md:text-[19px] font-black rounded-lg select-none leading-none tracking-tight">
             {language === 'gu' ? 'ફોટો   ગેલેરી' : language === 'hi' ? 'फोटो   गैलरी' : 'Photo   Gallery'}
           </span>
           <Link
             href="/photos"
             className="text-[#B3121B] hover:text-red-700 font-extrabold text-[13px] md:text-[14px] hover:underline"
           >
-            {language === 'gu' ? 'બધી ફોટો ગેલેરી →' : 'All Photo Gallery →'}
+            {language === 'gu' ? 'વધુ ફોટો ગેલેરી →' : 'More Photo Gallery →'}
           </Link>
         </div>
 

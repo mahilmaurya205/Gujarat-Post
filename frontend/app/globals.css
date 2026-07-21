@@ -378,10 +378,10 @@ img {
 }
 
 .news-loader-page {
-  min-height: min(72vh, 680px);
-  background:
-    radial-gradient(circle at 50% 44%, rgb(225 29 46 / 0.12), transparent 18rem),
-    linear-gradient(180deg, var(--background), var(--background));
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at 50% 50%, #1e0508 0%, #000000 75%);
+  color: #ffffff;
 }
 
 .news-loader-stage {
@@ -393,6 +393,8 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
+  transform: scale(1.45);
+  margin-bottom: 24px;
 }
 
 /* 3D Radio signal waves radiating from the head */
@@ -444,53 +446,110 @@ img {
   align-items: center;
 }
 
-/* Metallic mesh mic head */
+/* Volumetric metallic mesh mic head (Intersecting faces) */
 .news-loader-mic-head-3d {
   position: absolute;
   top: 0;
   width: 54px;
   height: 60px;
-  border-radius: 50% 50% 45% 45%;
-  background: radial-gradient(circle at 35% 30%, #a0aec0, #4a5568 50%, #1a202c 90%);
-  box-shadow:
-    0 10px 20px rgba(0, 0, 0, 0.4),
-    inset -4px -4px 10px rgba(0, 0, 0, 0.6),
-    inset 4px 4px 10px rgba(255, 255, 255, 0.4);
   transform-style: preserve-3d;
   z-index: 10;
-  overflow: hidden;
 }
 
-.news-loader-mic-head-3d .mesh-pattern {
+.head-face {
   position: absolute;
   inset: 0;
-  background-image:
-    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-    linear-gradient(rgba(0, 0, 0, 0.15) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.15) 1px, transparent 1px);
-  background-size: 4px 4px;
+  border-radius: 50% 50% 45% 45%;
+  background: radial-gradient(circle at 35% 30%, #e2e8f0, #475569 55%, #0f172a 90%);
+  box-shadow:
+    inset -4px -4px 10px rgba(0, 0, 0, 0.7),
+    inset 4px 4px 10px rgba(255, 255, 255, 0.4);
+  transform-style: preserve-3d;
+  backface-visibility: visible;
 }
 
-.news-loader-mic-head-3d .head-shine {
+.head-face.face-0 {
+  transform: rotateY(0deg);
+}
+
+.head-face.face-45 {
+  transform: rotateY(45deg);
+  filter: brightness(0.9);
+}
+
+.head-face.face-90 {
+  transform: rotateY(90deg);
+  filter: brightness(0.8);
+}
+
+.head-face.face-135 {
+  transform: rotateY(135deg);
+  filter: brightness(0.85);
+}
+
+.head-face .mesh-pattern {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.25) 1.2px, transparent 1.2px),
+    linear-gradient(rgba(0, 0, 0, 0.25) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.25) 1px, transparent 1px);
+  background-size: 5px 5px;
+  opacity: 0.85;
+}
+
+.head-face .head-shine {
   position: absolute;
   top: 4px;
   left: 10px;
-  width: 14px;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.6);
+  width: 16px;
+  height: 9px;
+  background: rgba(255, 255, 255, 0.75);
   border-radius: 50%;
-  filter: blur(1px);
+  filter: blur(1.5px);
   transform: rotate(-15deg);
+  opacity: 0.9;
 }
 
-.news-loader-mic-head-3d .head-band {
+/* 3D Head collar/band */
+.head-band-3d {
   position: absolute;
   bottom: 0;
-  left: 0;
-  right: 0;
-  height: 5px;
-  background: linear-gradient(90deg, #1a202c, #718096, #1a202c);
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  left: 50%;
+  width: 52px;
+  height: 7px;
+  margin-left: -26px;
+  transform-style: preserve-3d;
+}
+
+.band-face {
+  position: absolute;
+  height: 100%;
+  width: 52px;
+  background: linear-gradient(90deg, #94a3b8, #cbd5e1, #64748b);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.band-face.front {
+  transform: rotateY(0deg) translateZ(26px);
+}
+
+.band-face.right {
+  transform: rotateY(90deg) translateZ(26px);
+  filter: brightness(0.85);
+}
+
+.band-face.back {
+  transform: rotateY(180deg) translateZ(26px);
+  filter: brightness(0.7);
+}
+
+.band-face.left {
+  transform: rotateY(-90deg) translateZ(26px);
+  filter: brightness(0.9);
 }
 
 /* 3D Mic Neck */
@@ -505,34 +564,32 @@ img {
 .neck-face {
   position: absolute;
   height: 100%;
-  background: linear-gradient(90deg, #4a5568, #2d3748);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  width: 16px;
+  background: linear-gradient(90deg, #cbd5e1, #94a3b8, #475569);
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .neck-face.front {
-  width: 16px;
   transform: rotateY(0deg) translateZ(8px);
 }
 
 .neck-face.right {
-  width: 16px;
   transform: rotateY(90deg) translateZ(8px);
-  filter: brightness(0.8);
+  filter: brightness(0.85);
 }
 
 .neck-face.back {
-  width: 16px;
   transform: rotateY(180deg) translateZ(8px);
-  filter: brightness(0.6);
+  filter: brightness(0.7);
 }
 
 .neck-face.left {
-  width: 16px;
   transform: rotateY(-90deg) translateZ(8px);
   filter: brightness(0.9);
 }
 
-/* 3D Cube Mic Flag */
+/* 3D Cube Mic Flag - Premium Glossy Acrylic look */
 .news-loader-mic-flag-3d {
   position: absolute;
   top: 72px;
@@ -547,13 +604,33 @@ img {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #e11d2e, #850b18);
-  border: 1.5px solid rgba(255, 255, 255, 0.25);
-  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.15);
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(185, 28, 28, 0.95));
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  box-shadow:
+    inset 0 0 15px rgba(255, 255, 255, 0.25),
+    0 4px 10px rgba(0, 0, 0, 0.25);
   color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   font-family: inherit;
   overflow: hidden;
+  backdrop-filter: blur(2px);
+}
+
+.flag-face::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 40%;
+  height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: rotate(30deg);
+  animation: flag-shine-sweep 4s ease-in-out infinite;
+}
+
+@keyframes flag-shine-sweep {
+  0%, 100% { left: -60%; }
+  50% { left: 140%; }
 }
 
 .flag-face.front {
@@ -572,57 +649,66 @@ img {
   width: 60px;
   height: 48px;
   transform: rotateY(-90deg) translateZ(30px);
-  background: linear-gradient(135deg, #be1524, #66040d);
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.95), rgba(153, 27, 27, 0.95));
 }
 
 .flag-face.right {
   width: 60px;
   height: 48px;
   transform: rotateY(90deg) translateZ(30px);
-  background: linear-gradient(135deg, #be1524, #66040d);
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.95), rgba(153, 27, 27, 0.95));
 }
 
 .flag-face.top {
   width: 60px;
   height: 60px;
   transform: rotateX(90deg) translateZ(24px);
-  background: #66040d;
+  background: #991b1b;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
 }
 
 .flag-face.bottom {
   width: 60px;
   height: 60px;
   transform: rotateX(-90deg) translateZ(24px);
-  background: #3a0005;
+  background: #7f1d1d;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
 }
 
 .flag-face b {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 950;
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.05em;
+  background: linear-gradient(180deg, #ffffff, #f3f4f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3));
 }
 
 .flag-face small {
   margin-top: 1px;
   font-size: 8px;
-  font-weight: 800;
-  letter-spacing: 0.15em;
-  opacity: 0.9;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  color: #fee2e2;
+  opacity: 0.95;
 }
 
 .flag-face.left b,
 .flag-face.right b {
-  font-size: 11px;
-  font-weight: 800;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0;
 }
 
 .flag-face.left small,
 .flag-face.right small {
-  font-size: 7px;
+  font-size: 7.5px;
+  letter-spacing: 0.1em;
 }
 
-/* 3D Mic Handle */
+/* 3D Mic Handle - Anodized brushed aluminum */
 .news-loader-mic-handle-3d {
   position: absolute;
   top: 120px;
@@ -636,9 +722,19 @@ img {
   width: 18px;
   height: 56px;
   background: linear-gradient(180deg, #1e293b, #0f172a);
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
-  border-right: 1px solid rgba(0, 0, 0, 0.35);
-  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.05);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  border-right: 1px solid rgba(0, 0, 0, 0.5);
+  box-shadow:
+    inset 0 0 8px rgba(255, 255, 255, 0.08),
+    inset 1px 0 0 rgba(255, 255, 255, 0.05);
+}
+
+.handle-face::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 2px);
+  pointer-events: none;
 }
 
 .handle-face.front {
@@ -660,30 +756,93 @@ img {
   filter: brightness(0.85);
 }
 
-/* 3D Mic Base */
+/* 3D Mic Base & Cable Joint */
 .news-loader-mic-base-3d {
   position: absolute;
   top: 176px;
   width: 14px;
   height: 10px;
-  background: linear-gradient(90deg, #334155, #1e293b, #334155);
-  border-radius: 0 0 4px 4px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  transform: translateZ(0);
+  transform-style: preserve-3d;
 }
 
-/* 3D Orbiting Satellite */
+.base-face {
+  position: absolute;
+  width: 14px;
+  height: 10px;
+  background: linear-gradient(90deg, #64748b, #475569, #334155);
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  border-right: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.base-face.front {
+  transform: rotateY(0deg) translateZ(7px);
+}
+
+.base-face.right {
+  transform: rotateY(90deg) translateZ(7px);
+  filter: brightness(0.8);
+}
+
+.base-face.back {
+  transform: rotateY(180deg) translateZ(7px);
+  filter: brightness(0.65);
+}
+
+.base-face.left {
+  transform: rotateY(-90deg) translateZ(7px);
+  filter: brightness(0.85);
+}
+
+.cable-joint-3d {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 8px;
+  height: 16px;
+  margin-left: -4px;
+  transform-style: preserve-3d;
+}
+
+.cable-face {
+  position: absolute;
+  width: 8px;
+  height: 16px;
+  background: linear-gradient(180deg, #090d16, #020408);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cable-face.front {
+  transform: rotateY(0deg) translateZ(4px);
+}
+
+.cable-face.right {
+  transform: rotateY(90deg) translateZ(4px);
+  filter: brightness(0.85);
+}
+
+.cable-face.back {
+  transform: rotateY(180deg) translateZ(4px);
+  filter: brightness(0.7);
+}
+
+.cable-face.left {
+  transform: rotateY(-90deg) translateZ(4px);
+  filter: brightness(0.9);
+}
+
+/* 3D Orbiting Satellite & Glowing Orbit */
 .news-loader-orbit-3d {
   position: absolute;
-  top: 30px;
-  width: 190px;
-  height: 190px;
-  border: 1px dashed rgba(225, 29, 46, 0.35);
+  top: 25px;
+  width: 200px;
+  height: 200px;
+  border: 1.5px dashed rgba(239, 68, 68, 0.45);
   border-radius: 50%;
   transform-style: preserve-3d;
   transform: rotateX(72deg) rotateY(-8deg);
   animation: newsroom-orbit-spin-3d 10s linear infinite;
   pointer-events: none;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.1);
 }
 
 .orbiting-satellite {
@@ -696,17 +855,18 @@ img {
 
 .orbiting-satellite span {
   display: block;
-  padding: 3px 8px;
-  background: var(--accent);
+  padding: 3px 9px;
+  background: #ef4444;
   color: white;
-  font-size: 7px;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  border-radius: 10px;
+  font-size: 7.5px;
+  font-weight: 950;
+  letter-spacing: 0.15em;
+  border-radius: 999px;
   box-shadow:
-    0 0 10px var(--accent),
-    0 0 20px var(--accent);
+    0 0 12px rgba(239, 68, 68, 0.85),
+    0 0 25px rgba(239, 68, 68, 0.45);
   animation: counter-rotate-satellite 10s linear infinite;
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .news-loader-copy {
@@ -717,18 +877,18 @@ img {
 
 .news-loader-copy strong {
   display: block;
-  font-size: 19px;
+  font-size: 21px;
   font-weight: 950;
   letter-spacing: -0.01em;
-  color: var(--foreground);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  color: #ffffff;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
 }
 
 .news-loader-copy span {
   display: block;
   margin-top: 4px;
-  color: var(--muted-foreground);
-  font-size: 10px;
+  color: #94a3b8;
+  font-size: 10.5px;
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -752,6 +912,30 @@ img {
   border-radius: inherit;
   background: linear-gradient(90deg, transparent, var(--accent), transparent);
   animation: newsroom-bar 1.5s ease-in-out infinite;
+}
+
+/* Floor Shadow under the Mic */
+.news-loader-shadow {
+  position: absolute;
+  bottom: 25px;
+  width: 70px;
+  height: 10px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 75%);
+  border-radius: 50%;
+  animation: newsroom-shadow-pulse 6s ease-in-out infinite;
+  pointer-events: none;
+  transform: translateZ(-20px);
+}
+
+@keyframes newsroom-shadow-pulse {
+  0%, 100% {
+    transform: translateZ(-20px) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateZ(-20px) scale(0.75);
+    opacity: 0.4;
+  }
 }
 
 @keyframes newsroom-mic-spin {

@@ -25,15 +25,16 @@ type CardSize = 'hero' | 'medium' | 'wide' | 'tall';
   └───────────────┴───────────────┴───────────────┘
 */
 const CARD_SPANS: { colSpan: string; rowSpan: string; size: CardSize }[] = [
-  { colSpan: 'col-span-2', rowSpan: 'row-span-2', size: 'hero' },   // 0: Big hero
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 1
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 2
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 3
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 4
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 5
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 6
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 7
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 8
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1 md:row-span-2', size: 'hero' },   // 0 (labeled 1)
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 1 (labeled 2)
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1 md:row-span-2', size: 'hero' },   // 2 (labeled 3)
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 3 (labeled 4)
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 4 (labeled 5)
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 5 (labeled 6)
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 6 (labeled 7)
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 7 (labeled 8)
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 8 (labeled 9)
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 9 (labeled 10)
 ];
 
 /* ─── Category chips ─────────────────────────────────────────────────────── */
@@ -218,7 +219,7 @@ export default function PhotoGallery() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setPhotos(PHOTOS.slice(0, 9));
+    setPhotos(PHOTOS.slice(0, 10));
     setLoading(false);
   }, []);
 
@@ -227,15 +228,15 @@ export default function PhotoGallery() {
 
   if (loading) return <GallerySkeleton />;
 
-  const gallery = photos.length > 0 ? photos : PHOTOS.slice(0, 9);
+  const gallery = photos.length > 0 ? photos : PHOTOS.slice(0, 10);
 
   return (
     <section className="py-6 bg-background">
       <div className="mx-auto max-w-screen-xl px-4">
         <SectionHeader
-          title="Photo Gallery"
-          titleGu="ફોટો ગેલેરી"
-          titleHi="फोटो गैलरी"
+          title="More Photo Gallery"
+          titleGu="વધુ ફોટો ગેલેરી"
+          titleHi="और फोटो गैलरी"
           href="/photos"
           language={language}
         />

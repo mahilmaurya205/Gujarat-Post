@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -397,7 +397,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
     <div className="flex flex-col min-w-0">
       {/* Header */}
       <div className="flex items-center justify-between border-b-[3px] border-slate-950 dark:border-slate-800 pb-2.5 mb-6">
-        <span className="bg-[#B3121B] text-white px-4 py-1.5 font-extrabold text-[14px] md:text-[15px] rounded-sm tracking-tight leading-none">
+        <span className="bg-[#B3121B] text-white px-5 py-2.5 font-extrabold text-[17px] md:text-[19px] rounded-sm tracking-tight leading-none">
           {labelLatest}
         </span>
         <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] animate-pulse">

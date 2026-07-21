@@ -89,7 +89,7 @@ export default function TrendingSection() {
     <div className="mx-auto max-w-screen-xl px-4 mt-8 select-none">
       {/* Section Header */}
       <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
-        <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[13.5px] md:text-[14.5px] font-black rounded-lg select-none leading-none tracking-tight">
+        <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[17px] md:text-[19px] font-black rounded-lg select-none leading-none tracking-tight">
           {language === 'gu' ? 'ટ્રેન્ડિંગ  ન્યૂઝ' : language === 'hi' ? 'ट्रेंडिंग  न्यूज' : 'Trending News'}
         </span>
         <Link

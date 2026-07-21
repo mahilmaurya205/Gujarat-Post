@@ -56,40 +56,50 @@ function PlayStoreIcon({ className = 'h-4 w-4' }: { className?: string }) {
 }
 
 /* ─── Links data ─────────────────────────────────────────────────────────── */
-const topicsLinks = [
-    { label: 'Gujarat', href: '/category/gujarat' },
-    { label: 'Politics', href: '/category/politics' },
-    { label: 'Business', href: '/category/business' },
-    { label: 'Entertainment', href: '/category/entertainment' },
-    { label: 'Health', href: '/category/health' },
-    { label: 'Sports', href: '/category/sports' },
-    { label: 'Technology', href: '/category/technology' },
-    { label: 'World', href: '/category/world' },
-    { label: 'Trending', href: '/category/trending' },
+const topics1Links = [
+    { label: 'વીડિયો', href: '/videos' },
+    { label: 'ગુજરાત', href: '/category/gujarat' },
+    { label: 'અમદાવાદ', href: '/category/ahmedabad' },
+    { label: 'ગાંધીનગર', href: '/category/gandhinagar' },
+    { label: 'સુરત', href: '/category/surat' },
+    { label: 'વડોદરા', href: '/category/vadodara' },
+    { label: 'રાજકોટ', href: '/category/rajkot' },
+    { label: 'અન્ય શહેરો', href: '/category/gujarat' },
+    { label: 'ગુજરાત ચૂંટણી 2027', href: '/category/election-2027' },
 ];
 
-const showLinks = [
-    { label: 'GP Live TV', href: '/watch' },
-    { label: 'Gujarat Post Specials', href: '/category/trending' },
-    { label: 'Good Morning Gujarat', href: '/category/gujarat' },
-    { label: 'Ground Reports', href: '/category/state' },
-    { label: 'Podcast Series', href: '/videos?tab=podcast' },
-    { label: 'E-Paper', href: '/epaper' },
-    { label: 'Latest Videos', href: '/videos' },
-    { label: 'Shorts', href: '/shorts' },
-    { label: 'Photo Stories', href: '/photos' },
+const topics2Links = [
+    { label: 'હેલ્થ', href: '/category/health' },
+    { label: 'મનોરંજન', href: '/category/entertainment' },
+    { label: 'ટેકનોલોજી', href: '/category/technology' },
+    { label: 'ફોટો ગેલેરી', href: '/photos' },
+    { label: 'ઇન્સ્ટાગ્રામ', href: '/category/instagram' },
+    { label: 'વેબસ્ટોરી', href: '/category/webstory' },
+    { label: 'હવામાન', href: '/category/weather' },
+    { label: 'ગોલ્ડ- સિલ્વર', href: '/category/gold-silver' },
+];
+
+const topics3Links = [
+    { label: 'ભારત', href: '/category/national' },
+    { label: 'વિશ્વ', href: '/category/world' },
+    { label: 'રાજનીતિ', href: '/category/politics' },
+    { label: 'ક્રાઇમ', href: '/category/crime' },
+    { label: 'ફેક્ટ ચેક', href: '/category/fact-check' },
+    { label: 'ટ્રેન્ડિંગ ન્યૂઝ', href: '/category/trending' },
+    { label: 'પોડકાસ્ટ', href: '/videos?tab=podcast' },
+    { label: 'ઇપેપર', href: '/epaper' },
 ];
 
 const companyLinks = [
     { label: 'About Us', href: '/about' },
     { label: 'Contact Us', href: '/contact' },
-    { label: 'Advertise with Us', href: '/advertise' },
-    { label: 'Careers', href: '/careers' },
-    { label: 'Complaint Redressal', href: '/complaint-redressal' },
-    { label: 'Share Tips with GP', href: '/contact' },
-    { label: 'Gujarat Post App', href: '/app' },
-    { label: 'Authors List', href: '/authors' },
-    { label: 'Sitemap', href: '/sitemap' },
+    { label: 'Advertise With Us', href: '/advertise' },
+    { label: 'Privacy Policy', href: '/privacy-policy' },
+    { label: 'Terms Of Use', href: '/terms' },
+    { label: 'Disclaimer', href: '/disclaimer' },
+    { label: 'Site Map', href: '/sitemap' },
+    { label: 'RSS Terms of Service', href: '/rss-terms-of-service' },
+    { label: 'Feedback', href: '/feedback' },
 ];
 
 /* ─── NavColumn Component ─────────────────────────────────────────────────── */
@@ -143,7 +153,15 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
                 <div className="flex flex-col lg:flex-row gap-10 lg:gap-0 pb-10 border-b border-slate-800/80">
 
                     {/* Logo & Brand */}
-                    <div className="flex flex-col gap-5 lg:w-72 flex-shrink-0">
+                    <div className="flex flex-col gap-3 lg:w-72 flex-shrink-0">
+                        <div>
+                            <p className="text-[16px] font-bold text-white tracking-tight leading-snug ml-4">
+                                Real Stories. <span className="text-[#B3121B]">Real Gujarat.</span>
+                            </p>
+                            {/* <p className="text-[13px] font-normal leading-relaxed text-slate-400 mt-2 max-w-xs">
+                                Gujarat's leading digital news network — accurate, unbiased, and fast breaking news.
+                            </p> */}
+                        </div>
                         <Link
                             href="/"
                             className="inline-block relative h-16 w-56 overflow-hidden rounded-lg transition-transform duration-200 hover:scale-[1.02]"
@@ -153,29 +171,30 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
                                 alt="Gujarat Post Logo"
                                 fill
                                 priority
-                                className="object-contain"
+                                className="object-contain object-left"
                             />
                         </Link>
-                        <div>
-                            <p className="text-[16px] font-bold text-white tracking-tight leading-snug">
-                                Real Stories. <span className="text-[#B3121B]">Real Gujarat.</span>
-                            </p>
-                            {/* <p className="text-[13px] font-normal leading-relaxed text-slate-400 mt-2 max-w-xs">
-                                Gujarat's leading digital news network — accurate, unbiased, and fast breaking news.
-                            </p> */}
+                        {/* Social Icons Row */}
+                        <div className="flex items-center gap-3 flex-wrap mt-50 ml-4">
+                            {SOCIAL_LINKS.filter(item => item.platform !== 'news' && item.platform !== 'whatsapp').map((item) => (
+                                <SocialIconButton key={item.label} item={item} />
+                            ))}
                         </div>
                     </div>
 
                     {/* Nav columns — pushed to the right */}
-                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-10 lg:pl-28">
+                    <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-10 lg:pl-16">
 
-                        {/* Topics */}
-                        <NavColumn title="Topics" links={topicsLinks} />
+                        {/* Topics Col 1 */}
+                        <NavColumn title="Topics" links={topics1Links} />
 
-                        {/* Shows */}
-                        <NavColumn title="Shows" links={showLinks} />
+                        {/* Topics Col 2 */}
+                        <NavColumn title="Topics" links={topics2Links} />
 
-                        {/* Company */}
+                        {/* Topics Col 3 */}
+                        <NavColumn title="Topics" links={topics3Links} />
+
+                        {/* Company Col 4 */}
                         <NavColumn title="Company" links={companyLinks} />
 
                     </div>
@@ -183,17 +202,44 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
                 </div>
 
                 {/* ── Middle Row: Socials & App Store Downloads ── */}
-                <div className="pt-6 pb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6 border-b border-slate-800/80">
+                {/* <div className="pt-6 pb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6 border-b border-slate-800/80">
 
-                    {/* Social Icons Row (Left) */}
-                    <div className="flex items-center gap-3 flex-wrap">
-                        {SOCIAL_LINKS.map((item) => (
-                            <SocialIconButton key={item.label} item={item} />
-                        ))}
+                    
+
+                </div> */}
+
+                {/* ── Bottom Bar: Legal Policies & Copyright ── */}
+                <div className="pt-6 border-t border-slate-900/60 mt-6 grid grid-cols-1 md:grid-cols-3 items-center gap-6 text-[11.5px] font-extrabold text-slate-400">
+                    
+                    {/* Left Column: empty spacer on desktop to keep middle centered */}
+                    <div className="hidden md:block" />
+
+                    {/* Center Column: Legal links & Copyright */}
+                    <div className="flex flex-col items-center justify-center gap-3 text-center">
+                        {/* Policy Links Row */}
+                        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+                            {[
+                                ['Complaign Redressal', '/complaign-redressal'],
+                                ['Your Privacy Choices', '/privacy-choices'],
+                                ["Children's Privacy Policy", '/children-privacy'],
+                                ['Cookie Settings', '/cookie-settings'],
+                                ['DNPA Code Of Ethics', '/dnpa-code-of-ethics'],
+                            ].map(([label, href]) => (
+                                <Link key={href} href={href} className="hover:text-white transition-colors duration-200">
+                                    {label}
+                                </Link>
+                            ))}
+                        </div>
+
+                        {/* Copyright Line */}
+                        <div className="flex flex-col items-center justify-center gap-1.5 text-slate-500 font-extrabold text-[11px] mt-1">
+                            <p>External links are provided for reference purposes. © {new Date().getFullYear()} GUJARAT POST MEDIA. ALL RIGHTS RESERVED.</p>
+                            <p className="tracking-wider text-slate-400 font-black">RNI/GJ-DEMO/2026</p>
+                        </div>
                     </div>
 
-                    {/* App Store & Play Store Badges (Right - Matching Image 1 White Style) */}
-                    <div className="flex items-center gap-3 select-none">
+                    {/* Right Column: Badges (aligned to the right on desktop, centered on mobile) */}
+                    <div className="flex items-center justify-center md:justify-end gap-3 select-none">
                         {/* App Store Badge */}
                         <a
                             href="https://apps.apple.com"
@@ -221,34 +267,6 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
                                 <span className="block text-[14px] font-black text-black tracking-tight">Google Play</span>
                             </div>
                         </a>
-                    </div>
-
-                </div>
-
-                {/* ── Bottom Bar: Legal Policies & Copyright ── */}
-                <div className="pt-6 text-[11.5px] font-extrabold text-slate-400 leading-relaxed text-center">
-                    {/* Policy Links Row */}
-                    <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mb-3">
-                        {[
-                            ['Privacy Policy', '/privacy-policy'],
-                            ['Terms of Use', '/terms'],
-                            ['Your Privacy Choices', '/privacy-choices'],
-                            ["Children's Privacy Policy", '/children-privacy'],
-                            ['Ad Policy', '/ad-policy'],
-                            ['Complaint Redressal', '/complaint-redressal'],
-                            ['About Us', '/about'],
-                            ['Sitemap', '/sitemap']
-                        ].map(([label, href]) => (
-                            <Link key={href} href={href} className="hover:text-white transition-colors duration-200">
-                                {label}
-                            </Link>
-                        ))}
-                    </div>
-
-                    {/* Copyright Line */}
-                    <div className="flex flex-col items-center justify-center gap-2 border-t border-slate-900 pt-4 text-slate-500 font-extrabold text-[11px]">
-                        <p>External links are provided for reference purposes. © {new Date().getFullYear()} GUJARAT POST MEDIA. ALL RIGHTS RESERVED.</p>
-                        <p className="tracking-wider text-slate-400 font-black">RNI/GJ-DEMO/2026</p>
                     </div>
                 </div>
 

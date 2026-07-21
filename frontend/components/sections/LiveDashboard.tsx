@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { AlertCircle, CloudSun, Droplets, RefreshCw, Search, Wind, Cloud, Sun, CloudRain, TrendingUp, TrendingDown, Trophy, ChevronDown } from 'lucide-react';
@@ -184,8 +184,8 @@ export default function LiveDashboard() {
                   />
                 </div>
                 {/* Skewed Red Banner */}
-                <div className="bg-[#B3121B] text-white px-5 py-1 transform -skew-x-[20deg] font-black rounded-sm shadow-sm select-none">
-                  <span className="block transform skew-x-[20deg] text-[13px] md:text-[14px] tracking-wider uppercase leading-none">
+                <div className="bg-[#B3121B] text-white px-5 py-1.5 transform -skew-x-[20deg] font-black rounded-sm shadow-sm select-none">
+                  <span className="block transform skew-x-[20deg] text-[15px] md:text-[16.5px] tracking-wider uppercase leading-none">
                     {getLocalized(language, { en: 'Live Center', gu: 'લાઇવ સેન્ટર', hi: 'लाइव सेंटर' })}
                   </span>
                 </div>
