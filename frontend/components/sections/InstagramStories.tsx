@@ -9,7 +9,7 @@ import { getLocalized } from '@/data';
 function ReelsBadgeIcon({ className = "h-4 w-4 text-white" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
-      <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H9l2 4H8L6 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4zM8 17V9.5l7 3.75L8 17z"/>
+      <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H9l2 4H8L6 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4zM8 17V9.5l7 3.75L8 17z" />
     </svg>
   );
 }
@@ -114,7 +114,7 @@ const STORY_ITEMS: StoryItem[] = [
     image: '/assets/demo/8.jpg',
     description: 'Verifying trending claims and statements to reveal the truth.',
     descriptionGu: 'સત્ય જાહેર કરવા માટે ટ્રેન્ડિંગ દાવાઓ અને નિવેદનોની ચકાસણી કરવી.',
-  },{
+  }, {
     id: 'story11',
     title: 'Fact Check',
     titleGu: 'ફેક્ટ ચેક',
@@ -122,7 +122,7 @@ const STORY_ITEMS: StoryItem[] = [
     image: '/assets/demo/8.jpg',
     description: 'Verifying trending claims and statements to reveal the truth.',
     descriptionGu: 'સત્ય જાહેર કરવા માટે ટ્રેન્ડિંગ દાવાઓ અને નિવેદનોની ચકાસણી કરવી.',
-  },{
+  }, {
     id: 'story12',
     title: 'Fact Check',
     titleGu: 'ફેક્ટ ચેક',
@@ -253,10 +253,10 @@ export default function InstagramStories() {
   };
 
   return (
-    <section className="mx-auto max-w-screen-xl px-4 mt-4 relative overflow-hidden">
+    <section className="mx-auto max-w-screen-xl px-4 mt-2 -mb-4 relative overflow-hidden">
       <div className="relative">
         {/* Section Header */}
-        <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
+        <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-4">
           <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[17px] md:text-[19px] font-black rounded-lg select-none leading-none tracking-tight">
             {language === 'gu' ? 'ઇન્સ્ટાગ્રામ રિલ્સ' : language === 'hi' ? 'इन्स्टाग्राम रील्स' : 'Instagram Reels'}
           </span>
@@ -367,7 +367,7 @@ export default function InstagramStories() {
         </div> */}
 
         {/* Follow us on Instagram Row */}
-        <div className="relative flex items-center justify-center mt-6">
+        <div className="relative flex items-center justify-center mt-3">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-red-200 dark:border-red-950/40" />
           </div>

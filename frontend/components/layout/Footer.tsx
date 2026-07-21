@@ -57,37 +57,37 @@ function PlayStoreIcon({ className = 'h-4 w-4' }: { className?: string }) {
 
 /* ─── Links data ─────────────────────────────────────────────────────────── */
 const topics1Links = [
-    { label: 'વીડિયો', href: '/videos' },
-    { label: 'ગુજરાત', href: '/category/gujarat' },
-    { label: 'અમદાવાદ', href: '/category/ahmedabad' },
-    { label: 'ગાંધીનગર', href: '/category/gandhinagar' },
-    { label: 'સુરત', href: '/category/surat' },
-    { label: 'વડોદરા', href: '/category/vadodara' },
-    { label: 'રાજકોટ', href: '/category/rajkot' },
-    { label: 'અન્ય શહેરો', href: '/category/gujarat' },
-    { label: 'ગુજરાત ચૂંટણી 2027', href: '/category/election-2027' },
+    { label: 'Videos', href: '/videos' },
+    { label: 'Gujarat', href: '/category/gujarat' },
+    { label: 'Ahmedabad', href: '/category/ahmedabad' },
+    { label: 'Gandhinagar', href: '/category/gandhinagar' },
+    { label: 'Surat', href: '/category/surat' },
+    { label: 'Vadodara', href: '/category/vadodara' },
+    { label: 'Rajkot', href: '/category/rajkot' },
+    { label: 'Other Cities', href: '/category/gujarat' },
+    { label: 'Gujarat Election 2027', href: '/category/election-2027' },
 ];
 
 const topics2Links = [
-    { label: 'હેલ્થ', href: '/category/health' },
-    { label: 'મનોરંજન', href: '/category/entertainment' },
-    { label: 'ટેકનોલોજી', href: '/category/technology' },
-    { label: 'ફોટો ગેલેરી', href: '/photos' },
-    { label: 'ઇન્સ્ટાગ્રામ', href: '/category/instagram' },
-    { label: 'વેબસ્ટોરી', href: '/category/webstory' },
-    { label: 'હવામાન', href: '/category/weather' },
-    { label: 'ગોલ્ડ- સિલ્વર', href: '/category/gold-silver' },
+    { label: 'Health', href: '/category/health' },
+    { label: 'Entertainment', href: '/category/entertainment' },
+    { label: 'Technology', href: '/category/technology' },
+    { label: 'Photo Gallery', href: '/photos' },
+    { label: 'Instagram', href: '/category/instagram' },
+    { label: 'Web Stories', href: '/category/webstory' },
+    { label: 'Weather', href: '/category/weather' },
+    { label: 'Gold-Silver', href: '/category/gold-silver' },
 ];
 
 const topics3Links = [
-    { label: 'ભારત', href: '/category/national' },
-    { label: 'વિશ્વ', href: '/category/world' },
-    { label: 'રાજનીતિ', href: '/category/politics' },
-    { label: 'ક્રાઇમ', href: '/category/crime' },
-    { label: 'ફેક્ટ ચેક', href: '/category/fact-check' },
-    { label: 'ટ્રેન્ડિંગ ન્યૂઝ', href: '/category/trending' },
-    { label: 'પોડકાસ્ટ', href: '/videos?tab=podcast' },
-    { label: 'ઇપેપર', href: '/epaper' },
+    { label: 'India', href: '/category/national' },
+    { label: 'World', href: '/category/world' },
+    { label: 'Politics', href: '/category/politics' },
+    { label: 'Crime', href: '/category/crime' },
+    { label: 'Fact Check', href: '/category/fact-check' },
+    { label: 'Trending News', href: '/category/trending' },
+    { label: 'Podcast', href: '/videos?tab=podcast' },
+    { label: 'E-Paper', href: '/epaper' },
 ];
 
 const companyLinks = [
@@ -106,7 +106,7 @@ const companyLinks = [
 function NavColumn({ title, links, titleHref }: { title: string; links: { label: string; href: string }[]; titleHref?: string }) {
     return (
         <div>
-            <div className="mb-5">
+            <div className="mb-3">
                 {titleHref ? (
                     <Link href={titleHref} className="text-white font-extrabold text-[16px] leading-tight tracking-tight hover:text-slate-300 transition-colors uppercase">
                         {title}
@@ -115,7 +115,7 @@ function NavColumn({ title, links, titleHref }: { title: string; links: { label:
                     <h3 className="text-white font-extrabold text-[16px] leading-tight tracking-tight uppercase">{title}</h3>
                 )}
             </div>
-            <ul className="space-y-3.5">
+            <ul className="space-y-2">
                 {links.map((item) => (
                     <li key={item.label}>
                         <Link
@@ -143,14 +143,14 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
     const isFeedPage = pathname === '/watch' || pathname === '/shorts';
     if (isFeedPage && !isInline) return null;
 
-    const wrap = isInline ? 'pt-6 pb-4' : 'pt-10 pb-6';
+    const wrap = isInline ? 'pt-4 pb-3' : 'pt-6 pb-4';
 
     return (
         <footer data-theme="dark" className="bg-[#050B14] text-white relative border-t border-slate-900 select-none w-full">
             <div className={`w-full px-4 sm:px-6 md:px-8 lg:px-10 ${wrap}`}>
 
                 {/* ── Main Layout: Logo left, Nav columns pushed right ── */}
-                <div className="flex flex-col lg:flex-row gap-10 lg:gap-0 pb-10 border-b border-slate-800/80">
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-0 pb-6 border-b border-slate-800/80">
 
                     {/* Logo & Brand */}
                     <div className="flex flex-col gap-3 lg:w-72 flex-shrink-0">
@@ -175,15 +175,15 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
                             />
                         </Link>
                         {/* Social Icons Row */}
-                        <div className="flex items-center gap-3 flex-wrap mt-50 ml-4">
-                            {SOCIAL_LINKS.filter(item => item.platform !== 'news' && item.platform !== 'whatsapp').map((item) => (
+                        <div className="flex items-center gap-3 flex-wrap mt-4 ml-4">
+                            {SOCIAL_LINKS.map((item) => (
                                 <SocialIconButton key={item.label} item={item} />
                             ))}
                         </div>
                     </div>
 
                     {/* Nav columns — pushed to the right */}
-                    <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-10 lg:pl-16">
+                    <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-6 lg:pl-16">
 
                         {/* Topics Col 1 */}
                         <NavColumn title="Topics" links={topics1Links} />
@@ -209,7 +209,7 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
                 </div> */}
 
                 {/* ── Bottom Bar: Legal Policies & Copyright ── */}
-                <div className="pt-6 border-t border-slate-900/60 mt-6 grid grid-cols-1 md:grid-cols-3 items-center gap-6 text-[11.5px] font-extrabold text-slate-400">
+                <div className="pt-4 border-t border-slate-900/60 mt-4 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-[11.5px] font-extrabold text-slate-400">
                     
                     {/* Left Column: empty spacer on desktop to keep middle centered */}
                     <div className="hidden md:block" />

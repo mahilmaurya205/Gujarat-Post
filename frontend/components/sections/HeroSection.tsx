@@ -25,6 +25,7 @@ import WebStoriesSection from '@/components/sections/WebStoriesSection';
 import { ZODIAC_SIGNS, ZodiacSign } from '@/components/sections/AstrologySection';
 import LatestUpdatesSection from '@/components/sections/LatestUpdatesSection';
 import TrendingSection from '@/components/sections/TrendingSection';
+import Advertisement from '@/components/ads/Advertisement';
 
 const CHANNEL_URL = 'https://www.youtube.com/@Gujaratpostnews';
 const CHANNEL_ID = 'UCqQ8YbFSZ4j8J4iVJOHurTw';
@@ -554,6 +555,11 @@ export default function HeroSection() {
 
       <TrendingSection />
 
+      {/* Big Horizontal Ad before Latest News */}
+      <div className="mx-auto max-w-screen-xl px-4 mt-8 select-none">
+        <Advertisement position="header" className="w-full" />
+      </div>
+
       {/* Remaining bottom content layout (Latest Updates & Popular Stories) */}
       <section className="mt-8 border-t border-border/60 pt-6">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_336px] gap-8 items-start">
@@ -656,6 +662,11 @@ export default function HeroSection() {
           </div>
         </div>
       </section>
+
+      {/* Horizontal Ad Section before EntertainTechLifeSection */}
+      <div className="mx-auto max-w-screen-xl px-4 mt-8 select-none">
+        <Advertisement position="header" className="w-full" />
+      </div>
 
       <EntertainTechLifeSection language={language} />
 
@@ -4570,7 +4581,7 @@ const mockWorldCards = [
 /* --- World Section ("વિશ્વ" Zone) ----------------------------- */
 export function WorldSection({ language }: { language: Language }) {
   return (
-    <div className="mx-auto max-w-screen-xl px-4 mt-8">
+    <div className="mx-auto max-w-screen-xl px-4 mt-4">
       {/* Section Header */}
       <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
         <span className="bg-[#B3121B] text-white px-5 py-2.5 text-[17px] md:text-[19px] font-black rounded-lg select-none leading-none tracking-tight">

@@ -92,6 +92,12 @@ export const CATEGORY_META = {
   podcasts: { name: "Podcasts", gu: "પોડકાસ્ટ", hi: "पॉडकास्ट" },
   trending: { name: "Trending", gu: "લોકપ્રિય સ્ટોરીઝ", hi: "ट्रेंडिंग" },
   "fact-check": { name: "Fact Check", gu: "ફેક્ટ ચેક", hi: "फैक्ट चेक" },
+  gandhinagar: { name: "Gandhinagar", gu: "ગાંધીનગર", hi: "गांधीनगर" },
+  health: { name: "Health", gu: "હેલ્થ", hi: "स्वास्थ्य" },
+  instagram: { name: "Instagram", gu: "ઇન્સ્ટાગ્રામ", hi: "इन्स्टाग्राम" },
+  webstory: { name: "Web Stories", gu: "વેબસ્ટોરી", hi: "वेब स्टोरीज" },
+  weather: { name: "Weather", gu: "હવામાન", hi: "मौसम" },
+  "gold-silver": { name: "Gold - Silver", gu: "ગોલ્ડ - સિલ્વર", hi: "गोल्ड - सिल्वर" },
 };
 
 type CategorySlug = keyof typeof CATEGORY_META;
@@ -119,6 +125,13 @@ export const categorySlugMapping: Record<string, CategorySlug> = {
   podcasts: "podcasts",
   trending: "trending",
   "fact-check": "fact-check",
+  gandhinagar: "gandhinagar",
+  health: "health",
+  instagram: "instagram",
+  webstory: "webstory",
+  webstories: "webstory",
+  weather: "weather",
+  "gold-silver": "gold-silver",
 
   // Title-cased mappings to lowercase slug
   Gujarat: "state",
@@ -135,6 +148,14 @@ export const categorySlugMapping: Record<string, CategorySlug> = {
   Lifestyle: "lifestyle",
   Education: "education",
   World: "world",
+  Gandhinagar: "gandhinagar",
+  Health: "health",
+  Instagram: "instagram",
+  Webstory: "webstory",
+  Webstories: "webstory",
+  Weather: "weather",
+  "Gold-Silver": "gold-silver",
+  "Gold - Silver": "gold-silver",
 };
 
 const IMG: Record<string, string[]> = {
@@ -283,6 +304,12 @@ const IMG: Record<string, string[]> = {
 const baseStories = [
   // Gujarat
   ["sports", "Huge clash today at Narendra Modi Stadium, rush for tickets among fans", "નરેન્દ્ર મોદી સ્ટેડિયમમાં આજે મહામુકાબલો, ટિકિટ માટે પડાપડી", "नरेंद्र मोदी स्टेडियम में आज महामुकाबला, टिकटों के लिए मची मारामारी"],
+  ["health", "New health guidelines released: how to stay fit in summer", "આરોગ્ય માટે નવી માર્ગદર્શિકા: ઉનાળામાં ફિટ રહેવા માટે શું કરવું", "स्वास्थ्य के लिए नए दिशा-निर्देश: गर्मियों में फिट रहने के लिए क्या करें"],
+  ["gandhinagar", "Gift City Gandhinagar sets record in fintech investments", "ગિફ્ટ સિટી ગાંધીનગરે ફિનટેક રોકાણમાં રેકોર્ડ બનાવ્યો", "गिफ्ट सिटी गांधीनगर ने फिनटेक निवेश में रिकॉर्ड बनाया"],
+  ["instagram", "Social media influencers share local stories from Gujarat", "સોશિયલ મીડિયા ઇન્ફ્લુએન્સર્સે ગુજરાતની કથાઓ શેર કરી", "सोशल मीडिया इन्फ्लुएंसर्स ने गुजरात की कहानियां साझा की"],
+  ["webstory", "Explore the top tourist destinations in Gujarat this winter", "આ શિયાળામાં ગુજરાતના પ્રવાસન સ્થળોનું અન્વેષણ કરો", "इस सर्दियों में गुजरात के पर्यटन स्थलों का अन्वेषण करें"],
+  ["weather", "Monsoon update: Gujarat weather forecast for next week", "ચોમાસું અપડેટ: ગુજરાતમાં આગામી સપ્તાહનું હવામાન", "मानसून अपडेट: गुजरात में अगले सप्ताह का मौसम"],
+  ["gold-silver", "Gold and silver rates fluctuate: Check latest prices in Gujarat", "સોના-ચાંદીના ભાવમાં ઉતાર-ચઢાવ: ગુજરાતમાં આજના ભાવ", "सोने-चांदी की कीमतों में उतार-चढ़ाव: गुजरात में आज के भाव"],
   ["gujarat", "Big gift for Gujarat: New semiconductor policy announced, thousands of jobs to be created", "ગુજરાતને મોટી ભેટ! નવી સેમિકન્ડક્ટર પોલિસી જાહેર, હજારો નોકરીઓ મળશે", "गुजरात को बड़ी सौगात! नई सेमीकंडक्टर नीति घोषित, हजारों नौकरियां मिलेंगी"],
   ["gujarat", "New traffic rules implemented in Ahmedabad from today, details of penalty and locations", "અમદાવાદમાં આજથી નવા ટ્રાફિક નિયમ લાગુ! ક્યાં લાગશે દંડ, જાણો પૂરી વિગત", "अहमदाबाद में आज से नए ट्रैफिक नियम लागू! कहां लगेगा जुर्माना, जानें पूरी जानकारी"],
   ["gujarat", "Major change in Darshan timings at Dwarka Temple, important update for devotees", "દ્વારકા મંદિરના દર્શન સમયમાં મોટો ફેરફાર, શ્રદ્ધાળુઓ જરૂર વાંચે", "द्वारका मंदिर के दर्शन समय में बड़ा बदलाव, श्रद्धालु जरूर पढ़ें"],

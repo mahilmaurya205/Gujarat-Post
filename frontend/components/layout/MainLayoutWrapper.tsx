@@ -5,6 +5,7 @@ import Header from './Header';
 import DistrictBar from './DistrictBar';
 import BreakingTicker from './BreakingTicker';
 import Footer from './Footer';
+import SplashLoader from '@/components/ui/SplashLoader';
 
 interface Props {
   children: React.ReactNode;
@@ -20,6 +21,7 @@ export default function MainLayoutWrapper({ children }: Props) {
 
   return (
     <>
+      {pathname === '/' && <SplashLoader />}
       <Header />
       <DistrictBar />
       <BreakingTicker />

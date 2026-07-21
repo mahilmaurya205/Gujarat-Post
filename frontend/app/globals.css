@@ -124,13 +124,13 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: clip;
   font-size: var(--gp-font-size, 16px);
 }
 
 body {
   margin: 0;
-  overflow-x: hidden;
+  overflow-x: clip;
   background:
     radial-gradient(circle at 15% 0%, rgb(225 29 46 / 0.08), transparent 28rem),
     linear-gradient(180deg, var(--background), var(--background));
@@ -629,8 +629,15 @@ img {
 }
 
 @keyframes flag-shine-sweep {
-  0%, 100% { left: -60%; }
-  50% { left: 140%; }
+
+  0%,
+  100% {
+    left: -60%;
+  }
+
+  50% {
+    left: 140%;
+  }
 }
 
 .flag-face.front {
@@ -928,10 +935,13 @@ img {
 }
 
 @keyframes newsroom-shadow-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateZ(-20px) scale(1);
     opacity: 0.85;
   }
+
   50% {
     transform: translateZ(-20px) scale(0.75);
     opacity: 0.4;
@@ -1891,7 +1901,7 @@ html[data-theme="dark"] .share-x {
   grid-template-columns: minmax(0, 1fr) var(--rail);
   gap: var(--sp-8);
   padding: var(--sp-6) 0 0;
-  align-items: start;
+  /* align-items: start; */
 }
 
 .article-grid>article {

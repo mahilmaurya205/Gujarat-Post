@@ -32,21 +32,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>('gu');
   const [fsLevel, setFsLevel] = useState<number>(1);
   const hydrated = useRef(false);
-  const [showSplash, setShowSplash] = useState(true);
-  const [fadeSplash, setFadeSplash] = useState(false);
-
-  useEffect(() => {
-    const fadeTimer = setTimeout(() => {
-      setFadeSplash(true);
-    }, 1500);
-    const hideTimer = setTimeout(() => {
-      setShowSplash(false);
-    }, 2000);
-    return () => {
-      clearTimeout(fadeTimer);
-      clearTimeout(hideTimer);
-    };
-  }, []);
 
   useEffect(() => {
     let savedTheme: string | null = null;
@@ -132,14 +117,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AppContext.Provider value={value}>
-      {showSplash && (
-        <div className={`fixed inset-0 z-[9999] flex items-center justify-center bg-black transition-opacity duration-500 ${fadeSplash ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-          <NewsLoader fullPage />
-        </div>
-      )}
-      <div style={{ opacity: showSplash ? 0 : 1, transition: 'opacity 0.5s ease-out' }}>
-        {children}
-      </div>
+      {children}
     </AppContext.Provider>
   );
 }

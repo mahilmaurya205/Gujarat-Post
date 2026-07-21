@@ -62,7 +62,7 @@ export default function DistrictBar() {
   }, []);
 
   return (
-    <div className="w-full border-b border-border/40 bg-card/75 backdrop-blur-sm sticky top-[108px] z-40 select-none py-1.5 md:py-2">
+    <div className="w-full border-b border-border/40 bg-card/75 select-none py-1.5 md:py-2">
       <div className="mx-auto flex max-w-screen-xl max-w-header-layout items-center gap-3.5 px-4">
         {/* Gujarat Map Logo and vertical separator */}
         <div className="flex items-center gap-3 shrink-0 pr-3 border-r border-border/50">

@@ -214,7 +214,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur">
+      <header className="border-b border-border bg-card/95">
         {/* Top bar: date + social */}
         <div className="bg-black dark:bg-black text-white/95">
           <div className="mx-auto flex max-w-screen-xl max-w-header-layout items-center justify-between gap-3 px-4 py-1.5">
@@ -265,27 +265,35 @@ export default function Header() {
 
         {/* Logo + Controls */}
         <div className="mx-auto flex max-w-screen-xl max-w-header-layout items-center justify-between gap-5 px-4 py-2.5">
-          {/* Slogan — hidden on mobile */}
-          <div className="hidden sm:flex flex-col justify-center leading-tight mr-3 select-none">
-            <p className="text-[13px] md:text-[14px] font-black text-foreground tracking-wide whitespace-nowrap">
-              Real Stories. <span className="text-red-600">Real Gujarat.</span>
-            </p>
+          {/* Slogan on top, Logo below */}
+          <div className="flex flex-col items-start gap-1 select-none">
+            {/* Slogan */}
+            <div className="flex flex-col justify-center leading-tight">
+              <p className="text-[12px] md:text-[13px] font-black text-foreground tracking-wide whitespace-nowrap">
+                Real Stories. <span className="text-red-600">Real Gujarat.</span>
+              </p>
+            </div>
+
+            {/* Logo */}
+            <a href="/" className="logo-3d group flex shrink-0 items-center">
+              <span className="logo-3d-inner relative block h-14 overflow-hidden rounded-lg bg-white shadow-md ring-1 ring-black/10 transition-all duration-300 sm:h-14 lg:h-16 w-40 sm:w-48 lg:w-56">
+                <Image
+                  src={gpLogo}
+                  alt="Gujarat Post"
+                  fill
+                  priority
+                  unoptimized
+                  sizes="(max-width: 640px) 160px, (max-width: 1024px) 192px, 224px"
+                  className="object-cover"
+                />
+              </span>
+            </a>
           </div>
 
-          <a href="/" className="logo-3d group flex shrink-0 items-center">
-            <span className="logo-3d-inner relative block h-14 overflow-hidden rounded-lg bg-white shadow-md ring-1 ring-black/10 transition-all duration-300 sm:h-14 lg:h-16 w-40 sm:w-48 lg:w-56">
-              <Image
-                src={gpLogo}
-                alt="Gujarat Post"
-                fill
-                priority
-                unoptimized
-                sizes="(max-width: 640px) 160px, (max-width: 1024px) 192px, 224px"
-                className="object-cover"
-              />
-            </span>
-          </a>
-
+          {/* Header Ad Slot (visible on desktop) */}
+          <div className="hidden lg:block max-w-[600px] xl:max-w-[850px] 2xl:max-w-[950px] flex-1 mx-4 2xl:mx-6">
+            <Advertisement position="header" className="w-full" />
+          </div>
 
           {/* Right-side compact Search + News Brief Container (desktop only) */}
           <div className="ml-auto mr-3 hidden md:flex items-center gap-6 select-none shrink-0">
@@ -308,14 +316,14 @@ export default function Header() {
 
             {/* Compact Search Trigger */}
             <div
-              className="relative w-[180px] lg:w-[240px] flex items-center cursor-pointer group shrink-0"
+              className="relative w-[140px] lg:w-[180px] flex items-center cursor-pointer group shrink-0"
               onClick={() => router.push('/search')}
             >
-              <div className="h-10 w-full rounded-full border border-border bg-muted py-2 pl-12 pr-4 text-sm text-muted-foreground transition-all duration-200 group-hover:border-accent group-hover:bg-card select-none flex items-center">
+              <div className="h-[34px] w-full rounded-full border border-border bg-muted py-1.5 pl-10 pr-3.5 text-[13px] text-muted-foreground transition-all duration-200 group-hover:border-accent group-hover:bg-card select-none flex items-center">
                 સમાચાર શોધો...
               </div>
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-muted-foreground group-hover:text-accent transition-colors">
-                <Search className="h-4 w-4" />
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-muted-foreground group-hover:text-accent transition-colors">
+                <Search className="h-[14px] w-[14px]" />
               </span>
             </div>
           </div>
@@ -490,8 +498,8 @@ export default function Header() {
                       <a
                         href={link.href}
                         className={`relative flex h-11 items-center whitespace-nowrap px-3.5 text-sm font-semibold transition-colors duration-150 lg:px-4 ${active
-                            ? 'text-accent'
-                            : 'text-foreground hover:text-accent'
+                          ? 'text-accent'
+                          : 'text-foreground hover:text-accent'
                           }`}
                         aria-current={active ? 'page' : undefined}
                       >
@@ -579,8 +587,8 @@ export default function Header() {
                       key={link.href}
                       href={link.href}
                       className={`block rounded-md px-3.5 py-2 text-left text-xs font-semibold transition-colors duration-150 ${active
-                          ? 'bg-accent/10 text-accent'
-                          : 'text-foreground hover:bg-muted hover:text-accent'
+                        ? 'bg-accent/10 text-accent'
+                        : 'text-foreground hover:bg-muted hover:text-accent'
                         }`}
                     >
                       {getNavLabel(link)}
@@ -639,8 +647,8 @@ export default function Header() {
                       href={link.href}
                       onClick={() => setMenuOpen(false)}
                       className={`flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-semibold transition ${active
-                          ? 'border-accent/30 bg-accent/8 text-accent'
-                          : 'border-border bg-muted text-foreground hover:border-accent/25 hover:text-accent'
+                        ? 'border-accent/30 bg-accent/8 text-accent'
+                        : 'border-border bg-muted text-foreground hover:border-accent/25 hover:text-accent'
                         }`}
                       aria-current={active ? 'page' : undefined}
                     >
@@ -681,8 +689,8 @@ export default function Header() {
                   type="button"
                   onClick={() => handleSelectCity(city)}
                   className={`rounded border py-2.5 text-xs font-black transition-all cursor-pointer text-center ${selectedCity === city
-                      ? 'border-accent bg-accent/5 text-accent shadow-sm font-sans'
-                      : 'border-border bg-card hover:bg-muted hover:border-foreground/20 text-foreground'
+                    ? 'border-accent bg-accent/5 text-accent shadow-sm font-sans'
+                    : 'border-border bg-card hover:bg-muted hover:border-foreground/20 text-foreground'
                     }`}
                 >
                   {city}

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import Image from 'next/image';
@@ -392,7 +392,7 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                   {isTrafficArticle && language === 'gu'
                     ? 'અમદાવાદના SG હાઈવે પર નવી ટ્રાફિક સિગ્નલ પ્રણાલી.'
                     : isTrafficArticle && language === 'hi'
-                      ? 'अहमदाबाद के एसजी हाईवे पर नई ट्रैफिक सिग्नल प्रणाली।'
+                      ? 'अहमदाबाद के एसजी हाईवे पर नई ट्रैफिक संकेत प्रणाली।'
                       : isTrafficArticle
                         ? 'New traffic signal system on SG Highway in Ahmedabad.'
                         : title}
@@ -403,44 +403,63 @@ export default function NewsDetailClient({ article, related, trending, articleUr
               </figcaption>
             </figure>
 
-            <div className="share-row select-none flex flex-wrap gap-2 items-center">
-              <span className="lbl font-bold text-neutral-500 mr-1">{language === 'gu' ? 'શેર કરો:' : language === 'hi' ? 'शेयर करें:' : 'Share:'}</span>
+            <div className="share-row-custom select-none flex flex-wrap gap-2.5 items-center mb-6">
+              <span className="lbl font-extrabold text-neutral-800 dark:text-neutral-200 mr-2 text-[14.5px] tracking-wide">{language === 'gu' ? 'શેર કરો:' : language === 'hi' ? 'शेयर करें:' : 'Share:'}</span>
 
               {/* WhatsApp */}
               <a
                 href={`https://wa.me/?text=${encodeURIComponent(`${title} ${articleUrl}`)}`}
                 target="_blank"
                 rel="noreferrer"
-                className="share-cp flex items-center gap-1.5 font-bold text-[13px] px-4 py-2.5 rounded-[3px] border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 bg-transparent hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
+                title={language === 'gu' ? 'વોટ્સએપ' : language === 'hi' ? 'व्हाट्सएप' : 'WhatsApp'}
+                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-[#25D366]/10 hover:border-[#25D366]/30 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
               >
-                <svg viewBox="0 0 24 24" className="w-4 h-4 shrink-0">
+                <svg viewBox="0 0 24 24" className="w-[19px] h-[19px] shrink-0 transition-transform duration-300 group-hover:rotate-12">
                   <path fill="#25D366" d="M12.01 0a12 12 0 0 0-10.4 18l-1.6 5.8 6-1.6a12 12 0 1 0 6-22.2z" />
                   <path fill="#FFF" d="M16.9 14.1c-.3-.1-1.6-.8-1.9-.9-.3-.1-.5-.1-.7.2-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.8-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.2-.5 0-.2-.1-.4-.2-.6-.2-.4-.7-1.7-1-2.3-.3-.6-.6-.5-.8-.5H8c-.2 0-.6.1-.9.4C6.8 7.3 6 8.1 6 9.8c0 1.7 1.2 3.4 1.4 3.6.2.2 2.4 3.7 5.9 5.2.8.3 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 2.2-.9 2.5-1.8.3-.9.3-1.6.2-1.8-.1-.1-.3-.2-.5-.3z" />
                 </svg>
-                <span>{language === 'gu' ? 'વોટ્સએપ' : language === 'hi' ? 'व्हाट्सएप' : 'WhatsApp'}</span>
               </a>
 
               {/* Facebook */}
-              <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 font-bold text-[13px] px-4 py-2.5 rounded-[3px] border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 bg-transparent hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors">
-                <svg viewBox="0 0 24 24" className="w-4 h-4"><path fill="#1877F2" d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078v-3.47h3.047V9.35c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12z" /></svg>
-                <span>{language === 'gu' ? 'ફેસબુક' : language === 'hi' ? 'फेसबुक' : 'Facebook'}</span>
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`}
+                target="_blank"
+                rel="noreferrer"
+                title={language === 'gu' ? 'ફેસબુક' : language === 'hi' ? 'फेसबुक' : 'Facebook'}
+                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-[#1877F2]/10 hover:border-[#1877F2]/30 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
+              >
+                <svg viewBox="0 0 24 24" className="w-[19px] h-[19px] shrink-0 transition-transform duration-300 group-hover:rotate-12">
+                  <path fill="#1877F2" d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078v-3.47h3.047V9.35c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12z" />
+                </svg>
               </a>
 
               {/* X (Twitter) */}
-              <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(articleUrl)}`} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 font-bold text-[13px] px-4 py-2.5 rounded-[3px] border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 bg-transparent hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors">
-                <svg viewBox="0 0 24 24" className="w-4 h-4"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
-                <span>{language === 'gu' ? 'પોસ્ટ' : language === 'hi' ? 'पोस्ट' : 'Post'}</span>
+              <a
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(articleUrl)}`}
+                target="_blank"
+                rel="noreferrer"
+                title={language === 'gu' ? 'પોસ્ટ' : language === 'hi' ? 'पोस्ट' : 'Post'}
+                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
+              >
+                <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] shrink-0 text-neutral-800 dark:text-neutral-200 transition-transform duration-300 group-hover:rotate-12">
+                  <path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
               </a>
 
               {/* Dailyhunt */}
-              <a href="https://profile.dailyhunt.in/gujaratpost" target="_blank" rel="noreferrer" className="flex items-center gap-1.5 font-bold text-[13px] px-4 py-2.5 rounded-[3px] border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 bg-transparent hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors">
-                <svg viewBox="0 0 48 48" className="w-4 h-4">
+              <a
+                href="https://profile.dailyhunt.in/gujaratpost"
+                target="_blank"
+                rel="noreferrer"
+                title={language === 'gu' ? 'ડેઇલીહન્ટ' : language === 'hi' ? 'ડેલીહંત' : 'Dailyhunt'}
+                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
+              >
+                <svg viewBox="0 0 48 48" className="w-[20px] h-[20px] shrink-0 transition-transform duration-300 group-hover:rotate-12">
                   <path fill="#093492" d="M20.99 12.49 C21.62 14.48 21.86 21.86 21.86 21.86 C21.86 21.86 14.15 21.83 12.51 21.18 C8.59 19.61 5.5 17.07 5.5 13.08 C5.5 9.13 8.64 5.64 12.94 5.64 C17.17 5.64 19.77 8.69 20.99 12.49 Z" />
                   <path fill="#FBBC05" d="M35.51 20.99 C33.52 21.62 26.14 21.86 26.14 21.86 C26.14 21.86 26.17 14.15 26.82 12.51 C28.39 8.59 30.93 5.5 34.92 5.5 C38.87 5.5 42.36 8.64 42.36 12.94 C42.36 17.17 39.31 19.77 35.51 20.99 Z" />
                   <path fill="#ED1C24" d="M27.01 35.51 C26.38 33.52 26.14 26.14 26.14 26.14 C26.14 26.14 33.85 26.17 35.49 26.82 C39.41 28.39 42.5 30.93 42.5 34.92 C42.5 38.87 39.36 42.36 35.06 42.36 C30.83 42.36 28.23 39.31 27.01 35.51 Z" />
                   <path fill="#47B609" d="M12.49 27.01 C14.48 26.38 21.86 26.14 21.86 26.14 C21.86 26.14 21.83 33.85 21.18 35.49 C19.61 39.41 17.07 42.5 13.08 42.5 C9.13 42.5 5.64 39.36 5.64 35.06 C5.64 30.83 8.69 28.23 12.49 27.01 Z" />
                 </svg>
-                <span>{language === 'gu' ? 'ડેઇલીહન્ટ' : language === 'hi' ? 'डेलीहंत' : 'Dailyhunt'}</span>
               </a>
 
               {/* Google News */}
@@ -448,55 +467,55 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                 href="https://news.google.com/search?q=Gujarat+Post"
                 target="_blank"
                 rel="noreferrer"
-                className="share-cp flex items-center gap-1.5 font-bold text-[13px] px-4 py-2.5 rounded-[3px] border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 bg-transparent hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
+                title={language === 'gu' ? 'ગૂગલ ન્યૂઝ' : language === 'hi' ? 'गूगल न्यूज़' : 'Google News'}
+                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-[#4285F4]/10 hover:border-[#4285F4]/30 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
               >
-                <svg viewBox="0 0 24 24" className="w-4 h-4 shrink-0">
+                <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] shrink-0 transition-transform duration-300 group-hover:rotate-12">
                   <rect x="2" y="2" width="8" height="20" rx="1.5" fill="#4285F4" />
                   <rect x="12" y="3" width="10" height="3.5" rx="1" fill="#EA4335" />
                   <rect x="12" y="9" width="10" height="3.5" rx="1" fill="#FBBC05" />
                   <rect x="12" y="15" width="10" height="6" rx="1" fill="#34A853" />
                 </svg>
-                <span>{language === 'gu' ? 'ગૂગલ ન્યૂઝ' : language === 'hi' ? 'गूगल न्यूज़' : 'Google News'}</span>
               </a>
 
               {/* Print */}
               <button
                 type="button"
                 onClick={() => window.print()}
-                className="share-cp flex items-center gap-1.5 font-bold text-[13px] px-4 py-2.5 rounded-[3px] border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 bg-transparent hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
+                title={language === 'gu' ? 'પ્રિન્ટ' : language === 'hi' ? 'प्रिंट' : 'Print'}
+                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
               >
-                <svg viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-current stroke-2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" /><rect x="6" y="14" width="12" height="8" /></svg>
-                <span>{language === 'gu' ? 'પ્રિન્ટ' : language === 'hi' ? 'प्रिंट' : 'Print'}</span>
+                <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] fill-none stroke-current stroke-2 shrink-0 transition-transform duration-300 group-hover:rotate-12" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" /><rect x="6" y="14" width="12" height="8" /></svg>
               </button>
 
               {/* Copy Link */}
               <button
                 type="button"
                 onClick={copyUrl}
-                className="share-cp flex items-center gap-1.5 font-bold text-[13px] px-4 py-2.5 rounded-[3px] border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 bg-transparent hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
+                title={copied ? (language === 'gu' ? 'કૉપિ થઈ' : 'Copied') : (language === 'gu' ? 'લિંક કૉપિ કરો' : 'Copy Link')}
+                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-[#B3121B]/10 hover:text-[#B3121B] hover:border-[#B3121B]/30 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
               >
-                <svg viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-current stroke-2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
-                <span>{copied ? (language === 'gu' ? 'કૉપિ થઈ' : 'Copied') : (language === 'gu' ? 'લિંક કૉપિ કરો' : 'Copy Link')}</span>
+                <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] fill-none stroke-current stroke-2 shrink-0 transition-transform duration-300 group-hover:rotate-12" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
               </button>
 
               {/* Save */}
               <button
                 type="button"
                 onClick={handleToggleSave}
-                className="share-cp flex items-center gap-1.5 font-bold text-[13px] px-4 py-2.5 rounded-[3px] border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 bg-transparent hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
+                title={saved ? (language === 'gu' ? 'સાચવેલું' : 'Saved') : (language === 'gu' ? 'સાચવો' : 'Save')}
+                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-[#B3121B]/10 hover:text-[#B3121B] hover:border-[#B3121B]/30 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
               >
-                <svg viewBox="0 0 24 24" className={`w-4 h-4 ${saved ? 'fill-current' : 'fill-none'} stroke-current stroke-2`} strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" /></svg>
-                <span>{saved ? (language === 'gu' ? 'સાચવેલું' : 'Saved') : (language === 'gu' ? 'સાચવો' : 'Save')}</span>
+                <svg viewBox="0 0 24 24" className={`w-[18px] h-[18px] shrink-0 ${saved ? 'fill-current' : 'fill-none'} stroke-current stroke-2 transition-transform duration-300 group-hover:rotate-12`} strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" /></svg>
               </button>
 
               {/* Audio */}
               <button
                 type="button"
                 onClick={toggleAudio}
-                className="share-cp flex items-center gap-1.5 font-bold text-[13px] px-4 py-2.5 rounded-[3px] border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 bg-transparent hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
+                title={speaking ? (language === 'gu' ? 'બંધ કરો' : 'Stop') : (language === 'gu' ? 'ઓડિયો' : 'Audio')}
+                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-[#B3121B]/10 hover:text-[#B3121B] hover:border-[#B3121B]/30 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
               >
-                <svg viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-current stroke-2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /></svg>
-                <span>{speaking ? (language === 'gu' ? 'બંધ કરો' : 'Stop') : (language === 'gu' ? 'ઓડિયો' : 'Audio')}</span>
+                <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] fill-none stroke-current stroke-2 shrink-0 transition-transform duration-300 group-hover:rotate-12" strokeLinecap="round" strokeLinejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /></svg>
               </button>
             </div>
 
@@ -595,10 +614,10 @@ export default function NewsDetailClient({ article, related, trending, articleUr
 
 
 
-          </article>  
+          </article>
 
           <aside className="side select-none" style={{ alignSelf: 'stretch' }}>
-            <div className="side-sticky">
+            <div className="side-sticky" style={{ top: '24px' }}>
               {/* Most Read widget */}
               <div className="mostread">
                 <div className="wtitle">
@@ -629,7 +648,7 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                   <span>{language === 'gu' ? 'તમારા માટે ભલામણ' : language === 'hi' ? 'आपके लिए अनुशंसित' : 'Recommended Stories'}</span>
                 </div>
                 <div className="space-y-0 mt-3">
-                  {related.slice(0, 6).map((item) => {
+                  {related.slice(0, 5).map((item) => {
                     const itemTitle = getArticleTitle(item, language);
                     const itemCategory = getCategoryLabel(item, language);
                     return (
@@ -669,7 +688,7 @@ export default function NewsDetailClient({ article, related, trending, articleUr
               </div>
 
               {/* Trending Topics Tags */}
-              <div className="mt-6">
+              {/* <div className="mt-6">
                 <div className="flex items-center gap-2 border-b-2 border-[#B3121B] pb-2.5 mb-3.5">
                   <span className="bg-[#B3121B] text-white font-black text-[12px] px-2.5 py-0.5 rounded-sm select-none tracking-wide uppercase">
                     Trending Topics
@@ -686,16 +705,17 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                     </Link>
                   ))}
                 </div>
-              </div>
+              </div> */}
             </div>
           </aside>
         </div>
-        <section className="art-related select-none">
+
+        <section className="art-related select-none w-full">
           <div className="deskhead">
             <h2>{getLocalized(language, { en: 'Related Stories', gu: 'સંબંધિત સમાચાર', hi: 'संबंधित खबरें' })}</h2>
             <span className="spacer"></span>
           </div>
-          <div className="grid-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-1.5 md:gap-x-2 gap-y-6">
             {related.slice(0, 6).map((item) => {
               const itemTitle = getArticleTitle(item, language);
               const itemCategory = getCategoryLabel(item, language);
@@ -732,115 +752,151 @@ export default function NewsDetailClient({ article, related, trending, articleUr
           </div>
         </section>
 
-        <div className="article-stream-container select-none w-full border-t border-neutral-200 dark:border-neutral-800 pt-8 mt-8">
-          <div className="space-y-16">
-            {(() => {
-              const streamList = [...related, ...trending]
-                .filter((item, index, self) => self.findIndex(t => t.id === item.id) === index && item.id !== article.id)
-                .slice(0, 5);
+        <div className="article-grid mt-8 border-t border-neutral-200 dark:border-neutral-800 !pt-8">
+          <article className="article-stream-container select-none w-full">
+            <div className="space-y-8">
+              {(() => {
+                const streamList = [...related, ...trending]
+                  .filter((item, index, self) => self.findIndex(t => t.id === item.id) === index && item.id !== article.id)
+                  .slice(0, 5);
 
-              return streamList.map((streamArticle) => {
-                const streamTitle = getArticleTitle(streamArticle, language);
-                const streamExcerpt = getArticleExcerpt(streamArticle, language);
-                const streamCategory = getCategoryLabel(streamArticle, language);
-                const streamParagraphs = getArticleContent(streamArticle, language).split('\n\n');
-                const streamCity = language === 'gu' ? 'અમદાવાદ' : language === 'hi' ? 'अहमदाबाद' : 'Ahmedabad';
+                return streamList.map((streamArticle) => {
+                  const streamTitle = getArticleTitle(streamArticle, language);
+                  const streamExcerpt = getArticleExcerpt(streamArticle, language);
+                  const streamCategory = getCategoryLabel(streamArticle, language);
+                  const streamParagraphs = getArticleContent(streamArticle, language).split('\n\n');
+                  const streamCity = language === 'gu' ? 'અમદાવાદ' : language === 'hi' ? 'अहमदाबाद' : 'Ahmedabad';
 
-                const readAlsoArticles = [...related, ...trending]
-                  .filter(a => a.id !== streamArticle.id && a.id !== article.id)
-                  .slice(0, 2);
+                  const readAlsoArticles = [...related, ...trending]
+                    .filter(a => a.id !== streamArticle.id && a.id !== article.id)
+                    .slice(0, 4);
 
-                return (
-                  <div key={streamArticle.id} className="article-stream-item border-b border-neutral-200 dark:border-neutral-800 pb-16 last:border-b-0 text-left flex flex-col items-start w-full">
-                    <nav className="breadcrumb select-none flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-neutral-500 font-medium mb-3 w-full text-left justify-start">
-                      <Link href="/" className="hover:text-[var(--red)] transition-colors">
-                        {language === 'gu' ? 'હોમ' : language === 'hi' ? 'होम' : 'Home'}
-                      </Link>
-                      <span>/</span>
-                      <Link href={`/category/${streamArticle.category.toLowerCase().replace(/\s+/g, '-')}`} className="hover:text-[var(--red)] transition-colors">
-                        {streamCategory}
-                      </Link>
-                      <span>/</span>
-                      <span>{streamCity}</span>
-                      <span className="mx-0.5">:</span>
-                      <span className="text-red-700 dark:text-red-400 font-bold">
-                        {streamTitle}
-                      </span>
-                    </nav>
-
-                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight text-foreground tracking-tight mb-4 text-left w-full">
-                      {streamTitle}
-                    </h2>
-
-                    <div className="relative aspect-[16/7] w-full max-w-[70%] overflow-hidden bg-black rounded-lg shadow-sm mb-6 mt-4">
-                      <Image
-                        src={streamArticle.image}
-                        alt={streamTitle}
-                        fill
-                        sizes="(max-width: 1024px) 70vw, 46vw"
-                        className="object-cover"
-                      />
-                    </div>
-
-                    <div className="text-[16px] leading-relaxed text-foreground space-y-4 mb-6 text-left w-full">
-                      {streamParagraphs.map((p, pIdx) => (
-                        <p key={pIdx}>{p}</p>
-                      ))}
-                    </div>
-
-                    {readAlsoArticles.length > 0 && (
-                      <div className="w-full my-6 bg-neutral-50/50 dark:bg-neutral-900/30 border border-neutral-200/80 dark:border-neutral-800/80 rounded-xl p-5 shadow-sm">
-                        <div className="flex items-center gap-2 mb-4">
-                          <span className="w-1 h-4 bg-red-600 rounded-full"></span>
-                          <h4 className="font-extrabold text-[14px] uppercase tracking-wider text-red-600 dark:text-red-400">
-                            {language === 'gu' ? 'આ પણ વાંચો' : language === 'hi' ? 'यह भी पढ़ें' : 'Read Also'}
-                          </h4>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {readAlsoArticles.map((raArt) => {
-                            const raTitle = getArticleTitle(raArt, language);
-                            return (
-                              <Link
-                                key={raArt.id}
-                                href={`/news/${raArt.slug}`}
-                                className="group flex gap-4 p-2.5 rounded-lg border border-neutral-100 dark:border-neutral-800/40 bg-white dark:bg-neutral-900/60 hover:bg-neutral-50 dark:hover:bg-neutral-800/60 hover:border-red-500/20 hover:shadow-sm transition-all duration-300 items-center text-left"
-                              >
-                                <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-md border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 shadow-sm animate-pulse-once">
-                                  <Image
-                                    src={raArt.image}
-                                    alt={raTitle}
-                                    fill
-                                    sizes="96px"
-                                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                                  />
-                                </div>
-                                <div className="min-w-0 flex-1">
-                                  <p className="line-clamp-2 text-[13.5px] font-bold text-neutral-800 dark:text-neutral-200 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors duration-200 leading-snug">
-                                    {raTitle}
-                                  </p>
-                                </div>
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="flex flex-wrap items-center gap-2 mt-4 select-none">
-                      <span className="font-bold text-neutral-850 dark:text-neutral-200 mr-2 text-[14px]">
-                        {language === 'gu' ? 'ટોપિક્સ:' : language === 'hi' ? 'विषय:' : 'Topics:'}
-                      </span>
-                      {getStreamTags(streamArticle).map((tag, tIdx) => (
-                        <span key={tIdx} className="bg-[#FAF0E6] dark:bg-neutral-800 text-neutral-800 dark:text-neutral-250 hover:bg-[#FDF5E6] rounded-full px-3.5 py-1.5 text-xs font-semibold border border-neutral-200/60 dark:border-neutral-700 transition-colors">
-                          {tag}
+                  return (
+                    <div key={streamArticle.id} className="article-stream-item border-b border-neutral-200 dark:border-neutral-800 pb-8 last:border-b-0 text-left flex flex-col items-start w-full">
+                      <nav className="breadcrumb select-none flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-neutral-500 font-medium mb-3 w-full text-left justify-start">
+                        <Link href="/" className="hover:text-[var(--red)] transition-colors">
+                          {language === 'gu' ? 'હોમ' : language === 'hi' ? 'होम' : 'Home'}
+                        </Link>
+                        <span>/</span>
+                        <Link href={`/category/${streamArticle.category.toLowerCase().replace(/\s+/g, '-')}`} className="hover:text-[var(--red)] transition-colors">
+                          {streamCategory}
+                        </Link>
+                        <span>/</span>
+                        <span>{streamCity}</span>
+                        <span className="mx-0.5">:</span>
+                        <span className="text-red-700 dark:text-red-400 font-bold">
+                          {streamTitle}
                         </span>
-                      ))}
+                      </nav>
+
+                      <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight text-foreground tracking-tight mb-4 text-left w-full">
+                        {streamTitle}
+                      </h2>
+
+                      <div className="relative aspect-[16/9] w-full overflow-hidden bg-black rounded-lg shadow-sm mb-6 mt-4">
+                        <Image
+                          src={streamArticle.image}
+                          alt={streamTitle}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 760px"
+                          className="object-cover"
+                        />
+                      </div>
+
+                      <div className="text-[16px] leading-relaxed text-foreground space-y-4 mb-6 text-left w-full">
+                        {streamParagraphs.map((p, pIdx) => (
+                          <p key={pIdx}>{p}</p>
+                        ))}
+                      </div>
+
+                      {readAlsoArticles.length > 0 && (
+                        <div className="w-full my-6 bg-neutral-50/50 dark:bg-neutral-900/30 border border-neutral-200/80 dark:border-neutral-800/80 rounded-xl p-5 shadow-sm">
+                          <div className="flex items-center gap-2 mb-4">
+                            <span className="w-1 h-4 bg-red-600 rounded-full"></span>
+                            <h4 className="font-extrabold text-[14px] uppercase tracking-wider text-red-600 dark:text-red-400">
+                              {language === 'gu' ? 'આ પણ વાંચો' : language === 'hi' ? 'यह भी पढ़ें' : 'Read Also'}
+                            </h4>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {readAlsoArticles.map((raArt) => {
+                              const raTitle = getArticleTitle(raArt, language);
+                              return (
+                                <Link
+                                  key={raArt.id}
+                                  href={`/news/${raArt.slug}`}
+                                  className="group flex gap-4 p-2.5 rounded-lg border border-neutral-100 dark:border-neutral-800/40 bg-white dark:bg-neutral-900/60 hover:bg-neutral-50 dark:hover:bg-neutral-800/60 hover:border-red-500/20 hover:shadow-sm transition-all duration-300 items-center text-left"
+                                >
+                                  <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-md border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 shadow-sm animate-pulse-once">
+                                    <Image
+                                      src={raArt.image}
+                                      alt={raTitle}
+                                      fill
+                                      sizes="96px"
+                                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                    />
+                                  </div>
+                                  <div className="min-w-0 flex-1">
+                                    <p className="line-clamp-2 text-[13.5px] font-bold text-neutral-800 dark:text-neutral-200 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors duration-200 leading-snug">
+                                      {raTitle}
+                                    </p>
+                                  </div>
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="flex flex-wrap items-center gap-2 mt-5 select-none">
+                        <span className="font-extrabold text-neutral-900 dark:text-white mr-2 text-[14.5px] tracking-wide uppercase border-b-2 border-[#B3121B] pb-0.5">
+                          {language === 'gu' ? 'ટોપિક્સ:' : language === 'hi' ? 'विषय:' : 'Topics:'}
+                        </span>
+                        {getStreamTags(streamArticle).map((tag, tIdx) => (
+                          <span
+                            key={tIdx}
+                            className="cursor-pointer bg-white dark:bg-neutral-900 hover:bg-[#B3121B] dark:hover:bg-[#B3121B] text-neutral-800 dark:text-neutral-200 hover:text-white dark:hover:text-white rounded-full px-4 py-1.5 text-xs font-bold border border-red-600/30 dark:border-red-500/20 hover:border-[#B3121B] dark:hover:border-[#B3121B] shadow-sm transition-all duration-200"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                );
-              });
-            })()}
-          </div>
+                  );
+                });
+              })()}
+            </div>
+          </article>
+
+          <aside className="select-none" style={{ width: '100%', maxWidth: '336px' }}>
+            <div style={{ position: 'sticky', top: '24px', height: 'fit-content' }}>
+              <div>
+                <div className="wtitle">
+                  <span className="d"></span>
+                  <span>{language === 'gu' ? 'તમારા માટે ભલામણ' : language === 'hi' ? 'आपके लिए अनुशंसित' : 'Recommended Stories'}</span>
+                </div>
+                <div className="space-y-0 mt-3">
+                  {related.slice(0, 4).map((item) => {
+                    const itemTitle = getArticleTitle(item, language);
+                    const itemCategory = getCategoryLabel(item, language);
+                    return (
+                      <Link key={item.id} href={`/news/${item.slug}`} className="s-compact hover:opacity-85 transition-opacity">
+                        <div>
+                          <span className="kick">{itemCategory}</span>
+                          <h3>{itemTitle}</h3>
+                          <div className="meta">
+                            <span>{formatDate(item.publishedAt)}</span>
+                          </div>
+                        </div>
+                        <div className="imgwrap">
+                          <Image src={item.image} alt={item.title} fill sizes="92px" className="object-cover" />
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </aside>
         </div>
 
         {/* Sponsored Native Ads Section (Taboola/Outbrain Style Grid) */}

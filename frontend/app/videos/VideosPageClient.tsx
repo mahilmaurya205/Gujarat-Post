@@ -29,10 +29,10 @@ export default function VideosPageClient() {
 
   // Tab definitions
   const tabs = [
-    { key: 'video',     gu: 'તાજા વીડિયો',     hi: 'ताजा वीडियो',     en: 'Latest Videos' },
-    { key: 'short',     gu: 'શોર્ટ્સ',         hi: 'शॉर्ट्स',         en: 'Shorts' },
+    { key: 'video', gu: 'તાજા વીડિયો', hi: 'ताजा वीडियो', en: 'Latest Videos' },
+    { key: 'short', gu: 'શોર્ટ્સ', hi: 'शॉर्ट्स', en: 'Shorts' },
     { key: 'exclusive', gu: 'એક્સક્લુઝિવ તપાસ', hi: 'एक्सक्लूसिव जांच', en: 'Exclusive investigation' },
-    { key: 'bulletin',  gu: 'ન્યૂઝ બુલેટિન',    hi: 'न्यूज़ बुलेटिन',    en: 'News Bulletin' },
+    { key: 'bulletin', gu: 'ન્યૂઝ બુલેટિન', hi: 'न्यूज़ बुलेटिन', en: 'News Bulletin' },
   ] as const;
 
   // Handle category smooth scroll navigation
@@ -67,7 +67,7 @@ export default function VideosPageClient() {
 
   // Filter video lists
   const latestVideos = useMemo(() => {
-    return VIDEOS.slice(0, 7);
+    return VIDEOS.slice(0, 6);
   }, []);
 
   const shortsVideos = useMemo(() => {
@@ -106,11 +106,11 @@ export default function VideosPageClient() {
   return (
     <div className="bg-background min-h-screen">
       <div className="mx-auto max-w-screen-xl px-4 py-6">
-        
+
         {/* ── YOUTUBE VERIFIED CHANNEL BANNER CARD ─────────────────────────── */}
         <div className="relative overflow-hidden rounded-2xl bg-[#9E0F0F] text-white p-6 md:p-8 mb-6 shadow-md border border-red-800">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
-            
+
             {/* Left side: Avatar + info */}
             <div className="flex flex-col md:flex-row items-center gap-6 md:gap-6 min-w-0">
               {/* White rounded avatar logo */}
@@ -137,7 +137,7 @@ export default function VideosPageClient() {
                   <h1 className="text-xl md:text-2xl font-black tracking-tight leading-none">ગુજરાત પોસ્ટ</h1>
                   <span className="flex items-center justify-center bg-white/20 text-white rounded-full p-0.5" title="Verified Channel">
                     <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                     </svg>
                   </span>
                 </div>
@@ -152,8 +152,8 @@ export default function VideosPageClient() {
 
             {/* Right side: Subscribe buttons */}
             <div className="flex flex-row gap-3 shrink-0 self-center mt-2 md:mt-0">
-              <a 
-                href="https://www.youtube.com/@Gujaratpostnews?sub_confirmation=1" 
+              <a
+                href="https://www.youtube.com/@Gujaratpostnews?sub_confirmation=1"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 bg-white text-black font-black text-xs md:text-sm px-5 py-2.5 rounded-full hover:bg-slate-100 hover:scale-102 transition-all shadow cursor-pointer select-none active:scale-[0.98]"
@@ -161,8 +161,8 @@ export default function VideosPageClient() {
                 <Bell className="h-4 w-4 shrink-0 fill-current" />
                 <span>સબસ્ક્રાઇબ કરો</span>
               </a>
-              <a 
-                href="https://www.youtube.com/@Gujaratpostnews" 
+              <a
+                href="https://www.youtube.com/@Gujaratpostnews"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 bg-black/20 hover:bg-black/35 border border-white/25 text-white font-black text-xs md:text-sm px-5 py-2.5 rounded-full hover:scale-102 transition-all cursor-pointer select-none active:scale-[0.98]"
@@ -171,7 +171,7 @@ export default function VideosPageClient() {
                 <span>YouTube પર જુઓ</span>
               </a>
             </div>
-            
+
           </div>
         </div>
 
@@ -183,11 +183,10 @@ export default function VideosPageClient() {
               <button
                 key={tab.key}
                 onClick={() => handleTabChange(tab.key)}
-                className={`rounded-full px-5 py-2 text-xs font-black whitespace-nowrap transition cursor-pointer ${
-                  active
+                className={`rounded-full px-5 py-2 text-xs font-black whitespace-nowrap transition cursor-pointer ${active
                     ? 'bg-accent text-white font-black border border-accent'
                     : 'border border-border bg-card text-foreground hover:border-accent hover:text-accent font-semibold'
-                }`}
+                  }`}
               >
                 {getLocalized(language, { en: tab.en, gu: tab.gu, hi: tab.hi })}
               </button>
@@ -197,7 +196,7 @@ export default function VideosPageClient() {
 
         {/* ── CONTENT GRID + SIDEBAR ────────────────────────────────────── */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
-          
+
           {/* ── LEFT COLUMN: Featured & Sections ──────────────────────────── */}
           <div className="min-w-0">
 
@@ -215,12 +214,12 @@ export default function VideosPageClient() {
                     />
                   ) : (
                     <div className="relative w-full h-full cursor-pointer" onClick={() => setPlayingVideoId(featuredVideo.id)}>
-                      <Image 
-                        src={featuredVideo.thumbnail} 
-                        alt={featuredVideo.titleGu} 
-                        fill 
-                        sizes="(max-width: 768px) 100vw, 50vw" 
-                        className="object-cover transition-transform duration-300 group-hover:scale-103" 
+                      <Image
+                        src={featuredVideo.thumbnail}
+                        alt={featuredVideo.titleGu}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="object-cover transition-transform duration-300 group-hover:scale-103"
                       />
                       <div className="absolute inset-0 flex items-center justify-center bg-black/25 group-hover:bg-black/15 transition-all">
                         <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-accent shadow-md transition-transform group-hover:scale-110">
@@ -310,7 +309,7 @@ export default function VideosPageClient() {
 
           {/* ── RIGHT COLUMN: Sidebar ───────────────────────────────────── */}
           <div>
-            
+
             <div className="group rounded-xl border border-red-100 dark:border-red-950/20 bg-gradient-to-br from-red-50/10 to-red-50/30 dark:from-red-950/5 dark:to-red-950/10 p-5 mb-6 text-center shadow-sm hover:shadow transition-all duration-300">
               <div className="flex items-center justify-center gap-2 text-accent font-black text-[13px] uppercase tracking-wide mb-2.5">
                 <YoutubeIcon className="h-6 w-6 text-[#FF0000] drop-shadow-sm transition-transform duration-300 group-hover:scale-105" />
@@ -319,8 +318,8 @@ export default function VideosPageClient() {
               <p className="text-xs leading-relaxed text-muted-foreground font-semibold px-1 mb-4 leading-normal">
                 તમામ વીડિયો, બુલેટિન અને એક્સક્લુઝિવ તપાસ — એક જ જગ્યાએ, ગમે ત્યારે નિહાળો.
               </p>
-              <a 
-                href="https://www.youtube.com/@Gujaratpostnews?sub_confirmation=1" 
+              <a
+                href="https://www.youtube.com/@Gujaratpostnews?sub_confirmation=1"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full inline-flex items-center justify-center gap-2 bg-[#E62117] hover:bg-[#CC181E] text-white font-black text-sm py-2.5 rounded-xl transition-all hover:scale-102 shadow hover:shadow-md cursor-pointer select-none active:scale-[0.98]"
@@ -346,7 +345,7 @@ export default function VideosPageClient() {
                     rel="noopener noreferrer"
                     className="group flex items-start gap-3 py-3.5 first:pt-1.5 last:pb-1.5"
                   >
-                    <span 
+                    <span
                       className="text-[28px] font-extrabold leading-none select-none w-8 shrink-0 text-center"
                       style={{
                         fontVariantNumeric: 'tabular-nums',
