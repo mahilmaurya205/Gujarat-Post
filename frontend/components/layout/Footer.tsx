@@ -77,6 +77,7 @@ const topics2Links = [
     { label: 'Web Stories', href: '/category/webstory' },
     { label: 'Weather', href: '/category/weather' },
     { label: 'Gold-Silver', href: '/category/gold-silver' },
+    { label: 'News Brief', href: '/category/news-brief' }
 ];
 
 const topics3Links = [
@@ -158,12 +159,9 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
                     {/* Logo & Brand */}
                     <div className="flex flex-col gap-2 lg:w-72 flex-shrink-0">
                         <div>
-                            <p className="text-[15px] font-bold text-white tracking-tight leading-snug ml-4">
+                            <p className="text-[15px] font-bold text-white tracking-tight leading-snug ml-1">
                                 Real Stories. <span className="text-[#B3121B]">Real Gujarat.</span>
                             </p>
-                            {/* <p className="text-[13px] font-normal leading-relaxed text-slate-400 mt-2 max-w-xs">
-                                Gujarat's leading digital news network — accurate, unbiased, and fast breaking news.
-                            </p> */}
                         </div>
                         <Link
                             href="/"
