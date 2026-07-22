@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -106,21 +106,21 @@ const companyLinks = [
 function NavColumn({ title, links, titleHref }: { title: string; links: { label: string; href: string }[]; titleHref?: string }) {
     return (
         <div>
-            <div className="mb-3">
+            <div className="mb-2">
                 {titleHref ? (
-                    <Link href={titleHref} className="text-white font-extrabold text-[16px] leading-tight tracking-tight hover:text-slate-300 transition-colors uppercase">
+                    <Link href={titleHref} className="text-white font-extrabold text-[15px] leading-tight tracking-tight hover:text-slate-300 transition-colors uppercase">
                         {title}
                     </Link>
                 ) : (
-                    <h3 className="text-white font-extrabold text-[16px] leading-tight tracking-tight uppercase">{title}</h3>
+                    <h3 className="text-white font-extrabold text-[15px] leading-tight tracking-tight uppercase">{title}</h3>
                 )}
             </div>
-            <ul className="space-y-2">
+            <ul className="space-y-1.5">
                 {links.map((item) => (
                     <li key={item.label}>
                         <Link
                             href={item.href}
-                            className="text-[14px] font-semibold text-slate-300 hover:text-white transition-colors duration-150 block leading-snug"
+                            className="text-[13px] font-semibold text-slate-300 hover:text-white transition-colors duration-150 block leading-snug"
                         >
                             {item.label}
                         </Link>
@@ -134,6 +134,30 @@ function NavColumn({ title, links, titleHref }: { title: string; links: { label:
 /* ─── Footer Component ─────────────────────────────────────────────────── */
 export default function Footer({ isInline = false }: { isInline?: boolean }) {
     const pathname = usePathname();
+    const [isSticky, setIsSticky] = useState(false);
+
+    useEffect(() => {
+        const checkAdSection = () => {
+            const el = document.getElementById('infinite-ads-section');
+            if (!el) {
+                setIsSticky(false);
+                return;
+            }
+            const rect = el.getBoundingClientRect();
+
+            // Footer is sticky when scrolled into infinite ads section (rect.top <= 0).
+            // When reaching video section or before it (rect.top > 0), footer is not visible.
+            if (rect.top <= 0) {
+                setIsSticky(true);
+            } else {
+                setIsSticky(false);
+            }
+        };
+
+        window.addEventListener('scroll', checkAdSection, { passive: true });
+        checkAdSection();
+        return () => window.removeEventListener('scroll', checkAdSection);
+    }, [pathname]);
 
     if (pathname === '/login' || pathname.startsWith('/admin')) {
         return null;
@@ -143,19 +167,23 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
     const isFeedPage = pathname === '/watch' || pathname === '/shorts';
     if (isFeedPage && !isInline) return null;
 
-    const wrap = isInline ? 'pt-4 pb-3' : 'pt-6 pb-4';
+    const wrap = isInline ? 'pt-2 pb-1.5' : 'pt-4 pb-3';
 
     return (
-        <footer data-theme="dark" className="bg-[#050B14] text-white relative border-t border-slate-900 select-none w-full">
+        <footer
+            data-theme="dark"
+            className={`bg-[#050B14] text-white border-t border-slate-900 select-none w-full transition-all duration-300 ${isSticky ? 'sticky bottom-0 z-40' : 'relative'
+                }`}
+        >
             <div className={`w-full px-4 sm:px-6 md:px-8 lg:px-10 ${wrap}`}>
 
                 {/* ── Main Layout: Logo left, Nav columns pushed right ── */}
-                <div className="flex flex-col lg:flex-row gap-8 lg:gap-0 pb-6 border-b border-slate-800/80">
+                <div className="flex flex-col lg:flex-row gap-6 lg:gap-0 pb-4 border-b border-slate-800/80">
 
                     {/* Logo & Brand */}
-                    <div className="flex flex-col gap-3 lg:w-72 flex-shrink-0">
+                    <div className="flex flex-col gap-2 lg:w-72 flex-shrink-0">
                         <div>
-                            <p className="text-[16px] font-bold text-white tracking-tight leading-snug ml-4">
+                            <p className="text-[15px] font-bold text-white tracking-tight leading-snug ml-4">
                                 Real Stories. <span className="text-[#B3121B]">Real Gujarat.</span>
                             </p>
                             {/* <p className="text-[13px] font-normal leading-relaxed text-slate-400 mt-2 max-w-xs">
@@ -164,7 +192,7 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
                         </div>
                         <Link
                             href="/"
-                            className="inline-block relative h-16 w-56 overflow-hidden rounded-lg transition-transform duration-200 hover:scale-[1.02]"
+                            className="inline-block relative h-12 w-48 overflow-hidden rounded-lg transition-transform duration-200 hover:scale-[1.02]"
                         >
                             <Image
                                 src="/assets/logoblack.png"
@@ -174,16 +202,16 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
                                 className="object-contain object-left"
                             />
                         </Link>
-                        {/* Social Icons Row */}
-                        <div className="flex items-center gap-3 flex-wrap mt-4 ml-4">
-                            {SOCIAL_LINKS.map((item) => (
+                        {/* Social Icons Grid (3 logos in line 1, 3 logos in line 2) */}
+                        <div className="grid grid-cols-3 gap-3.5 w-fit mt-3.5 ml-4">
+                            {SOCIAL_LINKS.filter((item) => item.platform !== 'instagram').map((item) => (
                                 <SocialIconButton key={item.label} item={item} />
                             ))}
                         </div>
                     </div>
 
                     {/* Nav columns — pushed to the right */}
-                    <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-6 lg:pl-16">
+                    <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-4 lg:pl-10">
 
                         {/* Topics Col 1 */}
                         <NavColumn title="Topics" links={topics1Links} />
@@ -209,15 +237,15 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
                 </div> */}
 
                 {/* ── Bottom Bar: Legal Policies & Copyright ── */}
-                <div className="pt-4 border-t border-slate-900/60 mt-4 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-[11.5px] font-extrabold text-slate-400">
-                    
+                <div className="pt-3 border-t border-slate-900/60 mt-3 grid grid-cols-1 md:grid-cols-3 items-center gap-3 text-[11px] font-extrabold text-slate-400">
+
                     {/* Left Column: empty spacer on desktop to keep middle centered */}
                     <div className="hidden md:block" />
 
                     {/* Center Column: Legal links & Copyright */}
-                    <div className="flex flex-col items-center justify-center gap-3 text-center">
+                    <div className="flex flex-col items-center justify-center gap-2.5 text-center">
                         {/* Policy Links Row */}
-                        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+                        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5">
                             {[
                                 ['Complaign Redressal', '/complaign-redressal'],
                                 ['Your Privacy Choices', '/privacy-choices'],
@@ -232,7 +260,7 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
                         </div>
 
                         {/* Copyright Line */}
-                        <div className="flex flex-col items-center justify-center gap-1.5 text-slate-500 font-extrabold text-[11px] mt-1">
+                        <div className="flex flex-col items-center justify-center gap-1 text-slate-500 font-extrabold text-[10.5px] mt-0.5">
                             <p>External links are provided for reference purposes. © {new Date().getFullYear()} GUJARAT POST MEDIA. ALL RIGHTS RESERVED.</p>
                             <p className="tracking-wider text-slate-400 font-black">RNI/GJ-DEMO/2026</p>
                         </div>

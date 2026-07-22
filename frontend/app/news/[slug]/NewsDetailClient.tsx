@@ -17,6 +17,7 @@ import {
 import { useApp } from '@/components/AppProvider';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Advertisement from '@/components/ads/Advertisement';
+import { NativeAdsSection } from '@/components/sections/HeroSection';
 
 interface Props {
   article: Article;
@@ -339,9 +340,32 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                   </div>
                 </div>
               </div>
-              <span className="text-[12.5px] text-[var(--ink-2)]">
-                ⏱ {language === 'gu' ? `વાંચન સમય: ${article.readingTime} મિનિટ` : language === 'hi' ? `पठन समय: ${article.readingTime} मिनट` : `Read time: ${article.readingTime} mins`}
-              </span>
+              <div className="flex items-center gap-3 flex-wrap">
+                <span className="text-[12.5px] text-[var(--ink-2)]">
+                  ⏱ {language === 'gu' ? `વાંચન સમય: ${article.readingTime} મિનિટ` : language === 'hi' ? `पठन समय: ${article.readingTime} मिनट` : `Read time: ${article.readingTime} mins`}
+                </span>
+                {/* Google News Follow Badge */}
+                <a
+                  href="https://news.google.com/publications/CAAqBwgKMJq4lgswrOalAw"
+                  target="_blank"
+                  rel="noreferrer"
+                  title="Follow Gujarat Post on Google News"
+                  className="group inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 shadow-sm hover:shadow-md hover:border-[#4285F4]/50 transition-all duration-200 hover:scale-[1.03] active:scale-95 select-none"
+                  style={{ textDecoration: 'none' }}
+                >
+                  {/* GN coloured icon */}
+                  <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] shrink-0" aria-hidden="true">
+                    <rect x="2" y="2" width="8.5" height="20" rx="1.5" fill="#4285F4" />
+                    <rect x="12.5" y="3" width="9.5" height="3.8" rx="1" fill="#EA4335" />
+                    <rect x="12.5" y="9.1" width="9.5" height="3.8" rx="1" fill="#FBBC05" />
+                    <rect x="12.5" y="15.2" width="9.5" height="6.5" rx="1" fill="#34A853" />
+                  </svg>
+                  <span className="flex flex-col leading-tight">
+                    <span className="text-[8px] font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide">FOLLOW ON</span>
+                    <span className="text-[11px] font-bold text-neutral-800 dark:text-neutral-100 tracking-tight" style={{ fontFamily: 'Google Sans, sans-serif' }}>Google News</span>
+                  </span>
+                </a>
+              </div>
             </div>
 
             {/* Gist: એક નજરમાં */}
@@ -403,8 +427,11 @@ export default function NewsDetailClient({ article, related, trending, articleUr
               </figcaption>
             </figure>
 
-            <div className="share-row-custom select-none flex flex-wrap gap-2.5 items-center mb-6">
-              <span className="lbl font-extrabold text-neutral-800 dark:text-neutral-200 mr-2 text-[14.5px] tracking-wide">{language === 'gu' ? 'શેર કરો:' : language === 'hi' ? 'शेयर करें:' : 'Share:'}</span>
+            <div className="share-row-custom select-none flex flex-wrap gap-3 items-center mb-6 p-3.5 rounded-2xl bg-neutral-50/80 dark:bg-neutral-900/60 border border-neutral-200/80 dark:border-neutral-800/80 shadow-sm backdrop-blur-sm">
+              <span className="lbl font-black text-neutral-900 dark:text-neutral-100 mr-1 text-[14px] tracking-wide uppercase flex items-center gap-1.5 select-none">
+                <span className="h-2 w-2 rounded-full bg-[#B3121B] animate-ping" />
+                {language === 'gu' ? 'શેર કરો:' : language === 'hi' ? 'शेयर करें:' : 'Share:'}
+              </span>
 
               {/* WhatsApp */}
               <a
@@ -412,9 +439,9 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                 target="_blank"
                 rel="noreferrer"
                 title={language === 'gu' ? 'વોટ્સએપ' : language === 'hi' ? 'व्हाट्सएप' : 'WhatsApp'}
-                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-[#25D366]/10 hover:border-[#25D366]/30 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
+                className="group relative flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 transition-all duration-300 hover:scale-[1.15] hover:-translate-y-1 active:scale-95 cursor-pointer shadow-sm hover:shadow-[0_8px_20px_rgba(37,211,102,0.35)] hover:border-[#25D366]"
               >
-                <svg viewBox="0 0 24 24" className="w-[19px] h-[19px] shrink-0 transition-transform duration-300 group-hover:rotate-12">
+                <svg viewBox="0 0 24 24" className="w-[20px] h-[20px] shrink-0 transition-transform duration-300 group-hover:rotate-[15deg] group-hover:scale-110">
                   <path fill="#25D366" d="M12.01 0a12 12 0 0 0-10.4 18l-1.6 5.8 6-1.6a12 12 0 1 0 6-22.2z" />
                   <path fill="#FFF" d="M16.9 14.1c-.3-.1-1.6-.8-1.9-.9-.3-.1-.5-.1-.7.2-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.8-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.2-.5 0-.2-.1-.4-.2-.6-.2-.4-.7-1.7-1-2.3-.3-.6-.6-.5-.8-.5H8c-.2 0-.6.1-.9.4C6.8 7.3 6 8.1 6 9.8c0 1.7 1.2 3.4 1.4 3.6.2.2 2.4 3.7 5.9 5.2.8.3 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 2.2-.9 2.5-1.8.3-.9.3-1.6.2-1.8-.1-.1-.3-.2-.5-.3z" />
                 </svg>
@@ -426,9 +453,9 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                 target="_blank"
                 rel="noreferrer"
                 title={language === 'gu' ? 'ફેસબુક' : language === 'hi' ? 'फेसबुक' : 'Facebook'}
-                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-[#1877F2]/10 hover:border-[#1877F2]/30 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
+                className="group relative flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 transition-all duration-300 hover:scale-[1.15] hover:-translate-y-1 active:scale-95 cursor-pointer shadow-sm hover:shadow-[0_8px_20px_rgba(24,119,242,0.35)] hover:border-[#1877F2]"
               >
-                <svg viewBox="0 0 24 24" className="w-[19px] h-[19px] shrink-0 transition-transform duration-300 group-hover:rotate-12">
+                <svg viewBox="0 0 24 24" className="w-[20px] h-[20px] shrink-0 transition-transform duration-300 group-hover:rotate-[15deg] group-hover:scale-110">
                   <path fill="#1877F2" d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078v-3.47h3.047V9.35c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12z" />
                 </svg>
               </a>
@@ -439,9 +466,9 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                 target="_blank"
                 rel="noreferrer"
                 title={language === 'gu' ? 'પોસ્ટ' : language === 'hi' ? 'पोस्ट' : 'Post'}
-                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
+                className="group relative flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 transition-all duration-300 hover:scale-[1.15] hover:-translate-y-1 active:scale-95 cursor-pointer shadow-sm hover:shadow-[0_8px_20px_rgba(0,0,0,0.25)] dark:hover:shadow-[0_8px_20px_rgba(255,255,255,0.2)] hover:border-black dark:hover:border-white"
               >
-                <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] shrink-0 text-neutral-800 dark:text-neutral-200 transition-transform duration-300 group-hover:rotate-12">
+                <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] shrink-0 text-neutral-900 dark:text-neutral-100 transition-transform duration-300 group-hover:rotate-[-12deg] group-hover:scale-110">
                   <path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
               </a>
@@ -452,9 +479,9 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                 target="_blank"
                 rel="noreferrer"
                 title={language === 'gu' ? 'ડેઇલીહન્ટ' : language === 'hi' ? 'ડેલીહંત' : 'Dailyhunt'}
-                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
+                className="group relative flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 transition-all duration-300 hover:scale-[1.15] hover:-translate-y-1 active:scale-95 cursor-pointer shadow-sm hover:shadow-[0_8px_20px_rgba(251,188,5,0.35)] hover:border-[#FBBC05]"
               >
-                <svg viewBox="0 0 48 48" className="w-[20px] h-[20px] shrink-0 transition-transform duration-300 group-hover:rotate-12">
+                <svg viewBox="0 0 48 48" className="w-[21px] h-[21px] shrink-0 transition-transform duration-300 group-hover:rotate-[15deg] group-hover:scale-110">
                   <path fill="#093492" d="M20.99 12.49 C21.62 14.48 21.86 21.86 21.86 21.86 C21.86 21.86 14.15 21.83 12.51 21.18 C8.59 19.61 5.5 17.07 5.5 13.08 C5.5 9.13 8.64 5.64 12.94 5.64 C17.17 5.64 19.77 8.69 20.99 12.49 Z" />
                   <path fill="#FBBC05" d="M35.51 20.99 C33.52 21.62 26.14 21.86 26.14 21.86 C26.14 21.86 26.17 14.15 26.82 12.51 C28.39 8.59 30.93 5.5 34.92 5.5 C38.87 5.5 42.36 8.64 42.36 12.94 C42.36 17.17 39.31 19.77 35.51 20.99 Z" />
                   <path fill="#ED1C24" d="M27.01 35.51 C26.38 33.52 26.14 26.14 26.14 26.14 C26.14 26.14 33.85 26.17 35.49 26.82 C39.41 28.39 42.5 30.93 42.5 34.92 C42.5 38.87 39.36 42.36 35.06 42.36 C30.83 42.36 28.23 39.31 27.01 35.51 Z" />
@@ -467,10 +494,10 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                 href="https://news.google.com/search?q=Gujarat+Post"
                 target="_blank"
                 rel="noreferrer"
-                title={language === 'gu' ? 'ગૂગલ ન્યૂઝ' : language === 'hi' ? 'गूगल न्यूज़' : 'Google News'}
-                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-[#4285F4]/10 hover:border-[#4285F4]/30 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
+                title={language === 'gu' ? 'ગૂગલ ન્યૂઝ' : language === 'hi' ? 'गूगल न्यूज़' : 'Google News'}
+                className="group relative flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 transition-all duration-300 hover:scale-[1.15] hover:-translate-y-1 active:scale-95 cursor-pointer shadow-sm hover:shadow-[0_8px_20px_rgba(66,133,244,0.35)] hover:border-[#4285F4]"
               >
-                <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] shrink-0 transition-transform duration-300 group-hover:rotate-12">
+                <svg viewBox="0 0 24 24" className="w-[19px] h-[19px] shrink-0 transition-transform duration-300 group-hover:rotate-[15deg] group-hover:scale-110">
                   <rect x="2" y="2" width="8" height="20" rx="1.5" fill="#4285F4" />
                   <rect x="12" y="3" width="10" height="3.5" rx="1" fill="#EA4335" />
                   <rect x="12" y="9" width="10" height="3.5" rx="1" fill="#FBBC05" />
@@ -483,9 +510,12 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                 type="button"
                 onClick={() => window.print()}
                 title={language === 'gu' ? 'પ્રિન્ટ' : language === 'hi' ? 'प्रिंट' : 'Print'}
-                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
+                className="group relative flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 transition-all duration-300 hover:scale-[1.15] hover:-translate-y-1 active:scale-95 cursor-pointer shadow-sm hover:shadow-[0_8px_20px_rgba(79,70,229,0.3)] hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400"
               >
-                <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] fill-none stroke-current stroke-2 shrink-0 transition-transform duration-300 group-hover:rotate-12" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" /><rect x="6" y="14" width="12" height="8" /></svg>
+                <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] fill-none stroke-current stroke-2 shrink-0 transition-transform duration-300 group-hover:rotate-[-12deg]" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                  <rect x="6" y="14" width="12" height="8" />
+                </svg>
               </button>
 
               {/* Copy Link */}
@@ -493,29 +523,52 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                 type="button"
                 onClick={copyUrl}
                 title={copied ? (language === 'gu' ? 'કૉપિ થઈ' : 'Copied') : (language === 'gu' ? 'લિંક કૉપિ કરો' : 'Copy Link')}
-                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-[#B3121B]/10 hover:text-[#B3121B] hover:border-[#B3121B]/30 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
+                className={`group relative flex items-center justify-center w-11 h-11 rounded-full border transition-all duration-300 hover:scale-[1.15] hover:-translate-y-1 active:scale-95 cursor-pointer shadow-sm ${copied
+                    ? 'border-emerald-500 bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 shadow-[0_8px_20px_rgba(16,185,129,0.35)] scale-110'
+                    : 'border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 hover:border-[#B3121B] hover:text-[#B3121B] hover:shadow-[0_8px_20px_rgba(179,18,27,0.35)]'
+                  }`}
               >
-                <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] fill-none stroke-current stroke-2 shrink-0 transition-transform duration-300 group-hover:rotate-12" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
+                {copied ? (
+                  <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] fill-none stroke-current stroke-[2.5] shrink-0 animate-bounce">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] fill-none stroke-current stroke-2 shrink-0 transition-transform duration-300 group-hover:rotate-[15deg]" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                  </svg>
+                )}
               </button>
 
-              {/* Save */}
+              {/* Save / Bookmark */}
               <button
                 type="button"
                 onClick={handleToggleSave}
                 title={saved ? (language === 'gu' ? 'સાચવેલું' : 'Saved') : (language === 'gu' ? 'સાચવો' : 'Save')}
-                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-[#B3121B]/10 hover:text-[#B3121B] hover:border-[#B3121B]/30 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
+                className={`group relative flex items-center justify-center w-11 h-11 rounded-full border transition-all duration-300 hover:scale-[1.15] hover:-translate-y-1 active:scale-95 cursor-pointer shadow-sm ${saved
+                    ? 'border-[#B3121B] bg-red-50 text-[#B3121B] dark:bg-red-950/40 shadow-[0_8px_20px_rgba(179,18,27,0.35)]'
+                    : 'border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 hover:border-[#B3121B] hover:text-[#B3121B] hover:shadow-[0_8px_20px_rgba(179,18,27,0.35)]'
+                  }`}
               >
-                <svg viewBox="0 0 24 24" className={`w-[18px] h-[18px] shrink-0 ${saved ? 'fill-current' : 'fill-none'} stroke-current stroke-2 transition-transform duration-300 group-hover:rotate-12`} strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" /></svg>
+                <svg viewBox="0 0 24 24" className={`w-[18px] h-[18px] shrink-0 ${saved ? 'fill-current' : 'fill-none'} stroke-current stroke-2 transition-transform duration-300 group-hover:scale-110`} strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                </svg>
               </button>
 
-              {/* Audio */}
+              {/* Audio / Speaker */}
               <button
                 type="button"
                 onClick={toggleAudio}
                 title={speaking ? (language === 'gu' ? 'બંધ કરો' : 'Stop') : (language === 'gu' ? 'ઓડિયો' : 'Audio')}
-                className="group flex items-center justify-center w-11 h-11 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:bg-[#B3121B]/10 hover:text-[#B3121B] hover:border-[#B3121B]/30 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer shadow-sm hover:shadow-md"
+                className={`group relative flex items-center justify-center w-11 h-11 rounded-full border transition-all duration-300 hover:scale-[1.15] hover:-translate-y-1 active:scale-95 cursor-pointer shadow-sm ${speaking
+                    ? 'border-[#B3121B] bg-red-50 text-[#B3121B] dark:bg-red-950/40 shadow-[0_8px_20px_rgba(179,18,27,0.35)] animate-pulse'
+                    : 'border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 hover:border-[#B3121B] hover:text-[#B3121B] hover:shadow-[0_8px_20px_rgba(179,18,27,0.35)]'
+                  }`}
               >
-                <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] fill-none stroke-current stroke-2 shrink-0 transition-transform duration-300 group-hover:rotate-12" strokeLinecap="round" strokeLinejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /></svg>
+                <svg viewBox="0 0 24 24" className={`w-[18px] h-[18px] fill-none stroke-current stroke-2 shrink-0 transition-transform duration-300 ${speaking ? 'animate-bounce' : 'group-hover:rotate-[12deg]'}`} strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M11 5L6 9H2v6h4l5 4V5z" />
+                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                </svg>
               </button>
             </div>
 
@@ -715,8 +768,8 @@ export default function NewsDetailClient({ article, related, trending, articleUr
             <h2>{getLocalized(language, { en: 'Related Stories', gu: 'સંબંધિત સમાચાર', hi: 'संबंधित खबरें' })}</h2>
             <span className="spacer"></span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-1.5 md:gap-x-2 gap-y-6">
-            {related.slice(0, 6).map((item) => {
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-6">
+            {related.slice(0, 8).map((item) => {
               const itemTitle = getArticleTitle(item, language);
               const itemCategory = getCategoryLabel(item, language);
               const isSaved = savedIds.includes(item.id);
@@ -747,7 +800,7 @@ export default function NewsDetailClient({ article, related, trending, articleUr
           </div>
           <div style={{ textAlign: 'center', padding: '42px 0 4px' }}>
             <button type="button" className="art-more-btn">
-              {language === 'gu' ? 'વધુ લેખ જુઓ ↓' : language === 'hi' ? 'अधिक समाचार देखें ↓' : 'View More Stories ↓'}
+              {language === 'gu' ? 'વધુ જુઓ ↓' : language === 'hi' ? 'अधिक देखें ↓' : 'View More ↓'}
             </button>
           </div>
         </section>
@@ -758,7 +811,7 @@ export default function NewsDetailClient({ article, related, trending, articleUr
               {(() => {
                 const streamList = [...related, ...trending]
                   .filter((item, index, self) => self.findIndex(t => t.id === item.id) === index && item.id !== article.id)
-                  .slice(0, 5);
+                  .slice(0, 8);
 
                 return streamList.map((streamArticle) => {
                   const streamTitle = getArticleTitle(streamArticle, language);
@@ -810,10 +863,10 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                       </div>
 
                       {readAlsoArticles.length > 0 && (
-                        <div className="w-full my-6 bg-neutral-50/50 dark:bg-neutral-900/30 border border-neutral-200/80 dark:border-neutral-800/80 rounded-xl p-5 shadow-sm">
-                          <div className="flex items-center gap-2 mb-4">
-                            <span className="w-1 h-4 bg-red-600 rounded-full"></span>
-                            <h4 className="font-extrabold text-[14px] uppercase tracking-wider text-red-600 dark:text-red-400">
+                        <div className="w-full mt-2.5 mb-5 bg-neutral-50/50 dark:bg-neutral-900/30 border border-neutral-200/80 dark:border-neutral-800/80 rounded-xl pt-3.5 pb-4 px-4 shadow-sm">
+                          <div className="flex items-center gap-2 mb-2.5">
+                            <span className="w-1.5 h-5 bg-red-600 rounded-full"></span>
+                            <h4 className="font-extrabold text-[16.5px] uppercase tracking-wide text-red-600 dark:text-red-400">
                               {language === 'gu' ? 'આ પણ વાંચો' : language === 'hi' ? 'यह भी पढ़ें' : 'Read Also'}
                             </h4>
                           </div>
@@ -868,296 +921,38 @@ export default function NewsDetailClient({ article, related, trending, articleUr
           </article>
 
           <aside className="select-none" style={{ width: '100%', maxWidth: '336px' }}>
+            {/* Heading stays OUTSIDE sticky so it's always visible */}
+            <div className="wtitle mb-3">
+              <span className="d"></span>
+              <span>{language === 'gu' ? 'તમારા માટે ભલામણ' : language === 'hi' ? 'आपके लिए अनुशंसित' : 'Recommended Stories'}</span>
+            </div>
             <div style={{ position: 'sticky', top: '24px', height: 'fit-content' }}>
-              <div>
-                <div className="wtitle">
-                  <span className="d"></span>
-                  <span>{language === 'gu' ? 'તમારા માટે ભલામણ' : language === 'hi' ? 'आपके लिए अनुशंसित' : 'Recommended Stories'}</span>
-                </div>
-                <div className="space-y-0 mt-3">
-                  {related.slice(0, 4).map((item) => {
-                    const itemTitle = getArticleTitle(item, language);
-                    const itemCategory = getCategoryLabel(item, language);
-                    return (
-                      <Link key={item.id} href={`/news/${item.slug}`} className="s-compact hover:opacity-85 transition-opacity">
-                        <div>
-                          <span className="kick">{itemCategory}</span>
-                          <h3>{itemTitle}</h3>
-                          <div className="meta">
-                            <span>{formatDate(item.publishedAt)}</span>
-                          </div>
+              <div className="space-y-0">
+                {related.slice(0, 4).map((item) => {
+                  const itemTitle = getArticleTitle(item, language);
+                  const itemCategory = getCategoryLabel(item, language);
+                  return (
+                    <Link key={item.id} href={`/news/${item.slug}`} className="s-compact hover:opacity-85 transition-opacity">
+                      <div>
+                        <span className="kick">{itemCategory}</span>
+                        <h3>{itemTitle}</h3>
+                        <div className="meta">
+                          <span>{formatDate(item.publishedAt)}</span>
                         </div>
-                        <div className="imgwrap">
-                          <Image src={item.image} alt={item.title} fill sizes="92px" className="object-cover" />
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
+                      </div>
+                      <div className="imgwrap">
+                        <Image src={item.image} alt={item.title} fill sizes="92px" className="object-cover" />
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           </aside>
         </div>
 
-        {/* Sponsored Native Ads Section (Taboola/Outbrain Style Grid) */}
-        <div className="border-t border-neutral-200 dark:border-neutral-800 pt-8 mt-12 w-full select-none">
-          <div className="flex items-center justify-between mb-6">
-            <span className="text-[11px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-widest">Sponsored Links</span>
-            <span className="text-[10px] text-neutral-450 dark:text-neutral-500 hover:underline cursor-pointer">Ad Choices ⓘ</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {/* Ad Card 1 */}
-            <div className="flex flex-col text-left group cursor-pointer">
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-neutral-800/40">
-                <Image
-                  src="/assets/demo/2.jpg"
-                  alt="Roi Native Creative Test"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                />
-              </div>
-              <h3 className="font-bold text-[14px] md:text-[15px] text-neutral-900 dark:text-neutral-100 mt-2.5 leading-snug group-hover:underline line-clamp-2">
-                Roi Native Creative Test
-              </h3>
-              <span className="text-[11px] text-neutral-450 dark:text-neutral-500 mt-1">
-                Taboola | Sponsored
-              </span>
-            </div>
-
-            {/* Ad Card 2 */}
-            <div className="flex flex-col text-left group cursor-pointer">
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-neutral-800/40">
-                <Image
-                  src="/assets/demo/3.jpg"
-                  alt="Demo Creative Library"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                />
-              </div>
-              <h3 className="font-bold text-[14px] md:text-[15px] text-neutral-900 dark:text-neutral-100 mt-2.5 leading-snug group-hover:underline line-clamp-2">
-                Demo Creative Library - Sample Advertisement for Businesses
-              </h3>
-              <span className="text-[11px] text-neutral-450 dark:text-neutral-500 mt-1">
-                test | Sponsored
-              </span>
-            </div>
-
-            {/* Ad Card 3 */}
-            <div className="flex flex-col text-left group cursor-pointer">
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-neutral-800/40">
-                <Image
-                  src="/assets/demo/4.jpg"
-                  alt="Cher's Son Is Probably..."
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                />
-              </div>
-              <h3 className="font-bold text-[14px] md:text-[15px] text-neutral-900 dark:text-neutral-100 mt-2.5 leading-snug group-hover:underline line-clamp-2">
-                Cher's Son Is Probably The Most Handsome Man To Ever Live
-              </h3>
-              <span className="text-[11px] text-neutral-450 dark:text-neutral-500 mt-1">
-                Novelodge | Sponsored
-              </span>
-            </div>
-
-            {/* Ad Card 4 */}
-            <div className="flex flex-col text-left group cursor-pointer">
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-neutral-800/40">
-                <Image
-                  src="/assets/demo/5.jpg"
-                  alt="description"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                />
-              </div>
-              <h3 className="font-bold text-[14px] md:text-[15px] text-neutral-900 dark:text-neutral-100 mt-2.5 leading-snug group-hover:underline line-clamp-2">
-                description
-              </h3>
-              <span className="text-[11px] text-neutral-450 dark:text-neutral-500 mt-1">
-                sharon-js-tags-test | Sponsored
-              </span>
-            </div>
-
-            {/* Ad Card 5 */}
-            <div className="flex flex-col text-left group cursor-pointer">
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-neutral-800/40">
-                <Image
-                  src="/assets/demo/6.jpg"
-                  alt="Cats That Headbutt..."
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                />
-              </div>
-              <h3 className="font-bold text-[14px] md:text-[15px] text-neutral-900 dark:text-neutral-100 mt-2.5 leading-snug group-hover:underline line-clamp-2">
-                Cats That Headbutt Their Owners Are Actually Trying to Tell Them Something
-              </h3>
-              <span className="text-[11px] text-neutral-450 dark:text-neutral-500 mt-1">
-                Novelodge | Sponsored
-              </span>
-            </div>
-
-            {/* Ad Card 6 */}
-            <div className="flex flex-col text-left group cursor-pointer">
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-neutral-800/40">
-                <Image
-                  src="/assets/demo/7.jpg"
-                  alt="Lakeside living"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                />
-              </div>
-              <h3 className="font-bold text-[14px] md:text-[15px] text-neutral-900 dark:text-neutral-100 mt-2.5 leading-snug group-hover:underline line-clamp-2">
-                {language === 'gu'
-                  ? 'અમદાવાદમાં લેકસાઇડ લિવિંગ | તમારો પ્લોટ બુક કરો'
-                  : language === 'hi'
-                    ? 'अहमदाबाद में लेकसाइड लिविंग | अपना प्लॉट बुक करें'
-                    : 'Lakeside living in Ahmedabad | Book your plot today'}
-              </h3>
-              <span className="text-[11px] text-neutral-450 dark:text-neutral-500 mt-1">
-                {language === 'gu' ? 'અમદાવાદ રીઅલ એસ્ટેટ | પ્રાયોજિત' : language === 'hi' ? 'अहमदाबाद रियल एस्टेट | प्रायोजित' : 'Ahmedabad Real Estate | Sponsored'}
-              </span>
-            </div>
-
-            <div className="flex flex-col text-left group cursor-pointer">
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-neutral-800/40">
-                <Image
-                  src="/assets/demo/7.jpg"
-                  alt="Lakeside living"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                />
-              </div>
-              <h3 className="font-bold text-[14px] md:text-[15px] text-neutral-900 dark:text-neutral-100 mt-2.5 leading-snug group-hover:underline line-clamp-2">
-                {language === 'gu'
-                  ? 'અમદાવાદમાં લેકસાઇડ લિવિંગ | તમારો પ્લોટ બુક કરો'
-                  : language === 'hi'
-                    ? 'अहमदाबाद में लेकसाइड लिविंग | अपना प्लॉट बुक करें'
-                    : 'Lakeside living in Ahmedabad | Book your plot today'}
-              </h3>
-              <span className="text-[11px] text-neutral-450 dark:text-neutral-500 mt-1">
-                {language === 'gu' ? 'અમદાવાદ રીઅલ એસ્ટેટ | પ્રાયોજિત' : language === 'hi' ? 'अहमदाबाद रियल एस्टेट | प्रायोजित' : 'Ahmedabad Real Estate | Sponsored'}
-              </span>
-            </div>
-
-            <div className="flex flex-col text-left group cursor-pointer">
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-neutral-800/40">
-                <Image
-                  src="/assets/demo/7.jpg"
-                  alt="Lakeside living"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                />
-              </div>
-              <h3 className="font-bold text-[14px] md:text-[15px] text-neutral-900 dark:text-neutral-100 mt-2.5 leading-snug group-hover:underline line-clamp-2">
-                {language === 'gu'
-                  ? 'અમદાવાદમાં લેકસાઇડ લિવિંગ | તમારો પ્લોટ બુક કરો'
-                  : language === 'hi'
-                    ? 'अहमदाबाद में लेकसाइड लिविंग | अपना प्लॉट बुक करें'
-                    : 'Lakeside living in Ahmedabad | Book your plot today'}
-              </h3>
-              <span className="text-[11px] text-neutral-450 dark:text-neutral-500 mt-1">
-                {language === 'gu' ? 'અમદાવાદ રીઅલ એસ્ટેટ | પ્રાયોજિત' : language === 'hi' ? 'अहमदाबाद रियल एस्टेट | प्रायोजित' : 'Ahmedabad Real Estate | Sponsored'}
-              </span>
-            </div>
-
-            <div className="flex flex-col text-left group cursor-pointer">
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-neutral-800/40">
-                <Image
-                  src="/assets/demo/7.jpg"
-                  alt="Lakeside living"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                />
-              </div>
-              <h3 className="font-bold text-[14px] md:text-[15px] text-neutral-900 dark:text-neutral-100 mt-2.5 leading-snug group-hover:underline line-clamp-2">
-                {language === 'gu'
-                  ? 'અમદાવાદમાં લેકસાઇડ લિવિંગ | તમારો પ્લોટ બુક કરો'
-                  : language === 'hi'
-                    ? 'अहमदाबाद में लेकसाइड लिविंग | अपना प्लॉट बुक करें'
-                    : 'Lakeside living in Ahmedabad | Book your plot today'}
-              </h3>
-              <span className="text-[11px] text-neutral-450 dark:text-neutral-500 mt-1">
-                {language === 'gu' ? 'અમદાવાદ રીઅલ એસ્ટેટ | પ્રાયોજિત' : language === 'hi' ? 'अहमदाबाद रियल एस्टेट | प्रायोजित' : 'Ahmedabad Real Estate | Sponsored'}
-              </span>
-            </div>
-
-            <div className="flex flex-col text-left group cursor-pointer">
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-neutral-800/40">
-                <Image
-                  src="/assets/demo/7.jpg"
-                  alt="Lakeside living"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                />
-              </div>
-              <h3 className="font-bold text-[14px] md:text-[15px] text-neutral-900 dark:text-neutral-100 mt-2.5 leading-snug group-hover:underline line-clamp-2">
-                {language === 'gu'
-                  ? 'અમદાવાદમાં લેકસાઇડ લિવિંગ | તમારો પ્લોટ બુક કરો'
-                  : language === 'hi'
-                    ? 'अहमदाबाद में लेकसाइड लिविंग | अपना प्लॉट बुक करें'
-                    : 'Lakeside living in Ahmedabad | Book your plot today'}
-              </h3>
-              <span className="text-[11px] text-neutral-450 dark:text-neutral-500 mt-1">
-                {language === 'gu' ? 'અમદાવાદ રીઅલ એસ્ટેટ | પ્રાયોજિત' : language === 'hi' ? 'अहमदाबाद रियल एस्टेट | प्रायोजित' : 'Ahmedabad Real Estate | Sponsored'}
-              </span>
-            </div>
-
-            <div className="flex flex-col text-left group cursor-pointer">
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-neutral-800/40">
-                <Image
-                  src="/assets/demo/7.jpg"
-                  alt="Lakeside living"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                />
-              </div>
-              <h3 className="font-bold text-[14px] md:text-[15px] text-neutral-900 dark:text-neutral-100 mt-2.5 leading-snug group-hover:underline line-clamp-2">
-                {language === 'gu'
-                  ? 'અમદાવાદમાં લેકસાઇડ લિવિંગ | તમારો પ્લોટ બુક કરો'
-                  : language === 'hi'
-                    ? 'अहमदाबाद में लेकसाइड लिविंग | अपना प्लॉट बुक करें'
-                    : 'Lakeside living in Ahmedabad | Book your plot today'}
-              </h3>
-              <span className="text-[11px] text-neutral-450 dark:text-neutral-500 mt-1">
-                {language === 'gu' ? 'અમદાવાદ રીઅલ એસ્ટેટ | પ્રાયોજિત' : language === 'hi' ? 'अहमदाबाद रियल एस्टेट | प्रायोजित' : 'Ahmedabad Real Estate | Sponsored'}
-              </span>
-            </div>
-
-            <div className="flex flex-col text-left group cursor-pointer">
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/40 dark:border-neutral-800/40">
-                <Image
-                  src="/assets/demo/7.jpg"
-                  alt="Lakeside living"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                />
-              </div>
-              <h3 className="font-bold text-[14px] md:text-[15px] text-neutral-900 dark:text-neutral-100 mt-2.5 leading-snug group-hover:underline line-clamp-2">
-                {language === 'gu'
-                  ? 'અમદાવાદમાં લેકસાઇડ લિવિંગ | તમારો પ્લોટ બુક કરો'
-                  : language === 'hi'
-                    ? 'अहमदाबाद में लेकसाइड लिविंग | अपना प्लॉट बुक करें'
-                    : 'Lakeside living in Ahmedabad | Book your plot today'}
-              </h3>
-              <span className="text-[11px] text-neutral-450 dark:text-neutral-500 mt-1">
-                {language === 'gu' ? 'અમદાવાદ રીઅલ એસ્ટેટ | પ્રાયોજિત' : language === 'hi' ? 'अहमदाबाद रियल एस्टेट | प्रायोजित' : 'Ahmedabad Real Estate | Sponsored'}
-              </span>
-            </div>
-          </div>
-        </div>
+        {/* Sponsored Native Ads Section (Infinite Lazy Loaded Scroll) */}
+        <NativeAdsSection language={language} />
       </div>
       <div style={{ height: '50px' }} />
     </>

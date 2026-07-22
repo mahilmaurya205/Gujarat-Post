@@ -19,6 +19,7 @@ import {
 import { useApp } from '@/components/AppProvider';
 import { SocialLinks } from '@/components/ui/SocialLinks';
 import Advertisement from '@/components/ads/Advertisement';
+import DistrictBar from './DistrictBar';
 import gpLogo from '../../public/Gujarat Post Logo.gif';
 
 const languageLabels = {
@@ -118,6 +119,27 @@ export default function Header() {
   const [otherMenuOpen, setOtherMenuOpen] = useState(false);
   const triggerRef = useRef<HTMLLIElement>(null);
   const [dropdownLeft, setDropdownLeft] = useState<number | null>(null);
+  const [hideStickyNav, setHideStickyNav] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const infiniteAdEl = document.getElementById('infinite-ads-section');
+      if (!infiniteAdEl) {
+        setHideStickyNav(false);
+        return;
+      }
+      const rect = infiniteAdEl.getBoundingClientRect();
+      if (rect.top <= 100) {
+        setHideStickyNav(true);
+      } else {
+        setHideStickyNav(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [pathname]);
 
   const updateSavedCount = () => {
     try {
@@ -482,7 +504,75 @@ export default function Header() {
           </div>
         </div>
 
-        {/* ── Desktop Nav Bar ──────────────────────────────────────────────── */}
+        {/* ── Mobile Drawer ────────────────────────────────────────────────── */}
+        {menuOpen && (
+          <nav className="border-t border-border bg-card md:hidden" aria-label="Mobile navigation">
+            <div className="px-4 py-3">
+              {/* E-Paper CTA */}
+              <a
+                href="/epaper"
+                onClick={() => setMenuOpen(false)}
+                className="mb-3 flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-2.5 text-sm font-black text-white shadow hover:bg-accent-hover transition"
+              >
+                ઈ-પેપર
+              </a>
+
+              {/* App downloads CTA */}
+              <div className="mb-3.5 flex items-center justify-between gap-2 p-3 rounded-xl bg-muted/40 border border-border">
+                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">App:</span>
+                <div className="flex gap-2">
+                  <a
+                    href="https://apps.apple.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-1 text-[10px] font-black text-white hover:border-zinc-500 hover:bg-zinc-800 transition active:scale-95 shadow-sm"
+                  >
+                    <AppleIcon className="h-3.5 w-3.5 animate-pulse text-white" />
+                    <span>App Store</span>
+                  </a>
+                  <a
+                    href="https://play.google.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-1 text-[10px] font-black text-white transition active:scale-95 shadow-sm hover:border-zinc-500 hover:bg-zinc-800"
+                  >
+                    <PlayStoreIcon className="h-3.5 w-3.5 text-white" />
+                    <span>Google Play</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Flat link grid */}
+              <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
+                {[...NAV_LINKS, ...OTHER_LINKS].map((link) => {
+                  const active = isActive(link.href);
+                  return (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setMenuOpen(false)}
+                      className={`flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-semibold transition ${active
+                        ? 'border-accent/30 bg-accent/8 text-accent'
+                        : 'border-border bg-muted text-foreground hover:border-accent/25 hover:text-accent'
+                        }`}
+                      aria-current={active ? 'page' : undefined}
+                    >
+                      {active && (
+                        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+                      )}
+                      <span className="truncate">{getNavLabel(link)}</span>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          </nav>
+        )}
+      </header>
+
+      {/* ── Sticky Nav Section (Category Bar + District Bar) ────────────────── */}
+      <div className={`${hideStickyNav ? 'relative z-50' : 'sticky top-0 z-50'} bg-card/98 shadow-md transition-all duration-300`}>
+        {/* Desktop Nav Bar */}
         <nav
           className="hidden border-t border-border bg-card/98 md:block"
           aria-label="Main navigation"
@@ -597,73 +687,12 @@ export default function Header() {
                 })}
               </div>
             )}
-          </div></nav>
+          </div>
+        </nav>
 
-        {/* ── Mobile Drawer ────────────────────────────────────────────────── */}
-        {menuOpen && (
-          <nav className="border-t border-border bg-card md:hidden" aria-label="Mobile navigation">
-            <div className="px-4 py-3">
-              {/* E-Paper CTA */}
-              <a
-                href="/epaper"
-                onClick={() => setMenuOpen(false)}
-                className="mb-3 flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-2.5 text-sm font-black text-white shadow hover:bg-accent-hover transition"
-              >
-                ઈ-પેપર
-              </a>
-
-              {/* App downloads CTA */}
-              <div className="mb-3.5 flex items-center justify-between gap-2 p-3 rounded-xl bg-muted/40 border border-border">
-                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">App:</span>
-                <div className="flex gap-2">
-                  <a
-                    href="https://apps.apple.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-1 text-[10px] font-black text-white hover:border-zinc-500 hover:bg-zinc-800 transition active:scale-95 shadow-sm"
-                  >
-                    <AppleIcon className="h-3.5 w-3.5 animate-pulse text-white" />
-                    <span>App Store</span>
-                  </a>
-                  <a
-                    href="https://play.google.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-1 text-[10px] font-black text-white transition active:scale-95 shadow-sm hover:border-zinc-500 hover:bg-zinc-800"
-                  >
-                    <PlayStoreIcon className="h-3.5 w-3.5 text-white" />
-                    <span>Google Play</span>
-                  </a>
-                </div>
-              </div>
-
-              {/* Flat link grid */}
-              <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
-                {[...NAV_LINKS, ...OTHER_LINKS].map((link) => {
-                  const active = isActive(link.href);
-                  return (
-                    <a
-                      key={link.href}
-                      href={link.href}
-                      onClick={() => setMenuOpen(false)}
-                      className={`flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-semibold transition ${active
-                        ? 'border-accent/30 bg-accent/8 text-accent'
-                        : 'border-border bg-muted text-foreground hover:border-accent/25 hover:text-accent'
-                        }`}
-                      aria-current={active ? 'page' : undefined}
-                    >
-                      {active && (
-                        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
-                      )}
-                      <span className="truncate">{getNavLabel(link)}</span>
-                    </a>
-                  );
-                })}
-              </div>
-            </div>
-          </nav>
-        )}
-      </header>
+        {/* District Bar */}
+        <DistrictBar />
+      </div>
 
       {/* City selection modal */}
       {cityModalOpen && (

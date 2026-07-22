@@ -4,207 +4,21 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PHOTOS, getLocalized } from '@/data';
-import SectionHeader from '@/components/ui/SectionHeader';
 import { useApp } from '@/components/AppProvider';
-import { Language } from '@/types';
-
-
-/* ─── Types ─────────────────────────────────────────────────────────────── */
-type CardSize = 'hero' | 'medium' | 'wide' | 'tall';
-
-/*
-  Layout (matches the target diagram):
-  ┌───────────────┬───────────────┐
-  │               │       1       │
-  │     HERO      ├───────────────┤
-  │    (2×2)      │       2       │
-  ├───────────────┼───────────────┼───────────────┐
-  │       3       │       4       │       5       │
-  ├───────────────┼───────────────┼───────────────┤
-  │       6       │       7       │       8       │
-  └───────────────┴───────────────┴───────────────┘
-*/
-const CARD_SPANS: { colSpan: string; rowSpan: string; size: CardSize }[] = [
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1 md:row-span-2', size: 'hero' },   // 0 (labeled 1)
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 1 (labeled 2)
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1 md:row-span-2', size: 'hero' },   // 2 (labeled 3)
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 3 (labeled 4)
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 4 (labeled 5)
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 5 (labeled 6)
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 6 (labeled 7)
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 7 (labeled 8)
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 8 (labeled 9)
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' }, // 9 (labeled 10)
-];
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 /* ─── Category chips ─────────────────────────────────────────────────────── */
-const CATS = ['Gujarat', 'Culture', 'Politics', 'Sports', 'City', 'Nature', 'Travel', 'Lifestyle', 'Tech'];
-
-/* ─── GalleryCard ─────────────────────────────────────────────────────────── */
-function GalleryCard({
-  photo,
-  index,
-  language,
-  hqSrc,
-  colSpan,
-  rowSpan,
-  size,
-}: {
-  photo: any;
-  index: number;
-  language: Language;
-  hqSrc: (src: string) => string;
-  colSpan: string;
-  rowSpan: string;
-  size: CardSize;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  const [imgError, setImgError] = useState(false);
-  const [hovered, setHovered] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold: 0.08 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-
-  const caption = getLocalized(language, {
-    en: photo.caption,
-    gu: photo.captionGu,
-    hi: photo.captionHi,
-  });
-
-  const isHero = size === 'hero';
-  const isWide = size === 'wide';
-
-  return (
-    <div
-      ref={ref}
-      className={`${colSpan} ${rowSpan}`}
-      style={{
-        transitionDelay: `${index * 70}ms`,
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0) scale(1)' : 'translateY(24px) scale(0.97)',
-        transition: 'opacity 0.6s cubic-bezier(0.4,0,0.2,1), transform 0.6s cubic-bezier(0.4,0,0.2,1)',
-      }}
-    >
-      <Link
-        href={`/photos/${photo.id}`}
-        className="group relative flex h-full w-full overflow-hidden rounded-2xl shadow-lg"
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
-        {/* ── Shimmer Placeholder ── */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 animate-pulse" />
-
-        {/* ── Image ── */}
-        {!imgError ? (
-          <Image
-            src={hqSrc(photo.src)}
-            alt={photo.alt}
-            fill
-            sizes={isHero ? '(max-width: 768px) 100vw, 66vw' : isWide ? '100vw' : '(max-width: 768px) 100vw, 33vw'}
-            quality={92}
-            onError={() => setImgError(true)}
-            style={{
-              transform: hovered ? 'scale(1.08)' : 'scale(1)',
-              transition: 'transform 0.8s cubic-bezier(0.4,0,0.2,1)',
-              objectFit: 'cover',
-            }}
-          />
-        ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#B3121B]/20 to-slate-900 gap-3">
-            <svg className="h-12 w-12 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2}
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14M14 8h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <span className="text-white/25 text-xs font-semibold tracking-wider uppercase">Photo</span>
-          </div>
-        )}
-
-        {/* ── Gradient Overlays ── */}
-        {/* Top fade */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent opacity-60" />
-        {/* Bottom strong gradient for caption */}
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent"
-          style={{
-            opacity: hovered ? 1 : 0.85,
-            transition: 'opacity 0.4s ease',
-          }}
-        />
-
-        {/* ── Category chip (top-left) ── */}
-        <div className="absolute top-3 left-3 z-10">
-          <span className="bg-[#B3121B] text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wide shadow-lg">
-            {CATS[index % CATS.length]}
-          </span>
-        </div>
-
-
-        {/* ── Caption area (bottom) ── */}
-        <div
-          className="absolute inset-x-0 bottom-0 z-10 p-4"
-          style={{
-            transform: hovered ? 'translateY(0)' : 'translateY(4px)',
-            transition: 'transform 0.4s ease',
-          }}
-        >
-          {/* Caption text */}
-          <p
-            className={`text-white font-bold leading-snug line-clamp-2 drop-shadow-lg
-              ${isHero ? 'text-[16px] md:text-[18px]' : isWide ? 'text-[15px] md:text-[16px]' : 'text-[13px] md:text-[14px]'}
-            `}
-          >
-            {caption}
-          </p>
-
-          {/* View Photo row — reveals on hover */}
-          <div
-            className="flex items-center gap-2 mt-2 overflow-hidden"
-            style={{
-              maxHeight: hovered ? '32px' : '0px',
-              opacity: hovered ? 1 : 0,
-              transition: 'max-height 0.35s ease, opacity 0.35s ease',
-            }}
-          >
-            <div className="h-[1.5px] w-8 bg-[#B3121B] rounded-full" />
-            <span className="text-white/80 text-[11px] font-semibold tracking-wider uppercase">View Photo</span>
-            <svg className="h-3.5 w-3.5 text-[#B3121B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-            </svg>
-          </div>
-        </div>
-
-        {/* ── Red border glow on hover ── */}
-        <div
-          className="absolute inset-0 rounded-2xl pointer-events-none"
-          style={{
-            boxShadow: hovered ? 'inset 0 0 0 2px #B3121B' : 'inset 0 0 0 0px #B3121B',
-            transition: 'box-shadow 0.35s ease',
-          }}
-        />
-      </Link>
-    </div>
-  );
-}
+const CATS = ['TRAVEL', 'SPORTS', 'FESTIVAL', 'CITY', 'CULTURE', 'POLITICS', 'NATURE', 'LIFESTYLE', 'TECH'];
 
 /* ─── Loading Skeleton ────────────────────────────────────────────────────── */
 function GallerySkeleton() {
   return (
-    <section className="py-6 bg-background">
+    <section className="py-6 bg-background select-none">
       <div className="mx-auto max-w-screen-xl px-4">
-        <div className="mb-6 h-7 w-44 rounded-lg bg-muted/60 animate-pulse" />
-        <div className="grid grid-cols-3 auto-rows-[200px] gap-4">
-          <div className="col-span-2 row-span-2 rounded-2xl bg-muted/50 animate-pulse" />
-          {Array.from({ length: 7 }).map((_, i) => (
-            <div key={i} className="rounded-2xl bg-muted/40 animate-pulse" />
+        <div className="mb-6 h-10 w-44 rounded-lg bg-muted/60 animate-pulse" />
+        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="flex-shrink-0 w-[270px] aspect-[3/4] rounded-2xl bg-muted/40 animate-pulse" />
           ))}
         </div>
       </div>
@@ -218,46 +32,235 @@ export default function PhotoGallery() {
   const [photos, setPhotos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const scrollPosRef = useRef<number>(0);
+  const isManualScrolling = useRef<boolean>(false);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+
   useEffect(() => {
-    setPhotos(PHOTOS.slice(0, 10));
+    // Merge database photos with 6 high-fidelity extra photos
+    const basePhotos = PHOTOS;
+    const extraPhotos = [
+      {
+        id: "ph13",
+        src: "https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=800&q=80",
+        alt: "Gir Forest Lion",
+        caption: "Gir National Park registers rise in Asiatic lion sightings",
+        captionGu: "ગીર રાષ્ટ્રીય ઉદ્યાનમાં એશિયાટિક સિંહોની સંખ્યામાં વધારો નોંધાયો",
+        captionHi: "ગીર રાષ્ટ્રીય ઉદ્યાનમાં એશિયાટિક સિંહોની સંખ્યામાં વધારો નોંધાયો"
+      },
+      {
+        id: "ph14",
+        src: "https://images.unsplash.com/photo-1596422846543-c5c6ff183bfe?w=800&q=80",
+        alt: "Rann of Kutch",
+        caption: "White desert of Rann of Kutch prep for winter tourist peak",
+        captionGu: "કચ્છનું સફેદ રણ શિયાળાના પ્રવાસીઓ માટે સજ્જ થઈ રહ્યું છે",
+        captionHi: "કચ્છનું સફેદ રણ શિયાળાના પ્રવાસીઓ માટે સજ્જ થઈ રહ્યું છે"
+      },
+      {
+        id: "ph15",
+        src: "https://images.unsplash.com/photo-1627894783046-765cd470db98?w=800&q=80",
+        alt: "Dwarkadhish Temple",
+        caption: "Dwarka beach tourism gets massive central funding boost",
+        captionGu: "દ્વારકા બીચ ટુરિઝમને કેન્દ્ર સરકાર તરફથી મોટું ફંડ મળ્યું",
+        captionHi: "દ્વારકા બીચ ટુરિઝમને કેન્દ્ર સરકાર તરફથી મોટું ફંડ મળ્યું"
+      },
+      {
+        id: "ph16",
+        src: "https://images.unsplash.com/photo-1561715276-a2d087060f1d?w=800&q=80",
+        alt: "Traditional Art",
+        caption: "Kutchi handicraft weavers receive national recognition rewards",
+        captionGu: "કચ્છી હસ્તકલા વણકરોને રાષ્ટ્રીય સ્તરે સન્માન મળ્યું",
+        captionHi: "કચ્છી હસ્તકલા વણકરોને રાષ્ટ્રીય સ્તરે સન્માન મળ્યું"
+      },
+      {
+        id: "ph17",
+        src: "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?w=800&q=80",
+        alt: "Surat Textiles",
+        caption: "Surat textile hubs announce record export orders for 2026",
+        captionGu: "સુરત ટેક્સટાઈલ હબ દ્વારા ૨૦૨૬માં રેકોર્ડ નિકાસ ઓર્ડર જાહેર",
+        captionHi: "સુરત ટેક્સટાઈલ હબ દ્વારા ૨૦૨૬માં રેકોર્ડ નિકાસ ઓર્ડર જાહેર"
+      },
+      {
+        id: "ph18",
+        src: "https://images.unsplash.com/photo-1590073844006-33379778ae09?w=800&q=80",
+        alt: "Sabarmati Ashram",
+        caption: "Sabarmati Ashram restoration project nears completion phase",
+        captionGu: "સાબરમતી આશ્રમ પુનઃનિર્માણ પ્રોજેક્ટ પૂર્ણતાના આરે છે",
+        captionHi: "સાબરમતી આશ્રમ પુનઃનિર્માણ પ્રોજેક્ટ પૂર્ણતાના આરે છે"
+      }
+    ];
+    setPhotos([...basePhotos, ...extraPhotos]);
     setLoading(false);
   }, []);
 
+  // Continuous 60fps auto-scroll loop with float ref accumulation to eliminate integer rounding freezes
+  useEffect(() => {
+    if (loading || photos.length === 0) return;
+
+    let animId: number;
+    const scrollStep = () => {
+      const el = scrollContainerRef.current;
+      if (el) {
+        if (!isManualScrolling.current) {
+          scrollPosRef.current += 1.2;
+          const halfWidth = el.scrollWidth / 2;
+          if (halfWidth > 0 && scrollPosRef.current >= halfWidth) {
+            scrollPosRef.current = 0;
+          }
+          el.scrollLeft = scrollPosRef.current;
+        }
+
+        setShowLeftArrow(el.scrollLeft > 10);
+        setShowRightArrow(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+      }
+      animId = requestAnimationFrame(scrollStep);
+    };
+
+    animId = requestAnimationFrame(scrollStep);
+    return () => cancelAnimationFrame(animId);
+  }, [loading, photos]);
+
+  const handleScroll = (direction: 'left' | 'right') => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    isManualScrolling.current = true;
+    const scrollAmount = direction === 'left' ? -350 : 350;
+    scrollPosRef.current = Math.max(0, scrollPosRef.current + scrollAmount);
+    el.scrollBy({
+      left: scrollAmount,
+      behavior: 'smooth',
+    });
+    setTimeout(() => {
+      if (el) scrollPosRef.current = el.scrollLeft;
+      isManualScrolling.current = false;
+    }, 400);
+  };
+
+  const handleNativeScroll = () => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    if (isManualScrolling.current) return;
+    // Sync float ref if user manually touches/drags
+    scrollPosRef.current = el.scrollLeft;
+    setShowLeftArrow(el.scrollLeft > 10);
+    setShowRightArrow(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+  };
+
   const hqSrc = (src: string) =>
-    src.replace(/w=\d+/, 'w=1400').replace(/q=\d+/, 'q=92');
+    src.replace(/w=\d+/, 'w=800').replace(/q=\d+/, 'q=90');
 
   if (loading) return <GallerySkeleton />;
 
-  const gallery = photos.length > 0 ? photos : PHOTOS.slice(0, 10);
+  const gallery = photos;
 
   return (
-    <section className="py-6 bg-background">
+    <section className="py-6 bg-background select-none">
       <div className="mx-auto max-w-screen-xl px-4">
-        <SectionHeader
-          title="More Photo Gallery"
-          titleGu="વધુ ફોટો ગેલેરી"
-          titleHi="और फोटो गैलरी"
-          href="/photos"
-          language={language}
-        />
+        {/* Top Header Matching User Mockup */}
+        <div className="flex items-center justify-between pb-3 border-b-2 border-neutral-900 dark:border-neutral-700 mb-6">
+          <div className="bg-[#B3121B] text-white font-extrabold text-[15px] px-4 py-2 rounded-xl shadow-sm tracking-wide">
+            {language === 'gu' ? 'ફોટો ગેલેરી' : language === 'hi' ? 'फोटो गैलरी' : 'Photo Gallery'}
+          </div>
+          <Link
+            href="/photos"
+            className="text-[#B3121B] font-bold text-[14px] hover:underline flex items-center gap-1"
+          >
+            {language === 'gu' ? 'વધુ ફોટો ગેલેરી →' : language === 'hi' ? 'और फोटो गैलरी →' : 'More Photo Gallery →'}
+          </Link>
+        </div>
 
-        {/* Bento Magazine Grid — 3 columns, auto rows of 200px */}
-        <div className="grid grid-cols-3 auto-rows-[200px] gap-4">
-          {gallery.map((photo, index) => {
-            const span = CARD_SPANS[index] ?? { colSpan: 'col-span-1', rowSpan: 'row-span-1', size: 'medium' as CardSize };
-            return (
-              <GalleryCard
-                key={photo.id}
-                photo={photo}
-                index={index}
-                language={language}
-                hqSrc={hqSrc}
-                colSpan={span.colSpan}
-                rowSpan={span.rowSpan}
-                size={span.size}
-              />
-            );
-          })}
+        <div className="relative">
+          {/* Left Arrow */}
+          {showLeftArrow && (
+            <button
+              type="button"
+              onClick={() => handleScroll('left')}
+              className="absolute left-[-14px] top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 flex items-center justify-center shadow-xl border border-neutral-200 dark:border-neutral-800 hover:scale-105 transition-transform cursor-pointer"
+              aria-label="Scroll left"
+            >
+              <ChevronLeft className="h-6 w-6 stroke-[3]" />
+            </button>
+          )}
+
+          {/* Right Arrow */}
+          {showRightArrow && (
+            <button
+              type="button"
+              onClick={() => handleScroll('right')}
+              className="absolute right-[-14px] top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 flex items-center justify-center shadow-xl border border-neutral-200 dark:border-neutral-800 hover:scale-105 transition-transform cursor-pointer"
+              aria-label="Scroll right"
+            >
+              <ChevronRight className="h-6 w-6 stroke-[3]" />
+            </button>
+          )}
+
+          {/* Scrollable Auto-Scroll List */}
+          <div
+            ref={scrollContainerRef}
+            onScroll={handleNativeScroll}
+            className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide"
+          >
+            {[...gallery, ...gallery].map((photo, index) => (
+              <div
+                key={`${photo.id}-${index}`}
+                className="group relative flex-shrink-0 w-[230px] sm:w-[260px] md:w-[280px] aspect-[3/4]"
+              >
+                <Link
+                  href={`/photos/${photo.id}`}
+                  className="group relative flex h-full w-full overflow-hidden rounded-2xl shadow-md border border-border/40 hover:border-[#B3121B]/40 transition-all duration-300 bg-neutral-900"
+                  onMouseEnter={() => setHoveredId(`${photo.id}-${index}`)}
+                  onMouseLeave={() => setHoveredId(null)}
+                >
+                  {/* Shimmer Placeholder */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-neutral-800 via-neutral-700 to-neutral-900 animate-pulse" />
+
+                  {/* Image */}
+                  <Image
+                    src={hqSrc(photo.src)}
+                    alt={photo.alt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 280px"
+                    quality={90}
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+
+                  {/* Dark Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+
+                  {/* Category Chip */}
+                  <div className="absolute top-3 left-3 z-10">
+                    <span className="bg-[#B3121B] text-white text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-md select-none">
+                      {CATS[index % CATS.length]}
+                    </span>
+                  </div>
+
+                  {/* Caption (bottom) */}
+                  <div className="absolute inset-x-0 bottom-0 z-10 p-4">
+                    <p className="text-white font-extrabold leading-snug line-clamp-2 drop-shadow-md text-[14px] md:text-[15px]">
+                      {getLocalized(language, {
+                        en: photo.caption,
+                        gu: photo.captionGu,
+                        hi: photo.captionHi,
+                      })}
+                    </p>
+                    <div
+                      className="flex items-center gap-1.5 mt-2 overflow-hidden transition-all duration-300"
+                      style={{
+                        maxHeight: hoveredId === `${photo.id}-${index}` ? '24px' : '0px',
+                        opacity: hoveredId === `${photo.id}-${index}` ? 1 : 0,
+                      }}
+                    >
+                      <span className="text-white/80 text-[10px] font-semibold tracking-wider uppercase select-none">View Gallery</span>
+                      <ChevronRight className="h-3.5 w-3.5 text-[#B3121B] stroke-[3.5]" />
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

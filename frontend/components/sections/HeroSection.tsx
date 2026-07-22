@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Clock, ArrowRight, Flame, Eye, Play, ChevronRight, ChevronLeft, Camera, X, Bookmark, Sun, Cloud, CloudRain, Shield, Trophy, TrendingUp, TrendingDown, Wind, ChevronDown, ArrowUpRight, Thermometer, Droplet, MoreVertical, Fuel, Megaphone, Radio } from 'lucide-react';
+import { Clock, ArrowRight, Flame, Eye, Play, ChevronRight, ChevronLeft, Camera, X, Bookmark, Sun, Cloud, CloudRain, Shield, Trophy, TrendingUp, TrendingDown, Wind, ChevronDown, ArrowUpRight, Thermometer, Droplet, MoreVertical, Fuel, Megaphone, Radio, MapPin } from 'lucide-react';
 import {
   getArticleTitle,
   getArticleExcerpt,
@@ -81,6 +81,25 @@ function makeHomeImagesUnique<T extends Article>(sections: T[][]): T[][] {
 export default function HeroSection() {
   const { language } = useApp();
   const [videoMode, setVideoMode] = useState<'latest' | 'live'>('latest');
+
+  // Sidebar auto-changing video state (cycles every 10s)
+  const sidebarVideos = VIDEOS.filter(v => v.type === 'video').slice(0, 6);
+  const [activeSidebarVideoIndex, setActiveSidebarVideoIndex] = useState(0);
+
+  useEffect(() => {
+    if (sidebarVideos.length === 0) return;
+    const interval = setInterval(() => {
+      setActiveSidebarVideoIndex((prev) => (prev + 1) % sidebarVideos.length);
+    }, 2000); // 2 seconds rotation
+    return () => clearInterval(interval);
+  }, [sidebarVideos.length]);
+
+  const currentSidebarVideo = sidebarVideos[activeSidebarVideoIndex] || {
+    youtubeId: 'A_5vL-ngK4M',
+    title: 'Latest Video',
+    titleGu: 'ગુજરાત પોસ્ટ તાજેતરનો વીડિયો',
+    titleHi: 'नवीनतम वीडियो',
+  };
 
   const [savedIds, setSavedIds] = useState<string[]>([]);
   useEffect(() => {
@@ -484,7 +503,7 @@ export default function HeroSection() {
               style={{ aspectRatio: '16/9' }}
             >
               <iframe
-                src={`https://www.youtube.com/embed/${LATEST_VIDEO_ID}?autoplay=0&mute=1&rel=0&modestbranding=1&controls=1`}
+                src={`https://www.youtube.com/embed/${currentSidebarVideo.youtubeId}?autoplay=0&mute=1&rel=0&modestbranding=1&controls=1`}
                 title="Gujarat Post Video"
                 className="absolute inset-0 h-full w-full border-0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -492,19 +511,23 @@ export default function HeroSection() {
               />
             </div>
 
-            <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground pt-1 border-t border-border/40 mt-1">
-              <span>
+            <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground pt-1 border-t border-border/40 mt-1 gap-2">
+              <span className="line-clamp-1 max-w-[170px]" title={getLocalized(language, {
+                en: currentSidebarVideo.title,
+                gu: currentSidebarVideo.titleGu,
+                hi: currentSidebarVideo.titleHi,
+              })}>
                 {getLocalized(language, {
-                  en: 'Gujarat Post Latest Video',
-                  gu: 'ગુજરાત પોસ્ટ તાજેતરનો વીડિયો',
-                  hi: 'गुजरात पोस्ट नवीनतम वीडियो',
+                  en: currentSidebarVideo.title,
+                  gu: currentSidebarVideo.titleGu,
+                  hi: currentSidebarVideo.titleHi,
                 })}
               </span>
               <a
-                href={`https://www.youtube.com/watch?v=${LATEST_VIDEO_ID}`}
+                href={`https://www.youtube.com/watch?v=${currentSidebarVideo.youtubeId}`}
                 target="_blank"
                 rel="noreferrer"
-                className="text-[#B3121B] hover:underline flex items-center gap-1 font-black"
+                className="text-[#B3121B] hover:underline flex items-center gap-0.5 font-black shrink-0"
               >
                 {language === 'gu' ? 'યુટ્યુબ પર જુઓ ↗' : 'Watch on YouTube ↗'}
               </a>
@@ -515,7 +538,7 @@ export default function HeroSection() {
           <div className="w-full rounded-sm border border-border bg-card p-4 shadow-sm flex flex-col gap-3">
             <div className="flex items-center justify-between border-b border-border pb-2">
               <span className="text-[#B3121B] font-black text-[13.5px] md:text-[14px] select-none">
-                {language === 'gu' ? 'લોકપ્રિય News' : 'Popular News'}
+                {language === 'gu' ? 'સૌથી વધુ વંચાયેલા' : 'Most Read'}
               </span>
               <Link
                 href="/category/trending"
@@ -743,7 +766,498 @@ export default function HeroSection() {
       <div className="mx-auto max-w-screen-xl px-2 my-6">
         <VideoDesk videos={videos} language={language} />
       </div>
+
+      {/* Native Sponsored Ads Section */}
+      <NativeAdsSection language={language} />
     </div>
+  );
+}
+
+/* --- Native Sponsored Ads Section (Taboola/Outbrain style) ---------------- */
+interface NativeAd {
+  id: string;
+  title: string;
+  titleGu: string;
+  description?: string;
+  descriptionGu?: string;
+  image: string;
+  source: string;
+  sourceGu: string;
+  buttonText?: string;
+  buttonTextGu?: string;
+  href: string;
+}
+
+const NATIVE_ADS: NativeAd[] = [
+  {
+    id: 'ad-1',
+    title: 'Stop Searching for the Perfect Everyday Top',
+    titleGu: 'રોજિંદા ઉપયોગ માટે પર્ફેક્ટ ટોપ શોધવાનું બંધ કરો',
+    description: 'Soft fabrics, flattering silhouettes, and timeless details come together in tops made to keep you stylish and comfortable all day long.',
+    descriptionGu: 'નરમ કાપડ, આકર્ષક સિલુએટ્સ અને કાલાતીત વિગતો આખો દિવસ તમને સ્ટાઇલિશ અને આરામદાયક રાખવા માટે તૈયાર કરવામાં આવી છે.',
+    image: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&q=80',
+    source: 'Everyday Fashion',
+    sourceGu: 'વ્યભિચારી | પ્રાયોજિત',
+    buttonText: 'Shop Now',
+    buttonTextGu: 'હવે ખરીદી કરો',
+    href: '#'
+  },
+  {
+    id: 'ad-2',
+    title: "Woman sells ring given by ex, then jeweler tells her 'This can't be true'",
+    titleGu: "મહિલાએ તેના પૂર્વ પ્રેમીએ આપેલી વીંટી વેચી, ઝવેરીએ કહ્યું 'આ સાચું ન હોઈ શકે'",
+    image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=80',
+    source: 'Daily Life',
+    sourceGu: 'લાઇવ ડેઇલી | પ્રાયોજિત',
+    href: '#'
+  },
+  {
+    id: 'ad-3',
+    title: 'finance courses for corporate employees',
+    titleGu: 'કોર્પોરેટ કર્મચારીઓ માટે ફાઇનાન્સ કોર્સ',
+    description: 'finance courses for corporate employees',
+    descriptionGu: 'કોર્પોરેટ કર્મચારીઓ માટે ખાસ ડિઝાઇન કરેલા ફાઇનાન્સ અભ્યાસક્રમો',
+    image: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=600&q=80',
+    source: 'Finance Acad',
+    sourceGu: 'વેબસી | પ્રાયોજિત',
+    buttonText: 'Shop Now',
+    buttonTextGu: 'હવે ખરીદી કરો',
+    href: '#'
+  },
+  {
+    id: 'ad-4',
+    title: '20 Celeb Transformations That Quietly Stunned Hollywood',
+    titleGu: '૨૦ સેલિબ્રિટી ટ્રાન્સફોર્મેશન જેણે હોલીવુડને સ્તબ્ધ કરી દીધું',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80',
+    source: 'Celeb Buzz',
+    sourceGu: 'રાજા-નિર્મિત ગુંડાઓ | પ્રાયોજિત',
+    href: '#'
+  },
+  {
+    id: 'ad-5',
+    title: 'My Husband Called Me Useless At A Company BBQ. Then I Said This To His CEO',
+    titleGu: 'મારી કંપનીના બાર્બેક્યુમાં પતિએ મને નકામી કહી, પછી મેં તેના CEOને આ વાત કહી',
+    image: 'https://images.unsplash.com/photo-1555244162-803834f70033?w=600&q=80',
+    source: 'Viral Stories',
+    sourceGu: 'બીચ રાઇડર | પ્રાયોજિત',
+    href: '#'
+  },
+  {
+    id: 'ad-6',
+    title: 'This New Smart Watch is Sweeping the Country',
+    titleGu: 'આ નવી સ્માર્ટ વોચ દેશભરમાં ધૂમ મચાવી રહી છે',
+    description: 'Track your health, receive calls, and stay fit with the next generation of affordable luxury watches.',
+    descriptionGu: 'પરવડે તેવી લક્ઝરી ઘડિયાળોની નવી પેઢી સાથે તમારા સ્વાસ્થ્યને ટ્રૅક કરો અને ફિટ રહો.',
+    image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&q=80',
+    source: 'Tech Watch',
+    sourceGu: 'સ્માર્ટ ટેક | પ્રાયોજિત',
+    buttonText: 'Order Now',
+    buttonTextGu: 'હવે ઓર્ડર કરો',
+    href: '#'
+  },
+  {
+    id: 'ad-7',
+    title: 'The Most Beautiful Island Resorts You Can Visit Without a Passport',
+    titleGu: 'પાસપોર્ટ વગર તમે મુલાકાત લઈ શકો તેવા સુંદર ટાપુ રિસોર્ટ્સ',
+    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80',
+    source: 'Island Travel',
+    sourceGu: 'પ્રવાસન ડેસ્ક | પ્રાયોજિત',
+    href: '#'
+  },
+  // Batch 2 Ads
+  {
+    id: 'ad-8',
+    title: 'The Most Affordable Dental Implants in Ahmedabad',
+    titleGu: 'અમદાવાદમાં સૌથી વધુ સસ્તા અને ગુણવત્તાયુક્ત ડેન્ટલ ઇમ્પ્લાન્ટ્સ',
+    description: 'Restore your smile with top quality dental implants starting at low prices.',
+    descriptionGu: 'સૌથી ઓછી કિંમતથી શરૂ થતા ગુણવત્તાયુક્ત ડેન્ટલ ઇમ્પ્લાન્ટ્સ વડે તમારું સ્મિત પાછું મેળવો.',
+    image: 'https://images.unsplash.com/photo-1598256989800-fe5f95da9787?w=600&q=80',
+    source: 'Dental Care',
+    sourceGu: 'ડેન્ટલ કેર | પ્રાયોજિત',
+    buttonText: 'Book Now',
+    buttonTextGu: 'બુક કરો',
+    href: '#'
+  },
+  {
+    id: 'ad-9',
+    title: 'Top SUV Cars Launching Under 10 Lakhs in 2026',
+    titleGu: '૨૦૨૬માં ૧૦ લાખની અંદર લોન્ચ થનારી શાનદાર SUV કાર્સ',
+    image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&q=80',
+    source: 'Auto World',
+    sourceGu: 'મોટર વર્લ્ડ | પ્રાયોજિત',
+    href: '#'
+  },
+  {
+    id: 'ad-10',
+    title: 'If You Suffer From Knee Pain, Try This Simple Daily Exercise',
+    titleGu: 'જો તમે ઘૂંટણના દુખાવાથી પરેશાન છો, તો અજમાવો આ સરળ કસરત',
+    description: 'Relieve joints naturally with a quick 5-minute stretch routine at home.',
+    descriptionGu: 'ઘરે જ માત્ર ૫-મિનિટની સરળ કસરતોથી ઘૂંટણના સાંધાના દુખાવામાં કુદરતી રાહત મેળવો.',
+    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80',
+    source: 'Health Life',
+    sourceGu: 'આરોગ્ય સેતુ | પ્રાયોજિત',
+    buttonText: 'Learn More',
+    buttonTextGu: 'વધુ જાણો',
+    href: '#'
+  },
+  {
+    id: 'ad-11',
+    title: 'Why Smart Homes Are Becoming The New Standard in India',
+    titleGu: 'શા માટે ભારતમાં સ્માર્ટ હોમ્સ નવો ટ્રેન્ડ બની રહ્યા છે',
+    image: 'https://images.unsplash.com/photo-1558002038-1055907df827?w=600&q=80',
+    source: 'Smart Home Tech',
+    sourceGu: 'ટેક હોમ | પ્રાયોજિત',
+    href: '#'
+  },
+  {
+    id: 'ad-12',
+    title: '15 Foods You Should Never Eat After Age 50',
+    titleGu: '૫૦ વર્ષની ઉંમર પછી ક્યારેય ન ખાવા જોઈએ તેવા ૧૫ ખોરાક',
+    image: 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=600&q=80',
+    source: 'Food Diet',
+    sourceGu: 'આહાર ન્યુટ્રિશન | પ્રાયોજિત',
+    href: '#'
+  },
+  {
+    id: 'ad-13',
+    title: 'Unsold Luxury Cabins in Himachal Pradesh Are Selling for Next to Nothing',
+    titleGu: 'હિમાચલ પ્રદેશમાં ન વેચાયેલા લક્ઝરી કેબિન ખૂબ જ સસ્તા ભાવે મળી રહ્યા છે',
+    description: 'Stunning mountain views and top tier design at a fraction of the cost.',
+    descriptionGu: 'આકર્ષક પર્વતીય નજારા અને લક્ઝરી સુવિધાઓ ધરાવતા કોટેજ ખૂબ જ ઓછી કિંમતે ઉપલબ્ધ.',
+    image: 'https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=600&q=80',
+    source: 'Himachal Cabins',
+    sourceGu: 'હિલ સ્ટેશન પ્રવાસ | પ્રાયોજિત',
+    buttonText: 'View Details',
+    buttonTextGu: 'વિગત જુઓ',
+    href: '#'
+  },
+  {
+    id: 'ad-14',
+    title: 'The Ultimate Guide to Saving for Retirement in Your 30s',
+    titleGu: '૩૦ વર્ષની ઉંમરે નિવૃત્તિ માટે બચત કરવાની અંતિમ માર્ગદર્શિકા',
+    image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80',
+    source: 'Wealth Guide',
+    sourceGu: 'બચત ડેસ્ક | પ્રાયોજિત',
+    href: '#'
+  },
+  {
+    id: 'ad-15',
+    title: 'Top 10 High-Paying Work From Home Jobs in 2026',
+    titleGu: '૨૦૨૬માં ઘરે બેઠા શાનદાર કમાણી આપતી ટોપ ૧૦ નોકરીઓ',
+    description: 'Work from anywhere and earn a stable income with these growing career opportunities.',
+    descriptionGu: 'આ વધતી જતી કારકિર્દીની તકો સાથે ગમે ત્યાંથી કામ કરો અને સ્થિર આવક મેળવો.',
+    image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80',
+    source: 'Job Careers',
+    sourceGu: 'રોજગાર ન્યૂઝ | પ્રાયોજિત',
+    buttonText: 'Apply Now',
+    buttonTextGu: 'અરજી કરો',
+    href: '#'
+  },
+  {
+    id: 'ad-16',
+    title: 'Indian Travelers Are Loving This New Suitcase Design',
+    titleGu: 'મુસાફરો માટે આ નવી સુટકેસ ડિઝાઇન સોશિયલ મીડિયા પર વાયરલ',
+    image: 'https://images.unsplash.com/photo-1565026057447-bc90a3dceb87?w=600&q=80',
+    source: 'Travel Gear',
+    sourceGu: 'પ્રવાસન કીટ | પ્રાયોજિત',
+    href: '#'
+  },
+  {
+    id: 'ad-17',
+    title: 'The Cost of a Cruise Might Surprise You',
+    titleGu: 'લક્ઝરી ક્રૂઝ સફરનો ખર્ચ જાણીને તમે ચોંકી જશો',
+    description: 'Find amazing discounts on last-minute cruise departures worldwide.',
+    descriptionGu: 'વિશ્વભરમાં છેલ્લી ઘડીના લક્ઝરી ક્રૂઝ બુકિંગ પર મેળવો આકર્ષક ડિસ્કાઉન્ટ.',
+    image: 'https://images.unsplash.com/photo-1548574505-5e239809ee19?w=600&q=80',
+    source: 'Cruise Deals',
+    sourceGu: 'સફર ડેસ્ક | પ્રાયોજિત',
+    buttonText: 'View Deals',
+    buttonTextGu: 'ડીલ્સ જુઓ',
+    href: '#'
+  },
+  {
+    id: 'ad-18',
+    title: 'If You Own a Car in Gujarat, Read This Before Paying Insurance',
+    titleGu: 'ગુજરાતમાં કાર ધરાવતા લોકો માટે ખાસ વીમા ટિપ્સ',
+    image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=600&q=80',
+    source: 'Car Insure',
+    sourceGu: 'વાહન વીમો | પ્રાયોજિત',
+    href: '#'
+  },
+  {
+    id: 'ad-19',
+    title: 'Best Credit Cards with Zero Annual Fees for 2026',
+    titleGu: 'કોઈપણ વાર્ષિક ચાર્જ વગરના ૨૦૨૬ના શ્રેષ્ઠ ક્રેડિટ કાર્ડ્સ',
+    image: 'https://images.unsplash.com/photo-1589758438368-0ad531db3366?w=600&q=80',
+    source: 'Card Expert',
+    sourceGu: 'નાણાકીય સલાહ | પ્રાયોજિત',
+    href: '#'
+  },
+  {
+    id: 'ad-20',
+    title: 'These Hair Oils Are Proven to Reduce Hair Fall in 2 Weeks',
+    titleGu: 'માત્ર ૨ અઠવાડિયામાં વાળ ખરતા અટકાવતા શ્રેષ્ઠ હેર ઓઇલ',
+    description: 'Restore thickness and volume naturally with 100% organic ayurvedic herbal oils.',
+    descriptionGu: '૧૦૦% ઓર્ગેનિક આયુર્વેદિક હર્બલ તેલ વડે વાળની ​​જાડાઈ અને જથ્થો કુદરતી રીતે પુનઃસ્થાપિત કરો.',
+    image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=600&q=80',
+    source: 'Hair Care',
+    sourceGu: 'બ્યુટી ટીપ્સ | પ્રાયોજિત',
+    buttonText: 'Order Now',
+    buttonTextGu: 'હવે ઓર્ડર કરો',
+    href: '#'
+  },
+  {
+    id: 'ad-21',
+    title: 'Top Luxury Retirement Homes in Gujarat (See Prices)',
+    titleGu: 'ગુજરાતમાં ઉપલબ્ધ લક્ઝરી નિવૃત્ત આશ્રમોની કિંમત જુઓ',
+    image: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&q=80',
+    source: 'Senior Living',
+    sourceGu: 'નિવૃત્ત વિલા | પ્રાયોજિત',
+    href: '#'
+  }
+];
+
+function AdCard({
+  ad,
+  language,
+  isRow2,
+  className = ''
+}: {
+  ad: NativeAd;
+  language: Language;
+  isRow2: boolean;
+  className?: string;
+}) {
+  if (isRow2) {
+    return (
+      <a
+        href={ad.href}
+        className={`group flex flex-col p-4 rounded-xl border border-border/40 hover:border-[#B3121B]/30 hover:shadow-md transition-all duration-300 bg-card ${className}`}
+      >
+        <div className="relative w-full h-44 overflow-hidden rounded-lg mb-3">
+          <Image
+            src={ad.image}
+            alt={ad.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 360px"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+        <div className="flex flex-col justify-between flex-1">
+          <div>
+            <h4 className="text-[13.5px] md:text-[14.5px] font-black leading-snug text-foreground line-clamp-2 group-hover:text-[#B3121B] transition-colors">
+              {language === 'gu' ? ad.titleGu : ad.title}
+            </h4>
+            {ad.description && (
+              <p className="text-[12px] text-muted-foreground mt-1.5 line-clamp-2 leading-relaxed">
+                {language === 'gu' ? ad.descriptionGu : ad.description}
+              </p>
+            )}
+          </div>
+          <div className="mt-4 flex items-center justify-between gap-3">
+            <span className="text-[10px] font-black uppercase text-muted-foreground tracking-wider">
+              {language === 'gu' ? ad.sourceGu : `${ad.source} | Sponsored`}
+            </span>
+            {ad.buttonText && (
+              <span className="border border-[#B3121B] text-[#B3121B] text-[10.5px] font-black rounded-full px-3 py-1 hover:bg-[#B3121B] hover:text-white transition-all duration-200">
+                {language === 'gu' ? ad.buttonTextGu : ad.buttonText}
+              </span>
+            )}
+          </div>
+        </div>
+      </a>
+    );
+  } else {
+    return (
+      <a
+        href={ad.href}
+        className={`group flex flex-col md:flex-row gap-4 p-4 rounded-xl border border-border/40 hover:border-[#B3121B]/30 hover:shadow-md transition-all duration-300 bg-card ${className}`}
+      >
+        <div className="relative w-full md:w-56 h-36 shrink-0 overflow-hidden rounded-lg">
+          <Image
+            src={ad.image}
+            alt={ad.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 224px"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+        <div className="flex flex-col justify-between flex-1 py-1">
+          <div>
+            <h4 className="text-[14px] md:text-[15.5px] font-black leading-snug text-foreground line-clamp-2 group-hover:text-[#B3121B] transition-colors">
+              {language === 'gu' ? ad.titleGu : ad.title}
+            </h4>
+            {ad.description && (
+              <p className="text-[12px] text-muted-foreground mt-2 line-clamp-2 leading-relaxed">
+                {language === 'gu' ? ad.descriptionGu : ad.description}
+              </p>
+            )}
+          </div>
+          <div className="mt-4 flex items-center justify-between gap-3">
+            <span className="text-[10px] font-black uppercase text-muted-foreground tracking-wider">
+              {language === 'gu' ? ad.sourceGu : `${ad.source} | Sponsored`}
+            </span>
+            {ad.buttonText && (
+              <span className="border border-[#B3121B] text-[#B3121B] text-[10.5px] font-black rounded-full px-4 py-1.5 hover:bg-[#B3121B] hover:text-white transition-all duration-200">
+                {language === 'gu' ? ad.buttonTextGu : ad.buttonText}
+              </span>
+            )}
+          </div>
+        </div>
+      </a>
+    );
+  }
+}
+
+function getInfiniteAds(count: number): NativeAd[] {
+  const list: NativeAd[] = [];
+  for (let i = 0; i < count; i++) {
+    const originalAd = NATIVE_ADS[i % NATIVE_ADS.length];
+    const repeatCount = Math.floor(i / NATIVE_ADS.length);
+    list.push({
+      ...originalAd,
+      id: `${originalAd.id}-rep-${repeatCount}`,
+    });
+  }
+  return list;
+}
+
+export function NativeAdsSection({ language }: { language: Language }) {
+  const [loadedCount, setLoadedCount] = useState(7);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const isLoadingRef = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    let timer: NodeJS.Timeout | null = null;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting && !isLoadingRef.current) {
+          isLoadingRef.current = true;
+          setIsLoadingMore(true);
+
+          timer = setTimeout(() => {
+            setLoadedCount((prev) => prev + 7);
+            isLoadingRef.current = false;
+            setIsLoadingMore(false);
+          }, 500);
+        }
+      },
+      {
+        root: null,
+        rootMargin: '200px',
+        threshold: 0.01
+      }
+    );
+
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+      if (timer) clearTimeout(timer);
+    };
+  }, [loadedCount]);
+
+  const visibleAds = getInfiniteAds(loadedCount);
+  const groups: NativeAd[][] = [];
+  for (let i = 0; i < visibleAds.length; i += 7) {
+    groups.push(visibleAds.slice(i, i + 7));
+  }
+
+  return (
+    <section id="infinite-ads-section" ref={containerRef} className="mx-auto max-w-screen-xl px-4 py-8 select-none border-t border-border/40 mt-8">
+      {/* Styles for smooth load-in transitions and custom scrollbar */}
+      <style>{`
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(24px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-slideUp {
+          animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+      `}</style>
+
+      <div className="flex items-center gap-2 mb-6 select-none">
+        <span className="h-[2px] flex-1 bg-neutral-200 dark:bg-neutral-800" />
+        <span className="text-[11px] font-black uppercase text-muted-foreground tracking-wider px-3 bg-background relative z-10">
+          {language === 'gu' ? 'તમને આ પણ ગમશે' : 'RECOMMENDED FOR YOU'}
+        </span>
+        <span className="h-[2px] flex-1 bg-neutral-200 dark:bg-neutral-800" />
+      </div>
+
+      <div className="space-y-6 border border-neutral-200/30 dark:border-neutral-800/40 rounded-xl p-4 bg-neutral-50/10 dark:bg-neutral-900/5">
+        {groups.map((group, groupIndex) => {
+          const row1 = group.slice(0, 2);
+          const row2 = group.slice(2, 5);
+          const row3 = group.slice(5, 7);
+          const animClass = groupIndex > 0 ? 'animate-slideUp' : '';
+
+          return (
+            <div key={groupIndex} className="space-y-6">
+              {/* Divider between batches */}
+              {groupIndex > 0 && (
+                <div className="flex items-center gap-2 py-4 select-none animate-slideUp">
+                  <span className="h-[1.5px] flex-1 bg-neutral-200 dark:bg-neutral-800" />
+                  <span className="text-[10px] font-black uppercase text-muted-foreground/80 tracking-widest px-3">
+                    {groupIndex % 2 === 1
+                      ? (language === 'gu' ? 'વધુ પ્રાયોજિત લિંક્સ' : 'MORE SPONSORED LINKS')
+                      : (language === 'gu' ? 'તમને રસ પડી શકે તેવી વધુ કડીઓ' : 'MORE LINKS FOR YOU')}
+                  </span>
+                  <span className="h-[1.5px] flex-1 bg-neutral-200 dark:bg-neutral-800" />
+                </div>
+              )}
+
+              {/* ROW A: 2 Columns */}
+              {row1.length > 0 && (
+                <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 ${animClass}`}>
+                  {row1.map((ad) => (
+                    <AdCard key={ad.id} ad={ad} language={language} isRow2={false} />
+                  ))}
+                </div>
+              )}
+
+              {/* ROW B: 3 Columns */}
+              {row2.length > 0 && (
+                <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ${animClass}`}>
+                  {row2.map((ad) => (
+                    <AdCard key={ad.id} ad={ad} language={language} isRow2={true} />
+                  ))}
+                </div>
+              )}
+
+              {/* ROW C: 2 Columns */}
+              {row3.length > 0 && (
+                <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 ${groupIndex > 0 ? '' : 'animate-slideUp'}`}>
+                  {row3.map((ad) => (
+                    <AdCard key={ad.id} ad={ad} language={language} isRow2={false} />
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+        {/* Sentinel for Infinite Scroll Trigger */}
+        <div ref={sentinelRef} className="h-12 w-full flex items-center justify-center mt-6">
+          <div className="flex items-center gap-2 text-xs text-neutral-400 font-bold select-none">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#B3121B] animate-ping" />
+            <span>{language === 'gu' ? 'વધુ લોડ થઈ રહ્યું છે...' : 'Loading more recommendations...'}</span>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -4823,6 +5337,174 @@ export function WorldSection({ language }: { language: Language }) {
 }
 
 /* --- Live Center Section ─────────────────────────────────────────────────── */
+/* --- Live Center Section ─────────────────────────────────────────────────── */
+function LivePanel({
+  title,
+  rightElement,
+  icon,
+  variant,
+  watermark,
+  sourceText,
+  children
+}: {
+  title: string;
+  rightElement?: React.ReactNode;
+  icon?: React.ReactNode;
+  variant: 'red' | 'black';
+  watermark?: React.ReactNode;
+  sourceText: string;
+  children: React.ReactNode;
+}) {
+  const panelBg = variant === 'red'
+    ? 'bg-gradient-to-b from-[#C21E26] to-[#990D14] text-white border-red-700/20'
+    : 'bg-gradient-to-b from-[#0F1115] to-[#050608] text-white border-neutral-900';
+
+  const borderLine = variant === 'red' ? 'border-white/20' : 'border-white/10';
+
+  return (
+    <div className={`relative flex flex-col rounded-2xl border p-4 shadow-md overflow-hidden min-h-[420px] ${panelBg}`}>
+      {/* Watermark in background */}
+      {watermark}
+
+      {/* Header */}
+      <div className={`mb-4 flex items-center justify-between pb-2.5 border-b select-none ${borderLine} relative z-10`}>
+        <div className="flex items-center gap-2">
+          {icon}
+          <h3 className="text-[16px] font-extrabold tracking-tight leading-none text-white">{title}</h3>
+        </div>
+        <div className="flex items-center">
+          {rightElement}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 flex flex-col justify-between relative z-10">
+        <div className="space-y-3 flex-1 flex flex-col justify-between">
+          {children}
+        </div>
+
+        {/* Source Footer */}
+        <p className={`pt-3 text-[10px] font-bold select-none mt-4 leading-none ${variant === 'red' ? 'text-white/60' : 'text-neutral-400'}`}>
+          {sourceText}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// Custom SVGs for card watermarks (matching the screenshots exactly)
+const FuelWatermark = (
+  <div className="absolute bottom-[-15px] right-[-10px] w-[220px] h-[160px] opacity-[0.16] pointer-events-none z-0 select-none text-black">
+    <svg viewBox="0 0 200 150" fill="currentColor" className="w-full h-full">
+      {/* Fuel nozzle Spout pointing up-left */}
+      <path d="M125 78 L95 48 C90 43 82 43 77 48 L48 77 C43 82 43 90 48 95 L58 105 L35 128 C32 131 32 136 35 139 C38 142 43 142 46 139 L69 116 L79 126 C84 131 92 131 97 126 L126 97 C131 92 131 84 126 79 Z M65 92 C62 89 62 84 65 81 C68 78 73 78 76 81 C79 84 79 89 76 92 C73 95 68 95 65 92 Z" />
+      <path d="M120 73 L155 38 C160 33 168 33 173 38 L195 60 C200 65 200 73 195 78 L160 113" fill="none" stroke="currentColor" strokeWidth="10" strokeLinecap="round" />
+      {/* Fuel droplet on the left */}
+      <path d="M85 85 C85 93 79 100 72 100 C65 100 59 93 59 85 C59 75 72 60 72 60 C72 60 85 75 85 85 Z" />
+      {/* Background waves */}
+      <path d="M -20 80 Q 40 55 100 70 T 220 50" stroke="currentColor" strokeWidth="0.8" strokeDasharray="3,3" fill="none" opacity="0.3" />
+      <path d="M -20 90 Q 40 65 100 80 T 220 60" stroke="currentColor" strokeWidth="0.8" strokeDasharray="3,3" fill="none" opacity="0.3" />
+    </svg>
+  </div>
+);
+
+const MarketWatermark = (
+  <div className="absolute bottom-[-10px] right-[-10px] w-[220px] h-[120px] opacity-[0.07] pointer-events-none z-0 select-none text-white">
+    <svg viewBox="0 0 200 100" fill="currentColor" className="w-full h-full">
+      {/* Histogram bars */}
+      <rect x="20" y="70" width="6" height="20" rx="1" />
+      <rect x="32" y="55" width="6" height="35" rx="1" />
+      <rect x="44" y="65" width="6" height="25" rx="1" />
+      <rect x="56" y="45" width="6" height="45" rx="1" />
+      <rect x="68" y="50" width="6" height="40" rx="1" />
+      <rect x="80" y="30" width="6" height="60" rx="1" />
+      <rect x="92" y="40" width="6" height="50" rx="1" />
+      <rect x="104" y="35" width="6" height="55" rx="1" />
+      <rect x="116" y="20" width="6" height="70" rx="1" />
+      <rect x="128" y="45" width="6" height="45" rx="1" />
+      <rect x="140" y="30" width="6" height="60" rx="1" />
+      <rect x="152" y="25" width="6" height="65" rx="1" />
+      <rect x="164" y="15" width="6" height="75" rx="1" />
+      {/* Connecting line on top */}
+      <path d="M 23 68 L 35 52 L 47 62 L 59 42 L 71 47 L 83 27 L 95 37 L 107 32 L 119 17 L 131 42 L 143 27 L 155 22 L 167 12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      {/* Dots */}
+      <circle cx="23" cy="68" r="2.5" />
+      <circle cx="35" cy="52" r="2.5" />
+      <circle cx="47" cy="62" r="2.5" />
+      <circle cx="59" cy="42" r="2.5" />
+      <circle cx="71" cy="47" r="2.5" />
+      <circle cx="83" cy="27" r="2.5" />
+      <circle cx="95" cy="37" r="2.5" />
+      <circle cx="107" cy="32" r="2.5" />
+      <circle cx="119" cy="17" r="2.5" />
+      <circle cx="131" cy="42" r="2.5" />
+      <circle cx="143" cy="27" r="2.5" />
+      <circle cx="155" cy="22" r="2.5" />
+      <circle cx="167" cy="12" r="2.5" />
+    </svg>
+  </div>
+);
+
+const CricketWatermark = (
+  <div className="absolute bottom-[-5px] right-[-10px] w-[240px] h-[140px] opacity-[0.14] pointer-events-none z-0 select-none text-black">
+    <svg viewBox="0 0 200 120" fill="currentColor" className="w-full h-full">
+      {/* Stadium Stands */}
+      <path d="M 0 100 Q 100 115 200 100 L 200 120 L 0 120 Z" opacity="0.6" />
+      <path d="M 0 88 Q 100 103 200 88 L 200 100 Q 100 115 0 100 Z" opacity="0.4" />
+      <path d="M 0 76 Q 100 91 200 76 L 200 88 Q 100 103 0 88 Z" opacity="0.3" />
+      <path d="M 0 64 Q 100 79 200 64 L 200 76 Q 100 91 0 76 Z" opacity="0.2" />
+      {/* Floodlights left */}
+      <g transform="translate(20, 25)" className="text-white">
+        <rect x="-12" y="-6" width="24" height="12" rx="1.5" fill="currentColor" />
+        <line x1="0" y1="6" x2="-2" y2="45" stroke="currentColor" strokeWidth="2.5" />
+        <polygon points="-8,6 -45,85 35,85" fill="currentColor" opacity="0.15" />
+        <circle cx="-8" cy="-2" r="1.5" fill="white" />
+        <circle cx="-3" cy="-2" r="1.5" fill="white" />
+        <circle cx="3" cy="-2" r="1.5" fill="white" />
+        <circle cx="8" cy="-2" r="1.5" fill="white" />
+        <circle cx="-8" cy="2" r="1.5" fill="white" />
+        <circle cx="-3" cy="2" r="1.5" fill="white" />
+        <circle cx="3" cy="2" r="1.5" fill="white" />
+        <circle cx="8" cy="2" r="1.5" fill="white" />
+      </g>
+      {/* Floodlights right */}
+      <g transform="translate(180, 30)" className="text-white">
+        <rect x="-12" y="-6" width="24" height="12" rx="1.5" fill="currentColor" />
+        <line x1="0" y1="6" x2="2" y2="40" stroke="currentColor" strokeWidth="2.5" />
+        <polygon points="8,6 -35,80 45,80" fill="currentColor" opacity="0.15" />
+        <circle cx="-8" cy="-2" r="1.5" fill="white" />
+        <circle cx="-3" cy="-2" r="1.5" fill="white" />
+        <circle cx="3" cy="-2" r="1.5" fill="white" />
+        <circle cx="8" cy="-2" r="1.5" fill="white" />
+        <circle cx="-8" cy="2" r="1.5" fill="white" />
+        <circle cx="-3" cy="2" r="1.5" fill="white" />
+        <circle cx="3" cy="2" r="1.5" fill="white" />
+        <circle cx="8" cy="2" r="1.5" fill="white" />
+      </g>
+      <path d="M -20 80 Q 40 55 100 70 T 220 50" stroke="currentColor" strokeWidth="1" strokeDasharray="3,3" fill="none" opacity="0.2" />
+    </svg>
+  </div>
+);
+
+const FootballWatermark = (
+  <div className="absolute bottom-[-10px] right-[-10px] w-[220px] h-[120px] opacity-[0.08] pointer-events-none z-0 select-none text-white">
+    <svg viewBox="0 0 200 100" fill="none" stroke="currentColor" strokeWidth="1" className="w-full h-full">
+      <path d="M0 90 Q 50 65 100 80 T 200 50" opacity="0.3" />
+      <path d="M0 80 Q 50 55 100 70 T 200 40" opacity="0.35" />
+      <path d="M0 70 Q 50 45 100 60 T 200 30" opacity="0.4" />
+      <path d="M0 60 Q 50 35 100 50 T 200 20" opacity="0.35" />
+      <path d="M0 50 Q 50 25 100 40 T 200 10" opacity="0.3" />
+      <path d="M 20 100 Q 50 60 80 10" opacity="0.3" />
+      <path d="M 50 100 Q 80 60 110 10" opacity="0.35" />
+      <path d="M 80 100 Q 110 60 140 10" opacity="0.4" />
+      <path d="M 110 100 Q 140 60 170 10" opacity="0.35" />
+      <path d="M 140 100 Q 170 60 200 10" opacity="0.3" />
+      <path d="M 100 90 A 50 50 0 0 1 200 40" stroke="currentColor" strokeWidth="0.8" strokeDasharray="3,3" opacity="0.25" />
+      <path d="M 120 90 A 40 40 0 0 1 200 50" stroke="currentColor" strokeWidth="0.8" strokeDasharray="3,3" opacity="0.25" />
+    </svg>
+  </div>
+);
+
 export function LiveCenterSection({ language }: { language: Language }) {
   return (
     <div className="mx-auto max-w-screen-xl px-4 mt-8 relative">
@@ -4831,11 +5513,11 @@ export function LiveCenterSection({ language }: { language: Language }) {
       <div className="absolute -bottom-6 right-10 w-[420px] h-[420px] bg-red-600/12 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-80 h-80 bg-red-500/10 rounded-full blur-[90px] pointer-events-none" />
 
-      {/* Container Box with Glassmorphic Backdrop Blur */}
-      <div className="relative border border-red-100/80 rounded-2xl bg-white/95 backdrop-blur-md shadow-xl overflow-hidden p-6 text-foreground select-none">
+      {/* Container Box */}
+      <div className="relative border border-neutral-200/80 dark:border-neutral-800 bg-[#f8f9fa] dark:bg-slate-900/40 rounded-2xl p-6 shadow-sm">
 
         {/* ── Header Row ──────────────────────────────────────────────── */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-5 border-b border-border/10">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-5 border-b border-neutral-200/40 dark:border-neutral-800/60 select-none">
           <div className="flex items-center gap-3 flex-wrap">
             <span className="bg-[#B3121B] text-white text-[13px] font-black px-4 py-1.5 rounded-full inline-flex items-center gap-2 shadow-sm">
               <span className="h-2 w-2 rounded-full bg-white animate-pulse" />
@@ -4858,308 +5540,185 @@ export function LiveCenterSection({ language }: { language: Language }) {
         {/* ── 4-Column Grid ────────────────────────────────────────── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-5">
 
-          {/* ── Column 1: Fuel Prices (ઈંધણ ભાવ) ──────────────────── */}
-          <div className="flex flex-col justify-between p-3.5 rounded-xl border border-red-100/70 bg-gradient-to-b from-red-50/20 to-slate-50/40 backdrop-blur-xs hover:border-red-200 transition-colors shadow-xs">
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[14px] font-black text-foreground flex items-center gap-2">
-                  <Fuel className="h-4 w-4 text-[#B3121B]" />
-                  {language === 'gu' ? 'ઈંધણ ભાવ' : 'Fuel Prices'}
-                </span>
-                <span className="text-[#B3121B] text-[11px] font-extrabold flex items-center gap-0.5">
-                  {language === 'gu' ? 'અમદાવાદ 📍' : 'Ahmedabad 📍'}
-                </span>
+          {/* Panel 1: Fuel Price */}
+          <LivePanel
+            title={language === 'gu' ? 'ઈંધણ ભાવ' : 'Fuel Price'}
+            variant="red"
+            watermark={FuelWatermark}
+            sourceText={language === 'gu' ? 'સ્ત્રોત: IOC / HPCL' : 'Source: IOC / HPCL'}
+            rightElement={
+              <div className="flex items-center gap-1 text-[12px] font-extrabold text-white select-none">
+                <span>{language === 'gu' ? 'અમદાવાદ' : 'Ahmedabad'}</span>
+                <MapPin className="h-3.5 w-3.5 text-white" />
               </div>
+            }
+            icon={<Fuel className="h-5 w-5 text-white" />}
+          >
+            {[
+              { name: 'પેટ્રોલ', nameEng: 'Petrol', price: '96.42', unit: 'લીટર', symbol: 'P' as const },
+              { name: 'ડીઝલ', nameEng: 'Diesel', price: '92.17', unit: 'લીટર', symbol: 'D' as const },
+              { name: 'CNG', nameEng: 'CNG', price: '76.00', unit: 'કિલો', symbol: 'C' as const }
+            ].map((item) => (
+              <div key={item.symbol} className="flex-1 flex items-center justify-between rounded-xl bg-white px-4 py-3.5 shadow-sm border border-neutral-100 hover:shadow transition-shadow">
+                <div className="flex items-center gap-3">
+                  <div className={`h-9 w-9 rounded-full flex items-center justify-center font-extrabold text-[16px] shrink-0
+                    ${item.symbol === 'P' ? 'bg-red-50 text-red-600 border border-red-100' : ''}
+                    ${item.symbol === 'D' ? 'bg-blue-50 text-blue-600 border border-blue-100' : ''}
+                    ${item.symbol === 'C' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : ''}
+                  `}>
+                    {item.symbol}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-extrabold text-[13.5px] text-neutral-900 leading-none">
+                      {language === 'gu' ? `${item.name} (${item.nameEng})` : `${item.nameEng} (${item.nameEng})`}
+                    </p>
+                    <p className="text-[10px] font-bold text-neutral-400 mt-2 leading-none">
+                      {language === 'gu' ? `પ્રતિ ${item.unit}` : `per ${item.unit === 'લીટર' ? 'liter' : 'kg'}`}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-[16px] font-black text-neutral-900 leading-none">₹{item.price}</p>
+                  <p className="text-[9px] font-bold text-neutral-400 mt-1.5 leading-none">
+                    / {item.unit}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </LivePanel>
 
-              {/* Items */}
-              <div className="space-y-2">
-                {/* Petrol */}
-                <div className="flex items-center justify-between p-2 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-7 h-7 rounded-full bg-red-100 text-[#B3121B] font-black flex items-center justify-center text-[12px]">
-                      P
+          {/* Panel 2: Stock Market */}
+          <LivePanel
+            title={language === 'gu' ? 'શેરબજાર' : 'Stock Market'}
+            variant="black"
+            watermark={MarketWatermark}
+            sourceText={language === 'gu' ? 'સ્ત્રોત: Yahoo Finance' : 'Source: Yahoo Finance'}
+            rightElement={
+              <span className="text-[10px] font-bold text-neutral-400 leading-none whitespace-nowrap">
+                {language === 'gu' ? 'ભારત ₹ INR' : 'India ₹ INR'}
+              </span>
+            }
+            icon={<TrendingUp className="h-5 w-5 text-white" />}
+          >
+            {[
+              { name: 'Nifty 50', exchange: 'NSE', value: 23456.2, change: 188.4, changePercent: 0.93 },
+              { name: 'BSE Sensex', exchange: 'BSE', value: 80309.1, change: 425.6, changePercent: 0.55 },
+              { name: 'Nifty Bank', exchange: 'NSE', value: 49640.8, change: -124.1, changePercent: -0.23 }
+            ].map((item) => (
+              <div key={item.name} className="rounded-xl bg-[#121518] p-3 border border-[#1F252C] shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-extrabold text-[13.5px] text-white leading-none">{item.name}</p>
+                    <p className="text-[10px] font-bold text-neutral-400 mt-2 leading-none">{item.exchange}</p>
+                  </div>
+                  <p className="text-[15px] font-black text-white leading-none">
+                    ₹{item.value.toLocaleString('en-IN', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
+                  </p>
+                </div>
+                <div className={`mt-2.5 flex items-center gap-1 text-[11px] font-black select-none leading-none
+                  ${item.change >= 0 ? 'text-emerald-500' : 'text-red-500'}
+                `}>
+                  {item.change >= 0 ? '↗' : '↘'}
+                  <span>{item.change >= 0 ? '+' : ''}{item.change.toFixed(1)} ({item.changePercent >= 0 ? '+' : ''}{item.changePercent.toFixed(2)}%)</span>
+                </div>
+              </div>
+            ))}
+          </LivePanel>
+
+          {/* Panel 3: Cricket */}
+          <LivePanel
+            title={language === 'gu' ? 'ક્રિકેટ' : 'Cricket'}
+            variant="red"
+            watermark={CricketWatermark}
+            sourceText={language === 'gu' ? 'સ્ત્રોત: ESPN' : 'Source: ESPN'}
+            rightElement={
+              <Link href="/sports" className="text-[12px] font-extrabold text-white leading-none hover:text-white/80 transition-colors select-none whitespace-nowrap">
+                {language === 'gu' ? '+ વધુ' : '+ More'}
+              </Link>
+            }
+            icon={<Trophy className="h-5 w-5 text-white" />}
+          >
+            {[
+              { title: 'India vs England', statusType: 'live', statusText: 'LIVE', team1: 'India', team1Score: '168/8 (20)', team2: 'England', team2Score: '185/9 (19.2)' },
+              { title: 'Ranji Trophy', statusType: 'day', statusText: 'Day 3', team1: 'Gujarat', team1Score: '284/6', team2: 'Mumbai', team2Score: '322/10' },
+              { title: 'IPL', statusType: 'time', statusText: '22:00', team1: 'CSK', team1Score: '—', team2: 'MI', team2Score: '—' }
+            ].map((match, i) => (
+              <div key={i} className="rounded-xl bg-white p-3 shadow-sm border border-neutral-100">
+                <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-neutral-100">
+                  <p className="font-extrabold text-[12.5px] text-neutral-900 leading-none">{match.title}</p>
+                  {match.statusType === 'live' ? (
+                    <span className="bg-emerald-50 text-emerald-600 px-2 py-0.5 text-[8.5px] font-black rounded leading-none select-none border border-emerald-100">
+                      {match.statusText}
                     </span>
-                    <div className="flex flex-col">
-                      <span className="text-[12px] font-black text-foreground">પેટ્રોલ (Petrol)</span>
-                      <span className="text-[9.5px] text-muted-foreground font-semibold">પ્રતિ લીટર</span>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-[14.5px] font-black text-foreground">₹96.42</span>
-                    <span className="text-[9px] text-muted-foreground block font-semibold">/ લીટર</span>
-                  </div>
-                </div>
-
-                {/* Diesel */}
-                <div className="flex items-center justify-between p-2 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-7 h-7 rounded-full bg-blue-100 text-blue-600 font-black flex items-center justify-center text-[12px]">
-                      D
+                  ) : (
+                    <span className="text-neutral-400 text-[9.5px] font-bold select-none">
+                      {match.statusText}
                     </span>
-                    <div className="flex flex-col">
-                      <span className="text-[12px] font-black text-foreground">ડીઝલ (Diesel)</span>
-                      <span className="text-[9.5px] text-muted-foreground font-semibold">પ્રતિ લીટર</span>
-                    </div>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center text-[12.5px] font-bold text-neutral-700">
+                    <span>{match.team1}</span>
+                    <span className="font-black text-neutral-900">{match.team1Score}</span>
                   </div>
-                  <div className="text-right">
-                    <span className="text-[14.5px] font-black text-foreground">₹92.17</span>
-                    <span className="text-[9px] text-muted-foreground block font-semibold">/ લીટર</span>
+                  <div className="flex justify-between items-center text-[12.5px] font-bold text-neutral-700">
+                    <span>{match.team2}</span>
+                    <span className="font-black text-neutral-900">{match.team2Score}</span>
                   </div>
                 </div>
+              </div>
+            ))}
+          </LivePanel>
 
-                {/* CNG */}
-                <div className="flex items-center justify-between p-2 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 font-black flex items-center justify-center text-[12px]">
-                      C
+          {/* Panel 4: Football */}
+          <LivePanel
+            title={language === 'gu' ? 'ફૂટબોલ' : 'Football'}
+            variant="black"
+            watermark={FootballWatermark}
+            sourceText={language === 'gu' ? 'સ્ત્રોત: ESPN' : 'Source: ESPN'}
+            rightElement={
+              <Link href="/sports" className="text-[12px] font-extrabold text-white leading-none hover:text-white/80 transition-colors select-none whitespace-nowrap">
+                {language === 'gu' ? '+ વધુ' : '+ More'}
+              </Link>
+            }
+            icon={<Shield className="h-5 w-5 text-white" />}
+          >
+            {[
+              { league: 'ISL', statusType: 'live', statusText: "75'", homeTeam: 'Mumbai City FC', homeScore: '2', awayTeam: 'Mohun Bagan', awayScore: '1' },
+              { league: 'EPL', statusType: 'time', statusText: '22:00', homeTeam: 'Man City', homeScore: '—', awayTeam: 'Arsenal', awayScore: '—' },
+              { league: 'La Liga', statusType: 'time', statusText: '23:00', homeTeam: 'Real Madrid', homeScore: '—', awayTeam: 'Barcelona', awayScore: '—' }
+            ].map((match, i) => (
+              <div key={i} className="rounded-xl bg-[#121518] p-3 border border-[#1F252C] shadow-sm">
+                <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[#1F252C]">
+                  <p className="font-extrabold text-[12.5px] text-white leading-none">{match.league}</p>
+                  {match.statusType === 'live' ? (
+                    <span className="bg-[#B3121B] text-white px-2 py-0.5 text-[8.5px] font-black rounded leading-none select-none">
+                      {match.statusText}
                     </span>
-                    <div className="flex flex-col">
-                      <span className="text-[12px] font-black text-foreground">CNG (CNG)</span>
-                      <span className="text-[9.5px] text-muted-foreground font-semibold">પ્રતિ કિગ્રા</span>
-                    </div>
+                  ) : (
+                    <span className="text-neutral-405 text-[9.5px] font-bold select-none">
+                      {match.statusText}
+                    </span>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center text-[12.5px] font-bold text-neutral-350">
+                    <span>{match.homeTeam}</span>
+                    <span className="font-black text-white">{match.homeScore}</span>
                   </div>
-                  <div className="text-right">
-                    <span className="text-[14.5px] font-black text-foreground">₹76.00</span>
-                    <span className="text-[9px] text-muted-foreground block font-semibold">/ કિલો</span>
+                  <div className="flex justify-between items-center text-[12.5px] font-bold text-neutral-355">
+                    <span>{match.awayTeam}</span>
+                    <span className="font-black text-white">{match.awayScore}</span>
                   </div>
                 </div>
               </div>
-            </div>
-
-            {/* Bottom Button & Source */}
-            <div className="mt-3">
-              <p className="text-[9.5px] text-muted-foreground/70 font-semibold text-left select-none">
-                સ્રોત: IOC / HPCL
-              </p>
-            </div>
-          </div>
-
-          {/* ── Column 2: Stock Market (શેરબજાર) ────────────────── */}
-          <div className="flex flex-col justify-between p-3.5 rounded-xl border border-red-100/70 bg-gradient-to-b from-red-50/20 to-slate-50/40 backdrop-blur-xs hover:border-red-200 transition-colors shadow-xs">
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[14px] font-black text-foreground flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4 text-[#B3121B]" />
-                  {language === 'gu' ? 'શેરબજાર' : 'Stock Market'}
-                </span>
-                <span className="text-muted-foreground text-[11px] font-bold select-none">
-                  {language === 'gu' ? 'ભારત ₹ INR' : 'India ₹ INR'}
-                </span>
-              </div>
-
-              <div className="space-y-2">
-                {/* Nifty 50 */}
-                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center justify-between">
-                    <div className="flex flex-col">
-                      <span className="text-[12px] font-black text-foreground">Nifty 50</span>
-                      <span className="text-[9px] text-muted-foreground font-bold uppercase">NSE</span>
-                    </div>
-                    <span className="text-[14.5px] font-black text-foreground">₹23,456.2</span>
-                  </div>
-                  <div className="mt-1 flex items-center gap-1 text-[10.5px] font-extrabold text-emerald-600">
-                    <span>↗ +188.4 (+0.93%)</span>
-                  </div>
-                </div>
-
-                {/* Sensex */}
-                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center justify-between">
-                    <div className="flex flex-col">
-                      <span className="text-[12px] font-black text-foreground">BSE Sensex</span>
-                      <span className="text-[9px] text-muted-foreground font-bold uppercase">BSE</span>
-                    </div>
-                    <span className="text-[14.5px] font-black text-foreground">₹80,309.1</span>
-                  </div>
-                  <div className="mt-1 flex items-center gap-1 text-[10.5px] font-extrabold text-emerald-600">
-                    <span>↗ +425.6 (+0.55%)</span>
-                  </div>
-                </div>
-
-                {/* Nifty Bank */}
-                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center justify-between">
-                    <div className="flex flex-col">
-                      <span className="text-[12px] font-black text-foreground">Nifty Bank</span>
-                      <span className="text-[9px] text-muted-foreground font-bold uppercase">NSE</span>
-                    </div>
-                    <span className="text-[14.5px] font-black text-foreground">₹49,640.8</span>
-                  </div>
-                  <div className="mt-1 flex items-center gap-1 text-[10.5px] font-extrabold text-red-600">
-                    <span>↘ -124.1 (-0.23%)</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Button & Source */}
-            <div className="mt-3">
-              <p className="text-[9.5px] text-muted-foreground/70 font-semibold text-left select-none">
-                સ્રોત: Yahoo Finance
-              </p>
-            </div>
-          </div>
-
-          {/* ── Column 3: Cricket (ક્રિકેટ) ────────────────────────── */}
-          <div className="flex flex-col justify-between p-3.5 rounded-xl border border-red-100/70 bg-gradient-to-b from-red-50/20 to-slate-50/40 backdrop-blur-xs hover:border-red-200 transition-colors shadow-xs">
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[14px] font-black text-foreground flex items-center gap-2">
-                  <Trophy className="h-4 w-4 text-[#B3121B]" />
-                  {language === 'gu' ? 'ક્રિકેટ' : 'Cricket'}
-                </span>
-                <Link href="/sports" className="text-[#B3121B] text-[11.5px] font-black hover:underline">
-                  + વધુ
-                </Link>
-              </div>
-
-              <div className="space-y-2">
-                {/* Match 1 */}
-                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[12px] font-black text-foreground">India vs England</span>
-                    <span className="text-[8.5px] font-black text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-sm">LIVE</span>
-                  </div>
-                  <div className="flex flex-col gap-0.5 mt-0.5 text-[11px]">
-                    <div className="flex items-center justify-between font-bold text-foreground">
-                      <span>India</span>
-                      <span className="font-black text-[12.5px]">168/8 (20)</span>
-                    </div>
-                    <div className="flex items-center justify-between font-bold text-foreground">
-                      <span>England</span>
-                      <span className="font-black text-[12.5px]">185/9 (19.2)</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Match 2 */}
-                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[12px] font-black text-foreground">Ranji Trophy</span>
-                    <span className="text-[8.5px] font-bold text-muted-foreground">Day 3</span>
-                  </div>
-                  <div className="flex flex-col gap-0.5 mt-0.5 text-[11px]">
-                    <div className="flex items-center justify-between font-bold text-foreground">
-                      <span>Gujarat</span>
-                      <span className="font-black text-[12.5px]">284/6</span>
-                    </div>
-                    <div className="flex items-center justify-between font-bold text-foreground">
-                      <span>Mumbai</span>
-                      <span className="font-black text-[12.5px]">322/10</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Match 3 */}
-                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[12px] font-black text-foreground">IPL</span>
-                    <span className="text-[8.5px] font-bold text-muted-foreground">22:00</span>
-                  </div>
-                  <div className="flex flex-col gap-0.5 mt-0.5 text-[11px]">
-                    <div className="flex items-center justify-between font-bold text-foreground">
-                      <span>CSK</span>
-                      <span className="text-muted-foreground">—</span>
-                    </div>
-                    <div className="flex items-center justify-between font-bold text-foreground">
-                      <span>MI</span>
-                      <span className="text-muted-foreground">—</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Button & Source */}
-            <div className="mt-3">
-              <p className="text-[9.5px] text-muted-foreground/70 font-semibold text-left select-none">
-                સ્રોત: ESPN
-              </p>
-            </div>
-          </div>
-
-          {/* ── Column 4: Football (ફૂટબોલ) ───────────────────────── */}
-          <div className="flex flex-col justify-between p-3.5 rounded-xl border border-red-100/70 bg-gradient-to-b from-red-50/20 to-slate-50/40 backdrop-blur-xs hover:border-red-200 transition-colors shadow-xs">
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[14px] font-black text-foreground flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-[#B3121B]" />
-                  {language === 'gu' ? 'ફૂટબોલ' : 'Football'}
-                </span>
-                <Link href="/sports" className="text-[#B3121B] text-[11.5px] font-black hover:underline">
-                  + વધુ
-                </Link>
-              </div>
-
-              <div className="space-y-2">
-                {/* Match 1 */}
-                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[12px] font-black text-foreground">ISL</span>
-                    <span className="text-[8.5px] font-black text-red-600 bg-red-50 px-1.5 py-0.5 rounded-sm">75'</span>
-                  </div>
-                  <div className="flex flex-col gap-0.5 mt-0.5 text-[11px]">
-                    <div className="flex items-center justify-between font-bold text-foreground">
-                      <span>Mumbai City FC</span>
-                      <span className="font-black text-[12.5px]">2</span>
-                    </div>
-                    <div className="flex items-center justify-between font-bold text-foreground">
-                      <span>Mohun Bagan</span>
-                      <span className="font-black text-[12.5px]">1</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Match 2 */}
-                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[12px] font-black text-foreground">EPL</span>
-                    <span className="text-[8.5px] font-bold text-muted-foreground">22:00</span>
-                  </div>
-                  <div className="flex flex-col gap-0.5 mt-0.5 text-[11px]">
-                    <div className="flex items-center justify-between font-bold text-foreground">
-                      <span>Man City</span>
-                      <span className="text-muted-foreground">—</span>
-                    </div>
-                    <div className="flex items-center justify-between font-bold text-foreground">
-                      <span>Arsenal</span>
-                      <span className="text-muted-foreground">—</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Match 3 */}
-                <div className="p-2 rounded-lg bg-white border border-border/10 shadow-xs">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[12px] font-black text-foreground">La Liga</span>
-                    <span className="text-[8.5px] font-bold text-muted-foreground">23:00</span>
-                  </div>
-                  <div className="flex flex-col gap-0.5 mt-0.5 text-[11px]">
-                    <div className="flex items-center justify-between font-bold text-foreground">
-                      <span>Real Madrid</span>
-                      <span className="text-muted-foreground">—</span>
-                    </div>
-                    <div className="flex items-center justify-between font-bold text-foreground">
-                      <span>Barcelona</span>
-                      <span className="text-muted-foreground">—</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Button & Source */}
-            <div className="mt-3">
-              <p className="text-[9.5px] text-muted-foreground/70 font-semibold text-left select-none">
-                સ્રોત: ESPN
-              </p>
-            </div>
-          </div>
+            ))}
+          </LivePanel>
 
         </div>
 
         {/* ── Bottom Live Highlights Ticker Bar ───────────────────── */}
-        <div className="mt-6 pt-4 border-t border-border/10 flex flex-wrap md:flex-nowrap items-center justify-between gap-4 select-none">
+        <div className="mt-6 pt-4 border-t border-neutral-200/40 dark:border-neutral-800/60 flex flex-wrap md:flex-nowrap items-center justify-between gap-4 select-none">
           <div className="flex items-center gap-2 shrink-0">
             <span className="bg-[#B3121B] text-white text-[12px] font-black px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow-xs">
               <Megaphone className="h-4 w-4" />
@@ -5167,21 +5726,21 @@ export function LiveCenterSection({ language }: { language: Language }) {
             </span>
           </div>
 
-          <div className="flex items-center gap-4 text-[12px] font-extrabold text-slate-700 overflow-x-auto scrollbar-hide py-1">
+          <div className="flex items-center gap-4 text-[12px] font-extrabold text-slate-700 dark:text-slate-300 overflow-x-auto scrollbar-hide py-1">
             <span>Nifty 50 ₹23,456.2 <span className="text-emerald-600 font-black">▲ 188.4</span></span>
-            <span className="text-slate-300">|</span>
+            <span className="text-slate-300 dark:text-slate-700">|</span>
             <span>Sensex ₹80,309.1 <span className="text-emerald-600 font-black">▲ 425.6</span></span>
-            <span className="text-slate-300">|</span>
+            <span className="text-slate-300 dark:text-slate-700">|</span>
             <span>Nifty Bank ₹49,640.8 <span className="text-red-600 font-black">▼ 124.1</span></span>
-            <span className="text-slate-300">•</span>
+            <span className="text-slate-300 dark:text-slate-700">•</span>
             <span>Petrol ₹96.42 /L</span>
-            <span className="text-slate-300">•</span>
+            <span className="text-slate-300 dark:text-slate-700">•</span>
             <span>USD ₹83.92 <span className="text-red-600 font-black">▼ 0.12</span></span>
           </div>
 
           <Link
             href="/live-updates"
-            className="shrink-0 border border-red-200 text-[#B3121B] font-black text-[12px] rounded-lg px-3.5 py-1.5 flex items-center gap-1 hover:bg-red-50 transition-colors"
+            className="shrink-0 border border-red-200 dark:border-red-900/30 text-[#B3121B] dark:text-red-400 font-black text-[12px] rounded-lg px-3.5 py-1.5 flex items-center gap-1 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors"
           >
             {language === 'gu' ? 'વધુ અપડેટસ જુઓ' : 'View More Updates'}
           </Link>
@@ -5596,87 +6155,64 @@ const GALLERY_DATA = [
     title: 'A wonderful glimpse of Ahmedabad Clover Show 2025',
     count: 34,
   },
-  {
-    id: 'gal4',
-    src: '/assets/demo/1.jpg',
-    titleGu: 'સ્ટેચ્યૂ ઓફ્ યુનિટીનું રાત્રિ સૌંદર્ય: જુઓ તસવીરો',
-    title: 'Statue of Unity night beauty: See the photos',
-    count: 15,
-  },
-  {
-    id: 'gal5',
-    src: '/assets/demo/7.jpg',
-    titleGu: 'કચ્છના રણોત્સવની અદ્ભૂત તસવીરો, જેવા જ ેવી ખરી',
-    title: 'Amazing photos of Kutch Rann Utsav, truly remarkable',
-    count: 29,
-  },
-  {
-    id: 'gal6',
-    src: '/assets/demo/4.jpg',
-    titleGu: 'દ્વારકા મંદિરની ધ્વજ વિધિ, ભક્તોમાં ભારે ઉત્સાહ',
-    title: 'Flag ceremony at Dwarka temple, devotees full of enthusiasm',
-    count: 10,
-  },
-  {
-    id: 'gal7',
-    src: '/assets/demo/3.jpg',
-    titleGu: 'સાપુતારા હિલ સ્ટેશન: ચોમાસાની મનોહર કળા ખીલી ઉઠી',
-    title: 'Saputara Hill Station: Beautiful monsoon scenes bloom',
-    count: 18,
-  },
-  {
-    id: 'gal8',
-    src: '/assets/demo/5.jpg',
-    titleGu: 'ઐતિહાસિક રાણકી વાવની અદભુત કોતરણી અને શિલ્પકળા',
-    title: 'Historic Rani ki Vav: Wonderful carvings and sculptures',
-    count: 24,
-  },
-  {
-    id: 'gal9',
-    src: '/assets/demo/8.jpg',
-    titleGu: 'સોમનાથ મંદિરનું ભવ્ય શણગાર: તસવીરોમાં શ્રદ્ધાનો મેળો',
-    title: 'Grand Somnath Temple decorations: Glimpse of divine faith',
-    count: 30,
-  },
-  {
-    id: 'gal10',
-    src: '/assets/demo/2.jpg',
-    titleGu: 'અંબાજી ભાદરવી પૂનમ મેળો: ભક્તોનું ઘોડાપૂર ઉમટ્યું',
-    title: 'Ambaji Bhadarvi Poonam Fair: Huge crowd of devotees gathered',
-    count: 42,
-  },
 ];
 
 function PhotoGallerySection({ language }: { language: Language }) {
   const CATS_GU = ['ગુજરાત', 'સંસ્કૃતિ', 'ધર્મ', 'પ્રવાસ', 'ખેલ', 'ઉત્સવ', 'શહેર', 'પ્રકૃતિ', 'ઐતિહાસ'];
   const CATS_EN = ['Gujarat', 'Culture', 'Religion', 'Travel', 'Sports', 'Festival', 'City', 'Nature', 'Heritage'];
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollPosRef = useRef<number>(0);
+  const lastTimeRef = useRef<number>(0);
+  const isPausedRef = useRef<boolean>(false);
 
-  const SPANS = [
-    // Column 1 (spans 2 rows)
-    { col: 'md:col-span-1', row: 'row-span-1 md:row-span-2', hero: true, wide: false }, // 0 (labeled 1)
-
-    // Column 2 Top (row 1)
-    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 1 (labeled 2)
-
-    // Column 3 (spans 2 rows)
-    { col: 'md:col-span-1', row: 'row-span-1 md:row-span-2', hero: true, wide: false }, // 2 (labeled 3)
-
-    // Column 2 Bottom (row 2)
-    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 3 (labeled 4)
-
-    // Row 3
-    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 4 (labeled 5)
-    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 5 (labeled 6)
-    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 6 (labeled 7)
-
-    // Row 4
-    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 7 (labeled 8)
-    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 8 (labeled 9)
-    { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false }, // 9 (labeled 10)
+  // Duplicate GALLERY_DATA to create an infinite scroll list
+  const repeatedGallery = [
+    ...GALLERY_DATA,
+    ...GALLERY_DATA,
+    ...GALLERY_DATA,
   ];
 
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    el.style.scrollBehavior = 'auto';
+    const SPEED = 72; // px per second (~1.2px/frame)
+    lastTimeRef.current = performance.now();
+
+    let animId: number;
+    const scrollStep = (now: number) => {
+      const dt = Math.min(now - lastTimeRef.current, 50);
+      lastTimeRef.current = now;
+
+      const singleSetWidth = el.scrollWidth / 3;
+
+      if (!isPausedRef.current && singleSetWidth > 0) {
+        scrollPosRef.current += (SPEED * dt) / 1000;
+        if (scrollPosRef.current >= singleSetWidth) {
+          scrollPosRef.current = scrollPosRef.current % singleSetWidth;
+        }
+        el.scrollLeft = scrollPosRef.current;
+      }
+      animId = requestAnimationFrame(scrollStep);
+    };
+
+    animId = requestAnimationFrame(scrollStep);
+
+    const handleNativeScroll = () => {
+      if (el) scrollPosRef.current = el.scrollLeft;
+    };
+
+    el.addEventListener('scroll', handleNativeScroll, { passive: true });
+
+    return () => {
+      cancelAnimationFrame(animId);
+      el.removeEventListener('scroll', handleNativeScroll);
+    };
+  }, []);
+
   return (
-    <section className="py-6 bg-background">
+    <section className="py-6 bg-background select-none">
       <div className="mx-auto max-w-screen-xl px-4">
         {/* Header */}
         <div className="flex items-center justify-between border-b-[3.5px] border-slate-950 dark:border-slate-800 pb-3 mb-6">
@@ -5691,21 +6227,22 @@ function PhotoGallerySection({ language }: { language: Language }) {
           </Link>
         </div>
 
-        {/* Bento Magazine Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 md:auto-rows-[200px] gap-4">
-          {GALLERY_DATA.map((item, index) => {
-            const span = SPANS[index] ?? { col: 'md:col-span-1', row: 'row-span-1', hero: false, wide: false };
+        {/* Scrollable Magazine Flex Strip */}
+        <div 
+          ref={scrollRef}
+          onMouseEnter={() => { isPausedRef.current = true; }}
+          onMouseLeave={() => { isPausedRef.current = false; lastTimeRef.current = performance.now(); }}
+          className="flex gap-4 overflow-x-auto scrollbar-hide py-2"
+        >
+          {repeatedGallery.map((item, index) => {
             const cat = language === 'gu' ? CATS_GU[index % CATS_GU.length] : CATS_EN[index % CATS_EN.length];
             const title = language === 'gu' ? item.titleGu : item.title;
 
             return (
               <Link
-                key={item.id}
+                key={item.id + '-' + index}
                 href="/photos"
-                className={`group relative flex overflow-hidden rounded-2xl shadow-lg
-                  ${span.col} ${span.row}
-                  ${span.hero ? 'min-h-[300px] md:min-h-0' : span.wide ? 'min-h-[180px] md:min-h-0' : 'min-h-[200px] md:min-h-0'}
-                `}
+                className="group relative flex flex-shrink-0 w-[85vw] sm:w-[48vw] md:w-[350px] h-[280px] md:h-[350px] overflow-hidden rounded-2xl shadow-lg"
                 style={{ WebkitTapHighlightColor: 'transparent' }}
               >
                 {/* Image */}
@@ -5713,7 +6250,7 @@ function PhotoGallerySection({ language }: { language: Language }) {
                   src={item.src}
                   alt={title}
                   fill
-                  sizes={span.hero ? '(max-width: 768px) 100vw, 66vw' : span.wide ? '100vw' : '(max-width: 768px) 100vw, 33vw'}
+                  sizes="(max-width: 768px) 100vw, 330px"
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.07]"
                 />
 
@@ -5730,13 +6267,9 @@ function PhotoGallerySection({ language }: { language: Language }) {
                   </span>
                 </div>
 
-
-
                 {/* Caption */}
                 <div className="absolute inset-x-0 bottom-0 z-10 p-4 translate-y-0 group-hover:-translate-y-1 transition-transform duration-300">
-                  <p className={`text-white font-bold leading-snug line-clamp-2 drop-shadow-lg
-                    ${span.hero ? 'text-[16px] md:text-[19px]' : span.wide ? 'text-[14px] md:text-[16px]' : 'text-[13px] md:text-[14px]'}
-                  `}>
+                  <p className="text-white font-bold leading-snug line-clamp-2 drop-shadow-lg text-[14px] md:text-[16px]">
                     {title}
                   </p>
 

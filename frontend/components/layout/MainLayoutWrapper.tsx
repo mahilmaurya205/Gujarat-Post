@@ -2,7 +2,6 @@
 
 import { usePathname } from 'next/navigation';
 import Header from './Header';
-import DistrictBar from './DistrictBar';
 import BreakingTicker from './BreakingTicker';
 import Footer from './Footer';
 import SplashLoader from '@/components/ui/SplashLoader';
@@ -23,7 +22,6 @@ export default function MainLayoutWrapper({ children }: Props) {
     <>
       {pathname === '/' && <SplashLoader />}
       <Header />
-      <DistrictBar />
       <BreakingTicker />
       <main>{children}</main>
       <Footer />

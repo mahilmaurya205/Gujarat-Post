@@ -560,7 +560,7 @@ export const ARTICLES: Article[] = Array.from({ length: 120 }, (_, i) => {
       if (i === 8) return "/assets/demo/3.jpg";
       if (i === 9) return "/assets/demo/1.jpg";
       if (i === 10) return "/assets/demo/5.jpg";
-      
+
       const mapped = categorySlugMapping[categorySlug] || "politics";
       if (mapped === "state" || mapped === "ahmedabad" || mapped === "rajkot" || mapped === "surat" || mapped === "vadodara") {
         const gujImages = ["/assets/demo/2.jpg", "/assets/demo/4.jpg", "/assets/demo/1.jpg", "/assets/demo/6.jpg", "/assets/demo/3.jpg"];
@@ -840,7 +840,7 @@ export const getArticlesByCategory = (cat: string) => {
 export const getTrendingArticles = () => ARTICLES.filter((article) => article.isTrending).slice(0, 10);
 export const getFeaturedArticles = () => ARTICLES.filter((article) => article.isFeatured).slice(0, 24);
 export const getRelatedArticles = (article: Article) =>
-  ARTICLES.filter((item) => item.category === article.category && item.id !== article.id).slice(0, 6);
+  ARTICLES.filter((item) => item.category === article.category && item.id !== article.id).slice(0, 9);
 
 export const searchArticles = (query: string) => {
   const terms = query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);

@@ -31,7 +31,7 @@ export default function BreakingTicker() {
     : BREAKING_TICKER;
 
   return (
-    <div className="flex h-10 items-center overflow-hidden bg-[#B3121B] text-white border-y border-[#8a0d14]">
+    <div className="flex h-10 items-center overflow-hidden bg-[#B3121B] text-white border-y border-[#8a0d14] relative z-30 shadow-sm">
       <div className="z-10 flex h-full shrink-0 items-center bg-black px-4 text-xs font-black uppercase tracking-wide text-white border-r border-black">
         {getLocalized(language, { en: 'BREAKING', gu: 'બ્રેકિંગ', hi: 'ब्रेकिंग' })}
       </div>

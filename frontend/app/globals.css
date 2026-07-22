@@ -1822,11 +1822,15 @@ html[data-theme="dark"] .share-x {
 
 .s-compact {
   display: grid;
-  grid-template-columns: 1fr 92px;
-  gap: 14px;
+  grid-template-columns: minmax(0, 1fr) clamp(64px, 25%, 92px);
+  gap: 12px;
   align-items: start;
   padding: 15px 0;
   border-top: 1px solid var(--border);
+}
+
+.s-compact > div:first-child {
+  min-width: 0;
 }
 
 .s-compact:first-child {
@@ -1838,8 +1842,8 @@ html[data-theme="dark"] .share-x {
   border-radius: var(--radius);
   position: relative;
   overflow: hidden;
-  height: 92px;
-  width: 92px;
+  width: 100%;
+  height: auto;
 }
 
 .s-compact .kick {
@@ -2305,11 +2309,15 @@ html[data-theme="dark"] .share-x {
 
 .s-compact {
   display: grid;
-  grid-template-columns: 1fr 92px;
-  gap: 14px;
+  grid-template-columns: minmax(0, 1fr) clamp(64px, 25%, 92px);
+  gap: 12px;
   align-items: start;
   padding: 15px 0;
   border-top: var(--rule);
+}
+
+.s-compact > div:first-child {
+  min-width: 0;
 }
 
 .s-compact.nt,
@@ -2320,6 +2328,10 @@ html[data-theme="dark"] .share-x {
 .s-compact .imgwrap {
   aspect-ratio: 1;
   border-radius: var(--radius);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: auto;
 }
 
 .s-compact .kick {

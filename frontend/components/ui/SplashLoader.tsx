@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 export default function SplashLoader() {
   const [visible, setVisible] = useState(true);
@@ -16,12 +17,12 @@ export default function SplashLoader() {
 
     const fadeTimer = setTimeout(() => {
       setVisible(false);
-    }, 3000); // Wait exactly 3 seconds, then trigger fade out
+    }, 3200); // 3.2s display time
 
     const destroyTimer = setTimeout(() => {
       setShouldRender(false);
       sessionStorage.setItem('gp-has-seen-splash', 'true');
-    }, 3400); // Fully unmount after 3.4s (400ms transition time)
+    }, 3600); // Unmount after fade out
 
     return () => {
       clearTimeout(fadeTimer);
@@ -33,261 +34,250 @@ export default function SplashLoader() {
 
   return (
     <div
-      className={`fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#050B14] transition-opacity duration-500 ease-in-out select-none ${
+      className={`fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#040810] transition-opacity duration-500 ease-in-out select-none ${
         visible ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
     >
       <style>{`
         .perspective-container {
-          perspective: 1000px;
-          perspective-origin: center;
+          perspective: 1400px;
+          perspective-origin: 50% 40%;
         }
-        @keyframes float-3d {
-          0%, 100% {
-            transform: translateY(0px) rotateY(-14deg) rotateX(6deg) rotateZ(-1deg);
+
+        @keyframes mic-spin-3d {
+          0% {
+            transform: translateY(0px) rotateY(0deg) rotateX(8deg);
+          }
+          25% {
+            transform: translateY(-14px) rotateY(90deg) rotateX(-2deg);
           }
           50% {
-            transform: translateY(-15px) rotateY(14deg) rotateX(-6deg) rotateZ(1deg);
+            transform: translateY(-22px) rotateY(180deg) rotateX(8deg);
+          }
+          75% {
+            transform: translateY(-14px) rotateY(270deg) rotateX(-2deg);
+          }
+          100% {
+            transform: translateY(0px) rotateY(360deg) rotateX(8deg);
           }
         }
+
+        @keyframes floor-shadow {
+          0%, 100% { transform: scale(1); opacity: 0.7; }
+          50% { transform: scale(0.75); opacity: 0.35; }
+        }
+
         @keyframes ripple {
           0% { transform: scale(0.8); opacity: 0.9; }
-          100% { transform: scale(1.3); opacity: 0; }
+          100% { transform: scale(1.45); opacity: 0; }
         }
+
         @keyframes glow {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 0.8; }
+          0%, 100% { opacity: 0.35; }
+          50% { opacity: 0.9; }
         }
+
         @keyframes sweep {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(100%); }
         }
-        @keyframes march {
-          to { stroke-dashoffset: -36; }
-        }
-        @keyframes rotate-3d {
+
+        @keyframes rotate-orbit {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
-        .animate-float-3d {
-          animation: float-3d 3.5s ease-in-out infinite;
+
+        .animate-mic-3d {
+          animation: mic-spin-3d 6.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
           transform-style: preserve-3d;
         }
-        .animate-pulse-slow {
+
+        .animate-floor-shadow {
+          animation: floor-shadow 6.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+        }
+
+        .animate-pulse-glow {
           animation: glow 2s ease-in-out infinite;
         }
+
         .animate-ripple-1 {
-          animation: ripple 2.2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
-          transform-origin: 100px 98px;
+          animation: ripple 2.4s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+          transform-origin: center;
         }
+
         .animate-ripple-2 {
-          animation: ripple 2.2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
-          animation-delay: 1.1s;
-          transform-origin: 100px 98px;
+          animation: ripple 2.4s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+          animation-delay: 1.2s;
+          transform-origin: center;
         }
+
         .animate-sweep {
           animation: sweep 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
-        .animate-march-forward {
-          animation: march 3s linear infinite;
-        }
-        .animate-march-backward {
-          animation: march 3s linear infinite reverse;
-        }
+
         .animate-rotate-orbit {
-          animation: rotate-3d 14s linear infinite;
-          transform-origin: 100px 98px;
+          animation: rotate-orbit 14s linear infinite;
+        }
+
+        .cube-flag {
+          transform-style: preserve-3d;
         }
       `}</style>
 
       {/* 3D Perspective Animation Container */}
-      <div className="perspective-container relative mb-6 flex items-center justify-center h-44 w-44">
-        {/* Background Glow (remains 2D flat behind) */}
+      <div className="perspective-container relative mb-8 flex items-center justify-center h-84 w-84">
+        {/* Ambient Red Glow Halo */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <svg className="h-44 w-44" viewBox="0 0 200 200" fill="none">
-            <defs>
-              <radialGradient id="glow-grad" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#e62117" stopOpacity="0.45" />
-                <stop offset="100%" stopColor="#e62117" stopOpacity="0" />
-              </radialGradient>
-            </defs>
-            <circle cx="100" cy="98" r="65" fill="url(#glow-grad)" className="animate-pulse-slow" />
-            <circle cx="100" cy="98" r="70" stroke="#e62117" strokeWidth="2" strokeDasharray="4 8" className="animate-ripple-1" />
-            <circle cx="100" cy="98" r="85" stroke="#e62117" strokeWidth="1.5" strokeDasharray="6 12" className="animate-ripple-2" />
-          </svg>
+          <div className="w-72 h-72 rounded-full bg-[#e62117]/35 blur-3xl animate-pulse-glow" />
+          <div className="absolute w-72 h-72 rounded-full border border-[#e62117]/40 animate-ripple-1" />
+          <div className="absolute w-84 h-84 rounded-full border border-[#e62117]/25 animate-ripple-2" />
         </div>
 
-        {/* Orbiting rings */}
+        {/* Orbiting Laser Ring */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none animate-rotate-orbit">
-          <svg className="h-44 w-44" viewBox="0 0 200 200" fill="none">
-            <ellipse
-              cx="100"
-              cy="98"
-              rx="88"
-              ry="26"
-              stroke="#e62117"
-              strokeWidth="2.5"
-              strokeDasharray="12 24"
-              fill="none"
-              className="animate-march-forward"
-              style={{ filter: 'drop-shadow(0 0 6px #e62117)' }}
-            />
-            <ellipse
-              cx="100"
-              cy="98"
-              rx="78"
-              ry="20"
-              stroke="#ffffff"
-              strokeWidth="1"
-              strokeDasharray="6 18"
-              fill="none"
-              className="animate-march-backward"
-              style={{ filter: 'drop-shadow(0 0 2px #ffffff)', opacity: 0.65 }}
-            />
-          </svg>
+          <div className="w-76 h-28 rounded-[100%] border-2 border-dashed border-[#e62117] shadow-[0_0_20px_#e62117] opacity-85" />
         </div>
 
-        {/* Floating Branded 3D News Mic with Perspective Rotation */}
-        <div className="animate-float-3d">
-          <svg
-            className="h-36 w-36"
-            viewBox="0 0 200 200"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              {/* Spherical gradient for head */}
-              <radialGradient id="grill-grad" cx="30%" cy="30%" r="70%">
-                <stop offset="0%" stopColor="#ffffff" />
-                <stop offset="45%" stopColor="#d1d5db" />
-                <stop offset="85%" stopColor="#4b5563" />
-                <stop offset="100%" stopColor="#1f2937" />
-              </radialGradient>
+        {/* Dynamic Floor Shadow below Mic Handle */}
+        <div className="absolute bottom-2 w-32 h-6 rounded-full bg-black/90 blur-md animate-floor-shadow" />
 
-              {/* Cylindrical metal gradient */}
-              <linearGradient id="metal-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#f3f4f6" />
-                <stop offset="20%" stopColor="#e5e7eb" />
-                <stop offset="50%" stopColor="#9ca3af" />
-                <stop offset="80%" stopColor="#4b5563" />
-                <stop offset="100%" stopColor="#111827" />
-              </linearGradient>
+        {/* 3D ROTATING NEWS MICROPHONE (ULTRA-REALISTIC 3D STYLING) */}
+        <div className="animate-mic-3d relative flex flex-col items-center justify-center w-48 h-76">
+          
+          {/* 1. MIC HEAD (Ultra-Detailed 3D Spherical Metallic Grill) */}
+          <div className="relative w-32 h-32 rounded-full bg-gradient-to-br from-slate-100 via-zinc-400 to-zinc-950 shadow-[0_15px_30px_rgba(0,0,0,0.9)] border-[3.5px] border-zinc-200 flex items-center justify-center overflow-hidden z-20">
+            {/* Metallic Grid Mesh Texture */}
+            <div className="absolute inset-0 bg-[radial-gradient(#000_1.8px,transparent_1.8px)] [background-size:5px_5px] opacity-80" />
+            
+            {/* Dual Chrome Center Bands with Red Accent Line */}
+            <div className="absolute w-full h-4 bg-gradient-to-r from-zinc-500 via-white to-zinc-600 shadow-md border-y border-zinc-800 z-10 flex items-center justify-center">
+              <div className="w-full h-0.5 bg-[#e62117] shadow-[0_0_4px_#e62117]" />
+            </div>
 
-              {/* Cylindrical handle gradient */}
-              <linearGradient id="handle-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#1e293b" />
-                <stop offset="25%" stopColor="#475569" />
-                <stop offset="50%" stopColor="#334155" />
-                <stop offset="85%" stopColor="#0f172a" />
-                <stop offset="100%" stopColor="#020617" />
-              </linearGradient>
+            {/* 3D Glossy Spherical Glare Highlight */}
+            <div className="absolute top-2.5 left-4 w-11 h-11 rounded-full bg-gradient-to-br from-white/80 via-white/40 to-transparent blur-[1.5px] z-20" />
+            
+            {/* Bottom Ambient Occlusion Shadow */}
+            <div className="absolute bottom-0 inset-x-0 h-10 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-15" />
+          </div>
 
-              {/* Left face cube gradient */}
-              <linearGradient id="body-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#9c0e15" />
-                <stop offset="35%" stopColor="#e62117" />
-                <stop offset="70%" stopColor="#9c0e15" />
-                <stop offset="100%" stopColor="#70090e" />
-              </linearGradient>
+          {/* 2. POLISHED CHROME CONNECTOR NECK */}
+          <div className="w-7 h-5 bg-gradient-to-r from-zinc-500 via-white to-zinc-800 border-x border-zinc-600 shadow-lg z-10" />
 
-              {/* Right face cube gradient */}
-              <linearGradient id="silver-flag-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#ffffff" />
-                <stop offset="60%" stopColor="#f3f4f6" />
-                <stop offset="100%" stopColor="#9ca3af" />
-              </linearGradient>
+          {/* 3. 3D CUBE MIC FLAG (150px x 150px x 100px) */}
+          <div className="cube-flag relative w-40 h-26 z-10">
+            {/* FRONT FACE */}
+            <div
+              className="absolute inset-0 bg-gradient-to-br from-[#c8000a] via-[#e62117] to-[#780005] border-2 border-red-300/80 shadow-[0_15px_35px_rgba(0,0,0,0.95)] rounded-xl flex items-center justify-center p-1.5 overflow-hidden"
+              style={{ transform: 'rotateY(0deg) translateZ(80px)' }}
+            >
+              <div className="relative w-full h-full bg-[#080808] rounded-lg p-1 border border-zinc-800 flex items-center justify-center overflow-hidden shadow-inner">
+                {/* Specular Light Sweep */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none z-10" />
+                <Image
+                  src="/assets/logoblack.png"
+                  alt="Gujarat Post Logo"
+                  fill
+                  className="object-contain scale-110 drop-shadow-md"
+                  priority
+                />
+              </div>
+            </div>
 
-              <filter id="shadow-mic" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="10" stdDeviation="6" floodColor="#000000" floodOpacity="0.7" />
-              </filter>
-            </defs>
+            {/* BACK FACE */}
+            <div
+              className="absolute inset-0 bg-gradient-to-br from-[#c8000a] via-[#e62117] to-[#780005] border-2 border-red-300/80 shadow-[0_15px_35px_rgba(0,0,0,0.95)] rounded-xl flex items-center justify-center p-1.5 overflow-hidden"
+              style={{ transform: 'rotateY(180deg) translateZ(80px)' }}
+            >
+              <div className="relative w-full h-full bg-[#080808] rounded-lg p-1 border border-zinc-800 flex items-center justify-center overflow-hidden shadow-inner">
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none z-10" />
+                <Image
+                  src="/assets/logoblack.png"
+                  alt="Gujarat Post Logo"
+                  fill
+                  className="object-contain scale-110 drop-shadow-md"
+                />
+              </div>
+            </div>
 
-            {/* Stand / Handle (rendered with shadow) */}
-            <g filter="url(#shadow-mic)">
-              {/* Collar Connector */}
-              <rect x="94" y="69" width="12" height="12" fill="url(#metal-grad)" rx="1" />
-              <line x1="94" y1="75" x2="106" y2="75" stroke="#111827" strokeWidth="1" />
+            {/* RIGHT FACE */}
+            <div
+              className="absolute inset-0 bg-gradient-to-br from-[#c8000a] via-[#e62117] to-[#780005] border-2 border-red-300/80 shadow-[0_15px_35px_rgba(0,0,0,0.95)] rounded-xl flex items-center justify-center p-1.5 overflow-hidden"
+              style={{ transform: 'rotateY(90deg) translateZ(80px)' }}
+            >
+              <div className="relative w-full h-full bg-[#080808] rounded-lg p-1 border border-zinc-800 flex items-center justify-center overflow-hidden shadow-inner">
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none z-10" />
+                <Image
+                  src="/assets/logoblack.png"
+                  alt="Gujarat Post Logo"
+                  fill
+                  className="object-contain scale-110 drop-shadow-md"
+                />
+              </div>
+            </div>
 
-              {/* Mic Handle */}
-              <path d="M 91,124 L 95,178 L 105,178 L 109,124 Z" fill="url(#handle-grad)" />
-              {/* Handle details / grip rings */}
-              <rect x="93" y="145" width="14" height="2" fill="#0f172a" />
-              <rect x="94" y="165" width="12" height="3" fill="#0f172a" />
-              <rect x="95" y="178" width="10" height="7" fill="url(#metal-grad)" rx="1" />
+            {/* LEFT FACE */}
+            <div
+              className="absolute inset-0 bg-gradient-to-br from-[#c8000a] via-[#e62117] to-[#780005] border-2 border-red-300/80 shadow-[0_15px_35px_rgba(0,0,0,0.95)] rounded-xl flex items-center justify-center p-1.5 overflow-hidden"
+              style={{ transform: 'rotateY(-90deg) translateZ(80px)' }}
+            >
+              <div className="relative w-full h-full bg-[#080808] rounded-lg p-1 border border-zinc-800 flex items-center justify-center overflow-hidden shadow-inner">
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none z-10" />
+                <Image
+                  src="/assets/logoblack.png"
+                  alt="Gujarat Post Logo"
+                  fill
+                  className="object-contain scale-110 drop-shadow-md"
+                />
+              </div>
+            </div>
 
-              {/* Branded 3D News Mic Flag Cube */}
-              {/* Left Face (Red Gradient - "GUJARAT") */}
-              <polygon points="62,80 100,89 100,126 62,115" fill="url(#body-grad)" stroke="#600509" strokeWidth="0.5" />
-              
-              {/* Right Face (White/Silver Gradient - "POST") */}
-              <polygon points="100,89 138,80 138,115 100,126" fill="url(#silver-flag-grad)" stroke="#6b7280" strokeWidth="0.5" />
-              
-              {/* Top Face (Dark Maroon Perspective Top) */}
-              <polygon points="62,80 100,74 138,80 100,89" fill="#400305" />
+            {/* TOP CAP (Seals 3D Cube) */}
+            <div
+              className="absolute w-40 h-40 bg-gradient-to-tr from-[#6b0207] via-[#3a0003] to-[#140001] border border-red-700/80 shadow-inner"
+              style={{ transform: 'rotateX(90deg) translateZ(52px)', top: '-28px' }}
+            />
+            {/* BOTTOM CAP (Seals 3D Cube) */}
+            <div
+              className="absolute w-40 h-40 bg-gradient-to-tr from-[#1c1c1c] via-[#0d0d0d] to-[#050505] border border-zinc-800 shadow-inner"
+              style={{ transform: 'rotateX(-90deg) translateZ(52px)', top: '-28px' }}
+            />
+          </div>
 
-              {/* 3D Bevel Highlight Lines */}
-              <line x1="100" y1="89" x2="100" y2="126" stroke="#ffffff" strokeWidth="1.2" strokeOpacity="0.4" />
-              <polyline points="62,80 100,89 138,80" stroke="#ffffff" strokeWidth="1" strokeOpacity="0.25" fill="none" />
+          {/* 4. CHROME CONNECTOR COLLAR */}
+          <div className="w-8 h-3.5 bg-gradient-to-r from-zinc-500 via-white to-zinc-800 border-x border-zinc-700 shadow-md z-10" />
 
-              {/* Perspective Texts */}
-              {/* "GUJARAT" on Left Face */}
-              <text
-                x="81"
-                y="105.5"
-                fill="#ffffff"
-                fontWeight="900"
-                fontSize="8"
-                letterSpacing="0.05em"
-                textAnchor="middle"
-                style={{ fontFamily: "'Hind Vadodara', sans-serif" }}
-                transform="skewY(13.2) scale(0.92, 1)"
-              >
-                GUJARAT
-              </text>
+          {/* 5. HEAVY NEWS REPORTER MIC HANDLE */}
+          <div className="relative w-11 h-36 bg-gradient-to-b from-zinc-800 via-zinc-900 to-black rounded-b-2xl border-x-2 border-zinc-700 shadow-2xl overflow-hidden flex flex-col items-center justify-between p-1 z-10">
+            {/* Glossy Vertical Metallic Reflection Strip */}
+            <div className="absolute inset-y-0 left-2 w-2 bg-gradient-to-r from-white/30 to-transparent blur-[0.5px]" />
+            
+            {/* Grip Ring Lines */}
+            <div className="w-full space-y-2 mt-3 z-10">
+              <div className="w-full h-1 bg-zinc-950 border-y border-zinc-700" />
+              <div className="w-full h-1 bg-zinc-950 border-y border-zinc-700" />
+              <div className="w-full h-1 bg-zinc-950 border-y border-zinc-700" />
+            </div>
 
-              {/* "POST" on Right Face */}
-              <text
-                x="119"
-                y="105.5"
-                fill="#050B14"
-                fontWeight="900"
-                fontSize="10"
-                letterSpacing="0.05em"
-                textAnchor="middle"
-                style={{ fontFamily: "'Hind Vadodara', sans-serif" }}
-                transform="skewY(-13.2) scale(0.92, 1)"
-              >
-                POST
-              </text>
+            {/* Metallic XLR Cable Jack Base with Gold Pins */}
+            <div className="w-9 h-4 bg-gradient-to-r from-zinc-400 via-zinc-100 to-zinc-600 rounded-b-lg border-t border-zinc-800 shadow-md flex items-center justify-center z-10">
+              <div className="w-3.5 h-1 bg-amber-400 rounded-xs shadow-[0_0_2px_#fbbf24]" />
+            </div>
+          </div>
 
-              {/* Mic Head (Grill Sphere) */}
-              {/* Dark base shadow */}
-              <circle cx="100" cy="45" r="24" fill="#1e293b" />
-              {/* Metallic spherical gradient head */}
-              <circle cx="100" cy="45" r="24" fill="url(#grill-grad)" stroke="url(#metal-grad)" strokeWidth="2.5" />
-              {/* Grill mesh texture details */}
-              <path
-                d="M 78,45 Q 100,56 122,45 M 80,36 Q 100,47 120,36 M 80,54 Q 100,65 120,54 M 100,21 V 69 M 87,24 Q 94,45 100,69 M 113,24 Q 106,45 100,69"
-                stroke="#374151"
-                strokeWidth="1.2"
-                strokeOpacity="0.45"
-                fill="none"
-              />
-              {/* Chrome horizontal collar ring */}
-              <rect x="75.5" y="42" width="49" height="5" rx="1.2" fill="url(#metal-grad)" stroke="#374151" strokeWidth="0.5" />
-              <rect x="75.5" y="44" width="49" height="1.2" fill="#ffffff" fillOpacity="0.5" />
-              
-              {/* Sphere Highlight shine overlay */}
-              <circle cx="91" cy="35" r="9" fill="#ffffff" fillOpacity="0.25" style={{ filter: 'blur(2.5px)' }} />
-            </g>
-          </svg>
         </div>
       </div>
 
-      {/* Brand Header */}
-      <h1 className="text-2xl sm:text-3xl font-black text-white tracking-wider uppercase leading-none" style={{ fontFamily: "'Hind Vadodara', sans-serif" }}>
-        Gujarat <span className="text-[#e62117]">Post</span>
-      </h1>
+      {/* Official Gujarat Post Black Logo */}
+      <div className="relative h-14 w-64 sm:h-16 sm:w-72 my-1 flex items-center justify-center filter drop-shadow-lg">
+        <Image
+          src="/assets/logoblack.png"
+          alt="Gujarat Post Logo"
+          fill
+          className="object-contain"
+          priority
+        />
+      </div>
 
       {/* Brand Slogan */}
       <p className="mt-2 text-xs sm:text-sm font-extrabold text-[#a3a3a3] uppercase tracking-widest leading-none select-none">
@@ -295,8 +285,8 @@ export default function SplashLoader() {
       </p>
 
       {/* Modern Sweep Loader Bar */}
-      <div className="mt-8 h-1 w-48 overflow-hidden rounded-full bg-white/10">
-        <div className="h-full w-24 bg-gradient-to-r from-transparent via-[#e62117] to-transparent animate-sweep" />
+      <div className="mt-8 h-1 w-52 overflow-hidden rounded-full bg-white/10 shadow-inner">
+        <div className="h-full w-28 bg-gradient-to-r from-transparent via-[#e62117] to-transparent animate-sweep" />
       </div>
     </div>
   );
