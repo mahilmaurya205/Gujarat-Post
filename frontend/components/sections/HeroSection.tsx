@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Clock, ArrowRight, Flame, Eye, Play, ChevronRight, ChevronLeft, Camera, X, Bookmark, Sun, Cloud, CloudRain, Shield, Trophy, TrendingUp, TrendingDown, Wind, ChevronDown, ArrowUpRight, Thermometer, Droplet, MoreVertical, Fuel, Megaphone, Radio, MapPin } from 'lucide-react';
+import { Clock, ArrowRight, Flame, Eye, Play, ChevronRight, ChevronLeft, Camera, X, Bookmark, Sun, Cloud, CloudRain, Shield, Trophy, TrendingUp, TrendingDown, Wind, ChevronDown, ArrowUpRight, Thermometer, Droplet, MoreVertical, Fuel, Megaphone, Radio, MapPin, Sparkles } from 'lucide-react';
 import {
   getArticleTitle,
   getArticleExcerpt,
@@ -3451,27 +3451,46 @@ function CrimeSection({
 
       {/* Today's Horoscope Widget */}
       <div>
-        <div className="flex items-center gap-1.5 border-b border-border pb-2.5 mb-3.5">
-          <span className="text-[#B3121B] font-black text-[13.5px] md:text-[14px]">
-            {language === 'gu' ? '• આજનું રાશિફળ' : '• Today\'s Horoscope'}
+        <div className="flex items-center justify-between border-b border-border pb-2 mb-3">
+          <span className="text-[#B3121B] font-black text-[13.5px] md:text-[14px] flex items-center gap-1.5">
+            <Sparkles className="h-4 w-4 text-purple-600 dark:text-purple-400 animate-pulse" />
+            {language === 'gu' ? '• આજનું રાશિફળ' : language === 'hi' ? '• आज का राशिफल' : '• Today\'s Horoscope'}
           </span>
         </div>
-        <div className="border border-border rounded-sm bg-card p-4 shadow-sm">
-          <div className="grid grid-cols-4 gap-x-2 gap-y-3.5">
-            {ZODIAC_SIGNS.map((sign) => (
-              <div
-                key={sign.id}
-                onClick={() => setSelectedZodiac(sign)}
-                className="flex flex-col items-center justify-center p-2.5 rounded-sm border border-border bg-card hover:border-[#B3121B] hover:bg-muted/10 transition duration-200 cursor-pointer select-none group text-center"
-              >
-                <div className="flex h-7 w-7 items-center justify-center rounded-[4px] bg-[#5038A6] text-white text-[13px] font-extrabold shadow-sm mb-1.5 transition duration-200 group-hover:scale-105 select-none leading-none">
-                  {getZodiacSymbol(sign.id)}
+        <div className="border border-purple-500/20 dark:border-purple-500/30 rounded-xl bg-gradient-to-b from-card via-card to-purple-950/5 p-3 sm:p-3.5 shadow-md">
+          <div className="grid grid-cols-4 gap-2 sm:gap-2.5">
+            {ZODIAC_SIGNS.map((sign, idx) => {
+              const symbol = getZodiacSymbol(sign.id);
+              const primaryName = language === 'gu' ? sign.nameGu : language === 'hi' ? sign.nameHi : sign.name;
+              const secondaryName = `(${sign.name})`;
+
+              return (
+                <div
+                  key={sign.id}
+                  onClick={() => setSelectedZodiac(sign)}
+                  style={{ animationDelay: `${idx * 40}ms` }}
+                  className="relative flex flex-col items-center justify-center p-2 sm:p-2.5 rounded-xl border border-border/80 bg-background/80 hover:bg-gradient-to-b hover:from-purple-50/80 hover:to-indigo-50/50 dark:hover:from-purple-950/40 dark:hover:to-indigo-950/30 hover:border-purple-500/60 shadow-xs hover:shadow-xl hover:shadow-purple-500/15 transition-all duration-300 transform hover:-translate-y-1.5 hover:scale-[1.03] cursor-pointer select-none group text-center overflow-hidden animate-in fade-in zoom-in-95"
+                >
+                  {/* Shimmer sweep effect */}
+                  <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 dark:via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" aria-hidden="true" />
+
+                  {/* Glowing 3D Icon Box */}
+                  <div className="relative flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg bg-gradient-to-br from-[#4A329A] via-[#5A38C2] to-[#7342DC] text-white text-[14px] font-extrabold shadow-md shadow-purple-950/30 mb-1.5 transition-all duration-300 group-hover:scale-115 group-hover:rotate-[6deg] group-hover:shadow-purple-500/40 group-hover:ring-4 group-hover:ring-purple-500/25 select-none leading-none">
+                    {symbol}
+                  </div>
+
+                  {/* Gujarati / Primary Name */}
+                  <span className="text-[11.5px] sm:text-[12px] font-black text-foreground group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors select-none leading-tight">
+                    {primaryName}
+                  </span>
+
+                  {/* Secondary English Name */}
+                  <span className="text-[9.5px] sm:text-[10px] font-bold text-muted-foreground/80 group-hover:text-purple-500/80 transition-colors select-none mt-0.5 leading-none">
+                    {secondaryName}
+                  </span>
                 </div>
-                <span className="text-[11px] font-extrabold text-foreground group-hover:text-[#B3121B] transition-colors select-none leading-normal">
-                  {language === 'gu' ? `${sign.nameGu} (${sign.name})` : sign.name}
-                </span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
@@ -3480,36 +3499,44 @@ function CrimeSection({
   );
 
   const zodiacModal = selectedZodiac && (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       <div className="absolute inset-0" onClick={() => setSelectedZodiac(null)} />
 
-      <div className="relative w-full max-w-md rounded-3xl overflow-hidden bg-card border border-border/10 p-6 shadow-2xl z-10 animate-in zoom-in-95 duration-200 text-center">
+      <div className="relative w-full max-w-md rounded-3xl overflow-hidden bg-card border border-purple-500/30 p-6 shadow-2xl z-10 animate-in zoom-in-95 duration-200 text-center">
         <button
           type="button"
           onClick={() => setSelectedZodiac(null)}
-          className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-muted-foreground/10 transition"
+          className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-muted-foreground/10 transition cursor-pointer"
         >
           <X className="h-4 w-4" />
         </button>
-        <div className="mx-auto mt-4 rounded-full border border-border/10 p-1 shadow-md w-24 h-24 overflow-hidden relative">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={selectedZodiac.image}
-            alt={selectedZodiac.name}
-            className="rounded-full w-full h-full object-cover"
-          />
+
+        <div className="relative mx-auto mt-2 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[#4A329A] via-[#5A38C2] to-[#7342DC] text-white text-3xl font-extrabold shadow-xl shadow-purple-900/40 ring-4 ring-purple-500/30 animate-pulse">
+          {getZodiacSymbol(selectedZodiac.id)}
         </div>
-        <h3 className="mt-4 text-xl font-black text-foreground">
-          {language === 'gu' ? `${selectedZodiac.nameGu} (${selectedZodiac.name})` : selectedZodiac.name}
+
+        <h3 className="mt-4 text-2xl font-black text-foreground">
+          {language === 'gu' ? `${selectedZodiac.nameGu} (${selectedZodiac.name})` : language === 'hi' ? `${selectedZodiac.nameHi} (${selectedZodiac.name})` : selectedZodiac.name}
         </h3>
-        <p className="text-xs font-semibold text-accent uppercase tracking-wider mt-1">
-          {getLocalized(language, { en: 'Daily Horoscope', gu: 'આજનું રાશિફળ', hi: 'आज का राशिफल' })}
-        </p>
+
+        <div className="mt-1.5 inline-flex items-center gap-1.5 rounded-full bg-purple-500/10 px-3.5 py-1 text-xs font-black text-purple-600 dark:text-purple-400 border border-purple-500/20">
+          <Sparkles className="h-3.5 w-3.5" />
+          <span>{getLocalized(language, { en: 'Daily Horoscope', gu: 'આજનું રાશિફળ', hi: 'आज का राशिफल' })}</span>
+        </div>
+
         <div className="mt-5 border-t border-border/80 pt-4 text-left">
           <p className="text-sm font-black text-foreground leading-relaxed">
             {language === 'gu' ? selectedZodiac.predictionGu : selectedZodiac.prediction}
           </p>
         </div>
+
+        <button
+          type="button"
+          onClick={() => setSelectedZodiac(null)}
+          className="mt-6 w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-sm font-bold shadow-lg shadow-purple-900/30 active:scale-98 transition-all cursor-pointer"
+        >
+          {language === 'gu' ? 'સમજાયું' : language === 'hi' ? 'ठीक है' : 'Got it'}
+        </button>
       </div>
     </div>
   );
