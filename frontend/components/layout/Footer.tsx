@@ -134,30 +134,6 @@ function NavColumn({ title, links, titleHref }: { title: string; links: { label:
 /* ─── Footer Component ─────────────────────────────────────────────────── */
 export default function Footer({ isInline = false }: { isInline?: boolean }) {
     const pathname = usePathname();
-    const [isSticky, setIsSticky] = useState(false);
-
-    useEffect(() => {
-        const checkAdSection = () => {
-            const el = document.getElementById('infinite-ads-section');
-            if (!el) {
-                setIsSticky(false);
-                return;
-            }
-            const rect = el.getBoundingClientRect();
-
-            // Footer is sticky when scrolled into infinite ads section (rect.top <= 0).
-            // When reaching video section or before it (rect.top > 0), footer is not visible.
-            if (rect.top <= 0) {
-                setIsSticky(true);
-            } else {
-                setIsSticky(false);
-            }
-        };
-
-        window.addEventListener('scroll', checkAdSection, { passive: true });
-        checkAdSection();
-        return () => window.removeEventListener('scroll', checkAdSection);
-    }, [pathname]);
 
     if (pathname === '/login' || pathname.startsWith('/admin')) {
         return null;
@@ -172,8 +148,7 @@ export default function Footer({ isInline = false }: { isInline?: boolean }) {
     return (
         <footer
             data-theme="dark"
-            className={`bg-[#050B14] text-white border-t border-slate-900 select-none w-full transition-all duration-300 ${isSticky ? 'sticky bottom-0 z-40' : 'relative'
-                }`}
+            className="bg-[#050B14] text-white border-t border-slate-900 select-none w-full relative"
         >
             <div className={`w-full px-4 sm:px-6 md:px-8 lg:px-10 ${wrap}`}>
 

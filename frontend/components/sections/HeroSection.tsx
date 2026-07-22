@@ -324,7 +324,7 @@ export default function HeroSection() {
     if (sidebarVideos.length === 0) return;
     const interval = setInterval(() => {
       setActiveSidebarVideoIndex((prev) => (prev + 1) % sidebarVideos.length);
-    }, 2000); // 2 seconds rotation
+    }, 4000); // 2 seconds rotation
     return () => clearInterval(interval);
   }, [sidebarVideos.length]);
 
@@ -1356,6 +1356,9 @@ function getInfiniteAds(count: number): NativeAd[] {
   return list;
 }
 
+const MAX_GROUPS = 5;
+const MAX_ADS_COUNT = MAX_GROUPS * 7;
+
 export function NativeAdsSection({ language }: { language: Language }) {
   const [loadedCount, setLoadedCount] = useState(7);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -1364,7 +1367,7 @@ export function NativeAdsSection({ language }: { language: Language }) {
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || loadedCount >= MAX_ADS_COUNT) return;
 
     let timer: NodeJS.Timeout | null = null;
 
@@ -1376,10 +1379,10 @@ export function NativeAdsSection({ language }: { language: Language }) {
           setIsLoadingMore(true);
 
           timer = setTimeout(() => {
-            setLoadedCount((prev) => prev + 7);
+            setLoadedCount((prev) => Math.min(prev + 7, MAX_ADS_COUNT));
             isLoadingRef.current = false;
             setIsLoadingMore(false);
-          }, 500);
+          }, 400);
         }
       },
       {
@@ -1404,6 +1407,7 @@ export function NativeAdsSection({ language }: { language: Language }) {
   for (let i = 0; i < visibleAds.length; i += 7) {
     groups.push(visibleAds.slice(i, i + 7));
   }
+  const limitedGroups = groups.slice(0, MAX_GROUPS);
 
   return (
     <section id="infinite-ads-section" ref={containerRef} className="mx-auto max-w-screen-xl px-4 py-8 select-none border-t border-border/40 mt-8">
@@ -1433,7 +1437,7 @@ export function NativeAdsSection({ language }: { language: Language }) {
       </div>
 
       <div className="space-y-6 border border-neutral-200/30 dark:border-neutral-800/40 rounded-xl p-4 bg-neutral-50/10 dark:bg-neutral-900/5">
-        {groups.map((group, groupIndex) => {
+        {limitedGroups.map((group, groupIndex) => {
           const row1 = group.slice(0, 2);
           const row2 = group.slice(2, 5);
           const row3 = group.slice(5, 7);
@@ -1483,13 +1487,15 @@ export function NativeAdsSection({ language }: { language: Language }) {
             </div>
           );
         })}
-        {/* Sentinel for Infinite Scroll Trigger */}
-        <div ref={sentinelRef} className="h-12 w-full flex items-center justify-center mt-6">
-          <div className="flex items-center gap-2 text-xs text-neutral-400 font-bold select-none">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#B3121B] animate-ping" />
-            <span>{language === 'gu' ? 'વધુ લોડ થઈ રહ્યું છે...' : 'Loading more recommendations...'}</span>
+        {/* Sentinel for Infinite Scroll Trigger (Stops after 5 component groups) */}
+        {loadedCount < MAX_ADS_COUNT && (
+          <div ref={sentinelRef} className="h-12 w-full flex items-center justify-center mt-6">
+            <div className="flex items-center gap-2 text-xs text-neutral-400 font-bold select-none">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#B3121B] animate-ping" />
+              <span>{language === 'gu' ? 'વધુ લોડ થઈ રહ્યું છે...' : 'Loading more recommendations...'}</span>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
