@@ -42,6 +42,240 @@ const HOME_IMAGE_FALLBACKS = [
   '/assets/demo/8.jpg',
 ];
 
+const MOCK_TITLE_MAP: Record<string, { en: string; hi: string }> = {
+  'સંસદનું ચોમાસુ સત્ર આજથી! અનેક મોટા ખરડા પર થશે ઘમાસાણ': {
+    en: 'Parliament Monsoon Session begins today! Clash expected over key bills',
+    hi: 'संसद का मानसून सत्र आज से! कई बड़े विधेयकों पर होगा हंगामा'
+  },
+  'ખુશખબર! GDP વૃદ્ધિ દર અંદાજ કરતાં વધુ નોંધાયો': {
+    en: 'Good news! GDP growth rate exceeds expectations',
+    hi: 'खुशखबरी! जीडीपी वृद्धि दर अनुमान से अधिक दर्ज'
+  },
+  'બે નવી વંદે ભારત ટ્રેનોને લીલી ઝંડી, જાણો રૂટ': {
+    en: 'Two new Vande Bharat trains flagged off, know routes',
+    hi: 'दो नई वंदे भारत ट्रेनों को हरी झंडी, जानें रूट'
+  },
+  'કેન્દ્ર સરકારની મોટી જાહેરાત! નવી યોજનાથી કરોડો લોકોને લાભ': {
+    en: 'Center announces new scheme, millions to benefit',
+    hi: 'केंद्र सरकार की बड़ी घोषणा! नई योजना से करोड़ों को लाभ'
+  },
+  'નવી રાષ્ટ્રીય શિક્ષણ નીતિનો બીજો તબક્કો આગામી સત્રથી લાગુ, જાણો શું બદલાશે': {
+    en: 'Second phase of New National Education Policy from next session, know details',
+    hi: 'नई राष्ट्रीय शिक्षा नीति का दूसरा चरण अगले सत्र से लागू, जानें क्या बदलेगा'
+  },
+  'ભારતીય સેનાને મળી મોટી તાકાત! સ્વદેશી બનાવટનું નવું સંરક્ષણ સાધન સામેલ': {
+    en: 'Indian Army gets major boost! New indigenous defense equipment inducted',
+    hi: 'भारतीय सेना को मिली बड़ी ताकत! नया स्वदेशी रक्षा उपकरण शामिल'
+  },
+  'સુપ્રીમ કોર્ટનો મોટો ચુકાદો! લાખો કેસોને સીધી અસર': {
+    en: 'Supreme Court historic judgment! Direct impact on millions of cases',
+    hi: 'सुप्रीम कोर्ट का बड़ा फैसला! लाखों मामलों पर सीधा असर'
+  },
+  'કરોડો લોકોને ફાયદો! કેન્દ્રે જાહેર કરી નવી આરોગ્ય વીમા યોજના': {
+    en: 'Millions to benefit! Center launches new health insurance scheme',
+    hi: 'करोड़ों लोगों को फायदा! केंद्र ने घोषित की नई स्वास्थ्य बीमा योजना'
+  },
+  'ખેડૂતો માટે ખુશખબર! નવી MSP જાહેર, કઠોળના ભાવમાં વધારો': {
+    en: 'Good news for farmers! New MSP declared, pulse prices hiked',
+    hi: 'किसानों के लिए खुशखबरी! नई एमएसपी घोषित, दालों के दाम बढ़े'
+  },
+  'દેશમાં 6G ટ્રાયલ શરૂ! ટૂંક સમયમાં પસંદગીના શહેરોમાં ટેસ્ટિંગ': {
+    en: '6G trials begin in India! Testing soon in select cities',
+    hi: 'देश में 6G ट्रायल शुरू! जल्द चुनिंदा शहरों में टेस्टिंग'
+  },
+  'મહિલા ઉદ્યોગ સાહસિકો માટે મોટી રાહત! નવી લોન યોજનામાં 0% વ્યાજ': {
+    en: 'Big relief for women entrepreneurs! 0% interest in new loan scheme',
+    hi: 'महिला उद्यमियों के लिए बड़ी राहत! नई ऋण योजना में 0% ब्याज'
+  },
+  'દેશના 10 મોટા શહેરોને જોડતો નવો એક્સપ્રેસવે નેટવર્ક મંજૂર!': {
+    en: 'New expressway network approved connecting 10 major cities!',
+    hi: 'देश के 10 बड़े शहरों को जोड़ने वाला नया एक्सप्रेसवे नेटवर्क मंजूर!'
+  },
+  'ભારતની મોટી જીત! સંયુક્ત રાષ્ટ્રમાં પ્રસ્તાવને વ્યાપક સમર્થન': {
+    en: 'India’s major victory! Broad support for proposal in United Nations',
+    hi: 'भारत की बड़ी जीत! संयुक्त राष्ट्र में प्रस्ताव को व्यापक समर्थन'
+  },
+  'મોટાભાગના સભ્ય દેશોએ ભારતના પ્રસ્તાવને ટેકો આપતા આંતરરાષ્ટ્રીય મંચ પર દેશની સ્થિતિ વધુ મજબૂત બની.': {
+    en: 'With broad support from member nations, India’s global standing strengthens further.',
+    hi: 'अधिकांश सदस्य देशों द्वारा भारत के प्रस्ताव का समर्थन करने से स्थिति मजबूत हुई।'
+  },
+  'યુરોપમાં નવી વ્યાપાર સંધિ પર હસ્તાક્ષર, ભારતને પણ ફાયદો': {
+    en: 'New trade treaty signed in Europe, India to benefit as well',
+    hi: 'यूरोप में नई व्यापार संधि पर हस्ताक्षर, भारत को भी फायदा'
+  },
+  'અમેરિકામાં ભારતીય સમુદાયનું વિશાળ સાંસ્કૃતિક આયોજન, જુઓ ઝલક': {
+    en: 'Grand cultural event by Indian community in USA, see glimpses',
+    hi: 'अमेरिका में भारतीय समुदाय का विशाल सांस्कृतिक आयोजन, देखें झलक'
+  },
+  'એશિયાઈ દેશો વચ્ચે નવી આર્થિક ભાગીદારીની મોટી જાહેરાત': {
+    en: 'Major announcement of new economic partnership among Asian nations',
+    hi: 'एशियाई देशों के बीच नई आर्थिक साझेदारी की बड़ी घोषणा'
+  },
+  'ગલ્ફ દેશોમાં ભારતીય શ્રમિકો માટે ખુશખબર! નવી કલ્યાણ યોજના જાહેર': {
+    en: 'Good news for Indian workers in Gulf countries! New welfare scheme announced',
+    hi: 'खाड़ी देशों में भारतीय श्रमिकों के लिए खुशखबरी! नई कल्याण योजना घोषित'
+  },
+  'ગુજરાત ચૂંટણી 2027 નજીક! જિલ્લાઓમાં તૈયારીઓ તેજ, સત્તાધારી પક્ષ સક્રિય': {
+    en: 'Gujarat Election 2027 near! Preparations active in districts',
+    hi: 'गुजरात चुनाव 2027 नजदीक! जिलों में तैयारियां तेज, सत्ताधारी दल सक्रिय'
+  },
+  'CMની મોટી બેઠક! વિકાસ પ્રોજેક્ટ માટે સમીક્ષા, ગ્રામીણ વિસ્તારો પર ભાર': {
+    en: 'CM holds major meeting! Review of development projects, focus on rural areas',
+    hi: 'सीएम की बड़ी बैठक! विकास परियोजनाओं के लिए समीक्षा, ग्रामीण क्षेत्रों पर जोर'
+  },
+  'ભાજપ પ્રદેશ કારોબારીની બેઠકમાં સંગઠન વિસ્તરણ પર મોટી ચર્ચા': {
+    en: 'BJP state executive meeting discusses organizational expansion',
+    hi: 'भाजपा प्रदेश कार्यकारिणी की बैठक में संगठन विस्तार पर बड़ी चर्चा'
+  },
+  'AAPનો મોટો દાવો! ગ્રામ્ય ગુજરાતમાં ભૂ-સ્તરીય નેટવર્ક વિસ્તાર્યું': {
+    en: 'AAP claims major ground-level network expansion in rural Gujarat',
+    hi: 'आप का बड़ा दावा! ग्रामीण गुजरात में भू-स्तरीय नेटवर्क का विस्तार'
+  },
+  'મોટો વિવાદ! અમદાવાદ મ્યુનિ. કમિશનરે તંત્ર સામે વાંધો ઉઠાવ્યો': {
+    en: 'Major controversy! Ahmedabad Muni Commissioner raises objection against system',
+    hi: 'बड़ा विवाद! अहमदाबाद नगर आयुक्त ने प्रणाली के खिलाफ आपत्ति जताई'
+  },
+  'સૈન્ય તાલીમમાં મોટી ગેરરીતિ! 100થી વધુ પ્રમોશન રદ કરાયા': {
+    en: 'Major irregularity in military training! Over 100 promotions cancelled',
+    hi: 'सैन्य प्रशिक्षण में बड़ी गड़बड़ी! 100 से अधिक पदोन्नति रद्द की गईं'
+  },
+  'કોંગ્રેસે ખોલ્યા પત્તા! 2027 ચૂંટણી ઝુંબેશ વ્યૂહ જાહેર કર્યો': {
+    en: 'Congress reveals cards! Unveils 2027 election campaign strategy',
+    hi: 'कांग्रेस ने खोले पत्ते! 2027 चुनाव अभियान रणनीति घोषित की'
+  },
+  'વિધાનસભા ચોમાસુ સત્રમાં હોબાળો! વિપક્ષે બેરોજગારી મુદ્દે સ્થગન પ્રસ્તાવ આપ્યો': {
+    en: 'Uproar in Assembly Monsoon session! Opposition submits adjournment motion on unemployment',
+    hi: 'विधानसभा मानसून सत्र में हंगामा! विपक्ष ने बेरोजगारी मुद्दे पर स्थगन प्रस्ताव दिया'
+  },
+  'હાઈકોર્ટની આકરી નોટિસ! રાજ્ય સરકારને ભરતી પ્રક્રિયા અંગે જવાબ માંગ્યો': {
+    en: 'Strict notice from High Court! State Government asked for response on recruitment process',
+    hi: 'हाईकोर्ट का सख्त नोटिस! राज्य सरकार से भर्ती प्रक्रिया पर जवाब मांगा'
+  },
+  'કેન્દ્રીય મંત્રીની ગુજરાત મુલાકાત! નવા ઔદ્યોગિક કોરિડોરની જાહેરાત શક્ય': {
+    en: 'Union Minister visits Gujarat! Announcement of new industrial corridor likely',
+    hi: 'केंद्रीय मंत्री का गुजरात दौरा! नए औद्योगिक गलियारे की घोषणा संभव'
+  },
+  'મતદાર યાદી સુધારણા ઝુંબેશ શરૂ! નાગરિકોને ઓનલાઈન નોંધણીની અપીલ': {
+    en: 'Voter list revision drive starts! Appeal to citizens for online registration',
+    hi: 'मतदाता सूची पुनरीक्षण अभियान शुरू! नागरिकों से ऑनलाइन पंजीकरण की अपील'
+  },
+  'યુવાનો માટે મોટી તક! પોલીસ ભરતીમાં 10,000 જગ્યાઓ ટૂંક સમયમાં ભરાશે': {
+    en: 'Great opportunity for youth! 10,000 vacancies in police recruitment to be filled soon',
+    hi: 'युवाओं के लिए बड़ा मौका! पुलिस भर्ती में 10,000 पद जल्द भरे जाएंगे'
+  },
+  'અમદાવાદમાં કરોડોનું કૌભાંડ! ફેક ઇન્વેસ્ટમેન્ટ એપ નેટવર્કનો પર્દાફાશ, અનેક ધરપકડ': {
+    en: 'Crores scam in Ahmedabad! Fake investment app network busted, many arrested',
+    hi: 'अहमदाबाद में करोड़ों का घोटाला! फेक निवेश ऐप नेटवर्क का भंडाफोड़, कई गिरफ्तार'
+  },
+  'સુરત પોલીસની સંયુક્ત રેડ! કરોડોની મુદ્દામાલ જપ્ત': {
+    en: 'Joint raid by Surat police! Contraband worth crores seized',
+    hi: 'सूरत पुलिस की संयुक्त छापेमारी! करोड़ों का माल जब्त'
+  },
+  'રાજકોટમાં અપહરણ ગેંગનો પર્દાફાશ! પાંચ આરોપી ઝડપાયા': {
+    en: 'Kidnapping gang exposed in Rajkot! Five suspects arrested',
+    hi: 'राजकोट में अपहरण गिरोह का पर्दाफाश! पांच आरोपी गिरफ्तार'
+  },
+  'વડોદરામાં ATM સ્કીમિંગ ગેંગ ઝડપાઈ! મહિનાઓની તપાસ બાદ ભાંડો ફૂટ્યો': {
+    en: 'ATM skimming gang caught in Vadodara! Secret busted after months of investigation',
+    hi: 'वडोदरा में एटीएम स्किमिंग गैंग पकड़ी गई! महीनों की जांच के बाद खुलासा'
+  },
+  'ભાવનગરમાં દારૂનો મોટો જથ્થો ઝડપાયો, ત્રણ આરોપી કબજે': {
+    en: 'Huge alcohol haul seized in Bhavnagar, three suspects in custody',
+    hi: 'भावनगर में शराब का बड़ा जहीरा जब्त, तीन आरोपी हिरासत में'
+  },
+  'જૂનાગઢમાં ઓનલાઇન લોન એપના નામે બ્લેકમેલિંગ! ફરિયાદ નોંધાઈ': {
+    en: 'Blackmailing in Junagadh in the name of online loan apps! FIR registered',
+    hi: 'जूनागढ़ में ऑनलाइन लोन ऐप के नाम पर ब्लैकमेलिंग! प्राथमिकी दर्ज'
+  },
+  'સાવધાન! વાયરલ વીડિયો ગુજરાતના પૂરનો નથી, જૂનો અને અલગ રાજ્યનો છે': {
+    en: 'Caution! Viral video is not from Gujarat floods, it is old and from another state',
+    hi: 'सावधान! वायरल वीडियो गुजरात बाढ़ का नहीं, पुराना और दूसरे राज्य का है'
+  },
+  'હા, રાજ્યમાં ખેડૂત સહાય યોજનાની રકમમાં ખરેખર વધારો કરાયો છે!': {
+    en: 'Yes, farmer assistance scheme amount has indeed been increased in the state!',
+    hi: 'हां, राज्य में किसान सहायता योजना की राशि में वास्तव में वृद्धि की गई है!'
+  },
+  'સોશિયલ મીડિયા પર ફરતો મેસેજ: "કાલથી પેટ્રોલ ₹50 થશે" – જાણો હકીકત': {
+    en: 'Viral message on social media: "Petrol will be ₹50 from tomorrow" – Know fact',
+    hi: 'सोशल मीडिया पर वायरल संदेश: "कल से पेट्रोल ₹50 होगा" – जानें सच'
+  },
+  'શું ખરેખર રાજ્યમાં તમામ શાળાઓ આગામી સપ્તાહથી બંધ રહેશે? જાણો સાચી વિગત': {
+    en: 'Will all schools in state really remain closed from next week? Know details',
+    hi: 'क्या वास्तव में राज्य में सभी स्कूल अगले हफ्ते से बंद रहेंगे? जानें सच'
+  },
+  'હા, રાજ્ય સરકારે વરિષ્ઠ નાગરિકો માટે બસ ભાડામાં ખરેખર છૂટ જાહેર કરી છે': {
+    en: 'Yes, state government has announced bus fare discount for senior citizens',
+    hi: 'हां, राज्य सरकार ने वरिष्ठ नागरिकों के लिए बस किराए में छूट घोषित की है'
+  },
+  'વોટ્સએપ પર ફરતો "નવો બેંક નિયમ" મેસેજ ખોટો, RBIએ કર્યો ઈનકાર': {
+    en: '"New bank rule" message circulating on WhatsApp is false, RBI denies',
+    hi: 'व्हाट्सएप पर वायरल "नया बैंक नियम" संदेश झूठा, आरबीआई ने किया इनकार'
+  },
+  'એ તસવીર અમદાવાદ પુલ તૂટવાની નથી, ત્રણ વર્ષ જૂની અને બીજા દેશની છે': {
+    en: 'That image is not of Ahmedabad bridge collapse, it is 3 years old and from another country',
+    hi: 'वह तस्वीर अहमदाबाद पुल ढहने की नहीं, तीन साल पुरानी और दूसरे देश की है'
+  },
+  'હા, રાજ્યમાં નવી રોજગાર ભરતી માટે ઓનલાઈન અરજી ખરેખર શરૂ થઈ ગઈ છે': {
+    en: 'Yes, online application for new employment recruitment has started in state',
+    hi: 'हां, राज्य में नई रोजगार भर्ती के लिए ऑनलाइन आवेदन वास्तव में शुरू हो गया है'
+  }
+};
+
+export const getMockTitle = (item: any, language: Language): string => {
+  if (!item) return '';
+  if (language === 'en') {
+    if (item.titleEn) return item.titleEn;
+    if (item.title) return item.title;
+    if (item.titleGu && MOCK_TITLE_MAP[item.titleGu]) return MOCK_TITLE_MAP[item.titleGu].en;
+    return item.titleGu || '';
+  }
+  if (language === 'hi') {
+    if (item.titleHi) return item.titleHi;
+    if (item.titleGu && MOCK_TITLE_MAP[item.titleGu]) return MOCK_TITLE_MAP[item.titleGu].hi;
+    return item.titleGu || item.title || '';
+  }
+  return item.titleGu || item.title || '';
+};
+
+export const getMockRelativeTime = (timeStrGu: string | undefined, language: Language): string => {
+  if (!timeStrGu) return language === 'en' ? '1 hour ago' : language === 'hi' ? '1 घंटा पहले' : '1 કલાક પહેલાં';
+  if (language === 'en') {
+    if (timeStrGu.includes('1 કલાક')) return '1 hour ago';
+    if (timeStrGu.includes('2 કલાક')) return '2 hours ago';
+    if (timeStrGu.includes('3 કલાક')) return '3 hours ago';
+    if (timeStrGu.includes('4 કલાક')) return '4 hours ago';
+    if (timeStrGu.includes('5 કલાક')) return '5 hours ago';
+    if (timeStrGu.includes('6 કલાક')) return '6 hours ago';
+    if (timeStrGu.includes('7 કલાક')) return '7 hours ago';
+    if (timeStrGu.includes('8 કલાક')) return '8 hours ago';
+    if (timeStrGu.includes('10 કલાક')) return '10 hours ago';
+    if (timeStrGu.includes('11 કલાક')) return '11 hours ago';
+    if (timeStrGu.includes('12 કલાક')) return '12 hours ago';
+    if (timeStrGu.includes('13 કલાક')) return '13 hours ago';
+    if (timeStrGu.includes('14 કલાક')) return '14 hours ago';
+    if (timeStrGu.includes('30 મિનિટ')) return '30 mins ago';
+    return timeStrGu.replace('કલાક પહેલાં', 'hours ago').replace('મિનિટ પહેલાં', 'mins ago');
+  }
+  if (language === 'hi') {
+    if (timeStrGu.includes('1 કલાક')) return '1 घंटा पहले';
+    if (timeStrGu.includes('2 કલાક')) return '2 घंटे पहले';
+    if (timeStrGu.includes('3 કલાક')) return '3 घंटे पहले';
+    if (timeStrGu.includes('4 કલાક')) return '4 घंटे पहले';
+    if (timeStrGu.includes('5 કલાક')) return '5 घंटे पहले';
+    if (timeStrGu.includes('6 કલાક')) return '6 घंटे पहले';
+    if (timeStrGu.includes('7 કલાક')) return '7 घंटे પહેલાં';
+    if (timeStrGu.includes('8 કલાક')) return '8 घंटे पहले';
+    if (timeStrGu.includes('10 કલાક')) return '10 घंटे पहले';
+    if (timeStrGu.includes('11 કલાક')) return '11 घंटे पहले';
+    if (timeStrGu.includes('12 કલાક')) return '12 घंटे पहले';
+    if (timeStrGu.includes('13 કલાક')) return '13 घंटे पहले';
+    if (timeStrGu.includes('14 કલાક')) return '14 घंटे पहले';
+    if (timeStrGu.includes('30 મિનિટ')) return '30 मिनट पहले';
+    return timeStrGu.replace('કલાક પહેલાં', 'ઘંટે પહેલાં').replace('મિનિટ પહેલાં', 'મિનટ પહેલાં');
+  }
+  return timeStrGu;
+};
+
 function makeHomeImagesUnique<T extends Article>(sections: T[][]): T[][] {
   const usedImages = new Set<string>();
   const processedArticleIds = new Set<string>();
@@ -1854,6 +2088,75 @@ const getMockTime = (id: string): string => {
   }
 };
 
+const CITY_NAME_MAP: Record<string, { gu: string; hi: string; en: string }> = {
+  'અમદાવાદ': { gu: 'અમદાવાદ', hi: 'अहमदाबाद', en: 'Ahmedabad' },
+  'સુરત': { gu: 'સુરત', hi: 'सूरत', en: 'Surat' },
+  'વડોદરા': { gu: 'વડોદરા', hi: 'वडोदरा', en: 'Vadodara' },
+  'રાજકોટ': { gu: 'રાજકોટ', hi: 'राजकोट', en: 'Rajkot' },
+  'ગાંધીનગર': { gu: 'ગાંધીનગર', hi: 'गांधीनगर', en: 'Gandhinagar' },
+  'અન્ય': { gu: 'અન્ય', hi: 'अन्य', en: 'Other Cities' }
+};
+
+const TAG_NAME_MAP: Record<string, { gu: string; hi: string; en: string }> = {
+  'મેટ્રો': { gu: 'મેટ્રો', hi: 'मेट्रो', en: 'Metro' },
+  'વિકાસ': { gu: 'વિકાસ', hi: 'विकास', en: 'Development' },
+  'અમદાવાદ': { gu: 'અમદાવાદ', hi: 'अहमदाबाद', en: 'Ahmedabad' },
+  'ટ્રાફિક': { gu: 'ટ્રાફિક', hi: 'ट्रैफिक', en: 'Traffic' },
+  'સિવિક': { gu: 'સિવિક', hi: 'सिविक', en: 'Civic' },
+  'પર્યટન': { gu: 'પર્યટન', hi: 'पर्यटन', en: 'Tourism' },
+  'AMC': { gu: 'AMC', hi: 'AMC', en: 'AMC' },
+  'પોલીસ': { gu: 'પોલીસ', hi: 'पुलिस', en: 'Police' },
+  'દંડ': { gu: 'દંડ', hi: 'जुर्माना', en: 'Penalty' },
+  'નિયમ': { gu: 'નિયમ', hi: 'नियम', en: 'Rules' },
+  'ડાયમંડ': { gu: 'ડાયમંડ', hi: 'डायमंड', en: 'Diamond' },
+  'બિઝનેસ': { gu: 'બિઝનેસ', hi: 'बिजनेस', en: 'Business' },
+  'સુરત': { gu: 'સુરત', hi: 'सूरत', en: 'Surat' },
+  'વેપાર': { gu: 'વેપાર', hi: 'व्यापार', en: 'Trade' },
+  'ટેક્સટાઇલ': { gu: 'ટેક્સટાઇલ', hi: 'टेक्सटाइल', en: 'Textile' },
+  'નિકાસ': { gu: 'નિકાસ', hi: 'निर्यात', en: 'Export' },
+  'ચોમાસું': { gu: 'ચોમાસું', hi: 'मानसून', en: 'Monsoon' },
+  'ડ્રેનેજ': { gu: 'ડ્રેનેજ', hi: 'ड्रेनेज', en: 'Drainage' },
+  'SMC': { gu: 'SMC', hi: 'SMC', en: 'SMC' },
+  'બજેટ': { gu: 'બજેટ', hi: 'बजट', en: 'Budget' },
+  'VMC': { gu: 'VMC', hi: 'VMC', en: 'VMC' },
+  'પાણી': { gu: 'પાણી', hi: 'पानी', en: 'Water' },
+  'MSU': { gu: 'MSU', hi: 'MSU', en: 'MSU' },
+  'સંશોધન': { gu: 'સંશોધન', hi: 'अनुसंधान', en: 'Research' },
+  'આરોગ્ય': { gu: 'આરોગ્ય', hi: 'स्वास्थ्य', en: 'Health' },
+  'વિજ્ઞાન': { gu: 'વિજ્ઞાન', hi: 'विज्ञान', en: 'Science' },
+  'સ્માર્ટ સિટી': { gu: 'સ્માર્ટ સિટી', hi: 'स्मार्ट सिटी', en: 'Smart City' },
+  'રસ્તા': { gu: 'રસ્તા', hi: 'सड़कें', en: 'Roads' },
+  'રાજકોટ': { gu: 'રાજકોટ', hi: 'राजकोट', en: 'Rajkot' },
+  'એરપોર્ટ': { gu: 'એરપોર્ટ', hi: 'एयरपोर्ट', en: 'Airport' },
+  'ટર્મિનલ': { gu: 'ટર્મિનલ', hi: 'टर्मिनल', en: 'Terminal' },
+  'ફ્લાઇટ': { gu: 'ફ્લાઇટ', hi: 'फ्लाइट', en: 'Flight' },
+  'GIFT સિટી': { gu: 'GIFT સિટી', hi: 'GIFT सिटी', en: 'GIFT City' },
+  'ફિનટેક': { gu: 'ફિનટેક', hi: 'फिनटेक', en: 'Fintech' },
+  'રોકાણ': { gu: 'રોકાણ', hi: 'निवेश', en: 'Investment' },
+  'નોકરી': { gu: 'નોકરી', hi: 'नौकरी', en: 'Jobs' },
+  'વિધાનસભા': { gu: 'વિધાનસભા', hi: 'विधानसभा', en: 'Assembly' },
+  'ચોમાસુ સત્ર': { gu: 'ચોમાસુ સત્ર', hi: 'मानसून सत्र', en: 'Monsoon Session' },
+  'રાજકારણ': { gu: 'રાજકારણ', hi: 'राजनीति', en: 'Politics' },
+  'બિલ': { gu: 'બિલ', hi: 'विधेयक', en: 'Bill' },
+  'ઉદ્યોગ': { gu: 'ઉદ્યોગ', hi: 'उद्योग', en: 'Industry' },
+  'રોજગાર': { gu: 'રોજગાર', hi: 'रोजगार', en: 'Employment' },
+  'ભાવનગર': { gu: 'ભાવનગર', hi: 'भावनगर', en: 'Bhavnagar' },
+  'પ્રવાસન': { gu: 'પ્રવાસન', hi: 'पर्यटन', en: 'Tourism' },
+  'જૂનાગઢ': { gu: 'જૂનાગઢ', hi: 'जूनागढ़', en: 'Junagadh' },
+  'ગિરનાર': { gu: 'ગિરનાર', hi: 'गिरनार', en: 'Girnar' },
+  'સુરક્ષા': { gu: 'સુરક્ષા', hi: 'सुरक्षा', en: 'Security' },
+  'ડેરી': { gu: 'ડેરી', hi: 'डेयरी', en: 'Dairy' },
+  'ખેડૂત': { gu: 'ખેડૂત', hi: 'किसान', en: 'Farmer' },
+  'આણંદ': { gu: 'આણંદ', hi: 'आनंद', en: 'Anand' }
+};
+
+const getLocalizedTag = (tag: string, language: Language) => {
+  if (TAG_NAME_MAP[tag]) {
+    return getLocalized(language, TAG_NAME_MAP[tag]);
+  }
+  return tag;
+};
+
 /* --- City Hyperlocal Section ("ગુજરાત" Zone) ----------------------------- */
 function CityHyperlocalSection({
   language,
@@ -2419,6 +2722,7 @@ function CityHyperlocalSection({
           <div className="flex items-center gap-5 border-b border-border pb-3 mb-6 overflow-x-auto scrollbar-none select-none">
             {['અમદાવાદ', 'સુરત', 'વડોદરા', 'રાજકોટ', 'ગાંધીનગર', 'અન્ય'].map((tab) => {
               const isActive = activeTab === tab;
+              const tabLabel = CITY_NAME_MAP[tab] ? getLocalized(language, CITY_NAME_MAP[tab]) : tab;
               return (
                 <button
                   key={tab}
@@ -2428,7 +2732,7 @@ function CityHyperlocalSection({
                     : 'border-transparent text-slate-500 hover:text-slate-800'
                     }`}
                 >
-                  {tab}
+                  {tabLabel}
                 </button>
               );
             })}
@@ -2498,14 +2802,17 @@ function CityHyperlocalSection({
                     </span>
                     <span>•</span>
                     <div className="flex flex-wrap gap-1.5">
-                      {currentSlide.tags.slice(0, 3).map((tag) => (
-                        <span
-                          key={tag}
-                          className="bg-muted text-muted-foreground text-[10.5px] font-bold px-2 py-0.5 rounded-sm border border-border select-none animate-fade-in"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                      {currentSlide.tags.slice(0, 3).map((tag) => {
+                        const tagLabel = getLocalizedTag(tag, language);
+                        return (
+                          <span
+                            key={tag}
+                            className="bg-muted text-muted-foreground text-[10.5px] font-bold px-2 py-0.5 rounded-sm border border-border select-none animate-fade-in"
+                          >
+                            {tagLabel}
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -2610,7 +2917,7 @@ function CityHyperlocalSection({
             </div>
             <div className="border border-border rounded-sm bg-card p-2.5 shadow-sm">
               <div className="flex flex-wrap gap-1.5">
-                {['#ચૂંટણી 2027', '#વરસાદ', '#સોના-ચાંદી', '#ક્રિકેટ', '#મેટ્રો', '#સેમિકન્ડક્ટર', '#ડાયમંડ ઉદ્યોગ', '#ટ્રાફિક'].map((tag) => {
+                {getLocalizedTrendingTags(language).map((tag) => {
                   const cleanTag = tag.startsWith('#') ? tag.slice(1) : tag;
                   return (
                     <span
@@ -3035,39 +3342,43 @@ function CrimeSection({
                 />
               </div>
               <h3 className="text-[13px] md:text-[13.5px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2">
-                {language === 'gu' ? col.featured.titleGu : col.featured.title}
+                {getMockTitle(col.featured, language)}
               </h3>
             </Link>
 
             <div className="flex flex-col divide-y divide-border/40 border-t border-border/40 mt-1">
-              {col.subs.slice(0, 3).map((sub) => (
-                <Link
-                  key={sub.id}
-                  href={`/news/${sub.slug}`}
-                  className="group py-3 flex items-center gap-3"
-                >
-                  {/* Thumbnail photo on left */}
-                  <div className="relative h-16 w-20 shrink-0 rounded-lg overflow-hidden border border-border/20 bg-muted">
-                    <Image
-                      src={sub.image || '/assets/demo/5.jpg'}
-                      alt={sub.titleGu}
-                      fill
-                      sizes="80px"
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  </div>
-
-                  {/* Title & Metadata on right */}
-                  <div className="flex flex-col min-w-0 flex-1">
-                    <h4 className="text-[12.5px] md:text-[13px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2">
-                      {sub.titleGu}
-                    </h4>
-                    <div className="flex items-center gap-1.5 mt-1.5 text-[10.5px] text-muted-foreground font-semibold select-none">
-                      <span>{sub.relativeTimeGu || '2 કલાક પહેલાં'}</span>
+              {col.subs.slice(0, 3).map((sub) => {
+                const subTitle = getMockTitle(sub, language);
+                const subTime = getMockRelativeTime(sub.relativeTimeGu, language);
+                return (
+                  <Link
+                    key={sub.id}
+                    href={`/news/${sub.slug}`}
+                    className="group py-3 flex items-center gap-3"
+                  >
+                    {/* Thumbnail photo on left */}
+                    <div className="relative h-16 w-20 shrink-0 rounded-lg overflow-hidden border border-border/20 bg-muted">
+                      <Image
+                        src={sub.image || '/assets/demo/5.jpg'}
+                        alt={subTitle}
+                        fill
+                        sizes="80px"
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
                     </div>
-                  </div>
-                </Link>
-              ))}
+
+                    {/* Title & Metadata on right */}
+                    <div className="flex flex-col min-w-0 flex-1">
+                      <h4 className="text-[12.5px] md:text-[13px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2">
+                        {subTitle}
+                      </h4>
+                      <div className="flex items-center gap-1.5 mt-1.5 text-[10.5px] text-muted-foreground font-semibold select-none">
+                        <span>{subTime}</span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         ))}
@@ -4584,85 +4895,80 @@ export function PoliticsSection({ language }: { language: Language }) {
 
       {/* 3-Column Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-        {mockPoliticsColumns.map((col) => (
-          <div key={col.colId} className="flex flex-col min-w-0">
-            <div className="flex flex-col min-w-0">
-              <Link
-                href={`/news/${col.featured.slug}`}
-                className="group flex flex-col mb-2.5"
-              >
-                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
-                  <Image
-                    src={col.featured.image || ''}
-                    alt={col.featured.titleGu}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 25vw"
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
+        {mockPoliticsColumns.map((col) => {
+          const featuredTitle = getMockTitle(col.featured, language);
+          const featuredTime = getMockRelativeTime(col.featured.relativeTimeGu, language);
+          const categoryLabel = language === 'gu' ? col.featured.categoryGu : language === 'hi' ? (col.featured.categoryGu === 'ચૂંટણી' ? 'चुनाव' : col.featured.categoryGu === 'સરકાર' ? 'सरकार' : 'संगठन') : (col.featured.categoryGu === 'ચૂંટણી' ? 'Election' : col.featured.categoryGu === 'સરકાર' ? 'Government' : 'Organization');
+          return (
+            <div key={col.colId} className="flex flex-col min-w-0">
+              <div className="flex flex-col min-w-0">
+                <Link
+                  href={`/news/${col.featured.slug}`}
+                  className="group flex flex-col mb-2.5"
+                >
+                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
+                    <Image
+                      src={col.featured.image || ''}
+                      alt={featuredTitle}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 25vw"
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                  <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] mb-1.5 select-none uppercase">
+                    {categoryLabel}
+                  </span>
+                  <h3 className="text-[14px] md:text-[15.5px] font-extrabold leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2 min-h-[40px] md:min-h-[46px]">
+                    {featuredTitle}
+                  </h3>
+                </Link>
+
+                {/* Clock Meta Row */}
+                <div className="flex items-center gap-1.5 mb-1 pb-2 border-b border-border/40 text-[10.5px] text-muted-foreground font-semibold">
+                  <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
+                  <span>{featuredTime}</span>
                 </div>
-                <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] mb-1.5 select-none uppercase">
-                  {col.featured.categoryGu}
-                </span>
-                <h3 className="text-[14px] md:text-[15.5px] font-extrabold leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2 min-h-[40px] md:min-h-[46px]">
-                  {col.featured.titleGu}
-                </h3>
-              </Link>
-
-              {/* Clock Meta Row */}
-              <div className="flex items-center gap-1.5 mb-1 pb-2 border-b border-border/40 text-[10.5px] text-muted-foreground font-semibold">
-                <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
-                <span>{col.featured.relativeTimeGu || '1 કલાક પહેલાં'}</span>
               </div>
-
-              {/* Sub-articles list (Text only) */}
-              {/* <div className="flex flex-col divide-y divide-border/40">
-                {col.subs?.map((sub) => (
-                  <Link
-                    key={sub.id}
-                    href={`/news/${sub.slug}`}
-                    className="group py-3.5 px-2.5 hover:bg-muted/10 transition-colors rounded-md block"
-                  >
-                    <h4 className="text-[12px] md:text-[12.5px] font-extrabold leading-snug line-clamp-1 text-foreground group-hover:text-[#B3121B] transition-colors">
-                      {sub.titleGu}
-                    </h4>
-                  </Link>
-                ))}
-              </div> */}
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* 5-Card Politics Bottom Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 border-t border-border/40 pt-6 ">
-        {mockPoliticsBottomCards.map((card) => (
-          <div key={card.id} className="flex flex-col min-w-0">
-            <Link
-              href={`/news/${card.slug}`}
-              className="group flex flex-col"
-            >
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
-                <Image
-                  src={card.image}
-                  alt={card.titleGu}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 20vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                />
+        {mockPoliticsBottomCards.map((card) => {
+          const cardTitle = getMockTitle(card, language);
+          const cardTime = getMockRelativeTime(card.relativeTimeGu, language);
+          const categoryLabel = language === 'gu' ? card.categoryGu : language === 'hi' ? (card.categoryGu === 'સંસદ' ? 'संसद' : card.categoryGu === 'પાર્ટી' ? 'पार्टी' : card.categoryGu === 'ગૃહ વિભાગ' ? 'गृह विभाग' : card.categoryGu === 'સ્થાનિક સ્વરાજ્ય' ? 'स्थानीय निकाय' : 'गठबंधन') : (card.categoryGu === 'સંસદ' ? 'Parliament' : card.categoryGu === 'પાર્ટી' ? 'Party' : card.categoryGu === 'ગૃહ વિભાગ' ? 'Home Dept' : card.categoryGu === 'સ્થાનિક સ્વરાજ્ય' ? 'Civic Body' : 'Alliance');
+          return (
+            <div key={card.id} className="flex flex-col min-w-0">
+              <Link
+                href={`/news/${card.slug}`}
+                className="group flex flex-col"
+              >
+                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
+                  <Image
+                    src={card.image}
+                    alt={cardTitle}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 20vw"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <span className="text-[#B3121B] font-extrabold text-[11px] mb-1.5 select-none uppercase leading-none">
+                  {categoryLabel}
+                </span>
+                <h4 className="text-[12.5px] md:text-[13px] font-extrabold leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-3">
+                  {cardTitle}
+                </h4>
+              </Link>
+              <div className="flex items-center gap-1.5 mt-2.5 text-[10.5px] text-muted-foreground font-semibold">
+                <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
+                <span>{cardTime}</span>
               </div>
-              <span className="text-[#B3121B] font-extrabold text-[11px] mb-1.5 select-none uppercase leading-none">
-                {card.categoryGu}
-              </span>
-              <h4 className="text-[12.5px] md:text-[13px] font-extrabold leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-3">
-                {card.titleGu}
-              </h4>
-            </Link>
-            <div className="flex items-center gap-1.5 mt-2.5 text-[10.5px] text-muted-foreground font-semibold">
-              <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
-              <span>{card.relativeTimeGu}</span>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -4825,7 +5131,7 @@ export function FactCheckSection({ language }: { language: Language }) {
                   </span>
                 </div>
                 <h4 className="text-[12.5px] md:text-[13px] font-extrabold leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2">
-                  {item.titleGu}
+                  {getMockTitle(item, language)}
                 </h4>
               </div>
             </Link>
@@ -4971,32 +5277,36 @@ export function NationalSection({ language }: { language: Language }) {
 
       {/* Top Row: 3 Featured Article Cards (Equal Height Grid) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch mb-4">
-        {mockNationalColumns.map((col) => (
-          <div key={col.colId} className="flex flex-col justify-between min-w-0 border-b border-border/40 pb-3">
-            {/* Featured Article Card */}
-            <Link
-              href={`/news/${col.featured.slug}`}
-              className="group flex flex-col"
-            >
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
-                <Image
-                  src={col.featured.image}
-                  alt={col.featured.titleGu}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 25vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                />
+        {mockNationalColumns.map((col) => {
+          const featuredTitle = getMockTitle(col.featured, language);
+          const featuredTime = getMockRelativeTime(col.featured.relativeTimeGu, language);
+          return (
+            <div key={col.colId} className="flex flex-col justify-between min-w-0 border-b border-border/40 pb-3">
+              {/* Featured Article Card */}
+              <Link
+                href={`/news/${col.featured.slug}`}
+                className="group flex flex-col"
+              >
+                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
+                  <Image
+                    src={col.featured.image}
+                    alt={featuredTitle}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 25vw"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <h3 className="text-[14px] md:text-[15.5px] font-extrabold leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2">
+                  {featuredTitle}
+                </h3>
+              </Link>
+              <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground font-semibold mt-2.5">
+                <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
+                <span>{featuredTime}</span>
               </div>
-              <h3 className="text-[14px] md:text-[15.5px] font-extrabold leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-2">
-                {col.featured.titleGu}
-              </h3>
-            </Link>
-            <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground font-semibold mt-2.5">
-              <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
-              <span>{col.featured.relativeTimeGu}</span>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Bottom Rows: 3 Sub-article Grid Rows (Synchronized Horizontal Alignment) */}
@@ -5006,6 +5316,8 @@ export function NationalSection({ language }: { language: Language }) {
             {mockNationalColumns.map((col) => {
               const sub = col.subs[subIndex];
               if (!sub) return <div key={col.colId} />;
+              const subTitle = getMockTitle(sub, language);
+              const subTime = getMockRelativeTime(sub.relativeTimeGu, language);
               return (
                 <Link
                   key={sub.id}
@@ -5015,7 +5327,7 @@ export function NationalSection({ language }: { language: Language }) {
                   <div className="relative h-[56px] w-[86px] shrink-0 overflow-hidden rounded-sm border border-border/10 bg-muted">
                     <Image
                       src={sub.image}
-                      alt={sub.titleGu}
+                      alt={subTitle}
                       fill
                       sizes="86px"
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -5026,11 +5338,11 @@ export function NationalSection({ language }: { language: Language }) {
                       ? 'text-red-600'
                       : 'text-foreground group-hover:text-[#B3121B]'
                       }`}>
-                      {sub.titleGu}
+                      {subTitle}
                     </h4>
                     <div className="flex items-center gap-1.5 mt-1 text-[10px] text-muted-foreground font-semibold">
                       <Clock className="h-3 w-3 text-muted-foreground/60" />
-                      <span>{sub.relativeTimeGu}</span>
+                      <span>{subTime}</span>
                     </div>
                   </div>
                 </Link>
@@ -5123,13 +5435,13 @@ export function WorldSection({ language }: { language: Language }) {
             {/* Content Left */}
             <div className="flex flex-col justify-center min-w-0 order-2 md:order-1">
               <span className="text-red-600 font-extrabold text-[12px] md:text-[13px] mb-2 select-none uppercase tracking-wide">
-                {mockWorldFeatured.categoryGu}
+                {language === 'gu' ? mockWorldFeatured.categoryGu : language === 'hi' ? 'संयुक्त राष्ट्र' : 'United Nations'}
               </span>
               <h3 className="text-[17px] md:text-[19px] font-black leading-snug text-foreground group-hover:text-[#B3121B] transition-colors">
-                {mockWorldFeatured.titleGu}
+                {getMockTitle(mockWorldFeatured, language)}
               </h3>
               <p className="text-muted-foreground text-[13px] leading-relaxed mt-3.5 line-clamp-4 select-none">
-                {mockWorldFeatured.excerptGu}
+                {language === 'gu' ? mockWorldFeatured.excerptGu : language === 'hi' ? 'अधिकांश सदस्य देशों द्वारा भारत के प्रस्ताव का समर्थन करने से स्थिति मजबूत हुई।' : 'With broad support from member nations, India’s global standing strengthens further.'}
               </p>
             </div>
 
@@ -5137,47 +5449,52 @@ export function WorldSection({ language }: { language: Language }) {
             <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm bg-muted order-1 md:order-2">
               <Image
                 src={mockWorldFeatured.image}
-                alt={mockWorldFeatured.titleGu}
+                alt={getMockTitle(mockWorldFeatured, language)}
                 fill
                 sizes="(max-width: 768px) 100vw, 30vw"
                 className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
               />
               <span className="absolute bottom-2.5 right-2.5 bg-black/60 text-white text-[9.5px] font-black px-2 py-0.5 rounded-sm select-none tracking-tight">
-                {mockWorldFeatured.watermarkGu}
+                {language === 'gu' ? mockWorldFeatured.watermarkGu : 'Gujarat Post'}
               </span>
             </div>
           </Link>
 
           {/* Grid of 4 Vertical Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {mockWorldCards.map((card) => (
-              <div key={card.id} className="flex flex-col min-w-0">
-                <Link
-                  href={`/news/${card.slug}`}
-                  className="group flex flex-col"
-                >
-                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
-                    <Image
-                      src={card.image}
-                      alt={card.titleGu}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 20vw"
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
+            {mockWorldCards.map((card) => {
+              const cardTitle = getMockTitle(card, language);
+              const cardTime = getMockRelativeTime(card.relativeTimeGu, language);
+              const categoryLabel = language === 'gu' ? card.categoryGu : language === 'hi' ? (card.categoryGu === 'યુરોપ' ? 'यूरोप' : card.categoryGu === 'અમેરિકા' ? 'अमेरिका' : card.categoryGu === 'એશિયા' ? 'एशिया' : 'मध्य-पूर्व') : (card.categoryGu === 'યુરોપ' ? 'Europe' : card.categoryGu === 'અમેરિકા' ? 'USA' : card.categoryGu === 'એશિયા' ? 'Asia' : 'Middle East');
+              return (
+                <div key={card.id} className="flex flex-col min-w-0">
+                  <Link
+                    href={`/news/${card.slug}`}
+                    className="group flex flex-col"
+                  >
+                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-sm border border-border/10 bg-muted mb-2.5">
+                      <Image
+                        src={card.image}
+                        alt={cardTitle}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 20vw"
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                    <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] mb-1.5 select-none uppercase leading-none">
+                      {categoryLabel}
+                    </span>
+                    <h4 className="text-[13px] md:text-[13.5px] font-extrabold leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-3">
+                      {cardTitle}
+                    </h4>
+                  </Link>
+                  <div className="flex items-center gap-1.5 mt-2.5 text-[11px] text-muted-foreground font-semibold">
+                    <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
+                    <span>{cardTime}</span>
                   </div>
-                  <span className="text-[#B3121B] font-extrabold text-[12px] md:text-[13px] mb-1.5 select-none uppercase leading-none">
-                    {card.categoryGu}
-                  </span>
-                  <h4 className="text-[13px] md:text-[13.5px] font-extrabold leading-snug text-foreground group-hover:text-[#B3121B] transition-colors line-clamp-3">
-                    {card.titleGu}
-                  </h4>
-                </Link>
-                <div className="flex items-center gap-1.5 mt-2.5 text-[11px] text-muted-foreground font-semibold">
-                  <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
-                  <span>{card.relativeTimeGu}</span>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
         </div>

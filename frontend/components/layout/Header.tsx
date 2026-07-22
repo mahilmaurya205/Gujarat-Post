@@ -236,7 +236,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="border-b border-border bg-card/95">
+      <header className="relative z-[60] border-b border-border bg-card/95">
         {/* Top bar: date + social */}
         <div className="bg-black dark:bg-black text-white/95">
           <div className="mx-auto flex max-w-screen-xl max-w-header-layout items-center justify-between gap-3 px-4 py-1.5">
@@ -342,7 +342,7 @@ export default function Header() {
               onClick={() => router.push('/search')}
             >
               <div className="h-[34px] w-full rounded-full border border-border bg-muted py-1.5 pl-10 pr-3.5 text-[13px] text-muted-foreground transition-all duration-200 group-hover:border-accent group-hover:bg-card select-none flex items-center">
-                સમાચાર શોધો...
+                {language === 'gu' ? 'સમાચાર શોધો...' : language === 'hi' ? 'समाचार खोजें...' : 'Search news...'}
               </div>
               <span className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-muted-foreground group-hover:text-accent transition-colors">
                 <Search className="h-[14px] w-[14px]" />
@@ -359,7 +359,7 @@ export default function Header() {
                   type="text"
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}
-                  placeholder="સમાચાર શોધો..."
+                  placeholder={language === 'gu' ? 'સમાચાર શોધો...' : language === 'hi' ? 'समाचार खोजें...' : 'Search news...'}
                   className={`h-10 w-full rounded-full border border-border bg-muted py-2 pl-10 pr-10 text-sm text-foreground outline-none transition-all duration-300 ease-in-out focus:border-accent focus:bg-card ${searchOpen ? 'opacity-100 pointer-events-auto' : 'w-10 opacity-0 pointer-events-none'
                     }`}
                 />
@@ -401,33 +401,53 @@ export default function Header() {
             </div>
 
             {/* Language switcher */}
-            <div className={`relative transition-all duration-300 ${searchOpen ? 'max-sm:hidden' : ''}`}>
+            <div className={`relative z-50 transition-all duration-300 ${searchOpen ? 'max-sm:hidden' : ''}`}>
               <button
                 type="button"
                 onClick={() => setLanguageOpen((value) => !value)}
-                className="inline-flex h-10 items-center gap-1 rounded-full bg-muted px-4 text-sm font-black text-foreground transition hover:bg-secondary"
+                className={`inline-flex h-10 items-center gap-1.5 rounded-full bg-muted px-4 text-sm font-black text-foreground transition-all duration-200 hover:bg-secondary cursor-pointer shadow-xs active:scale-95 ${languageOpen ? 'ring-2 ring-red-600/50 bg-secondary' : ''
+                  }`}
                 aria-label="Switch language"
                 aria-expanded={languageOpen}
               >
-                {languageLabels[language]}
-                <ChevronDown className="h-3.5 w-3.5" />
+                <span>{languageLabels[language]}</span>
+                <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-300 ${languageOpen ? 'rotate-180 text-red-600' : ''}`} />
               </button>
+
               {languageOpen && (
-                <div className="absolute right-0 top-full z-50 mt-2 min-w-32 rounded-md border border-border bg-card p-1 shadow-lg">
-                  {(['gu', 'en', 'hi'] as const).map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => {
-                        setLanguage(item);
-                        setLanguageOpen(false);
-                      }}
-                      className="block w-full rounded px-3 py-2 text-left text-xs font-semibold text-foreground hover:bg-muted"
-                    >
-                      {languageLabels[item]}
-                    </button>
-                  ))}
-                </div>
+                <>
+                  {/* Backdrop overlay to close dropdown when clicking outside */}
+                  <div
+                    className="fixed inset-0 z-[9998] cursor-default"
+                    onClick={() => setLanguageOpen(false)}
+                  />
+
+                  {/* Dropdown Menu Popup with Smooth Scale & Slide Entrance Animation */}
+                  <div className="absolute right-0 top-full z-[9999] mt-2 w-36 rounded-xl border border-border/90 bg-card p-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.25)] backdrop-blur-md origin-top-right transition-all duration-200 animate-in fade-in-0 zoom-in-95 slide-in-from-top-2">
+                    {(['gu', 'en', 'hi'] as const).map((item) => {
+                      const isSelected = language === item;
+                      return (
+                        <button
+                          key={item}
+                          type="button"
+                          onClick={() => {
+                            setLanguage(item);
+                            setLanguageOpen(false);
+                          }}
+                          className={`flex items-center justify-between w-full rounded-lg px-3 py-2 text-left text-xs font-bold transition-all duration-150 cursor-pointer hover:scale-[1.02] active:scale-98 ${isSelected
+                              ? 'bg-red-600 text-white font-extrabold shadow-sm'
+                              : 'text-foreground hover:bg-muted'
+                            }`}
+                        >
+                          <span>{languageLabels[item]}</span>
+                          {isSelected && (
+                            <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
               )}
             </div>
 
@@ -514,7 +534,7 @@ export default function Header() {
                 onClick={() => setMenuOpen(false)}
                 className="mb-3 flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-2.5 text-sm font-black text-white shadow hover:bg-accent-hover transition"
               >
-                ઈ-પેપર
+                {language === 'gu' ? 'ઈ-પેપર' : language === 'hi' ? 'ई-पेपर' : 'E-Paper'}
               </a>
 
               {/* App downloads CTA */}
@@ -651,7 +671,7 @@ export default function Header() {
                 {/* shimmer sweep on hover */}
                 <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full" aria-hidden="true" />
                 <BookOpen className="h-3.5 w-3.5 shrink-0" />
-                <span className="tracking-wide">ઈ-પેપર</span>
+                <span className="tracking-wide">{language === 'gu' ? 'ઈ-પેપર' : language === 'hi' ? 'ई-पेपर' : 'E-Paper'}</span>
                 {/* live pulse dot */}
                 <span className="relative flex h-1.5 w-1.5 shrink-0">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-60" />

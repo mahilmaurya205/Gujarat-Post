@@ -807,7 +807,7 @@ export default function NewsDetailClient({ article, related, trending, articleUr
 
         <div className="article-grid mt-8 border-t border-neutral-200 dark:border-neutral-800 !pt-8">
           <article className="article-stream-container select-none w-full">
-            <div className="space-y-8">
+            <div className="space-y-5">
               {(() => {
                 const streamList = [...related, ...trending]
                   .filter((item, index, self) => self.findIndex(t => t.id === item.id) === index && item.id !== article.id)
@@ -825,7 +825,7 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                     .slice(0, 4);
 
                   return (
-                    <div key={streamArticle.id} className="article-stream-item border-b border-neutral-200 dark:border-neutral-800 pb-8 last:border-b-0 text-left flex flex-col items-start w-full">
+                    <div key={streamArticle.id} className="article-stream-item border-b border-neutral-200 dark:border-neutral-800 pb-5 last:border-b-0 text-left flex flex-col items-start w-full">
                       <nav className="breadcrumb select-none flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-neutral-500 font-medium mb-3 w-full text-left justify-start">
                         <Link href="/" className="hover:text-[var(--red)] transition-colors">
                           {language === 'gu' ? 'હોમ' : language === 'hi' ? 'होम' : 'Home'}
@@ -863,7 +863,7 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                       </div>
 
                       {readAlsoArticles.length > 0 && (
-                        <div className="w-full mt-2.5 mb-5 bg-neutral-50/50 dark:bg-neutral-900/30 border border-neutral-200/80 dark:border-neutral-800/80 rounded-xl pt-3.5 pb-4 px-4 shadow-sm">
+                        <div className="read-also-box w-full mt-2.5 mb-5 bg-neutral-50/50 dark:bg-neutral-900/40 border border-neutral-200/80 dark:border-neutral-800/80 rounded-xl pt-3.5 pb-4 px-4 shadow-sm">
                           <div className="flex items-center gap-2 mb-2.5">
                             <span className="w-1.5 h-5 bg-red-600 rounded-full"></span>
                             <h4 className="font-extrabold text-[16.5px] uppercase tracking-wide text-red-600 dark:text-red-400">
@@ -877,7 +877,7 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                                 <Link
                                   key={raArt.id}
                                   href={`/news/${raArt.slug}`}
-                                  className="group flex gap-4 p-2.5 rounded-lg border border-neutral-100 dark:border-neutral-800/40 bg-white dark:bg-neutral-900/60 hover:bg-neutral-50 dark:hover:bg-neutral-800/60 hover:border-red-500/20 hover:shadow-sm transition-all duration-300 items-center text-left"
+                                  className="read-also-card group flex gap-4 p-2.5 rounded-lg border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-neutral-800/80 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-red-500/30 hover:shadow-sm transition-all duration-300 items-center text-left"
                                 >
                                   <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-md border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 shadow-sm animate-pulse-once">
                                     <Image
@@ -889,7 +889,7 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                                     />
                                   </div>
                                   <div className="min-w-0 flex-1">
-                                    <p className="line-clamp-2 text-[13.5px] font-bold text-neutral-800 dark:text-neutral-200 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors duration-200 leading-snug">
+                                    <p className="line-clamp-2 text-[13.5px] font-bold text-neutral-800 dark:text-neutral-100 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors duration-200 leading-snug">
                                       {raTitle}
                                     </p>
                                   </div>
@@ -901,13 +901,13 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                       )}
 
                       <div className="flex flex-wrap items-center gap-2 mt-5 select-none">
-                        <span className="font-extrabold text-neutral-900 dark:text-white mr-2 text-[14.5px] tracking-wide uppercase border-b-2 border-[#B3121B] pb-0.5">
+                        <span className="topics-title font-extrabold text-neutral-900 dark:text-white mr-2 text-[14.5px] tracking-wide uppercase border-b-2 border-[#B3121B] pb-0.5">
                           {language === 'gu' ? 'ટોપિક્સ:' : language === 'hi' ? 'विषय:' : 'Topics:'}
                         </span>
                         {getStreamTags(streamArticle).map((tag, tIdx) => (
                           <span
                             key={tIdx}
-                            className="cursor-pointer bg-white dark:bg-neutral-900 hover:bg-[#B3121B] dark:hover:bg-[#B3121B] text-neutral-800 dark:text-neutral-200 hover:text-white dark:hover:text-white rounded-full px-4 py-1.5 text-xs font-bold border border-red-600/30 dark:border-red-500/20 hover:border-[#B3121B] dark:hover:border-[#B3121B] shadow-sm transition-all duration-200"
+                            className="topic-pill cursor-pointer bg-neutral-100 dark:bg-neutral-800/80 hover:bg-[#B3121B] dark:hover:bg-[#B3121B] text-neutral-800 dark:text-neutral-200 hover:text-white dark:hover:text-white rounded-full px-4 py-1.5 text-xs font-bold border border-neutral-300 dark:border-neutral-700 hover:border-[#B3121B] dark:hover:border-[#B3121B] shadow-sm transition-all duration-200"
                           >
                             {tag}
                           </span>
@@ -918,35 +918,87 @@ export default function NewsDetailClient({ article, related, trending, articleUr
                 });
               })()}
             </div>
+
+            {/* Read Also Section for Primary Article */}
+            {related.length > 0 && (
+              <div className="read-also-box w-full mt-6 mb-6 bg-neutral-50/50 dark:bg-neutral-900/40 border border-neutral-200/80 dark:border-neutral-800/80 rounded-xl pt-3.5 pb-4 px-4 shadow-sm">
+                <div className="flex items-center gap-2 mb-2.5">
+                  <span className="w-1.5 h-5 bg-red-600 rounded-full"></span>
+                  <h4 className="font-extrabold text-[16.5px] uppercase tracking-wide text-red-600 dark:text-red-400">
+                    {language === 'gu' ? 'આ પણ વાંચો' : language === 'hi' ? 'यह भी पढ़ें' : 'Read Also'}
+                  </h4>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {related.slice(0, 4).map((raArt) => {
+                    const raTitle = getArticleTitle(raArt, language);
+                    return (
+                      <Link
+                        key={raArt.id}
+                        href={`/news/${raArt.slug}`}
+                        className="read-also-card group flex gap-4 p-2.5 rounded-lg border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-neutral-800/80 hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-red-500/30 hover:shadow-sm transition-all duration-300 items-center text-left"
+                      >
+                        <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-md border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 shadow-sm animate-pulse-once">
+                          <Image
+                            src={raArt.image}
+                            alt={raTitle}
+                            fill
+                            sizes="96px"
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="line-clamp-2 text-[13.5px] font-bold text-neutral-800 dark:text-neutral-100 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors duration-200 leading-snug">
+                            {raTitle}
+                          </p>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Topics Tags for Primary Article */}
+            <div className="flex flex-wrap items-center gap-2 mt-5 select-none">
+              <span className="topics-title font-extrabold text-neutral-900 dark:text-white mr-2 text-[14.5px] tracking-wide uppercase border-b-2 border-[#B3121B] pb-0.5">
+                {language === 'gu' ? 'ટોપિક્સ:' : language === 'hi' ? 'विषय:' : 'Topics:'}
+              </span>
+              {article.tags.map((tag, tIdx) => (
+                <span
+                  key={tIdx}
+                  className="topic-pill cursor-pointer bg-neutral-100 dark:bg-neutral-800/80 hover:bg-[#B3121B] dark:hover:bg-[#B3121B] text-neutral-800 dark:text-neutral-200 hover:text-white dark:hover:text-white rounded-full px-4 py-1.5 text-xs font-bold border border-neutral-300 dark:border-neutral-700 hover:border-[#B3121B] dark:hover:border-[#B3121B] shadow-sm transition-all duration-200"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           </article>
 
-          <aside className="select-none" style={{ width: '100%', maxWidth: '336px' }}>
-            {/* Heading stays OUTSIDE sticky so it's always visible */}
+          <aside className="select-none h-fit sticky top-[100px]" style={{ width: '100%', maxWidth: '336px' }}>
+            {/* Heading and recommended stories stick together below header */}
             <div className="wtitle mb-3">
               <span className="d"></span>
               <span>{language === 'gu' ? 'તમારા માટે ભલામણ' : language === 'hi' ? 'आपके लिए अनुशंसित' : 'Recommended Stories'}</span>
             </div>
-            <div style={{ position: 'sticky', top: '24px', height: 'fit-content' }}>
-              <div className="space-y-0">
-                {related.slice(0, 4).map((item) => {
-                  const itemTitle = getArticleTitle(item, language);
-                  const itemCategory = getCategoryLabel(item, language);
-                  return (
-                    <Link key={item.id} href={`/news/${item.slug}`} className="s-compact hover:opacity-85 transition-opacity">
-                      <div>
-                        <span className="kick">{itemCategory}</span>
-                        <h3>{itemTitle}</h3>
-                        <div className="meta">
-                          <span>{formatDate(item.publishedAt)}</span>
-                        </div>
+            <div className="space-y-0">
+              {related.slice(0, 4).map((item) => {
+                const itemTitle = getArticleTitle(item, language);
+                const itemCategory = getCategoryLabel(item, language);
+                return (
+                  <Link key={item.id} href={`/news/${item.slug}`} className="s-compact hover:opacity-85 transition-opacity">
+                    <div>
+                      <span className="kick">{itemCategory}</span>
+                      <h3>{itemTitle}</h3>
+                      <div className="meta">
+                        <span>{formatDate(item.publishedAt)}</span>
                       </div>
-                      <div className="imgwrap">
-                        <Image src={item.image} alt={item.title} fill sizes="92px" className="object-cover" />
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
+                    </div>
+                    <div className="imgwrap">
+                      <Image src={item.image} alt={item.title} fill sizes="92px" className="object-cover" />
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </aside>
         </div>

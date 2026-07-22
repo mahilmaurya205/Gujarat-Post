@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, [data-theme="dark"], .dark *, [data-theme="dark"] *));
+
 :root {
   /* ==========================================
      GUJARAT POST — Redesign Rebuild Variables
@@ -160,6 +162,69 @@ footer[data-theme="dark"] {
   --red: #e6535b;
   color-scheme: dark;
   color: rgba(255, 255, 255, 0.9);
+}
+
+/* ── Article Dark Mode Overrides ── */
+[data-theme="dark"] .share-row-custom,
+.dark .share-row-custom {
+  background-color: rgba(24, 24, 27, 0.85) !important;
+  border-color: rgba(63, 63, 70, 0.7) !important;
+}
+
+[data-theme="dark"] .share-row-custom .lbl,
+.dark .share-row-custom .lbl {
+  color: #f4f4f5 !important;
+}
+
+[data-theme="dark"] .share-row-custom button,
+[data-theme="dark"] .share-row-custom a,
+.dark .share-row-custom button,
+.dark .share-row-custom a {
+  background-color: #27272a !important;
+  border-color: #3f3f46 !important;
+  color: #f4f4f5 !important;
+}
+
+[data-theme="dark"] .share-row-custom button svg,
+.dark .share-row-custom button svg {
+  stroke: #f4f4f5 !important;
+}
+
+[data-theme="dark"] .read-also-box,
+.dark .read-also-box {
+  background-color: rgba(24, 24, 27, 0.6) !important;
+  border-color: rgba(63, 63, 70, 0.8) !important;
+}
+
+[data-theme="dark"] .read-also-card,
+.dark .read-also-card {
+  background-color: rgba(39, 39, 42, 0.7) !important;
+  border-color: rgba(63, 63, 70, 0.6) !important;
+  color: #f4f4f5 !important;
+}
+
+[data-theme="dark"] .read-also-card p,
+.dark .read-also-card p {
+  color: #f4f4f5 !important;
+}
+
+[data-theme="dark"] .topics-title,
+.dark .topics-title {
+  color: #f4f4f5 !important;
+}
+
+[data-theme="dark"] .topic-pill,
+.dark .topic-pill {
+  background-color: #18181b !important;
+  border-color: #3f3f46 !important;
+  color: #e4e4e7 !important;
+}
+
+[data-theme="dark"] .topic-pill:hover,
+.dark .topic-pill:hover {
+  background-color: #B3121B !important;
+  border-color: #B3121B !important;
+  color: #ffffff !important;
 }
 
 html[lang="gu"] {
@@ -1823,9 +1888,9 @@ html[data-theme="dark"] .share-x {
 .s-compact {
   display: grid;
   grid-template-columns: minmax(0, 1fr) clamp(64px, 25%, 92px);
-  gap: 12px;
+  gap: 10px;
   align-items: start;
-  padding: 15px 0;
+  padding: 8px 0;
   border-top: 1px solid var(--border);
 }
 
@@ -2310,9 +2375,9 @@ html[data-theme="dark"] .share-x {
 .s-compact {
   display: grid;
   grid-template-columns: minmax(0, 1fr) clamp(64px, 25%, 92px);
-  gap: 12px;
+  gap: 10px;
   align-items: start;
-  padding: 15px 0;
+  padding: 8px 0;
   border-top: var(--rule);
 }
 
