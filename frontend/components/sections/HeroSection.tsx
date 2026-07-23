@@ -783,7 +783,7 @@ export default function HeroSection() {
             </div>
 
             <div className="flex flex-col divide-y divide-border">
-              {uniqueTrendingArt.slice(0, 4).map((art, idx) => (
+              {uniqueTrendingArt.slice(0, 5).map((art, idx) => (
                 <Link
                   key={art.id}
                   href={`/news/${art.slug}`}

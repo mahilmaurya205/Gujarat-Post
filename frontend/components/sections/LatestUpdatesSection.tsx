@@ -570,7 +570,7 @@ export default function LatestUpdatesSection({ view = 'all' }: { view?: 'timelin
         </div>
 
         <div className="flex flex-col divide-y divide-border/40">
-          {mostRead.map((art, idx) => (
+          {mostRead.slice(0, 5).map((art, idx) => (
             <Link
               key={art.id}
               href={`/news/${art.slug}`}

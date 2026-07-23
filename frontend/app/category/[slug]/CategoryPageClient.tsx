@@ -349,7 +349,7 @@ export default function CategoryPageClient({ articles, category, slug }: Props) 
     return result;
   }, [displayArticles, activeTab, sortBy]);
 
-  const mostReadToDisplay = isGujarat ? GUJARAT_MOCK_MOST_READ : mostRead;
+  const mostReadToDisplay = (isGujarat ? GUJARAT_MOCK_MOST_READ : mostRead).slice(0, 6);
   const tagsToDisplay = isGujarat ? (GUJARAT_MOCK_TAGS[language] || GUJARAT_MOCK_TAGS.en) : trendingTags;
 
   const heroArticle = filteredArticles[0];
@@ -423,8 +423,8 @@ export default function CategoryPageClient({ articles, category, slug }: Props) 
             <button
               onClick={() => setSortBy('latest')}
               className={`rounded-full px-4 py-1.5 text-xs font-black transition cursor-pointer ${sortBy === 'latest'
-                  ? 'bg-foreground text-background'
-                  : 'border border-border text-muted-foreground hover:border-accent hover:text-accent bg-card'
+                ? 'bg-foreground text-background'
+                : 'border border-border text-muted-foreground hover:border-accent hover:text-accent bg-card'
                 }`}
             >
               {getLocalized(language, { gu: 'તાજા', hi: 'ताजा', en: 'Latest' })}
@@ -432,8 +432,8 @@ export default function CategoryPageClient({ articles, category, slug }: Props) 
             <button
               onClick={() => setSortBy('popular')}
               className={`rounded-full px-4 py-1.5 text-xs font-black transition cursor-pointer ${sortBy === 'popular'
-                  ? 'bg-foreground text-background'
-                  : 'border border-border text-muted-foreground hover:border-accent hover:text-accent bg-card'
+                ? 'bg-foreground text-background'
+                : 'border border-border text-muted-foreground hover:border-accent hover:text-accent bg-card'
                 }`}
             >
               {getLocalized(language, { gu: 'લોકપ્રિય', hi: 'लोकप्रिय', en: 'Popular' })}
@@ -448,8 +448,8 @@ export default function CategoryPageClient({ articles, category, slug }: Props) 
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`rounded-full px-4 py-1.5 text-xs font-black transition cursor-pointer ${activeTab === tab.id
-                  ? 'bg-accent text-white font-black'
-                  : 'border border-border bg-card text-foreground hover:border-accent hover:text-accent font-semibold'
+                ? 'bg-accent text-white font-black'
+                : 'border border-border bg-card text-foreground hover:border-accent hover:text-accent font-semibold'
                 }`}
             >
               {getLocalized(language, { en: tab.en, gu: tab.gu, hi: tab.hi })}
@@ -555,7 +555,7 @@ export default function CategoryPageClient({ articles, category, slug }: Props) 
             </div>
 
             {/* Trending Tags */}
-            <div className="mt-6">
+            {/* <div className="mt-6">
               <div className="flex items-center gap-2.5 mb-3 pb-2 border-b border-border">
                 <span className="w-2 h-2 bg-accent rotate-45 shrink-0 inline-block" />
                 <span className="text-sm font-black text-foreground">
@@ -573,7 +573,7 @@ export default function CategoryPageClient({ articles, category, slug }: Props) 
                   </Link>
                 ))}
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
